@@ -27,7 +27,7 @@ import java.util.UUID;
 /**
  * A stationary shield spell that creates a comprehensive protective barrier over an area.
  *
- * <p>Protego Maxima is a powerful defensive charm that provides multiple layers of protection:
+ * <p>Protego Maxima is a powerful defensive charm that provides multiple layers of protection:</p>
  * <ul>
  *   <li>Kills tracked projectiles that enter the protected area</li>
  *   <li>Prevents living entities outside the area from targeting players or passive mobs inside</li>
@@ -36,7 +36,6 @@ import java.util.UUID;
  *   <li>Prevents projectiles from hitting players or non-hostile mobs inside the area</li>
  *   <li>Allows projectiles to hit hostile mobs inside the area</li>
  * </ul>
- * </p>
  *
  * <p>Note: In the Harry Potter universe, this spell would also repel hostile entities like Dementors,
  * but Spigot does not provide an entity move event for this functionality.</p>

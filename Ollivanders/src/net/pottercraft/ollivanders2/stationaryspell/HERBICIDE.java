@@ -20,14 +20,13 @@ import java.util.UUID;
 /**
  * A stationary spell that destroys plants and vegetation within a protected area.
  *
- * <p>Herbicide creates a powerful killing field that eliminates all plant life by:
+ * <p>Herbicide creates a powerful killing field that eliminates all plant life by:</p>
  * <ul>
  *   <li>Replacing plants with dead alternatives (leaves become air, grass becomes dirt, etc.)</li>
  *   <li>Dropping items for saplings and vegetation</li>
  *   <li>Resetting crop growth to age 0</li>
  *   <li>Checking WorldGuard permissions to prevent griefing</li>
  * </ul>
- * </p>
  *
  * <p>The spell targets a comprehensive list of plant materials including flowers, crops, leaves,
  * mossy blocks, potted plants, and mushrooms.</p>
@@ -242,13 +241,12 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
     /**
      * Ages the spell and eliminates plant life within the protected area.
      *
-     * <p>Every 10 ticks, processes all blocks in the spell radius:
+     * <p>Every 10 ticks, processes all blocks in the spell radius:</p>
      * <ul>
      *   <li>Replaces plant blocks with dead alternatives (leaves→air, grass→dirt, etc.)</li>
      *   <li>Drops items for saplings/bamboo and removes the block</li>
      *   <li>Resets crop age to 0 for immature crops</li>
      * </ul>
-     * </p>
      */
     @Override
     public void upkeep() {

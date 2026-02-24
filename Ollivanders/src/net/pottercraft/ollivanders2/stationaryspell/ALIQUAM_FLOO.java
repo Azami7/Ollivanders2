@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
  * Players throw floo powder into the fireplace to activate it, then speak a destination name to teleport.
  * If the destination name is not recognized, the player is randomly sent to another floo location.</p>
  *
- * <p>Spell characteristics:
+ * <p>Spell characteristics:</p>
  * <ul>
  *   <li>Fixed radius of 2 blocks (hardcoded, cannot be modified)</li>
  *   <li>Permanent spell (never expires unless killed)</li>
@@ -44,7 +44,6 @@ import org.jetbrains.annotations.NotNull;
  *   <li>Visual effects: legacy mob spawner flames or soul fire (configurable)</li>
  *   <li>Prevents fire and combustion damage within the protected area</li>
  * </ul>
- * </p>
  *
  * <p>All active floo locations are registered in a static network list for teleportation discovery.</p>
  *

@@ -12,6 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Abstract base class for stationary spells created by thrown potions.
+ *
+ * <p>Represents lingering potion effects that persist in the world after a potion is thrown. These spells
+ * differ from other stationary spells in that they perform WorldGuard permission checks at the time of
+ * creation, since the original O2Spell projectile may not perform these checks.</p>
+ *
+ * @author Azami7
+ */
 public abstract class ThrownPotionStationarySpell extends O2StationarySpell {
     /**
      * A list of the worldguard permissions needed for this spell

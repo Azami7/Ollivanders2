@@ -14,16 +14,14 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * GEMINO is a dark arts spell that enchants an item with the Doubling Curse. When a player picks up
  * a GEMINO-enchanted item, it duplicates exponentially (2^magnitude copies), potentially filling
- * containers and overwhelming the player with copies.
- * </p>
+ * containers and overwhelming the player with copies.</p>
  * <p>
- * Spell mechanics:
+ * Spell mechanics:</p>
  * <ul>
  * <li>Strength: 0.25x modifier multiplier</li>
  * <li>Max magnitude: 10 (produces 2^10 = 1024 copies at maximum)</li>
  * <li>Classification: Dark Arts</li>
  * </ul>
- * </p>
  *
  * @see net.pottercraft.ollivanders2.item.enchantment.GEMINO the enchantment that powers this spell
  * @see <a href="https://harrypotter.fandom.com/wiki/Doubling_Charm">Doubling Charm - Harry Potter Wiki</a>
@@ -35,7 +33,6 @@ public final class GEMINO extends ItemEnchant {
      * <p>
      * This constructor initializes the spell with flavor text and description but does not perform
      * any actual spell casting. Use the full constructor with player and wand parameters to cast the spell.
-     * </p>
      *
      * @param plugin the Ollivanders2 plugin instance
      */

@@ -20,13 +20,12 @@ import java.util.UUID;
  * area will not take damage from the impact, no matter the height of the fall. The spell lasts
  * for a configurable duration based on caster skill level.</p>
  *
- * <p>Spell characteristics:
+ * <p>Spell characteristics:</p>
  * <ul>
  *   <li>Radius: 5-20 blocks (configurable)</li>
  *   <li>Duration: 30 seconds to 30 minutes (configurable)</li>
  *   <li>Effect: Negates fall damage for all entities within the protected area</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>

@@ -23,13 +23,12 @@ import java.util.UUID;
  * The spell is permanent and cannot be dispelled by normal means. Any attempt to open or break a protected
  * door or trapdoor will fail silently.</p>
  *
- * <p>Spell characteristics:
+ * <p>Spell characteristics:</p>
  * <ul>
  *   <li>Radius: 5 blocks (fixed)</li>
  *   <li>Duration: Permanent (cannot be dispelled)</li>
  *   <li>Effect: Prevents opening/breaking doors, trapdoors, and chests within the protected area</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>

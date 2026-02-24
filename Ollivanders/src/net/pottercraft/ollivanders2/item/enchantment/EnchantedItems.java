@@ -30,7 +30,7 @@ import java.util.List;
  * Manager for enchanted items and their magical properties.
  * <p>
  * Enchantments are magical effects applied to items using NBT (Named Binary Tag) data stored in item metadata.
- * This class handles:
+ * This class handles:</p>
  * <ul>
  * <li>Creating and tracking enchanted items with unique identifiers</li>
  * <li>Storing enchantment metadata (type, magnitude, arguments) as NBT tags</li>
@@ -38,14 +38,12 @@ import java.util.List;
  * <li>Handling enchantment event listeners (pickup, drop, despawn, item held)</li>
  * <li>Managing cursed item detection with level-based awareness</li>
  * </ul>
- * </p>
  * <p>
  * Enchantments are stored as NBT tags on ItemStack metadata, allowing them to persist across server
  * restarts and item operations. Each enchantment is cached by its unique ID for efficient event handling.
  * </p>
  * <p>
- * Examples: broom flight (VOLATUS), port keys (PORTUS), item duplication (GEMINO), concealment (CELATUM).
- * </p>
+ * Examples: broom flight (VOLATUS), port keys (PORTUS), item duplication (GEMINO), concealment (CELATUM).</p>
  *
  * @see Enchantment the abstract base class for all enchantment implementations
  * @see ItemEnchantmentType the enumeration of available enchantment types
@@ -54,7 +52,7 @@ public class EnchantedItems implements Listener {
     /**
      * Reference to the Ollivanders2 plugin instance.
      */
-    private Ollivanders2 p;
+    private final Ollivanders2 p;
 
     /**
      * Utility functions for common operations across the plugin.
@@ -166,17 +164,15 @@ public class EnchantedItems implements Listener {
     /**
      * Apply an enchantment to an ItemStack and register it in the enchantment cache.
      * <p>
-     * This method:
+     * This method:</p>
      * <ul>
      * <li>Stores enchantment metadata (type, magnitude, ID, args) as NBT tags in the item's metadata</li>
      * <li>Creates an Enchantment object from the enchantment type and caches it by ID</li>
      * <li>Adds custom lore to the item if the enchantment has associated text</li>
      * </ul>
-     * </p>
      * <p>
      * The enchantment ID uniquely identifies this enchanted item instance and is used for efficient
-     * lookup during event handling. It should typically be a UUID or unique identifier.
-     * </p>
+     * lookup during event handling. It should typically be a UUID or unique identifier.</p>
      *
      * @param itemStack the ItemStack to enchant
      * @param eType     the type of enchantment to apply
@@ -551,16 +547,14 @@ public class EnchantedItems implements Listener {
     /**
      * Remove an enchantment from an ItemStack completely.
      * <p>
-     * This method:
+     * This method:</p>
      * <ul>
      * <li>Removes the Enchantment object from the cache</li>
      * <li>Removes all enchantment NBT tags from the item's metadata</li>
      * </ul>
-     * </p>
      * <p>
      * Use this to completely disenchant an item. For simply removing NBT tags without touching the
-     * cache, use {@link #removeEnchantmentNBT(ItemStack)} instead.
-     * </p>
+     * cache, use {@link #removeEnchantmentNBT(ItemStack)} instead.</p>
      *
      * @param enchantedItemStack the ItemStack to remove the enchantment from
      * @return the ItemStack with the enchantment removed

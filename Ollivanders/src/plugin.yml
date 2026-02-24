@@ -10,7 +10,7 @@ commands:
   Ollivanders2:
     description: This is the main admin command for the Ollivanders2 plugin
     usage: /Ollivanders2 <arg>
-    aliases: [Olli]
+    aliases: [Olli, olli]
     permissions: Ollivanders2.admin
     permission-message: You do not have Ollivanders admin permissions.
 permissions:

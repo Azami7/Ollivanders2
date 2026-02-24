@@ -22,10 +22,9 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * PORTUS is an expert-level enchantment that transforms an item into a portkey—a magical transportation
  * device that teleports players to a predetermined destination when picked up. Portkeys are powerful
- * magical objects that can transport multiple players at once within a configurable radius.
- * </p>
+ * magical objects that can transport multiple players at once within a configurable radius.</p>
  * <p>
- * Portkey behavior:
+ * Portkey behavior:</p>
  * <ul>
  * <li>Player pickup: teleports the player and all players within the radius to the destination</li>
  * <li>Non-player pickup: blocked, only players can activate portkeys</li>
@@ -33,14 +32,12 @@ import org.jetbrains.annotations.Nullable;
  * <li>Round-trip: after activation, the destination is updated to return to the pickup location</li>
  * <li>Proximity check: portkeys won't activate if the player is within 3 blocks of the destination</li>
  * </ul>
- * </p>
  * <p>
- * Teleportation can be blocked by stationary spells:
+ * Teleportation can be blocked by stationary spells:</p>
  * <ul>
  * <li>{@link O2StationarySpellType#NULLUM_EVANESCUNT}: blocks teleportation FROM a location</li>
  * <li>{@link O2StationarySpellType#NULLUM_APPAREBIT}: blocks teleportation TO a location</li>
  * </ul>
- * </p>
  *
  * @see net.pottercraft.ollivanders2.spell.PORTUS the spell that creates portkeys
  * @see <a href="https://harrypotter.fandom.com/wiki/Portkey">https://harrypotter.fandom.com/wiki/Portkey</a>
@@ -124,10 +121,9 @@ public class PORTUS extends Enchantment {
      * <p>
      * When a player picks up a portkey, this method teleports the player and all nearby players
      * (within the configured radius) to the portkey's destination. After teleportation, the
-     * destination is updated to the pickup location, creating a round-trip portkey.
-     * </p>
+     * destination is updated to the pickup location, creating a round-trip portkey.</p>
      * <p>
-     * Teleportation is blocked when:
+     * Teleportation is blocked when:</p>
      * <ul>
      * <li>The entity is not a player (event is cancelled)</li>
      * <li>A {@link O2StationarySpellType#NULLUM_EVANESCUNT} spell blocks departure from the location</li>
@@ -135,7 +131,6 @@ public class PORTUS extends Enchantment {
      * <li>The player is within 3 blocks of the destination (prevents accidental self-teleportation)</li>
      * <li>The destination is null (portkey was not properly configured)</li>
      * </ul>
-     * </p>
      *
      * @param event the entity item pickup event
      */

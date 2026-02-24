@@ -34,9 +34,9 @@ import java.util.ArrayList;
  *
  * <p><strong>Success Rate by Skill Comparison:</strong></p>
  * <ul>
- * <li>80% success when caster's skill > target's skill</li>
+ * <li>80% success when caster's skill &gt; target's skill</li>
  * <li>66% success when skills are equal</li>
- * <li>10% success when caster's skill < target's skill</li>
+ * <li>10% success when caster's skill &lt; target's skill</li>
  * </ul>
  *
  * <p><strong>Animagus Form:</strong> When target is in animagus form, only level 10+ casters can attempt
@@ -45,7 +45,14 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Legilimency_Spell">Legilimency Spell</a>
  */
 public final class LEGILIMENS extends O2Spell {
+    /**
+     * The radius that legilimens can find a target in
+     */
     public static final int radius = 3;
+
+    /**
+     * The failure message when the spell finds a target but fails to read their mind
+     */
     public static final String mindReadFailureMessage = " resists your mind.";
 
     /**

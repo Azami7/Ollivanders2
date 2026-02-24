@@ -38,6 +38,9 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
+    /**
+     * The proximity alarm message
+     */
     private final String proximityAlarmMessage = "A hostile entity approaches.";
 
     /**
@@ -154,6 +157,11 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
         proximityCooldownTimer = proximityCooldownLimit;
     }
 
+    /**
+     * Get the message sent to the caster when proximity is triggered.
+     *
+     * @return the proximity alarm message
+     */
     public String getProximityAlarmMessage() {
         return proximityAlarmMessage;
     }

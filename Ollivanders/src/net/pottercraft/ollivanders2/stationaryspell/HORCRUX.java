@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * A stationary spell that creates a horcrux - an anchor point for player resurrection with preserved power.
  *
  * <p>Horcrux creates a permanent magical anchor that allows the spell's caster to respawn at the
- * horcrux location when killed, while retaining all spell levels and experience. The spell:
+ * horcrux location when killed, while retaining all spell levels and experience. The spell:</p>
  * <ul>
  *   <li>Creates an anchor point as a physical item in the world</li>
  *   <li>Prevents the player from losing spell levels on death</li>
@@ -39,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
  *   <li>Protects the horcrux item from being picked up or despawning</li>
  *   <li>Can only be destroyed by fiendfyre</li>
  * </ul>
- * </p>
  *
  * <p>The spell is permanent and persists across server restarts.</p>
  *
@@ -98,7 +97,14 @@ public class HORCRUX extends O2StationarySpell {
      */
     public static final int effectDuration = Ollivanders2Common.ticksPerSecond * 15;
 
+    /**
+     * The serialization label for the item material
+     */
     private final String materialLabel = "itemType";
+
+    /**
+     * The serialization label for the item location world
+     */
     private final String worldLabel = "world";
 
     /**
@@ -416,13 +422,13 @@ public class HORCRUX extends O2StationarySpell {
     /**
      * Validates that the spell was properly deserialized with all required data.
      *
-     * <p>Checks that the following essential data was restored from the saved state:
+     * <p>Checks that the following essential data was restored from the saved state:</p>
      * <ul>
      *   <li>Player UUID (caster identification)</li>
      *   <li>Location (horcrux position)</li>
      *   <li>Horcrux material (item type)</li>
      * </ul>
-     * If any required data is missing, the spell is invalid and should be destroyed.</p>
+     * <p>If any required data is missing, the spell is invalid and should be destroyed.</p>
      *
      * @return true if all required data is present, false otherwise
      */

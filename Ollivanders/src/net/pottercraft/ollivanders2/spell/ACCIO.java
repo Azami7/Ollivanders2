@@ -20,8 +20,19 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://harrypotter.fandom.com/wiki/Summoning_Charm">Summoning Charm</a>
  */
 public final class ACCIO extends Knockback {
+    /**
+     * The min distance
+     */
     public static int minDistanceConfig = 0;
+
+    /**
+     * The max distance
+     */
     public static int maxDistanceConfig = 20;
+
+    /**
+     * The divisor for usesModifier to determine spell strength
+     */
     public static int strengthReducerConfig = 10;
 
     /**

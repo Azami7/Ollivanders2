@@ -1,7 +1,9 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
@@ -109,7 +111,6 @@ public final class LUMOS_DUO extends O2Spell {
 
             curBlock.setType(Material.GLOWSTONE);
             line.add(curBlock);
-            p.addTempBlock(curBlock, Material.AIR);
 
             lineLength = lineLength + 1;
         }
@@ -125,8 +126,9 @@ public final class LUMOS_DUO extends O2Spell {
 
     @Override
     protected void revert() {
+        // change the blocks back to air
         for (Block block : line)
-            p.revertTempBlock(block);
+            block.setType(Material.AIR);
 
         line.clear();
     }

@@ -67,12 +67,12 @@ public abstract class EntityDisguise extends EntityTransfiguration {
      * Determine if this entity can be transfigured by this spell.
      *
      * <p>Checks if LibsDisguises is enabled for spells that require it, then delegates to parent validation.
-     * Entity can be transfigured if:
+     * Entity can be transfigured if:</p>
      * <ul>
      * <li>The entity is not already the target type</li>
      * <li>It is not in the blocked list</li>
      * <li>It is in the allowed list, if the allowed list exists</li>
-     * </ul></p>
+     * </ul>
      *
      * @param entity the entity to check
      * @return true if the entity can be transfigured, false otherwise

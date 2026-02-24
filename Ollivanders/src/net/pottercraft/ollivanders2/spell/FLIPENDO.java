@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,8 +19,19 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://harrypotter.fandom.com/wiki/Knockback_Jinx">Knockback Jinx</a>
  */
 public final class FLIPENDO extends Knockback {
+    /**
+     * The min distance
+     */
     public static int minDistanceConfig = 2;
+
+    /**
+     * The max distance
+     */
     public static int maxDistanceConfig = 10;
+
+    /**
+     * The divisor for usesModifier to determine spell strength
+     */
     public static int strengthReducerConfig = 10;
 
     /**

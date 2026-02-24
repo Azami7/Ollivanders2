@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 
@@ -976,28 +977,51 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Calculate the velocity needed to travel a target distance with a given drag factor.
+     * Calculate the velocity needed to travel a target distance in a target direction with a given drag factor.
      *
-     * <p>Simulates Minecraft's per-tick physics: velocity = (velocity - 0.08) * dragFactor.
-     * Increments velocity by 0.01 until the simulated height reaches the target distance.</p>
-     *
-     * @param targetDistance the number of blocks to travel
-     * @param dragFactor     the drag factor (0.8 for water, 0.98 for air)
-     * @return the initial velocity needed to reach the target distance
+     * @param source     the location to calculate direction from
+     * @param distance   the number of blocks to travel
+     * @param dragFactor the drag factor
+     * @param towards    is the velocity towards the source (pull) or away (push)
+     * @return the calculated velocity needed to reach the target distance
      */
-    public static double velocityForDistance(double targetDistance, double dragFactor) {
-        double velocity = 0.01;
-        while (true) {
-            double v = velocity;
-            double height = 0;
-            while (v > 0) {
-                height += v;
-                v = (v - 0.08) * dragFactor;
-            }
-            if (height >= targetDistance)
-                return velocity;
-            velocity += 0.01;
+    public static Vector calculateVelocityForDistance(Location source, double distance, double dragFactor, boolean towards) {
+        Vector velocity = source.getDirection();
+
+        if (towards) {
+            velocity.multiply(-1);
         }
+
+        // Actual velocity calculation would require calculus, this is a simple approximation that is good enough for our purposes
+        double magnitude = distance + (distance * (1 - dragFactor));
+
+        Ollivanders2API.common.printDebugMessage("magnitude = " + magnitude, null, null, false);
+
+        return velocity.multiply(magnitude);
     }
 
+    /**
+     * Calculate the velocity needed to travel in +/-Y a target distance with a given drag factor.
+     *
+     * @param distance   the number of blocks to travel
+     * @param dragFactor the drag factor
+     * @param upwards    is the velocity in the +Y direction, else -Y
+     * @return the calculated velocity vector
+     */
+    public static Vector calculateVerticalVelocity(double distance, double dragFactor, boolean upwards) {
+        // Actual velocity calculation would require calculus, this is a simple approximation that is good enough for our purposes
+        double magnitude = distance + (distance * (1 - dragFactor));
+
+        Ollivanders2API.common.printDebugMessage("magnitude = " + magnitude, null, null, false);
+
+        // Create a purely vertical vector
+        Vector velocity = new Vector(0, magnitude, 0);
+
+        // If downwards, make it negative
+        if (!upwards) {
+            velocity.setY(-magnitude);
+        }
+
+        return velocity;
+    }
 }

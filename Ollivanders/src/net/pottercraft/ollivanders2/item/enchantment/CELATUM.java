@@ -11,14 +11,13 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The concealment charm - used to hide secret messages in books.
  * <p>
- * Enchantment behavior:
+ * Enchantment behavior:</p>
  * <ul>
  * <li>Player pickup: no special behavior, players can pick up celatum items normally</li>
  * <li>Hopper pickup: blocked, hoppers cannot collect celatum-enchanted items</li>
  * <li>Drop events: no special behavior, items can be dropped normally</li>
  * <li>Slot switching: no special behavior, celatum status is independent of player actions</li>
  * </ul>
- * </p>
  *
  * @see net.pottercraft.ollivanders2.spell.CELATUM the spell that casts this enchantment
  * @see <a href="https://harrypotter.fandom.com/wiki/Revealing_Charm">https://harrypotter.fandom.com/wiki/Revealing_Charm</a>

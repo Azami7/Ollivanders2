@@ -93,8 +93,20 @@ public class O2Effects implements Listener {
      * to maintain consistent field naming across saves and loads.</p>
      */
     public static final String effectPIDLabel = "Effect_target_pid";
+
+    /**
+     * Serialization label for isPermanent
+     */
     public static final String effectPermanentLabel = "Effect_is_permanent";
+
+    /**
+     * Serialization label for duration
+     */
     public static final String effectDurationLabel = "Effect_duration";
+
+    /**
+     * Serialization label for effectType
+     */
     public static final String effectTypeLabel = "Effect_type";
 
     /**

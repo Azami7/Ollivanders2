@@ -19,7 +19,7 @@ import java.util.UUID;
  * witches who are concealed within the spell area, nor can they hear conversations happening inside.
  * Unlike some concealment spells, this charm does not trigger proximity alarms when muggles approach.</p>
  *
- * <p><strong>Behavior:</strong>
+ * <p><strong>Behavior:</strong></p>
  * <ul>
  *   <li>Muggles cannot enter the spell area ({@link #canEnter(LivingEntity)} returns false)</li>
  *   <li>Muggles cannot see wizards inside ({@link #canSee(LivingEntity)} returns false)</li>
@@ -27,7 +27,6 @@ import java.util.UUID;
  *   <li>All entities (including muggles) can target players inside without restriction</li>
  *   <li>No proximity alarms are triggered when muggles approach the boundary</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  * @version Ollivanders2

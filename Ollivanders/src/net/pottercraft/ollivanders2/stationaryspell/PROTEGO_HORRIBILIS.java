@@ -21,14 +21,13 @@ import org.jetbrains.annotations.NotNull;
  * area. However, the spell is not powerful enough to stop the Killing Curse (Avada Kedavra), which bypasses the shield
  * due to its overwhelming dark magic.</p>
  *
- * <p>Spell characteristics:
+ * <p>Spell characteristics:</p>
  * <ul>
  *   <li>Radius: 5-30 blocks (configurable)</li>
  *   <li>Duration: 30 seconds to 30 minutes (configurable)</li>
  *   <li>Effect: Blocks Dark Arts spells from entering the protected area</li>
  *   <li>Exception: Avada Kedavra (Killing Curse) bypasses the shield</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>

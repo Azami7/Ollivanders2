@@ -29,12 +29,12 @@ public abstract class Knockback extends O2Spell {
     /**
      * The minimum distance we can move things
      */
-    protected int minDistance = 1;
+    protected double minDistance = 1;
 
     /**
      * The maximum distance we can move things
      */
-    protected int maxDistance = 5;
+    protected double maxDistance = 5;
 
     /**
      * The maximum number of targets
@@ -54,7 +54,7 @@ public abstract class Knockback extends O2Spell {
     /**
      * Is the knockback vertical or horizontal
      */
-    boolean isVertical = false;
+    boolean vertical = false;
 
     /**
      * Does this spell target the caster?
@@ -142,11 +142,20 @@ public abstract class Knockback extends O2Spell {
             if (distance <= 0) // spell will have no effect so exit
                 return;
 
-            // determine the magnitude of the velocity
+            // determine the velocity
+            /*
             double magnitude = calculateVelocityMagnitude(target, distance);
             if (magnitude == 0) // spell will have no effect so exit
                 return;
 
+             */
+
+            if (isVertical())
+                velocity = Ollivanders2Common.calculateVerticalVelocity(distance, calculateDragFactor(target), !isPull());
+            else
+                velocity = Ollivanders2Common.calculateVelocityForDistance(location, distance, calculateDragFactor(target), isPull());
+
+            /*
             if (pull) // make velocity negative to move towards rather than away from the caster location
                 magnitude = magnitude * -1;
 
@@ -154,6 +163,8 @@ public abstract class Knockback extends O2Spell {
                 velocity = new Vector(0.0, magnitude, 0.0);
             else // velocity is towards or away from the direction the caster is facing
                 velocity = player.getLocation().getDirection().normalize().multiply(magnitude);
+
+             */
 
             target.setVelocity(velocity);
         }
@@ -166,7 +177,12 @@ public abstract class Knockback extends O2Spell {
      * @return true if it can be targeted, false otherwise
      */
     boolean entityTargetCheck(Entity entity) {
-        // check entity allow list
+        if (entity.getUniqueId().equals(player.getUniqueId()) && !targetsSelf)
+            return false;
+        else if (entity.getUniqueId().equals(player.getUniqueId()) && targetsSelf)
+            return true;
+
+        // check canTarget
         if (!canTarget(entity))
             return false;
 
@@ -235,7 +251,7 @@ public abstract class Knockback extends O2Spell {
             distance = maxDistance;
 
         // if this is a vertical push spell and the target is underwater, we don't want to send them flying out of the water at underwater drag velocity
-        if (isVertical && !pull && !Ollivanders2.testMode && target.isUnderWater()) { // isUnderWater not currently implemented in MockBukkit
+        if (vertical && !pull && !Ollivanders2.testMode && target.isUnderWater()) { // isUnderWater not currently implemented in MockBukkit
             int distanceToSurface = EntityCommon.distanceToSurface(target);
             if (distance > (distanceToSurface + 1))
                 distance = distanceToSurface + 1;
@@ -252,26 +268,22 @@ public abstract class Knockback extends O2Spell {
      * determine the velocity needed to move the target the specified distance.</p>
      *
      * @param target   the target to affect
-     * @param distance the distance to move the target
      * @return the velocity magnitude for the target
      */
-    double calculateVelocityMagnitude(Entity target, double distance) {
+    double calculateDragFactor(Entity target) {
         double drag;
 
         if (!Ollivanders2.testMode && target.isUnderWater()) { // isUnderWater not currently implemented in MockBukkit
             drag = Ollivanders2Common.underWaterDragFactor;
         }
         else {
-            if (isVertical)
+            if (vertical)
                 drag = Ollivanders2Common.airVerticalDragFactor;
             else
                 drag = Ollivanders2Common.airHorizontalDragFactor;
         }
 
-        double magnitude = Ollivanders2Common.velocityForDistance(distance, drag);
-
-        common.printDebugMessage("Knockback.calculateVelocityMagnitude: magnitude = " + magnitude, null, null, false);
-        return magnitude;
+        return drag;
     }
 
     /**
@@ -298,7 +310,7 @@ public abstract class Knockback extends O2Spell {
      * @return true if the knockback is vertical (Y-axis), false if horizontal
      */
     public boolean isVertical() {
-        return isVertical;
+        return vertical;
     }
 
     /**
@@ -333,7 +345,7 @@ public abstract class Knockback extends O2Spell {
      *
      * @return the minimum distance
      */
-    public int getMinDistance() {
+    public double getMinDistance() {
         return minDistance;
     }
 
@@ -342,7 +354,7 @@ public abstract class Knockback extends O2Spell {
      *
      * @return the maximum distance
      */
-    public int getMaxDistance() {
+    public double getMaxDistance() {
         return maxDistance;
     }
 

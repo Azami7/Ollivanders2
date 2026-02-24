@@ -35,8 +35,19 @@ public final class O2PlayerCommon {
      */
     final Ollivanders2Common common;
 
+    /**
+     * Multiplier for spell casting, when using their destined wand, this is 1, so no effect.
+     */
     public static final double rightWand = 1.0;
+
+    /**
+     * Multiplier for spell casting, when using the Elder wand, strength is doubled
+     */
     public static final double wrongWand = 2.0;
+
+    /**
+     * Multiplier for spell casting, when using someone else's wand, strength is halved
+     */
     public static final double elderWand = 0.5;
 
     /**

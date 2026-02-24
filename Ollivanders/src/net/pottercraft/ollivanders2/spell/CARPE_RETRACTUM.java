@@ -21,10 +21,29 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://harrypotter.fandom.com/wiki/Seize_and_pull_charm">Seize and Pull Charm</a>
  */
 public final class CARPE_RETRACTUM extends Knockback {
-    public static int minDistanceConfig = 1;
+    /**
+     * The min distance
+     */
+    public static int minDistanceConfig;
+
+    /**
+     * The max distance
+     */
     public static int maxDistanceConfig = 5;
+
+    /**
+     * The divisor for usesModifier to determine spell strength
+     */
     public static int strengthReducerConfig = 4;
+
+    /**
+     * The max radius
+     */
     public static double maxRadiusConfig = 10;
+
+    /**
+     * The max number of targets
+     */
     public static int maxTargetConfig = 3;
 
     /**

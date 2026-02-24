@@ -19,10 +19,29 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://harrypotter.fandom.com/wiki/Arania_Exumai">Arania Exumai</a>
  */
 public final class ARANIA_EXUMAI extends Knockback {
+    /**
+     * The min distance
+     */
     public static int minDistanceConfig = 0;
+
+    /**
+     * The max distance
+     */
     public static int maxDistanceConfig = 10;
+
+    /**
+     * The divisor for usesModifier to determine spell strength
+     */
     public static int strengthReducerConfig = 10;
+
+    /**
+     * The max radius
+     */
     public static double maxRadiusConfig = 10;
+
+    /**
+     * The max number of targets
+     */
     public static int maxTargetConfig = 5;
 
     /**

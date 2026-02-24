@@ -21,13 +21,12 @@ import java.util.UUID;
  * A stationary spell that prevents apparition and teleportation out of the protected area.
  *
  * <p>Nullum Evanescunt creates a powerful anti-disapparition barrier that prevents entities
- * from escaping through magical means. Those trapped inside cannot:
+ * from escaping through magical means. Those trapped inside cannot:</p>
  * <ul>
  *   <li>Apparate by name to leave the spell area</li>
  *   <li>Apparate by coordinates to leave the spell area</li>
  *   <li>Teleport away from the spell area</li>
  * </ul>
- * </p>
  *
  * <p>Note: This spell uses min/max constraints from {@link NULLUM_APPAREBIT}.</p>
  *

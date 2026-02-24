@@ -358,8 +358,6 @@ public abstract class O2Spell {
      * {@link #maxProjectileDistance} blocks before being automatically terminated.</p>
      */
     public void move() {
-        common.printDebugMessage("O2Spell.move: location is " + location.getX() + " , " + location.getY() + ", " + location.getZ(), null, null, false);
-
         // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
         if (isKilled() || hasHitTarget())
             return;

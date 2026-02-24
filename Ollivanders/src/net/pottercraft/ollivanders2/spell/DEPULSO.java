@@ -18,9 +18,24 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://harrypotter.fandom.com/wiki/Banishing_Charm">Banishing Charm</a>
  */
 public final class DEPULSO extends Knockback {
+    /**
+     * The min distance
+     */
     public static int minDistanceConfig = 0;
+
+    /**
+     * The max distance
+     */
     public static int maxDistanceConfig = 10;
+
+    /**
+     * The max radius
+     */
     public static double maxRadiusConfig = 10;
+
+    /**
+     * The max number of targets
+     */
     public static int maxTargetConfig = 5;
 
     /**
