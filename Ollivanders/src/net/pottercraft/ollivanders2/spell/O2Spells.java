@@ -459,6 +459,7 @@ public class O2Spells {
      * @param player the player that cast the spell
      * @param name   the name of the spell cast
      * @param wandC  the wand check value for the held wand
+     * @return the spell that was created, or null if something failed
      */
     @Nullable
     public O2Spell createSpell(@NotNull Player player, @NotNull O2SpellType name, double wandC) {

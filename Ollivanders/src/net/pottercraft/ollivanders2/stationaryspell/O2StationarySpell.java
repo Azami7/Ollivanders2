@@ -49,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
  * (flair), and provide a hook system for handling game events. Each spell has configurable minimum and
  * maximum radius and duration constraints that subclasses must define.</p>
  *
- * <p>Key features:
+ * <p>Key features:</p>
  * <ul>
  *   <li>Fixed location with configurable radius</li>
  *   <li>Time-based duration (ages each tick unless permanent)</li>
@@ -58,7 +58,6 @@ import org.jetbrains.annotations.NotNull;
  *   <li>Serialization/deserialization for persistence across server restarts</li>
  *   <li>Visual effects (flair) at spell location</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  * @version Ollivanders2

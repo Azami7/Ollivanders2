@@ -21,10 +21,9 @@ import org.jetbrains.annotations.Nullable;
  * VOLATUS is an expert-level beneficial enchantment that grants the {@link O2EffectType#BROOM_FLYING}
  * effect to players holding volatus-enchanted broomsticks. The enchantment actively monitors whether
  * the player is holding a volatus item and applies or removes the flying effect accordingly. Flight
- * is only enabled when the player has a volatus-enchanted broomstick in their main hand or off-hand.
- * </p>
+ * is only enabled when the player has a volatus-enchanted broomstick in their main hand or off-hand.</p>
  * <p>
- * Enchantment behavior:
+ * Enchantment behavior:</p>
  * <ul>
  * <li>When a volatus item is picked up, the flying effect is applied if the player is now holding one</li>
  * <li>When a volatus item is dropped, the flying effect is removed if the player is no longer holding one</li>
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
  * <li>Hoppers cannot pick up volatus items (broomsticks persist in the world)</li>
  * <li>Requires broomsticks to be enabled in the plugin configuration</li>
  * </ul>
- * </p>
  *
  * @see net.pottercraft.ollivanders2.spell.VOLATUS the spell that casts this enchantment
  * @see <a href="https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>

@@ -907,10 +907,10 @@ public class O2Player {
         if (Ollivanders2.enableDeathExpLoss) {
             resetSpellCount();
             resetPotionCount();
-            resetSouls();
-            Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
         }
 
+        resetSouls();
+        Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
         setWandSpell(null);
     }
 
@@ -949,12 +949,17 @@ public class O2Player {
             animagusColor = Cat.Type.SIAMESE.toString();
     }
 
+    /**
+     * Is this player currently online? For use when we have an O2Player and not a player (which has an isOnline() method in Spigot)
+     *
+     * @return true if they are online, false otherwise
+     */
     public boolean isOnline() {
         Player player = p.getServer().getPlayer(pid);
 
         if (player == null)
             return false;
         else
-            return true;
+            return player.isOnline();
     }
 }

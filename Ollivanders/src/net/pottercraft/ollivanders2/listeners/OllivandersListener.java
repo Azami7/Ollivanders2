@@ -555,16 +555,12 @@ public class OllivandersListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
-        if (Ollivanders2.enableDeathExpLoss) {
-            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(event.getEntity().getUniqueId());
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(event.getEntity().getUniqueId());
 
-            if (o2p == null)
-                return;
+        if (o2p == null)
+            return;
 
-            o2p.onDeath();
-
-            p.setO2Player(event.getEntity(), o2p);
-        }
+        o2p.onDeath();
     }
 
     /**
@@ -594,6 +590,7 @@ public class OllivandersListener implements Listener {
     public void onTemporaryBlockBreak(@NotNull BlockBreakEvent event) {
         Block block = event.getBlock();
 
+        // todo re-create the global block management so that we can keep track of all temporarily changed blocks
         if (p.isTempBlock(block)) {
             event.setDropItems(false);
         }

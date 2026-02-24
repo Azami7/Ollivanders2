@@ -196,15 +196,19 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
         assertInstanceOf(Knockback.class, spell);
         Knockback knockbackSpell = (Knockback)spell;
 
+        Entity target;
         if (!knockbackSpell.isTargetsSelf()) {
             EntityType validType = getValidEntityType();
+
             if (validType == EntityType.ITEM)
-                testWorld.dropItem(targetLocation, new ItemStack(Material.WOODEN_AXE, 1));
+                target = testWorld.dropItem(targetLocation, new ItemStack(Material.WOODEN_AXE, 1));
             else
-                testWorld.spawnEntity(targetLocation, validType);
+                target = testWorld.spawnEntity(targetLocation, validType);
 
             mockServer.getScheduler().performTicks(10); // do 10 ticks to get the projectile to the target
         }
+        else
+            target = caster;
 
         mockServer.getScheduler().performTicks(3);
         Vector velocity = knockbackSpell.getVelocity();
@@ -217,10 +221,12 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
         }
         else {
             if (knockbackSpell.isPull())
-                assertTrue(velocity.getX() < 0, "velocity not set to -X for horizontal pull, Y velocity = " + velocity.getX()); // we know it will be in X because location and targetLocation only differ in X
+                assertTrue(velocity.getX() < 0, "velocity not set to -X for horizontal pull, X velocity = " + velocity.getX()); // we know it will be in X because location and targetLocation only differ in X
             else
-                assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, Y velocity = " + velocity.getX());
+                assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, X velocity = " + velocity.getX());
         }
+
+        assertEquals(velocity, target.getVelocity(), "velocity not set on target");
     }
 
     @Test
@@ -239,20 +245,20 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
         if (knockbackSpell.isTargetsMultiple()) {
             EntityType validType = getValidEntityType();
 
-            Entity entity1;
-            Entity entity2;
-            Entity entity3;
+            Entity target1;
+            Entity target2;
+            Entity target3;
 
             // spawn
             if (validType == EntityType.ITEM) {
-                entity1 = testWorld.dropItem(targetLocation, new ItemStack(Material.WOODEN_AXE, 1));
-                entity2 = testWorld.dropItem(targetLocation.getBlock().getRelative(BlockFace.NORTH).getLocation(), new ItemStack(Material.WOODEN_AXE, 1));
-                entity3 = testWorld.dropItem(targetLocation.getBlock().getRelative(BlockFace.EAST).getLocation(), new ItemStack(Material.WOODEN_AXE, 1));
+                target1 = testWorld.dropItem(targetLocation, new ItemStack(Material.WOODEN_AXE, 1));
+                target2 = testWorld.dropItem(targetLocation.getBlock().getRelative(BlockFace.NORTH).getLocation(), new ItemStack(Material.WOODEN_AXE, 1));
+                target3 = testWorld.dropItem(targetLocation.getBlock().getRelative(BlockFace.EAST).getLocation(), new ItemStack(Material.WOODEN_AXE, 1));
             }
             else {
-                entity1 = testWorld.spawnEntity(targetLocation, validType);
-                entity2 = testWorld.spawnEntity(targetLocation.getBlock().getRelative(BlockFace.SOUTH).getLocation(), validType);
-                entity3 = testWorld.spawnEntity(targetLocation.getBlock().getRelative(BlockFace.WEST).getLocation(), validType);
+                target1 = testWorld.spawnEntity(targetLocation, validType);
+                target2 = testWorld.spawnEntity(targetLocation.getBlock().getRelative(BlockFace.SOUTH).getLocation(), validType);
+                target3 = testWorld.spawnEntity(targetLocation.getBlock().getRelative(BlockFace.WEST).getLocation(), validType);
             }
 
             mockServer.getScheduler().performTicks(20);
@@ -272,9 +278,9 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
                     assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, Y velocity = " + velocity.getX());
             }
 
-            assertEquals(velocity, entity1.getVelocity(), "entity1 velocity not set");
-            assertEquals(velocity, entity2.getVelocity(), "entity2 velocity not set");
-            assertEquals(velocity, entity3.getVelocity(), "entity3 velocity not set");
+            assertEquals(velocity, target1.getVelocity(), "target1 velocity not set");
+            assertEquals(velocity, target2.getVelocity(), "target2 velocity not set");
+            assertEquals(velocity, target3.getVelocity(), "target3 velocity not set");
         }
     }
 }

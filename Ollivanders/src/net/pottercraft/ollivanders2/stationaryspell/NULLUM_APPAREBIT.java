@@ -21,13 +21,12 @@ import java.util.UUID;
  * A stationary spell that prevents apparition and teleportation into the protected area.
  *
  * <p>Nullum Apparebit creates a powerful anti-apparition barrier that prevents outside entities
- * from accessing the protected area through magical means. The spell blocks:
+ * from accessing the protected area through magical means. The spell blocks:</p>
  * <ul>
  *   <li>Apparation by name into the spell area</li>
  *   <li>Apparation by coordinates into the spell area</li>
  *   <li>Teleportation into the spell area</li>
  * </ul>
- * </p>
  *
  * <p>This spell creates a magical sanctuary that cannot be breached by apparition or teleportation.</p>
  *

@@ -111,10 +111,20 @@ public final class ANIMAGUS_POTION extends O2Potion {
         }
     }
 
+    /**
+     * Get the failure message to the drinker if this potion did not work.
+     *
+     * @return the failure message
+     */
     public String getPotionFailureMessage() {
         return potionFailureMessage;
     }
 
+    /**
+     * Get the messagr to send to the drinker if they are already an animagus
+     *
+     * @return the already an animagus message
+     */
     public String getAlreadyAnimagusMessage() {
         return alreadyAnimagusMessage;
     }

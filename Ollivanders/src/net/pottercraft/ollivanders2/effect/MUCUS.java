@@ -31,6 +31,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  */
 public class MUCUS extends O2Effect {
+    /**
+     * How often, in ticks, we spawn another slime
+     */
     public final static int mucusFrequency = 300;
 
     /**

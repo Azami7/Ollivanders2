@@ -123,101 +123,127 @@ public class Ollivanders2 extends JavaPlugin {
     public static int chatDropoff = 15;
 
     /**
+     * Sets the color for chat messages from the plugin.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-color">https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-color</a>
      */
     public static ChatColor chatColor;
 
     /**
-     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#log-in-message">https://github.com/Azami7/Ollivanders2/wiki/Configuration#log-in-message</a>
-     */
-    public static boolean showLogInMessage;
-
-    /**
+     * Enables book learning.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning</a>
      */
     public static boolean bookLearning;
 
     /**
+     * Enables max spell level.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#max-spell-level">https://github.com/Azami7/Ollivanders2/wiki/Configuration#max-spell-level</a>
      */
     public static boolean maxSpellLevel;
 
     /**
+     * Enables non-verbal casting.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting">https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting</a>
      */
     public static boolean enableNonVerbalSpellCasting;
 
     /**
+     * Enables spell journals.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal">https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal</a>
      */
     public static boolean useSpellJournal;
 
     /**
+     * Enables hostile mobs for animagus forms.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi">https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi</a>
      */
     public static boolean useHostileMobAnimagi;
 
     /**
+     * Enables spell and potion experience loss on death.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#death-exp-loss">https://github.com/Azami7/Ollivanders2/wiki/Configuration#death-exp-loss</a>
      */
     public static boolean enableDeathExpLoss;
 
     /**
+     * Enables apparate locations, disables apparating by coordinates.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations">https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations</a>
      */
     public static boolean apparateLocations;
 
     /**
+     * Sets the maximum Minecraft days that a prophecy will come to pass.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination-1">https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination-1</a>
      */
     public static int divinationMaxDays = 4;
 
     /**
+     * Whether to use school years to affect spell casting success chances.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#years">https://github.com/Azami7/Ollivanders2/wiki/Configuration#years</a>
      */
     public static boolean useYears;
 
     /**
+     * Enables debug mode.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#debug-mode">https://github.com/Azami7/Ollivanders2/wiki/Configuration#debug-mode</a>
      */
     public static boolean debug;
 
     /**
-     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#override-mc-version-check">https://github.com/Azami7/Ollivanders2/wiki/Configuration#override-mc-version-check</a>
-     */
-    public static boolean overrideVersionCheck;
-
-    /**
+     * Sets the material to use for floo powder.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#floo-powder">https://github.com/Azami7/Ollivanders2/wiki/Configuration#floo-powder</a>
      */
     public static Material flooPowderMaterial;
 
     /**
+     * Sets the material to use for broomsticks.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#broomstick">https://github.com/Azami7/Ollivanders2/wiki/Configuration#broomstick</a>
      */
     public static Material broomstickMaterial;
 
     /**
+     * Enables random wand drops by Witch entities.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop">https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop</a>
      */
     public static boolean enableWitchDrop;
 
     /**
+     * Turns on hourly plugin data backup.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#hourly-backup">https://github.com/Azami7/Ollivanders2/wiki/Configuration#hourly-backup</a>
      */
     public static boolean hourlyBackup;
 
     /**
+     * Turns on backup archiving to save previous backups.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#archive-previous-backup">https://github.com/Azami7/Ollivanders2/wiki/Configuration#archive-previous-backup</a>
      */
     public static boolean archivePreviousBackup;
 
     /**
+     * Turns on translations for strings that support them.
+     *
      * Whether to load localization strings from the config file
      */
     public static boolean useTranslations;
 
     /**
+     * Enables strict Animagus conditions.
+     *
      * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#animagus-transformation-rules">https://github.com/Azami7/Ollivanders2/wiki/Configuration#animagus-transformation-rules</a>
      */
     public static boolean useStrictAnimagusConditions;
@@ -277,7 +303,6 @@ public class Ollivanders2 extends JavaPlugin {
 
         APPARATE.saveApparateLocations();
 
-        revertAllTempBlocks();
         savePluginConfig();
 
         getLogger().info(this + " is now disabled!");
@@ -413,13 +438,6 @@ public class Ollivanders2 extends JavaPlugin {
         getLogger().info("Setting plugin message color to " + chatColor.toString());
 
         //
-        // showLogInMessage
-        //
-        showLogInMessage = getConfig().getBoolean("showLogInMessage");
-        if (showLogInMessage)
-            getLogger().info("Enabling player log in message.");
-
-        //
         // bookLearning
         //
         bookLearning = getConfig().getBoolean("bookLearning");
@@ -521,10 +539,6 @@ public class Ollivanders2 extends JavaPlugin {
         debug = getConfig().getBoolean("debug");
         if (debug)
             getLogger().info("Enabling debug mode.");
-
-        overrideVersionCheck = getConfig().getBoolean("overrideVersionCheck");
-        if (overrideVersionCheck)
-            getLogger().info("Experimental - disabling version checks. This version of Ollivanders2 may not be compatible with you MC server api.");
 
         //
         // Save options
@@ -740,6 +754,8 @@ public class Ollivanders2 extends JavaPlugin {
                 //
             else if (subCommand.equalsIgnoreCase("apparate") || subCommand.equalsIgnoreCase("apparateLoc"))
                 return runApparateLocation(sender, args);
+            else
+                usageMessageOllivanders(sender);
         }
         else
             usageMessageOllivanders(sender);
@@ -1795,31 +1811,6 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Add a temporary block. A temp block is a block that has been temporarily changed to a different type.
-     *
-     * @param block            the block to add
-     * @param originalMaterial the original material of this block
-     */
-    @Deprecated
-    public void addTempBlock(@NotNull Block block, @NotNull Material originalMaterial) {
-        tempBlocks.put(block, originalMaterial);
-    }
-
-    /**
-     * Reverts a temp block back to its original type.
-     *
-     * @param block the block to remove
-     */
-    @Deprecated
-    public void revertTempBlock(@NotNull Block block) {
-        if (tempBlocks.containsKey(block)) {
-            revertBlockType(block);
-
-            tempBlocks.remove(block);
-        }
-    }
-
-    /**
      * Revert a temporarily changed block back to its original type.
      *
      * @param block the changed block
@@ -1847,17 +1838,6 @@ public class Ollivanders2 extends JavaPlugin {
     @Deprecated
     public boolean isTempBlock(@NotNull Block block) {
         return tempBlocks.containsKey(block);
-    }
-
-    /**
-     * Returns the original material for a temp block.
-     *
-     * @param block the temp block
-     * @return the material, if found, null otherwise
-     */
-    @Deprecated
-    public Material getTempBlockOriginalMaterial(@NotNull Block block) {
-        return tempBlocks.getOrDefault(block, null);
     }
 
     /**

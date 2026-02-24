@@ -18,23 +18,20 @@ import org.jetbrains.annotations.Nullable;
  * GEMINO is an expert-level curse that causes items to multiply exponentially when picked up by a player.
  * When a player picks up a gemino-cursed item, 2^magnitude additional copies are added to their inventory,
  * creating exponential duplication. For example: magnitude 1 creates 2 copies (2^1), magnitude 2 creates
- * 4 copies (2^2), magnitude 3 creates 8 copies (2^3), magnitude 4 creates 16 copies (2^4).
- * </p>
+ * 4 copies (2^2), magnitude 3 creates 8 copies (2^3), magnitude 4 creates 16 copies (2^4).</p>
  * <p>
  * The exponential nature of this curse means it can quickly fill a player's inventory, potentially causing
  * inventory overflow and item loss. The cursed item itself is not duplicated—only unenchanted copies are
  * added. Gemino items cannot be picked up by hoppers or other block inventories, preventing automated
- * systems from triggering the curse.
- * </p>
+ * systems from triggering the curse.</p>
  * <p>
- * Curse behavior:
+ * Curse behavior:</p>
  * <ul>
  * <li>Player pickup: triggers exponential duplication (2^magnitude copies added)</li>
  * <li>Hopper pickup: blocked, hoppers cannot trigger the curse</li>
  * <li>Drop events: no special behavior, duplication only occurs on pickup</li>
  * <li>Slot switching: no special behavior, duplication only occurs on pickup</li>
  * </ul>
- * </p>
  *
  * @see net.pottercraft.ollivanders2.spell.GEMINO the spell that casts this curse
  * @see <a href="https://harrypotter.fandom.com/wiki/Doubling_Charm">https://harrypotter.fandom.com/wiki/Doubling_Charm</a>
@@ -56,22 +53,19 @@ public class GEMINO extends Enchantment {
     /**
      * Apply the GEMINO curse when a player picks up a cursed item.
      * <p>
-     * This method triggers the exponential duplication when a player picks up a gemino-cursed item:
+     * This method triggers the exponential duplication when a player picks up a gemino-cursed item:</p>
      * <ul>
      * <li>Clones the picked-up item and removes all enchantment NBT data</li>
      * <li>Sets the amount to 2^magnitude (creates the duplicate copies)</li>
      * <li>Adds the duplicates (without the curse) to the player's inventory</li>
      * </ul>
-     * </p>
      * <p>
      * The original gemino-cursed item is also added to the inventory via the normal pickup event flow.
      * Combined with the duplicates, this can quickly overwhelm the player's inventory. Non-player entities
-     * are ignored since only players can be affected by the curse.
-     * </p>
+     * are ignored since only players can be affected by the curse.</p>
      * <p>
      * Important: The duplicates created by this method have the enchantment NBT removed, so they will not
-     * trigger additional duplication if picked up again by another player.
-     * </p>
+     * trigger additional duplication if picked up again by another player.</p>
      *
      * @param event the entity item pickup event
      */

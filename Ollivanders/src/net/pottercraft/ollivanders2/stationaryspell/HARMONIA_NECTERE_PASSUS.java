@@ -21,7 +21,7 @@ import java.util.UUID;
  * A stationary spell that creates a paired teleportation portal (vanishing cabinet).
  *
  * <p>Harmonia Nectere Passus creates a vanishing cabinet that teleports players to its twin
- * cabinet when they enter. The spell:
+ * cabinet when they enter. The spell:</p>
  * <ul>
  *   <li>Maintains a paired connection with another vanishing cabinet</li>
  *   <li>Teleports players between the two cabinets when they move into one</li>
@@ -29,7 +29,6 @@ import java.util.UUID;
  *   <li>Verifies cabinet structural integrity on each upkeep</li>
  *   <li>Disables itself if the twin cabinet is destroyed or the structure is compromised</li>
  * </ul>
- * </p>
  *
  * <p>The spell is permanent and persists across server restarts.</p>
  *
@@ -130,13 +129,13 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     /**
      * Ages the spell and validates cabinet integrity and twin connection.
      *
-     * <p>Each tick, verifies:
+     * <p>Each tick, verifies:</p>
      * <ul>
      *   <li>The cabinet structure is intact and valid</li>
      *   <li>The twin cabinet still exists</li>
      *   <li>Cooldowns for players using the cabinet are properly decremented</li>
      * </ul>
-     * If any checks fail, both cabinets are destroyed.</p>
+     * <p>If any checks fail, both cabinets are destroyed.</p>
      */
     @Override
     public void upkeep() {

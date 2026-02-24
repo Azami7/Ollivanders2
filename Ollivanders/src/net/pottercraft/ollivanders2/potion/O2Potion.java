@@ -94,7 +94,7 @@ public abstract class O2Potion {
     public double usesModifier = 1;
 
     /**
-     *
+     * The success message to send when this potion is consumed
      */
     protected String potionSuccessMessage = "";
 

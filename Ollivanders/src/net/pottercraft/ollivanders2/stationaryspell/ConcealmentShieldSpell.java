@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Abstract base class for concealment shield spells that hide and restrict access to protected areas.
  *
- * <p>Concealment shield spells create protective barriers that:
+ * <p>Concealment shield spells create protective barriers that:</p>
  * <ul>
  *   <li>Hide players inside the area from those outside (via visibility toggle)</li>
  *   <li>Prevent certain entities from entering the protected area</li>
@@ -33,7 +33,6 @@ import java.util.UUID;
  *   <li>Prevent chat from those outside reaching those inside</li>
  *   <li>Optionally trigger proximity alarms when hostile entities approach</li>
  * </ul>
- * </p>
  *
  * <p>Subclasses customize behavior through abstract methods: {@link #canEnter(LivingEntity)},
  * {@link #canSee(LivingEntity)}, {@link #canHear(LivingEntity)}, {@link #canTarget(LivingEntity)},
@@ -150,13 +149,13 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     /**
      * Toggles the visibility of a specific player based on concealment rules.
      *
-     * <p>For each online player (viewer), hides or shows the target player based on:
+     * <p>For each online player (viewer), hides or shows the target player based on:</p>
      * <ul>
      *   <li>Whether the target is inside the spell area</li>
      *   <li>Whether the viewer can see into the spell area (via {@link #canSee(LivingEntity)})</li>
      *   <li>Whether the target has other invisibility effects</li>
      * </ul>
-     * Does not hide the target from themselves.</p>
+     * <p>Does not hide the target from themselves.</p>
      *
      * @param player the player whose visibility to toggle
      */
@@ -264,10 +263,20 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         return Ollivanders2Common.isInside(location, alertLocation, getProximityRadius());
     }
 
+    /**
+     * The radius from the spell center for proximity checks for this spell
+     *
+     * @return the proximity radius
+     */
     public int getProximityRadius() {
         return radius + proximityRadiusModifier;
     }
 
+    /**
+     * Does this spell alarm on proximity?
+     *
+     * @return true if it alarms on proximity, false otherwise
+     */
     public boolean doesAlarmOnProximty() {
         return alarmOnProximity;
     }
@@ -345,13 +354,13 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     /**
      * Handles visibility and proximity logic when an entity moves relative to the spell boundary.
      *
-     * <p>Called asynchronously after a player move event completes successfully. Handles three cases:
+     * <p>Called asynchronously after a player move event completes successfully. Handles three cases:</p>
      * <ul>
      *   <li>Entity entering: Re-evaluates visibility for all players in the area if entry is allowed</li>
      *   <li>Entity leaving: Unhides the departing player to all viewers</li>
      *   <li>Proximity check: Triggers proximity alarm if entity moves near the boundary</li>
      * </ul>
-     * Assumes the move event completed and entry restrictions have already been checked.</p>
+     * <p>Assumes the move event completed and entry restrictions have already been checked.</p>
      *
      * @param entity       the living entity that moved
      * @param toLocation   the location the entity moved to

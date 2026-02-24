@@ -20,8 +20,15 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Ascendio">Ascendio</a>
  */
 public final class ASCENDIO extends Knockback {
-    public static int minDistanceConfig = 0;
-    public static int maxDistanceConfig = 3;
+    /**
+     * The min distance
+     */
+    public static double minDistanceConfig = 0.5;
+
+    /**
+     * The max distance
+     */
+    public static double maxDistanceConfig = 3;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -56,10 +63,10 @@ public final class ASCENDIO extends Knockback {
         branch = O2MagicBranch.CHARMS;
         noProjectile = true; // spell targets self so should not create a spell projectile
 
-        minDistance = 0;
-        maxDistance = 3; // more than 3 and the caster will take fall damage on landing
+        minDistance = minDistanceConfig;
+        maxDistance = maxDistanceConfig; // more than 3 and the caster will take fall damage on landing
         targetsSelf = true;
-        isVertical = true;
+        vertical = true;
 
         initSpell();
     }

@@ -12,4 +12,3 @@ plugins {
 }
 
 rootProject.name = "Ollivanders2-2.21.7"
-include("lib")

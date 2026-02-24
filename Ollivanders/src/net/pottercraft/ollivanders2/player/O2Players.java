@@ -124,6 +124,7 @@ public class O2Players {
      *
      * @param pid  the UUID of this player
      * @param name the effectType of this player
+     * @return the O2Player that was added
      */
     @NotNull
     public O2Player addPlayer(@NotNull UUID pid, @NotNull String name) {

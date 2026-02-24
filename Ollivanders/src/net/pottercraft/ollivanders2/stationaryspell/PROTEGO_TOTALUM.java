@@ -21,14 +21,13 @@ import java.util.UUID;
 /**
  * A stationary shield spell that creates a protective barrier preventing entities from entering.
  *
- * <p>Protego Totalum creates an area where:
+ * <p>Protego Totalum creates an area where:</p>
  * <ul>
  *   <li>Players cannot move into the protected area from outside</li>
  *   <li>Hostile mobs that enter have their AI disabled so they cannot move or attack</li>
  *   <li>Creatures cannot spawn inside the protected area</li>
  *   <li>Entities already inside the area can move freely, including leaving</li>
  * </ul>
- * </p>
  *
  * <p>Note: There is no EntityMoveEvent in Spigot, so hostile mobs are handled by disabling
  * their AI rather than blocking their movement directly.</p>

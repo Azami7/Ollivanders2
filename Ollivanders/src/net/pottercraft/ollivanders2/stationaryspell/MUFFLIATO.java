@@ -22,14 +22,13 @@ import java.util.UUID;
  * outside the spell cannot hear any conversations occurring within the protected area, effectively
  * preventing eavesdropping. The spell lasts for a configurable duration based on caster skill level.</p>
  *
- * <p>Spell characteristics:
+ * <p>Spell characteristics:</p>
  * <ul>
  *   <li>Radius: 5-20 blocks (configurable)</li>
  *   <li>Duration: 30 seconds to 30 minutes (configurable)</li>
  *   <li>Effect: Prevents outside players from hearing inside conversations</li>
  *   <li>Inside players can hear outside conversations</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
