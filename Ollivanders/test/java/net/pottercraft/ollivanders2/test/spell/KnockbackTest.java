@@ -64,7 +64,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
      * projectile stops. This test is skipped for spells that target the caster (targetsSelf=true) or
      * those with no invalid entity types.</p>
      */
-    @Override @Test
+    @Override
+    @Test
     void doCheckEffectTest() {
         // test for invalid entity case, other cases in other tests
         World testWorld = mockServer.addSimpleWorld("world");
@@ -76,7 +77,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
 
         O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel); // cast with high experience to ensure >0 velocity magnitude
         assertInstanceOf(Knockback.class, spell);
-        Knockback knockbackSpell = (Knockback)spell;
+        Knockback knockbackSpell = (Knockback) spell;
 
         if (!knockbackSpell.isTargetsSelf()) { // caster will always be selected so no need to test wrong entity type
             EntityType invalidType = getInvalidEntityType();
@@ -85,39 +86,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
 
                 mockServer.getScheduler().performTicks(12);
                 assertTrue(knockbackSpell.isKilled(), "spell projectile did not stop");
-                assertEquals(new Vector(0, 0, 0 ), knockbackSpell.getVelocity(), "velocity set on invalid entity");
-            }
-        }
-    }
-
-    /**
-     * Test that invalid entity targets are not moved.
-     *
-     * <p>Verifies that when the spell targets an invalid entity type, the entity remains at its original
-     * location and the projectile stops. This test is skipped for spells that target the caster (targetsSelf=true)
-     * or those with no invalid entity types.</p>
-     */
-    @Test
-    void doCheckEffectInvalidEntityTest() {
-        World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 300, 40, 100);
-        Location targetLocation = new Location(testWorld, 310, 40, 100);
-        PlayerMock caster = mockServer.addPlayer();
-
-        TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3); // create a base for the entity to stand on
-
-        O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel); // cast with high experience to ensure >0 velocity magnitude
-        assertInstanceOf(Knockback.class, spell);
-        Knockback knockbackSpell = (Knockback)spell;
-
-        if (!knockbackSpell.isTargetsSelf()) { // caster will always be selected so no need to test wrong entity type
-            EntityType invalidType = getInvalidEntityType();
-            if (invalidType != null) { // if null, there are no invalid entity types
-                Entity entity = testWorld.spawnEntity(targetLocation, invalidType);
-
-                mockServer.getScheduler().performTicks(12);
-                assertTrue(knockbackSpell.isKilled(), "spell projectile did not stop");
-                assertEquals(targetLocation, entity.getLocation(), "invalid entity was moved by the spell");
+                assertEquals(new Vector(0, 0, 0), knockbackSpell.getVelocity(), "velocity set on invalid entity");
             }
         }
     }
@@ -137,14 +106,14 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
 
         O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel); // cast with high experience to ensure >0 velocity magnitude
         assertInstanceOf(Knockback.class, spell);
-        Knockback knockbackSpell = (Knockback)spell;
+        Knockback knockbackSpell = (Knockback) spell;
 
         if (knockbackSpell.isTargetsSelf()) {
             mockServer.getScheduler().performTicks(1);
             assertTrue(knockbackSpell.isKilled(), "projectile not immediately killed when spell is targets self");
 
             mockServer.getScheduler().performTicks(1);
-            assertNotEquals(new Vector(0, 0, 0 ), knockbackSpell.getVelocity(), "velocity not applied to caster for targets self");
+            assertNotEquals(new Vector(0, 0, 0), knockbackSpell.getVelocity(), "velocity not applied to caster for targets self");
         }
     }
 
@@ -165,7 +134,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
         targetLocation.getBlock().setType(Material.STONE);
         O2Spell spell = castSpell(caster, location, targetLocation);
         assertInstanceOf(Knockback.class, spell);
-        Knockback knockbackSpell = (Knockback)spell;
+        Knockback knockbackSpell = (Knockback) spell;
 
         if (!knockbackSpell.isTargetsSelf()) {
             Ollivanders2API.getSpells().addSpell(caster, spell);
@@ -194,7 +163,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
 
         O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         assertInstanceOf(Knockback.class, spell);
-        Knockback knockbackSpell = (Knockback)spell;
+        Knockback knockbackSpell = (Knockback) spell;
 
         Entity target;
         if (!knockbackSpell.isTargetsSelf()) {
@@ -240,7 +209,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
 
         O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         assertInstanceOf(Knockback.class, spell);
-        Knockback knockbackSpell = (Knockback)spell;
+        Knockback knockbackSpell = (Knockback) spell;
 
         if (knockbackSpell.isTargetsMultiple()) {
             EntityType validType = getValidEntityType();

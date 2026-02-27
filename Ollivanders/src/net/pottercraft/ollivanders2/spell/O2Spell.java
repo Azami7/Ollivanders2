@@ -105,9 +105,14 @@ public abstract class O2Spell {
     public Location location;
 
     /**
+     * How long has this spell been alive
+     */
+    private int age = 0;
+
+    /**
      * How long this spell projectile has been alive in game ticks.
      */
-    private int lifeTicks = 0;
+    private int projectileAge = 0;
 
     /**
      * Whether this spell should be terminated.
@@ -261,6 +266,7 @@ public abstract class O2Spell {
         projectilePassThrough.add(Material.CAVE_AIR);
         projectilePassThrough.add(Material.WATER);
         projectilePassThrough.add(Material.FIRE);
+        projectilePassThrough.add(Material.SOUL_FIRE);
     }
 
     /**
@@ -303,6 +309,22 @@ public abstract class O2Spell {
     }
 
     /**
+     * Age the spell by 1, called each game tick.
+     */
+    private void age() {
+        age = age + 1;
+    }
+
+    /**
+     * The total age of this spell.
+     *
+     * @return the number of ticks this spell has been alive.
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
      * Main game tick update called every server tick while the spell is active.
      *
      * <p>Handles core spell lifecycle logic:</p>
@@ -317,28 +339,23 @@ public abstract class O2Spell {
      * Only override this method if you need to customize the spell's entire tick behavior.</p>
      */
     public void checkEffect() {
-        // check whether this spell can exist up until it hits a target
-        if (!hitTarget && !isSpellAllowed()) {
+        // check whether this spell can exist
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
-        lifeTicks = lifeTicks + 1;
-
-        // if this spell exceeds the max age, kill it
-        if (lifeTicks > maxSpellLifetime)
-            kill();
-
-        // do nothing if spell is already marked as killed
-        if (!kill) {
-            // only move the projectile if a target has not been hit
-            if (!hitTarget)
-                move();
-
-            // if the spell has not been killed, run the spell upkeep cycle
-            if (!isKilled())
-                doCheckEffect();
+        // move the spell projectile, this will also handle if we hit a target, and age the projectile
+        if (!noProjectile) {
+            move();
+            projectileAge = projectileAge + 1;
         }
+
+        // run the spell-specific checkEffect actions
+        doCheckEffect();
+
+        // age the spell 1 tick
+        age();
     }
 
     /**
@@ -370,7 +387,7 @@ public abstract class O2Spell {
 
         // if we have gone beyond the max distance, kill this spell
         if (isAtMaxDistance()) {
-            common.printDebugMessage("O2Spell.move: projectile reached max distance without hitting a target", null, null, false);
+            common.printDebugMessage("O2Spell.move: projectile reached max distance " + projectileAge + " without hitting a target", null, null, false);
             kill();
             return;
         }
@@ -511,7 +528,7 @@ public abstract class O2Spell {
                     if (!e.equals(player))
                         close.add(e);
                     else {
-                        if (lifeTicks > 1) // get at least 2 blocks away from the caster
+                        if (projectileAge > 1) // get at least 2 blocks away from the caster
                             close.add(e);
                     }
                 }
@@ -552,7 +569,7 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && lifeTicks > 1)
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && projectileAge > 1)
             living.add(player);
 
         return living;
@@ -575,7 +592,7 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && lifeTicks > 1)
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && projectileAge > 1)
             players.add(player);
 
         return players;
@@ -598,7 +615,7 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && lifeTicks > 1)
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && projectileAge > 1)
             damageable.add(player);
 
         return damageable;
@@ -816,8 +833,8 @@ public abstract class O2Spell {
      *
      * @return the lifeticks for this spell
      */
-    public int getLifeTicks() {
-        return lifeTicks;
+    public int getProjectileAge() {
+        return projectileAge;
     }
 
     /**
@@ -904,5 +921,42 @@ public abstract class O2Spell {
      */
     public String getFailureMessage() {
         return failureMessage;
+    }
+
+    /**
+     * Get the list of pass through materials for this spell projectile.
+     *
+     * @return the list of materials the projectile can pass through
+     */
+    public List<Material> getProjectilePassThroughMaterials() {
+        List<Material> passThrough = new ArrayList<>();
+        passThrough.addAll(projectilePassThrough);
+
+        return passThrough;
+    }
+
+    /**
+     * Get the list of blocked materials for this spell to target.
+     *
+     * @return the list of blocked materials
+     */
+    public List<Material> getBlockedMaterials() {
+        List<Material> blocked = new ArrayList<>();
+        blocked.addAll(materialBlockedList);
+
+        return blocked;
+    }
+
+    /**
+     * Get the list of allowed materials for this spell to target.
+     *
+     * @return the list of allowed materials
+     */
+    @NotNull
+    public List<Material> getAllowedMaterials() {
+        List<Material> allowed = new ArrayList<>();
+        allowed.addAll(materialAllowList);
+
+        return allowed;
     }
 }

@@ -82,4 +82,12 @@ public class AlohomoraTest extends O2SpellTestSuper {
         assertTrue(colloportus.isKilled(), "colloportus not killed");
         assertFalse(muffliato.isKilled(), "muffliato was killed");
     }
+
+    /**
+     * Alohomora has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

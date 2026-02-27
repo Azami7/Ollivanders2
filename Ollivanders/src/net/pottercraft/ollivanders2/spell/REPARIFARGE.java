@@ -173,8 +173,9 @@ public final class REPARIFARGE extends O2Spell {
     public boolean reparifargeBlock(@NotNull Block target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isBlockTransfigured(target)) {
-                if (checkSuccess())
+                if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
                     spell.kill();
+
                 return true;
             }
         }

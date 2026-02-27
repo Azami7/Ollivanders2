@@ -38,7 +38,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -578,21 +577,6 @@ public class OllivandersListener implements Listener {
                 if (damaged.getHealth() - event.getDamage() <= 0)
                     p.getO2Player(attacker).addSoul();
             }
-        }
-    }
-
-    /**
-     * If a block is broken that is temporary, prevent it from dropping anything.
-     *
-     * @param event the block break event
-     */
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onTemporaryBlockBreak(@NotNull BlockBreakEvent event) {
-        Block block = event.getBlock();
-
-        // todo re-create the global block management so that we can keep track of all temporarily changed blocks
-        if (p.isTempBlock(block)) {
-            event.setDropItems(false);
         }
     }
 

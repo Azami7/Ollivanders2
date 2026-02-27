@@ -65,4 +65,12 @@ public class AscendioTest extends KnockbackTest {
         assertEquals(ASCENDIO.minDistanceConfig, ascendio.getMinDistance(), "unexpected minDistance");
         assertEquals(ASCENDIO.maxDistanceConfig, ascendio.getMaxDistance(), "unexpected maxDistance");
     }
+
+    /**
+     * Ascendio has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

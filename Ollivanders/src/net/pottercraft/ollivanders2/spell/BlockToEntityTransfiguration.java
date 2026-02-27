@@ -3,8 +3,6 @@ package net.pottercraft.ollivanders2.spell;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -39,7 +37,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * For use with spells that can do more than one type of change. Add each material that can
      * be changed to this map. Any missing material will fall back to the default entityType.
      * <p>
-     * If the spell can only target one or more specific material types and they all change to
+     * If the spell can only target one or more specific material types, and they all change to
      * the same thing, add that to materialWhitelist and set entityType.
      * <p>
      * If the spell can target any material, make materialWhitelist blank and set entityType.
@@ -96,8 +94,9 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
             return;
         }
 
-        if (!permanent)
-            changedBlocks.put(target, target.getType());
+        if (!permanent) {
+            Ollivanders2API.getBlocks().addTemporarilyChangedBlock(target, this);
+        }
 
         // get the type to change this material
         if (transfigurationMap.containsKey(target.getType()))
@@ -123,30 +122,6 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
         p.getServer().getPluginManager().registerEvents((Listener) this, p);
 
         sendSuccessMessage();
-    }
-
-    /**
-     * Set duration, including making the spell permanent, based on caster's skill.
-     */
-    void setDuration() {
-        if (usesModifier >= 200) {
-            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-            if (o2p == null)
-                common.printDebugMessage("Null o2player in BlockToEntityTransfiguration.setDuration()", null, null, true);
-
-            if (!Ollivanders2.useYears || (o2p != null && o2p.getYear().getHighestLevelForYear().ordinal() >= this.spellType.getLevel().ordinal()))
-                permanent = true;
-        }
-        else {
-            permanent = false;
-
-            // spell duration
-            spellDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
-            if (spellDuration < minDuration)
-                spellDuration = minDuration;
-            else if (spellDuration > maxDuration)
-                spellDuration = maxDuration;
-        }
     }
 
     /**
@@ -182,7 +157,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * Is this block transfigured by this spell
      *
      * @param block the block to check
-     * @return true if transfigured, false otherwise
+     * @return false - since the block is now an entity, it isn't considered a block anymore
      */
     @Override
     public boolean isBlockTransfigured(@NotNull Block block) {

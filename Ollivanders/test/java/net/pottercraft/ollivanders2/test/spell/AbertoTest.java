@@ -95,4 +95,12 @@ public class AbertoTest extends O2SpellTestSuper {
         message = caster.nextMessage();
         assertNotNull(message, "caster did not get failure message");
     }
+
+    /**
+     * Aberto has no revert actions.
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }
