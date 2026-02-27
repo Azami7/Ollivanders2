@@ -8,11 +8,11 @@ import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -38,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author Azami7
  */
-@Isolated
 public abstract class O2SpellTestSuper {
     /**
      * Default spell experience level for test casting.
@@ -65,6 +64,11 @@ public abstract class O2SpellTestSuper {
     static Ollivanders2 testPlugin;
 
     /**
+     * X location value for use by getNextLocation
+     */
+    int nextX = 0;
+
+    /**
      * Initialize the mock Bukkit server before all tests.
      *
      * <p>Static setup method called once before all tests in this class. Creates the shared
@@ -80,6 +84,13 @@ public abstract class O2SpellTestSuper {
 
         // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
+    }
+
+    synchronized Location getNextLocation(World world) {
+        Location location = new Location(world, nextX, 40, 100);
+        nextX = nextX + 100;
+
+        return location;
     }
 
     /**

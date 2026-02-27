@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.Openable;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Azami7
  */
+@Isolated
 public class AbertoTest extends O2SpellTestSuper {
     @Override @NotNull
     O2SpellType getSpellType() {

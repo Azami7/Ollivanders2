@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Azami7
  */
+@Isolated
 public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
     @Override @NotNull
     O2SpellType getSpellType() {

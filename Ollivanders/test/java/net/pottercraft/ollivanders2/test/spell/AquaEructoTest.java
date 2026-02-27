@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Test suite for the AQUA_ERUCTO spell (water-jet extinguishing charm).
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Test;
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.AQUA_ERUCTO
  */
+@Isolated
 public class AquaEructoTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.

@@ -178,9 +178,9 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
         setEffectRadius();
         common.printDebugMessage("BlockTransfiguration.transfigure: effect radius is " + effectRadius, null, null, false);
 
-        List<Block> blocksInRadius = Ollivanders2Common.getBlocksInRadius(getTargetBlock().getLocation(), effectRadius);
+        List<Block> blocksInRadius = Ollivanders2Common.getBlocksInRadius(getTargetBlock().getLocation(), effectRadius); // we use getTargetBlock since spells like Aguamenti target the block above location
 
-        // get the blocks to be transfigured, target block is not always the block at the location (such as aguamenti), so we cannot use 'location'
+        // get the blocks to be transfigured
         for (Block blockToChange : blocksInRadius) {
             common.printDebugMessage("BlockTransfiguration.transfigure: checking block at " + blockToChange.getLocation().getX() + ", " + blockToChange.getLocation().getY() + ", " + blockToChange.getLocation().getZ(), null, null, false);
             if (!canTransfigure(blockToChange))
@@ -277,14 +277,14 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
             common.printDebugMessage("BlockTransfigure.canTranfigure: block is a pass-through block", null, null, false);
             return false;
         }
-        else if (materialBlockedList.contains(blockType)) {
-            // do not change if this block is in the blocked list
-            common.printDebugMessage("BlockTransfigure.canTranfigure: Material on blocked list: " + blockType, null, null, false);
-            return false;
-        }
         else if (!materialAllowList.isEmpty() && !materialAllowList.contains(blockType)) {
             // do not change if the allowed list exists and this block is not in it
             common.printDebugMessage("BlockTransfigure.canTranfigure: Material not on allow list: " + blockType, null, null, false);
+            return false;
+        }
+        else if (materialBlockedList.contains(blockType)) {
+            // do not change if this block is in the blocked list
+            common.printDebugMessage("BlockTransfigure.canTranfigure: Material on blocked list: " + blockType, null, null, false);
             return false;
         }
         else if (transfigurationMap.isEmpty() && blockType == transfigureType) {

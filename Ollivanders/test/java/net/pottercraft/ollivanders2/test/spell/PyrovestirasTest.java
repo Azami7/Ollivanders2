@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Azami7
  * @see PYROSVESTIRAS
  */
+@Isolated
 public class PyrovestirasTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.
@@ -103,9 +105,9 @@ public class PyrovestirasTest extends BlockTransfigurationTest {
      */
     @Test
     void pyrovestirasRadiusTest() {
-        World testWorld = mockServer.addSimpleWorld("Pyrovestiras Test");
-        Location location = new Location(testWorld, 600, 40, 100);
-        Location targetLocation = new Location(testWorld, 610, 40, 100);
+        World testWorld = mockServer.addSimpleWorld("pyrovestiras");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         testWorld.getBlockAt(targetLocation).setType(Material.CAMPFIRE);

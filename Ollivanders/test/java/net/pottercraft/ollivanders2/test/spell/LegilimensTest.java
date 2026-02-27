@@ -20,6 +20,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.util.List;
@@ -48,6 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Azami7
  */
+@Isolated
 public class LegilimensTest extends O2SpellTestSuper {
     @Override @NotNull
     O2SpellType getSpellType() {
