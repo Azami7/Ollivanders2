@@ -100,7 +100,7 @@ public abstract class Knockback extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget()) // projectile is stopped so we'll check this location then exit the spell
+        if (hasHitTarget() || targetsSelf) // projectile is stopped so we'll check this location then exit the spell
             kill();
 
         //
@@ -127,44 +127,16 @@ public abstract class Knockback extends O2Spell {
             }
         }
 
-        if (targets.isEmpty())
-            return;
-        else
-            kill(); // stop the spell from continuing to search for targets
-
-        //
-        // calculate velocity
-        //
-
         for (Entity target : targets) {
             // determine distance to send the target
             double distance = calculateDistance(target);
             if (distance <= 0) // spell will have no effect so exit
                 return;
 
-            // determine the velocity
-            /*
-            double magnitude = calculateVelocityMagnitude(target, distance);
-            if (magnitude == 0) // spell will have no effect so exit
-                return;
-
-             */
-
             if (isVertical())
                 velocity = Ollivanders2Common.calculateVerticalVelocity(distance, calculateDragFactor(target), !isPull());
             else
                 velocity = Ollivanders2Common.calculateVelocityForDistance(location, distance, calculateDragFactor(target), isPull());
-
-            /*
-            if (pull) // make velocity negative to move towards rather than away from the caster location
-                magnitude = magnitude * -1;
-
-            if (isVertical) // velocity is in the Y direction (up or down)
-                velocity = new Vector(0.0, magnitude, 0.0);
-            else // velocity is towards or away from the direction the caster is facing
-                velocity = player.getLocation().getDirection().normalize().multiply(magnitude);
-
-             */
 
             target.setVelocity(velocity);
         }

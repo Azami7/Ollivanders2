@@ -67,4 +67,12 @@ public class CarpeRetractumTest extends KnockbackTest {
         assertEquals(CARPE_RETRACTUM.maxRadiusConfig, carpeRetractum.getMaxRadius(), "unexpected maxRadius");
         assertEquals(CARPE_RETRACTUM.maxTargetConfig, carpeRetractum.getMaxTargets(), "unexpected maxTargets");
     }
+
+    /**
+     * Carpe Retractum has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

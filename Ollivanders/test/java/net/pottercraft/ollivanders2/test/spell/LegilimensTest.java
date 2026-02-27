@@ -226,4 +226,12 @@ public class LegilimensTest extends O2SpellTestSuper {
 
         return wholeMessage.toString();
     }
+
+    /**
+     * Legilimens has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

@@ -400,7 +400,7 @@ public class Ollivanders2Common {
             for (int y = -blockRadius; y <= blockRadius; y++) {
                 for (int z = -blockRadius; z <= blockRadius; z++) {
                     Block block = center.getRelative(x, y, z);
-                    if (block.getLocation().distance(center.getLocation()) < radius) { // make sure we aee still in the radius since we're rounding a square
+                    if (block.getLocation().distance(center.getLocation()) < radius && !blockList.contains(block)) { // make sure we aee still in the radius since we're rounding a square
                         blockList.add(block);
                     }
                 }
@@ -908,6 +908,18 @@ public class Ollivanders2Common {
      */
     static public boolean isHotBlock(Material material) {
         return hotBlocks.contains(material);
+    }
+
+    /**
+     * Get a list of all the hot blocks in the game. Example: fires, lava, magma
+     *
+     * @return the list of hot blocks
+     */
+    static public List<Material> getHotBlocks() {
+        ArrayList<Material> list = new ArrayList<>();
+        list.addAll(hotBlocks);
+
+        return list;
     }
 
     /**

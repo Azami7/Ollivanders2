@@ -65,4 +65,12 @@ public class AraniaExumaiTest extends KnockbackTest {
         assertEquals(ARANIA_EXUMAI.maxRadiusConfig, araniaExumai.getMaxRadius(), "unexpected maxRadius");
         assertEquals(ARANIA_EXUMAI.maxTargetConfig, araniaExumai.getMaxTargets(), "unexpected maxTargets");
     }
+
+    /**
+     * Arania Exumai has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

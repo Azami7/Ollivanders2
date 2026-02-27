@@ -37,14 +37,17 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,6 +72,7 @@ import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventCl
  *
  * @author Azami7
  */
+@Isolated
 public class O2SpellTest {
     /**
      * Shared mock Bukkit server instance for all tests.
@@ -201,7 +205,7 @@ public class O2SpellTest {
      * <p>Verifies that each tick:
      * <ul>
      * <li>Projectile moves one block via {@link O2Spell#move()}</li>
-     * <li>Spell age increments via {@link O2Spell#getLifeTicks()}</li>
+     * <li>Spell age increments via {@link O2Spell#getProjectileAge()}</li>
      * <li>Spell terminates after exceeding max lifetime</li>
      * <li>hasHitTarget is not set when aging out (only when hitting a target)</li>
      * <li>Hitting a block terminates the spell and sets hasHitTarget</li>
@@ -220,7 +224,7 @@ public class O2SpellTest {
         // call check effect should move the spell and increase its age by 1
         melofors.checkEffect();
         assertNotEquals(castLocation, melofors.location, "Melofors did not move");
-        assertEquals(1, melofors.getLifeTicks(), "Melofors did not age by 1");
+        assertEquals(1, melofors.getProjectileAge(), "Melofors did not age by 1");
 
         // call check effect until the spell should age out
         for (int i = 0; i < O2Spell.maxSpellLifetime; i++) {
@@ -671,9 +675,11 @@ public class O2SpellTest {
     void sendSuccessMessageTest() {
         World testWorld = mockServer.addSimpleWorld("world");
         Location castLocation = new Location(testWorld, 1100, 40, 100);
-        Location targetLocation = new Location(testWorld, 1100, 40, 110);
+        Location targetLocation = new Location(testWorld, 1100, 39, 110);
         PlayerMock caster = mockServer.addPlayer();
         caster.setLocation(TestCommon.faceTarget(castLocation, targetLocation));
+
+        TestCommon.createBlockBase(targetLocation, 5);
 
         AGUAMENTI aguamenti = new AGUAMENTI(testPlugin, caster, O2PlayerCommon.rightWand);
         aguamenti.sendSuccessMessage();
@@ -684,9 +690,9 @@ public class O2SpellTest {
         assertEquals(aguamenti.getSuccessMessage(), TestCommon.cleanChatMessage(message), "player did not get expected success message");
 
         // verify success message sends when spell actually works
-        testWorld.getBlockAt(targetLocation).setType(Material.DIRT);
         Ollivanders2API.getSpells().addSpell(caster, aguamenti);
         mockServer.getScheduler().performTicks(20);
+        assertTrue(aguamenti.isTransfigured());
 
         message = caster.nextMessage();
         assertNotNull(message, "player did not get spell success message when spell succeeded");
@@ -731,6 +737,27 @@ public class O2SpellTest {
         message = caster.nextMessage();
         assertNotNull(message, "player did not get spell failure message when spell failed");
         assertEquals(deletrius.getFailureMessage(), TestCommon.cleanChatMessage(message), "player did not get expected failure message when spell failed");
+    }
+
+    @Nullable
+    O2Spell getBaseSpell(O2SpellType spellType) {
+        String spellClass = "net.pottercraft.ollivanders2.spell." + spellType;
+        Constructor<?> c = null;
+        try {
+            c = Class.forName(spellClass).getConstructor(Ollivanders2.class);
+        }
+        catch (Exception e) {
+        }
+        assertNotNull(c, "Failed to to get constructor for " + spellType);
+
+        O2Spell spell = null;
+        try {
+            spell = (O2Spell) c.newInstance(testPlugin);
+        }
+        catch (Exception e) {
+        }
+
+        return spell;
     }
 
     /**

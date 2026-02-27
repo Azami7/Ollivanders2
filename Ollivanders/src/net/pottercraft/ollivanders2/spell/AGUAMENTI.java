@@ -13,52 +13,117 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Water-Making Spell - https://harrypotter.fandom.com/wiki/Water-Making_Spell - which places a block of water against
- * the targeted block.
+ * The Water-Making Spell that conjures clean, drinkable water.
+ *
+ * <p>AGUAMENTI is a water conjuration spell that creates water blocks where cast. It conjures a
+ * stream of clean, drinkable water from the wand tip, suitable for drinking or creating water
+ * sources. The spell works by converting air blocks to water, allowing it to fill empty spaces.</p>
+ *
+ * <p>Spell behavior:</p>
+ * <ul>
+ * <li><strong>Target:</strong> AIR and CAVE_AIR (pass-through blocks)</li>
+ * <li><strong>Effect:</strong> Converts AIR to WATER</li>
+ * <li><strong>Radius:</strong> 1 block (single-target precision spell)</li>
+ * <li><strong>Duration:</strong> Temporary; 15 seconds to 10 minutes based on skill</li>
+ * <li><strong>Success Rate:</strong> 100% (deterministic)</li>
+ * <li><strong>Pass-Through:</strong> Can transfigure normally solid pass-through blocks</li>
+ * <li><strong>Visual Effect:</strong> Blue ice particle stream (water jet)</li>
+ * </ul>
+ *
+ * <p>AGUAMENTI is particularly useful for creating water sources for drinking, filling containers,
+ * or creating decorative water features. Unlike most transfiguration spells, it is designed to work
+ * on empty air blocks. The spell targets the block before the air block hit (the solid surface
+ * behind the air) to place water adjacent to that surface.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Water-Making_Spell">Water-Making Spell on Harry Potter Wiki</a>
  */
-public final class AGUAMENTI extends BlockTransfiguration
-{
+public final class AGUAMENTI extends BlockTransfiguration {
+    /**
+     * Minimum effect radius for AGUAMENTI (1 block).
+     *
+     * <p>AGUAMENTI is a precision single-target spell with fixed radius of 1 block.</p>
+     */
     private static final int minRadiusConfig = 1;
+
+    /**
+     * Maximum effect radius for AGUAMENTI (1 block).
+     *
+     * <p>AGUAMENTI is a precision single-target spell with fixed radius of 1 block.</p>
+     */
     private static final int maxRadiusConfig = 1;
+
+    /**
+     * Minimum spell duration for AGUAMENTI (15 seconds).
+     *
+     * <p>The spell's duration is clamped to not go below this value, ensuring water
+     * remains for at least a minimum time.</p>
+     */
     private static final int minDurationConfig = 15 * Ollivanders2Common.ticksPerSecond;
+
+    /**
+     * Maximum spell duration for AGUAMENTI (10 minutes).
+     *
+     * <p>The spell's duration is clamped to not exceed this value, establishing an upper
+     * bound on how long the conjured water persists.</p>
+     */
     private static final int maxDurationConfig = 10 * Ollivanders2Common.ticksPerMinute;
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for spell text generation and documentation.
      *
-     * @param plugin the Ollivanders2 plugin
+     * <p>Used only for generating spell descriptions in spell books and UI displays.
+     * <strong>Do not use this constructor to cast the spell.</strong> Use the
+     * three-argument constructor instead.</p>
+     *
+     * <p>Initializes spell metadata including name, branch (CHARMS), and flavor text
+     * describing the Water-Making Spell.</p>
+     *
+     * @param plugin the Ollivanders2 plugin instance
      */
-    public AGUAMENTI(Ollivanders2 plugin)
-    {
+    public AGUAMENTI(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AGUAMENTI;
         branch = O2MagicBranch.CHARMS;
 
         text = "Aguamenti will cause water to erupt against the surface you cast it on.";
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Water-Making Spell conjures clean, drinkable water from the end of the wand.");
             add("The Water-Making Spell");
         }};
     }
 
     /**
-     * Constructor.
+     * Constructor for casting AGUAMENTI spells.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Initializes AGUAMENTI with player context, wand information, and spell-specific configuration:</p>
+     * <ul>
+     * <li>Radius: Fixed 1 block (single-target precision spell)</li>
+     * <li>Duration: 15 seconds to 10 minutes (25% skill modifier)</li>
+     * <li>Target materials: AIR and CAVE_AIR (pass-through blocks enabled)</li>
+     * <li>Effect: Converts air to water</li>
+     * <li>Blocked materials: Hot blocks (lava, fire, etc.) and existing water</li>
+     * <li>Visual Effect: Blue ice particle stream (water jet)</li>
+     * <li>WorldGuard: Requires BUILD permission (if enabled)</li>
+     * </ul>
+     *
+     * <p>AGUAMENTI is designed to create water sources for drinking or decorative purposes.
+     * It uses a special targeting mechanism to place water adjacent to solid surfaces.</p>
+     *
+     * @param plugin    the Ollivanders2 plugin instance
+     * @param player    the player casting this spell
+     * @param rightWand the wand correctness factor (1.0 = correct wand, affects skill modifier)
      */
-    public AGUAMENTI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AGUAMENTI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.AGUAMENTI;
         branch = O2MagicBranch.CHARMS;
 
         permanent = false;
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
+        effectsPassThrough = true;
+        minEffectRadius = minRadiusConfig;
+        maxEffectRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
         durationModifier = 0.25; // 25% of usesModifier
@@ -67,12 +132,8 @@ public final class AGUAMENTI extends BlockTransfiguration
 
         moveEffectData = Material.BLUE_ICE;
 
-        // pass-through materials
-        projectilePassThrough.remove(Material.WATER);
-
         // set materials that cannot be transfigured by this spell
-        materialBlockedList.add(Material.FIRE);
-        materialBlockedList.add(Material.SOUL_FIRE);
+        materialBlockedList.addAll(Ollivanders2Common.getHotBlocks());
         materialBlockedList.add(Material.WATER);
 
         // make sure none of these are on the pass-through list
@@ -89,18 +150,24 @@ public final class AGUAMENTI extends BlockTransfiguration
     }
 
     /**
-     * Override to make the target block the pass-through block before the actual target block
+     * Overrides target block selection to target the solid block before the air.
      *
-     * @return the target block for aguamenti
+     * <p>AGUAMENTI places water adjacent to solid surfaces by targeting the block before
+     * the pass-through air block. When the projectile hits an air block, this method returns
+     * the solid block that precedes it in the projectile's path, allowing water to be placed
+     * next to the surface rather than in the empty air.</p>
+     *
+     * <p>This special targeting is necessary because AGUAMENTI is designed to create water
+     * sources at surfaces, not fill arbitrary air spaces.</p>
+     *
+     * @return the block before the air block (solid surface), or null if no target hit
      */
     @Override
     @Nullable
-    public Block getTargetBlock()
-    {
-        if (hasHitTarget())
-        {
+    public Block getTargetBlock() {
+        if (hasHitTarget()) {
             // we want to target block before this block
-            return location.subtract(super.vector).getBlock();
+            return location.clone().subtract(super.vector).getBlock();
         }
 
         return null;

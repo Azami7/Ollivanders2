@@ -2,8 +2,10 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -15,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ import java.util.ArrayList;
  * There is no spell like this in HP universe though we know there must be some sort of animation spell which McGonagall
  * used on the giant wizards chess board in 1991.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Animation_Charm">https://harrypotter.fandom.com/wiki/Animation_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Animation_Charm">https://harrypotter.fandom.com/wiki/Animation_Charm</a>
  */
 public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     private static final int minDurationConfig = 30 * Ollivanders2Common.ticksPerSecond;
@@ -92,6 +93,31 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
         successRate = 100;
 
         setDuration();
+    }
+
+    /**
+     * Set duration, including making the spell permanent, based on caster's skill.
+     */
+    @Override
+    void setDuration() {
+        if (usesModifier >= 200) {
+            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+            if (o2p == null)
+                common.printDebugMessage("Null o2player in BlockToEntityTransfiguration.setDuration()", null, null, true);
+
+            if (!Ollivanders2.useYears || (o2p != null && o2p.getYear().getHighestLevelForYear().ordinal() >= this.spellType.getLevel().ordinal()))
+                permanent = true;
+        }
+        else {
+            permanent = false;
+
+            // spell duration
+            effectDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
+            if (effectDuration < minDuration)
+                effectDuration = minDuration;
+            else if (effectDuration > maxDuration)
+                effectDuration = maxDuration;
+        }
     }
 
     /**

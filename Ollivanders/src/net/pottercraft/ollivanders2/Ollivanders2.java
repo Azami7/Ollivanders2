@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.block.O2Blocks;
 import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
@@ -115,6 +116,11 @@ public class Ollivanders2 extends JavaPlugin {
      * Owl Post
      */
     static Ollivanders2OwlPost owlPost;
+
+    /**
+     * Blocks
+     */
+    static O2Blocks blocks;
 
     // file config
     /**
@@ -300,6 +306,7 @@ public class Ollivanders2 extends JavaPlugin {
         stationarySpells.onDisable();
         prophecies.onDisable();
         owlPost.onDisable();
+        blocks.onDisable(); // needs to be done last
 
         APPARATE.saveApparateLocations();
 
@@ -367,6 +374,7 @@ public class Ollivanders2 extends JavaPlugin {
         stationarySpells = new O2StationarySpells(this);
         prophecies = new O2Prophecies(this);
         owlPost = new Ollivanders2OwlPost(this);
+        blocks = new O2Blocks(this);
 
         Ollivanders2API.init(this);
 
@@ -411,6 +419,9 @@ public class Ollivanders2 extends JavaPlugin {
 
         // teleport events
         teleportActions = new Ollivanders2TeleportActions(this);
+
+        // blocks
+        blocks.onEnable();
 
         getLogger().info(this + " is now enabled!");
     }
@@ -1808,47 +1819,5 @@ public class Ollivanders2 extends JavaPlugin {
                 + "\nremove <location name> - removes the specified apparate location"
                 + "\nExample: /ollivanders2 apparateLoc add hogsmeade 200 70 350"
                 + "\nExample: /ollivanders2 remove hogsmeade");
-    }
-
-    /**
-     * Revert a temporarily changed block back to its original type.
-     *
-     * @param block the changed block
-     */
-    @Deprecated
-    private void revertBlockType(@NotNull Block block) {
-        if (tempBlocks.containsKey(block)) {
-            Material material = tempBlocks.get(block);
-
-            try {
-                block.setType(material);
-            }
-            catch (Exception e) {
-                // in case the block does not exist anymore.
-            }
-        }
-    }
-
-    /**
-     * Is a block a temp block or not.
-     *
-     * @param block the block to check
-     * @return true if it is a temp block, false otherwise
-     */
-    @Deprecated
-    public boolean isTempBlock(@NotNull Block block) {
-        return tempBlocks.containsKey(block);
-    }
-
-    /**
-     * Revert all temporary blocks to their original type.
-     */
-    @Deprecated
-    private void revertAllTempBlocks() {
-        for (Block block : tempBlocks.keySet()) {
-            revertBlockType(block);
-        }
-
-        tempBlocks.clear();
     }
 }

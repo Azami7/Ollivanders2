@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2;
 
+import net.pottercraft.ollivanders2.block.O2Blocks;
 import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -14,7 +15,13 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * API for allowing other plugins to interact with Ollivanders.
+ * Public API for external plugins to interact with the Ollivanders2 plugin.
+ *
+ * <p>Provides static accessor methods to retrieve manager objects for various Ollivanders2 systems including
+ * players, spells, potions, stationary spells, items, houses, books, prophecies, blocks, and owl post.
+ * This is the primary entry point for external plugin integration.</p>
+ *
+ * @author Azami7
  */
 public class Ollivanders2API {
     /**
@@ -134,5 +141,15 @@ public class Ollivanders2API {
     @NotNull
     public static Ollivanders2OwlPost getOwlPost() {
         return Ollivanders2.owlPost;
+    }
+
+    /**
+     * Get the global block management object.
+     *
+     * @return the block management object.
+     */
+    @NotNull
+    public static O2Blocks getBlocks() {
+        return Ollivanders2.blocks;
     }
 }

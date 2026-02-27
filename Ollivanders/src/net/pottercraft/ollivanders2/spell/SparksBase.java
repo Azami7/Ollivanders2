@@ -69,7 +69,7 @@ public abstract class SparksBase extends O2Spell {
     @Override
     public void doCheckEffect() {
         // play the firework launch sound on the first tick, tick is incremented before doCheckEffect() is called so it starts at 1
-        if (getLifeTicks() == 1) {
+        if (getProjectileAge() == 1) {
             World world = location.getWorld();
             if (world != null)
                 world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 0);

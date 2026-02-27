@@ -38,7 +38,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book {
         spells.add(O2SpellType.MELOFORS);
         spells.add(O2SpellType.DIAMAS_REPARO);
         spells.add(O2SpellType.DIFFINDO);
-        spells.add(O2SpellType.LUMOS_MAXIMA);
+        //spells.add(O2SpellType.LUMOS_MAXIMA);
         spells.add(O2SpellType.TERGEO);
         spells.add(O2SpellType.COLOVARIA);
         // todo Orchideous - https://github.com/Azami7/Ollivanders2/issues/56

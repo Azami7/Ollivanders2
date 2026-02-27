@@ -65,4 +65,12 @@ public class AccioTest extends KnockbackTest {
         assertEquals(ACCIO.maxDistanceConfig, accio.getMaxDistance(), "unexpected maxDistance");
         assertEquals(ACCIO.strengthReducerConfig, accio.getStrengthReducer(), "unexpected strengthReducer");
     }
+
+    /**
+     * Accio has no revert actions.
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

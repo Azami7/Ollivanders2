@@ -64,4 +64,12 @@ public class DepulsoTest extends KnockbackTest {
         assertEquals(DEPULSO.maxRadiusConfig, depulso.getMaxRadius(), "unexpected maxRadius");
         assertEquals(DEPULSO.maxTargetConfig, depulso.getMaxTargets(), "unexpected maxTargets");
     }
+
+    /**
+     * Depulso has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

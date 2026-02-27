@@ -64,4 +64,12 @@ public class FlipendoTest extends KnockbackTest {
         assertEquals(FLIPENDO.maxDistanceConfig, flipendo.getMaxDistance(), "unexpected maxDistance");
         assertEquals(FLIPENDO.strengthReducerConfig, flipendo.getStrengthReducer(), "unexpected strengthReducer");
     }
+
+    /**
+     * Flipendo has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

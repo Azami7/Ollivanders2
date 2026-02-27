@@ -1,10 +1,9 @@
 package net.pottercraft.ollivanders2.spell;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.sk89q.worldguard.protection.flags.Flags;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -21,11 +20,6 @@ import org.jetbrains.annotations.NotNull;
  * Sets fire to blocks or living entities for an amount of time depending on the player's spell level.
  */
 public abstract class IncendioSuper extends O2Spell {
-    /**
-     * The list of blocks affected that can be used to restore them later.
-     */
-    public Set<Block> changed = new HashSet<>();
-
     /**
      * The time remaining for the burn effect.
      */
@@ -154,12 +148,29 @@ public abstract class IncendioSuper extends O2Spell {
      */
     private void setBlockOnFire(@NotNull Block block) {
         Material type = block.getType();
-        if (type == Material.AIR) {
+        if (type == Material.AIR && !Ollivanders2API.getBlocks().isTemporarilyChangedBlock(block)) {
             block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
 
+            if (!staysLit(block)) { // only add the block if the fire will be temporary
+                Ollivanders2API.getBlocks().addTemporarilyChangedBlock(block, this);
+            }
+
             block.setType(Material.FIRE);
-            changed.add(block);
         }
+    }
+
+    /**
+     * Is this fire on a base block that should burn forever?
+     *
+     * @param block the block to check
+     * @return true if the block under this block would stay lit forever
+     */
+    boolean staysLit(Block block) {
+        Block down = block.getRelative(BlockFace.DOWN);
+        if (down.getType() == Material.NETHERRACK || down.getType() == Material.SOUL_SAND)
+            return true;
+
+        return false;
     }
 
     /**
@@ -167,16 +178,6 @@ public abstract class IncendioSuper extends O2Spell {
      */
     @Override
     public void revert() {
-        for (Block block : changed) {
-            Material mat = block.getType();
-
-            // if the fire is on top of a material that burns forever, do not revert it
-            Block down = block.getRelative(BlockFace.DOWN);
-            if (down.getType() == Material.NETHERRACK || down.getType() == Material.SOUL_SAND)
-                continue;
-
-            if (mat == Material.FIRE)
-                block.setType(Material.AIR);
-        }
+        Ollivanders2API.getBlocks().revertTemporarilyChangedBlocksBy(this);
     }
 }

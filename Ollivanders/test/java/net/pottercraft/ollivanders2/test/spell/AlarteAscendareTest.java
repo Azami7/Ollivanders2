@@ -70,34 +70,10 @@ public class AlarteAscendareTest extends KnockbackTest {
     }
 
     /**
-     * Test entity targeting and projectile behavior.
-     *
-     * <p>Verifies that the spell targets entities and applies upward velocity, and that the
-     * projectile stops when hitting both entities and solid blocks.</p>
+     * Alarte Ascendare has no revert actions
      */
     @Override @Test
-    void doCheckEffectTest() {
-        /*
-        World testWorld = mockServer.addSimpleWorld("world1");
-        Location location = new Location(testWorld, 200, 40, 100);
-        Location targetLocation = new Location(testWorld, 210, 40, 100);
-        PlayerMock caster = mockServer.addPlayer();
-        caster.setLocation(location);
+    void revertTest() {
 
-        targetLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.DIRT);
-        Entity skeleton = testWorld.spawnEntity(targetLocation, EntityType.SKELETON);
-
-        ALARTE_ASCENDARE alarteAscendare = (ALARTE_ASCENDARE) castSpell(caster, targetLocation, O2SpellType.ALARTE_ASCENDARE);
-        mockServer.getScheduler().performTicks(11);
-        assertTrue(alarteAscendare.isKilled(), "projectile did not stop at target entity");
-        assertEquals(alarteAscendare.getVelocity(), skeleton.getVelocity(), "target entity does not have expected velocity");
-
-        skeleton.remove();
-        targetLocation.getBlock().setType(Material.DANDELION);
-        alarteAscendare = (ALARTE_ASCENDARE) castSpell(caster, targetLocation, O2SpellType.ALARTE_ASCENDARE);
-        mockServer.getScheduler().performTicks(11);
-        assertTrue(alarteAscendare.isKilled(), "projectile did not stop at solid block");
-
-         */
     }
 }

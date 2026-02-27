@@ -122,4 +122,12 @@ public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
         assertTrue(harmonia.hasHitTarget());
         assertFalse(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location1, O2StationarySpellType.HARMONIA_NECTERE_PASSUS), "harmonia stationary spell was created when to and from locations were the same");
     }
+
+    /**
+     * Harmonia has no revert actions
+     */
+    @Override @Test
+    void revertTest() {
+
+    }
 }

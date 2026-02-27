@@ -8,15 +8,47 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Glacius Duo has the same effect as Glacius but with 2x the duration and radius.
+ * A stronger variant of the Freezing Charm with doubled effect radius.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Glacius_Duo">https://harrypotter.fandom.com/wiki/Glacius_Duo</a>
+ * <p>GLACIUS_DUO is an enhanced version of GLACIUS that trades spell duration for significantly
+ * increased area of effect. It freezes liquids and ice blocks over twice the radius of standard
+ * GLACIUS, making it ideal for quickly freezing large areas. However, the transfiguration effect
+ * persists for half the duration of standard GLACIUS.</p>
+ *
+ * <p>Spell behavior:</p>
+ * <ul>
+ * <li><strong>Target materials:</strong> WATER, LAVA, ICE</li>
+ * <li><strong>Transformations:</strong>
+ *   <ul>
+ *   <li>WATER → ICE (freezes water)</li>
+ *   <li>LAVA → OBSIDIAN (solidifies lava)</li>
+ *   <li>ICE → PACKED_ICE (further freezes ice)</li>
+ *   </ul>
+ * </li>
+ * <li><strong>Radius:</strong> 2-10 blocks (double GLACIUS), scaled by player skill (100% modifier)</li>
+ * <li><strong>Duration:</strong> Temporary; 15 seconds to 5 minutes (half GLACIUS duration), 50% skill modifier</li>
+ * <li><strong>Success Rate:</strong> 100% (deterministic)</li>
+ * </ul>
+ *
+ * <p>GLACIUS_DUO is particularly useful for large-scale terraforming, quickly creating safe
+ * passages through extensive lava lakes, or freezing large water bodies. The reduced duration
+ * trade-off is offset by the doubled effect radius, making it more efficient for area-based tasks.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Glacius_Duo">Glacius Duo on Harry Potter Wiki</a>
  */
 public final class GLACIUS_DUO extends GlaciusSuper {
     /**
-     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     * Default constructor for spell text generation and documentation.
      *
-     * @param plugin the Ollivanders2 plugin
+     * <p>Used only for generating spell descriptions in spell books and UI displays.
+     * <strong>Do not use this constructor to cast the spell.</strong> Use the
+     * three-argument constructor instead.</p>
+     *
+     * <p>Initializes spell metadata including name, branch (CHARMS), and flavor text
+     * describing the stronger Freezing Charm variant.</p>
+     *
+     * @param plugin the Ollivanders2 plugin instance
      */
     public GLACIUS_DUO(Ollivanders2 plugin) {
         super(plugin);
@@ -33,11 +65,23 @@ public final class GLACIUS_DUO extends GlaciusSuper {
     }
 
     /**
-     * Constructor.
+     * Constructor for casting GLACIUS_DUO spells.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Initializes GLACIUS_DUO with player context, wand information, and spell-specific configuration:</p>
+     * <ul>
+     * <li>Effect radius: 2-10 blocks (double GLACIUS, 100% skill modifier)</li>
+     * <li>Duration: 15 seconds to 5 minutes (half GLACIUS, 50% skill modifier)</li>
+     * <li>Target materials: WATER, LAVA, ICE</li>
+     * <li>Effect: Converts water to ice, lava to obsidian, ice to packed ice</li>
+     * </ul>
+     *
+     * <p>GLACIUS_DUO excels at quickly freezing large areas at the cost of shorter duration.
+     * Affected blocks are temporarily frozen; they revert to their original material when the
+     * spell duration expires.</p>
+     *
+     * @param plugin    the Ollivanders2 plugin instance
+     * @param player    the player casting this spell
+     * @param rightWand the wand correctness factor (1.0 = correct wand, affects skill modifier)
      */
     public GLACIUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -45,9 +89,9 @@ public final class GLACIUS_DUO extends GlaciusSuper {
         spellType = O2SpellType.GLACIUS_DUO;
         branch = O2MagicBranch.CHARMS;
 
-        minRadius = GLACIUS.minRadiusConfig * 2;
-        maxRadius = GLACIUS.maxRadiusConfig * 2;
-        radiusModifier = 1; // 100% of usesModifier
+        minEffectRadius = GLACIUS.minRadiusConfig * 2;
+        maxEffectRadius = GLACIUS.maxRadiusConfig * 2;
+        effectRadiusModifier = 1;
         minDuration = GLACIUS.minDurationConfig / 2;
         maxDuration = GLACIUS.maxDurationConfig / 2;
         durationModifier = 0.5; // 50% of usesModifier

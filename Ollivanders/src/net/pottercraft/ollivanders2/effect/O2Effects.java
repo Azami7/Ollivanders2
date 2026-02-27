@@ -910,7 +910,6 @@ public class O2Effects implements Listener {
         p.getLogger().info("Loaded " + count + " saved effects.");
     }
 
-
     /**
      * Serialize all active and saved effects across all players in the game.
      *

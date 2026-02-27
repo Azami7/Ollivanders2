@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -37,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author Azami7
  */
+@Isolated
 public abstract class O2SpellTestSuper {
     /**
      * Default spell experience level for test casting.
@@ -91,8 +93,8 @@ public abstract class O2SpellTestSuper {
     /**
      * Cast a spell with default wand and experience.
      *
-     * @param caster the player casting the spell
-     * @param fromLocation the location to cast the spell from
+     * @param caster         the player casting the spell
+     * @param fromLocation   the location to cast the spell from
      * @param targetLocation the location the spell should target
      * @return the created and added spell
      */
@@ -103,10 +105,10 @@ public abstract class O2SpellTestSuper {
     /**
      * Cast a spell with custom wand and default experience.
      *
-     * @param caster the player casting the spell
-     * @param fromLocation the location to cast the spell from
+     * @param caster         the player casting the spell
+     * @param fromLocation   the location to cast the spell from
      * @param targetLocation the location the spell should target
-     * @param wand the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
+     * @param wand           the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
      * @return the created and added spell
      */
     O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand) {
@@ -119,14 +121,32 @@ public abstract class O2SpellTestSuper {
      * <p>Sets up the player's experience with the spell type, positions them to face the target,
      * creates the spell, and adds it to the active spell list.</p>
      *
-     * @param caster the player casting the spell
-     * @param fromLocation the location to cast the spell from
+     * @param caster         the player casting the spell
+     * @param fromLocation   the location to cast the spell from
      * @param targetLocation the location the spell should target
-     * @param wand the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
-     * @param experience the spell experience level to set on the player
+     * @param wand           the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
+     * @param experience     the spell experience level to set on the player
      * @return the created and added spell
      */
     O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, int experience) {
+        return castSpell(caster, fromLocation, targetLocation, wand, experience, getSpellType());
+    }
+
+    /**
+     * Cast a spell with custom wand and experience.
+     *
+     * <p>Sets up the player's experience with the spell type, positions them to face the target,
+     * creates the spell, and adds it to the active spell list.</p>
+     *
+     * @param caster         the player casting the spell
+     * @param fromLocation   the location to cast the spell from
+     * @param targetLocation the location the spell should target
+     * @param wand           the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
+     * @param experience     the spell experience level to set on the player
+     * @param spellType      the type of spell to cast
+     * @return the created and added spell
+     */
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, int experience, O2SpellType spellType) {
         caster.setLocation(fromLocation);
 
         if (!fromLocation.equals(targetLocation)) {
@@ -137,7 +157,7 @@ public abstract class O2SpellTestSuper {
             caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
         }
 
-        O2Spell spell = Ollivanders2API.getSpells().createSpell(caster, getSpellType(), wand);
+        O2Spell spell = Ollivanders2API.getSpells().createSpell(caster, spellType, wand);
         assertNotNull(spell, "Unable to create spell");
 
         Ollivanders2API.getSpells().addSpell(caster, spell);
@@ -157,6 +177,12 @@ public abstract class O2SpellTestSuper {
      */
     @Test
     abstract void doCheckEffectTest();
+
+    /**
+     * Test revert functionality
+     */
+    @Test
+    abstract void revertTest();
 
     /**
      * Tear down the mock Bukkit server after all tests complete.
