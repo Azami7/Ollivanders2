@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  * @see AGUAMENTI
  */
+@Isolated
 public class AguamentiTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.
@@ -106,9 +108,9 @@ public class AguamentiTest extends BlockTransfigurationTest {
     @Override
     @Test
     void transfigurationMapTest() {
-        World testWorld = mockServer.addSimpleWorld("blocktransworld");
-        Location location = new Location(testWorld, 1400, 40, 400);
-        Location targetLocation = new Location(testWorld, 1410, 40, 400);
+        World testWorld = mockServer.addSimpleWorld("aguamenti");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(targetLocation, 5);
@@ -147,9 +149,9 @@ public class AguamentiTest extends BlockTransfigurationTest {
     @Override
     @Test
     void isAlreadyTransfiguredTest() {
-        World testWorld = mockServer.addSimpleWorld("blocktransworld");
-        Location location = new Location(testWorld, 1200, 40, 100);
-        Location targetLocation = new Location(testWorld, 1210, 40, 100);
+        World testWorld = mockServer.addSimpleWorld("aguamenti");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -187,9 +189,9 @@ public class AguamentiTest extends BlockTransfigurationTest {
     @Override
     @Test
     void successAndFailureMessageTest() {
-        World testWorld = mockServer.addSimpleWorld("blocktransworld");
-        Location location = new Location(testWorld, 1300, 40, 100);
-        Location targetLocation = new Location(testWorld, 1310, 40, 100);
+        World testWorld = mockServer.addSimpleWorld("aguamenti");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         testWorld.getBlockAt(targetLocation).setType(Material.STONE);

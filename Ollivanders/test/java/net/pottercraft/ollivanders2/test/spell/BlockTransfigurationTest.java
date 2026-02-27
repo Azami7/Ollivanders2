@@ -67,8 +67,10 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     /**
      * Should not be needed for most block transfiguration spells, specific spells should override as needed
      */
-    @Override @Test
-    void spellConstructionTest() {}
+    @Override
+    @Test
+    void spellConstructionTest() {
+    }
 
     /**
      * Tests spell behavior when targeting invalid (blocked) materials.
@@ -80,8 +82,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     void doCheckEffectTest() {
         // test for invalid target case, other cases in other tests
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 100, 40, 100);
-        Location targetLocation = new Location(testWorld, 110, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -112,8 +114,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void blockedMaterialsTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 100, 40, 200);
-        Location targetLocation = new Location(testWorld, 110, 40, 200);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -136,8 +138,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void effectSuccessRateTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 100, 40, 300);
-        Location targetLocation = new Location(testWorld, 110, 40, 300);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -167,8 +169,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
         Ollivanders2.debug = true;
 
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 100, 40, 400);
-        Location targetLocation = new Location(testWorld, 110, 40, 400);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         BlockTransfiguration blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
@@ -201,8 +203,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void sameMaterialTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 200, 40, 100);
-        Location targetLocation = new Location(testWorld, 210, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -227,8 +229,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void ageAndKillTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 300, 40, 100);
-        Location targetLocation = new Location(testWorld, 310, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -260,8 +262,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void isPermanentTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 400, 40, 100);
-        Location targetLocation = new Location(testWorld, 410, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -287,8 +289,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void isAlreadyTransfiguredTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 500, 40, 100);
-        Location targetLocation = new Location(testWorld, 510, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -315,8 +317,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void effectRadiusTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 600, 40, 100);
-        Location targetLocation = new Location(testWorld, 610, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         testWorld.getBlockAt(targetLocation).setType(getValidTargetType());
@@ -348,8 +350,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void effectDurationTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 900, 40, 100);
-        Location targetLocation = new Location(testWorld, 910, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         BlockTransfiguration blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
@@ -372,8 +374,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     @Test
     void successAndFailureMessageTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 700, 40, 100);
-        Location targetLocation = new Location(testWorld, 710, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
@@ -411,11 +413,12 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
      * when the spell duration expires or is explicitly killed. For permanent spells,
      * verifies that blocks remain in their transfigured state.</p>
      */
-    @Override @Test
+    @Override
+    @Test
     void revertTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = new Location(testWorld, 800, 40, 100);
-        Location targetLocation = new Location(testWorld, 810, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         BlockTransfiguration blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);

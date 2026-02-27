@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -132,7 +133,7 @@ public final class AGUAMENTI extends BlockTransfiguration {
 
         moveEffectData = Material.BLUE_ICE;
 
-        // set materials that cannot be transfigured by this spell
+        // set materials that cannot be t by this spell
         materialBlockedList.addAll(Ollivanders2Common.getHotBlocks());
         materialBlockedList.add(Material.WATER);
 
@@ -147,6 +148,34 @@ public final class AGUAMENTI extends BlockTransfiguration {
             worldGuardFlags.add(Flags.BUILD);
 
         initSpell();
+    }
+
+    /**
+     * Override of canTransfigure because Aguamenti targets the block above the projectile target, which can only be
+     * AIR or CAVE_AIR. {@link BlockTransfiguration#canTransfigure(Block)} uses {@link O2Spell#materialBlockedList} and
+     * {@link O2Spell#materialAllowList} to determine what block types can be changed but in this case those will be the
+     * wrong types.
+     *
+     * @param block the block to validate
+     * @return true if success check passes, the block is AIR or CAVE_AIR, and the block is not already transfigured
+     */
+    @Override
+    boolean canTransfigure(@NotNull Block block) {
+        common.printDebugMessage("Aguamenti.canTranfigure: Checking if this block can be transfigured.", null, null, false);
+
+        // first check success rate
+        int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
+        if (rand >= successRate) {
+            common.printDebugMessage("Aguamenti.canTranfigure: " + player.getName() + " failed success check in canTransfigure()", null, null, false);
+            return false;
+        }
+        else if (Ollivanders2API.getBlocks().isTemporarilyChangedBlock(block)) {
+            // do not change if this block is already magically altered, this must be checked first because below conditions may also be true
+            common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already magically altered", null, null, false);
+            return false;
+        }
+
+        return block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR;
     }
 
     /**

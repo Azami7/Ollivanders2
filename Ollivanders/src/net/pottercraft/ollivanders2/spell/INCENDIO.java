@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -9,13 +10,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Sets fire to blocks. Also sets fire to living entities and items for an amount of time depending on the player's
- * spell level.
+ * The basic fire-making charm that ignites blocks, entities, and items.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Fire-Making_Spell">https://harrypotter.fandom.com/wiki/Fire-Making_Spell</a>
+ * <p>INCENDIO is a fundamental fire spell that sets fire to a single target location and any entities/items
+ * in that immediate area. It is a single-target spell (non-strafe) with a 1-block effective radius.</p>
+ *
+ * <p>Spell characteristics:
+ * <ul>
+ * <li><strong>Target:</strong> Single block - non-strafe behavior</li>
+ * <li><strong>Block Radius:</strong> 1 block - only the directly hit block</li>
+ * <li><strong>Entity Radius:</strong> 1 block - only entities at the target location</li>
+ * <li><strong>Duration Modifier:</strong> 1x - baseline burn duration</li>
+ * <li><strong>Max Burn Duration:</strong> 10 seconds (200 ticks)</li>
+ * </ul>
+ *
+ * <p>The spell will set blocks on fire and apply burn effects to living entities and items within the
+ * 1-block radius, with burn duration scaled by the caster's spell proficiency.</p>
+ *
+ * @see IncendioSuper
+ * @see <a href="https://harrypotter.fandom.com/wiki/Fire-Making_Spell">https://harrypotter.fandom.com/wiki/Fire-Making_Spell</a>
  */
 public final class INCENDIO extends IncendioSuper {
-    // todo rework to make this lower strength - equiv to a flint and steel
+    private static final int maxBurnDurationConfig = Ollivanders2Common.ticksPerSecond * 10;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -51,9 +67,11 @@ public final class INCENDIO extends IncendioSuper {
         branch = O2MagicBranch.CHARMS;
 
         strafe = false;
-        radius = 1;
+        entityRadius = 1;
         blockRadius = 1;
         durationModifier = 1;
+
+        maxBurnDuration = maxBurnDurationConfig;
 
         initSpell();
     }

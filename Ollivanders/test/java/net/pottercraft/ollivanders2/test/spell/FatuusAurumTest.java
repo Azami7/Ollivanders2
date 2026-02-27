@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Test suite for the FATUUS_AURUM spell (Stone to Gold Charm).
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.Test;
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.FATUUS_AURUM
  */
+@Isolated
 public class FatuusAurumTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.
