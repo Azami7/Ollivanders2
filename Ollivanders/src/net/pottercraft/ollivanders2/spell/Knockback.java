@@ -115,7 +115,7 @@ public abstract class Knockback extends O2Spell {
             int numberOfTargets = calculateNumberOfTargets();
             double radius = calculateRadius();
 
-            List<Entity> entities = getCloseEntities(radius);
+            List<Entity> entities = getNearbyEntities(radius);
             for (Entity entity : entities) {
                 if (!entityTargetCheck(entity)) // we cannot target this entity
                     continue;

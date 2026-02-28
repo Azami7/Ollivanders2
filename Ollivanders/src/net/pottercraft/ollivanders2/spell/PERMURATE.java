@@ -75,7 +75,7 @@ public class PERMURATE extends ItemToItemTransfiguration {
 
         Item itemOne = null;
         // find an item close to the spell projectile path
-        for (Entity entity : getCloseEntities(defaultRadius)) {
+        for (Entity entity : getNearbyEntities(defaultRadius)) {
             if ((entity instanceof Item) && canTransfigure(entity)) {
                 itemOne = (Item) entity;
 

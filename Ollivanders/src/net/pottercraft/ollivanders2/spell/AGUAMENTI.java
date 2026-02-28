@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -134,7 +135,8 @@ public final class AGUAMENTI extends BlockTransfiguration {
         moveEffectData = Material.BLUE_ICE;
 
         // set materials that cannot be t by this spell
-        materialBlockedList.addAll(Ollivanders2Common.getHotBlocks());
+        materialBlockedList.add(Material.SOUL_FIRE);
+        materialBlockedList.add(Material.SOUL_CAMPFIRE);
         materialBlockedList.add(Material.WATER);
 
         // make sure none of these are on the pass-through list
@@ -175,7 +177,7 @@ public final class AGUAMENTI extends BlockTransfiguration {
             return false;
         }
 
-        return block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR;
+        return BlockCommon.isAirBlock(block);
     }
 
     /**

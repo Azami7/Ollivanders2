@@ -65,11 +65,9 @@ public final class INFORMOUS extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
-            return;
-
         boolean gaveInfo = false;
 
+        // check for entities
         for (LivingEntity entity : getNearbyLivingEntities(1.5)) {
             if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
@@ -78,46 +76,49 @@ public final class INFORMOUS extends O2Spell {
             gaveInfo = true;
         }
 
-        if (!gaveInfo) {
+        if (!gaveInfo && hasHitTarget()) {
+            // check for stationary spells at this location
             for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
                 if (spell.isLocationInside(location)) {
                     stationarySpellInfo(spell);
                     gaveInfo = true;
                 }
             }
-        }
 
-        if (!gaveInfo) {
-            Location playerLocation = player.getLocation();
+            // if we didn't find a stationary spell, give information about the location
+            if (!gaveInfo) {
+                Location playerLocation = player.getLocation();
 
-            if (playerLocation.getY() > 256) {
-                String weather;
-                World world = playerLocation.getWorld();
-                if (world == null) {
-                    common.printDebugMessage("INFORMOUS.doCheckEffect: world is null", null, null, true);
-                    kill();
-                    return;
-                }
+                if (playerLocation.getY() > 256) {
+                    String weather;
+                    World world = playerLocation.getWorld();
+                    if (world == null) {
+                        common.printDebugMessage("INFORMOUS.doCheckEffect: world is null", null, null, true);
+                        kill();
+                        return;
+                    }
 
-                boolean thunder = world.isThundering();
+                    boolean thunder = world.isThundering();
 
-                if (world.hasStorm()) {
-                    weather = "rain";
-                }
-                else {
-                    weather = "clear skies";
-                }
-                int weatherTime = world.getWeatherDuration();
-                int thunderTime = world.getThunderDuration();
+                    if (world.hasStorm()) {
+                        weather = "rain";
+                    }
+                    else {
+                        weather = "clear skies";
+                    }
+                    int weatherTime = world.getWeatherDuration();
+                    int thunderTime = world.getThunderDuration();
 
-                player.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
-                if (thunder) {
-                    player.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+                    player.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+                    if (thunder) {
+                        player.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+                    }
                 }
             }
         }
 
-        kill();
+        if (gaveInfo || hasHitTarget()) // stop the spell if we hit a target or gave info about an entity
+            kill();
     }
 
     /**

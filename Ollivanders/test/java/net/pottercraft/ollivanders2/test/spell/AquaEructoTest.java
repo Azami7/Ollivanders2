@@ -1,35 +1,39 @@
 package net.pottercraft.ollivanders2.test.spell;
 
+import net.pottercraft.ollivanders2.spell.AQUA_ERUCTO;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the AQUA_ERUCTO spell (water-jet extinguishing charm).
+ * Unit tests for the AQUA_ERUCTO water extinguishing spell.
  *
- * <p>Tests verify that AQUA_ERUCTO correctly targets and extinguishes fire and lava blocks
- * while rejecting invalid materials. AQUA_ERUCTO permanently transforms fire variants to air
- * and lava to obsidian with a fixed 1-block radius.</p>
- *
- * <p>Test coverage includes:</p>
+ * <p>Provides comprehensive test coverage for the spell's core functionality:
  * <ul>
- * <li>Valid target materials: FIRE, SOUL_FIRE, LAVA, CAMPFIRE, SOUL_CAMPFIRE</li>
- * <li>Invalid target materials: Non-fire blocks (stone, dirt, sand, etc.)</li>
- * <li>Transformations: Fire variants → Air/Logs, Lava → Obsidian</li>
- * <li>Fixed radius: 1 block (single-target precision spell)</li>
- * <li>Permanent duration: Extinguished fires do not reignite</li>
- * <li>Success and failure messaging</li>
- * <li>Visual effects (blue ice water jet)</li>
+ * <li><strong>Target Detection:</strong> Verifies the spell finds on-fire entities and items</li>
+ * <li><strong>Extinguishing:</strong> Confirms fire ticks are removed from burning targets</li>
+ * <li><strong>Water Block Effect:</strong> Tests water block placement and tracking</li>
+ * <li><strong>Caster Protection:</strong> Ensures the spell doesn't extinguish the caster</li>
+ * <li><strong>No Target Handling:</strong> Validates spell behavior when no on-fire target exists</li>
+ * <li><strong>Water Block Lifespan:</strong> Tests water block TTL and cleanup</li>
+ * <li><strong>Reversion:</strong> Verifies temporary water blocks are properly reverted</li>
  * </ul>
- *
- * @author Azami7
- * @see net.pottercraft.ollivanders2.spell.AQUA_ERUCTO
  */
 @Isolated
-public class AquaEructoTest extends BlockTransfigurationTest {
+public class AquaEructoTest extends AquaEructoSuperTest {
     /**
      * Returns the spell type being tested.
      *
@@ -42,57 +46,68 @@ public class AquaEructoTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns the valid target material for AQUA_ERUCTO tests.
+     * Creates a burning entity that is a valid target for AQUA_ERUCTO.
      *
-     * <p>AQUA_ERUCTO only transfigures fire and lava variants (FIRE, SOUL_FIRE, LAVA, CAMPFIRE,
-     * SOUL_CAMPFIRE). LAVA is used here as a representative valid target.</p>
+     * <p>Returns a CAMEL with fire ticks set to 100, making it a burning entity that the spell
+     * should target and extinguish.</p>
      *
-     * @return LAVA material type
+     * @param location the location to spawn the entity at
+     * @return a burning CAMEL entity
      */
     @Override
     @NotNull
-    Material getValidTargetType() {
-        return Material.LAVA;
+    Entity getValidEntity(@NotNull Location location) {
+        Entity entity = location.getWorld().spawnEntity(location, EntityType.CAMEL);
+        entity.setFireTicks(100);
+
+        return entity;
     }
 
     /**
-     * Returns an invalid target material for AQUA_ERUCTO tests.
+     * Creates a non-burning entity that is not a valid target for AQUA_ERUCTO.
      *
-     * <p>AQUA_ERUCTO's allow list contains only fire and lava variants. All other block types,
-     * including common materials like stone, are invalid targets.</p>
+     * <p>Returns a CAMEL without fire ticks, making it an invalid target that the spell
+     * should ignore.</p>
      *
-     * @return STONE material type (or any non-fire/lava material)
+     * @param location the location to spawn the entity at
+     * @return a non-burning CAMEL entity
      */
     @Override
-    @Nullable
-    Material getInvalidTargetType() {
-        return Material.STONE;
+    @NotNull
+    Entity getInvalidEntity(@NotNull Location location) {
+        return location.getWorld().spawnEntity(location, EntityType.CAMEL);
     }
 
     /**
-     * Overrides spellConstructionTest with no additional implementation.
+     * Verifies that AQUA_ERUCTO successfully extinguished the target.
      *
-     * <p>AQUA_ERUCTO uses the default construction behavior provided by the parent test class.
-     * No spell-specific construction tests are needed beyond the inherited test coverage.</p>
+     * <p>Checks that the entity's fire ticks were set to 0, confirming the extinguishing effect.</p>
+     *
+     * @param affectedEntity the entity that was targeted by the spell
      */
-    @Override
-    @Test
-    void spellConstructionTest() {
-
+    void checkEffect(Entity affectedEntity) {
+        assertEquals(0, affectedEntity.getFireTicks(), "Entity fireTicks not set to 0");
     }
 
     /**
-     * Overrides sameMaterialTest because it is not applicable to AQUA_ERUCTO.
+     * Tests spell effect on burning items.
      *
-     * <p>AQUA_ERUCTO converts fire blocks to air and lava to obsidian (and campfires to oak logs).
-     * Since air, obsidian, and oak logs are not valid targets for the spell (only FIRE, SOUL_FIRE,
-     * LAVA, CAMPFIRE, and SOUL_CAMPFIRE are in the allow list), this spell can never encounter a
-     * situation where it tries to transfigure a block that is already the target type.</p>
-     *
-     * <p>Therefore, this test is not applicable and remains empty.</p>
+     * <p>Verifies that the spell can target and extinguish burning items (dropped items on the ground).</p>
      */
     @Test
-    void sameMaterialTest() {
-        // this cannot happen, the types aqua eructo changes blocks in to cannot be targeted by the spell
+    void itemTargetTest() {
+        World testWorld = mockServer.addSimpleWorld("Aqua_Eructo");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
+        PlayerMock caster = mockServer.addPlayer();
+
+        targetLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.STONE); // block for target item to stand on
+        Item item = testWorld.dropItem(targetLocation, new ItemStack(Material.ARROW, 1));
+        item.setFireTicks(100);
+
+        AQUA_ERUCTO aquaEructo = (AQUA_ERUCTO) castSpell(caster, location, item.getLocation());
+        mockServer.getScheduler().performTicks(20);
+        assertTrue(aquaEructo.hasHitTarget());
+        assertTrue(aquaEructo.isExtinguished(), "target not extinguished");
     }
 }

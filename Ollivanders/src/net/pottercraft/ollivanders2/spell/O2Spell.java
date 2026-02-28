@@ -514,7 +514,7 @@ public abstract class O2Spell {
      * @return a list of entities within the radius of the projectile
      */
     @NotNull
-    public List<Entity> getCloseEntities(double radius) {
+    public List<Entity> getNearbyEntities(double radius) {
         if (radius <= 0)
             radius = 1.0;
 
@@ -524,19 +524,12 @@ public abstract class O2Spell {
 
         for (Entity e : entities) {
             if (e instanceof LivingEntity) {
-                if (((LivingEntity) e).getEyeLocation().distance(location) <= radius) {
-                    if (!e.equals(player))
-                        close.add(e);
-                    else {
-                        if (projectileAge > 1) // get at least 2 blocks away from the caster
-                            close.add(e);
-                    }
-                }
+                if (!e.equals(player))
+                    close.add(e);
             }
             else
                 close.add(e);
         }
-
 
         return close;
     }
@@ -560,7 +553,7 @@ public abstract class O2Spell {
      */
     @NotNull
     public List<LivingEntity> getNearbyLivingEntities(double radius) {
-        List<Entity> entities = getCloseEntities(radius);
+        List<Entity> entities = getNearbyEntities(radius);
         List<LivingEntity> living = new ArrayList<>();
         for (Entity e : entities) {
             if (e instanceof LivingEntity)
@@ -583,7 +576,7 @@ public abstract class O2Spell {
      */
     @NotNull
     public List<Player> getNearbyPlayers(double radius) {
-        List<Entity> entities = getCloseEntities(radius);
+        List<Entity> entities = getNearbyEntities(radius);
         List<Player> players = new ArrayList<>();
         for (Entity e : entities) {
             if (e instanceof Player)
@@ -606,7 +599,7 @@ public abstract class O2Spell {
      */
     @NotNull
     public List<Damageable> getNearbyDamageableEntities(double radius) {
-        List<Entity> entities = getCloseEntities(radius);
+        List<Entity> entities = getNearbyEntities(radius);
         List<Damageable> damageable = new ArrayList<>();
         for (Entity e : entities) {
             if (e instanceof Damageable)
@@ -881,10 +874,7 @@ public abstract class O2Spell {
             return false;
 
         // paintings
-        if (entity instanceof Painting && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ENTITY_PAINTING_DESTROY))
-            return false;
-
-        return true;
+        return entity instanceof Painting && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ENTITY_PAINTING_DESTROY);
     }
 
     /**

@@ -128,7 +128,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
         Entity target = event.getEntity(); // will never be null
         EntityDamageEvent.DamageCause cause = event.getCause(); // will never be null
 
-        if (!EntityCommon.attackDamageCauses.contains(cause))
+        if (!EntityCommon.isAttackDamageCause(cause))
             return;
 
         if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))

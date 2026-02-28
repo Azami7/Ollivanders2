@@ -1,140 +1,191 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.block.BlockCommon;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
 /**
- * The Aqua Eructo Charm that shoots water to permanently extinguish fires.
+ * Aqua Eructo — a water-based spell that extinguishes burning entities and items.
  *
- * <p>AQUA_ERUCTO is a water-jet spell that extinguishes fire by converting flames into air or
- * converting lava into obsidian. A jet of water erupts from the wand tip, striking at the target
- * location. This spell is particularly useful for combating magical and natural fires.</p>
+ * <p>AQUA_ERUCTO shoots water from the caster's wand and targets any on-fire entity or item in its path.
+ * When the spell finds a burning target, it extinguishes the fire and places a water block at the target's
+ * eye location (for living entities) or center location (for items). The water block persists temporarily
+ * to create a visual effect, then reverts to its original state.</p>
  *
- * <p>Spell behavior:</p>
+ * <p>Spell behavior:
  * <ul>
- * <li><strong>Target materials:</strong> FIRE, SOUL_FIRE, LAVA, CAMPFIRE, SOUL_CAMPFIRE</li>
- * <li><strong>Transformations:</strong>
- *   <ul>
- *   <li>FIRE → AIR (extinguishes fire)</li>
- *   <li>SOUL_FIRE → AIR (extinguishes soul fire)</li>
- *   <li>LAVA → OBSIDIAN (solidifies lava)</li>
- *   <li>CAMPFIRE → OAK_LOG (extinguishes campfire)</li>
- *   <li>SOUL_CAMPFIRE → OAK_LOG (extinguishes soul campfire)</li>
- *   </ul>
- * </li>
- * <li><strong>Radius:</strong> 1 block (single-target spell)</li>
- * <li><strong>Duration:</strong> Permanent; extinguished fire does not reignite</li>
- * <li><strong>Success Rate:</strong> 100% (deterministic)</li>
- * <li><strong>Visual Effect:</strong> Blue ice particle effect for water jet</li>
+ * <li><strong>Target Detection:</strong> Searches for on-fire entities and items as the projectile travels</li>
+ * <li><strong>Extinguishing:</strong> Removes fire ticks from any burning target found</li>
+ * <li><strong>Water Effect:</strong> Places a temporary water block at the target's eye level</li>
+ * <li><strong>Duration:</strong> Water block remains for {@link #waterBlockTTL} (1 second)</li>
+ * <li><strong>Caster Protection:</strong> Does not extinguish the caster if they are on fire</li>
  * </ul>
  *
- * <p>AQUA_ERUCTO is a precision spell designed for extinguishing fires without affecting
- * surrounding blocks. Unlike most transfiguration spells, the effects are permanent—extinguished
- * fires will not revert to their original state.</p>
- *
- * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Aqua_Eructo">Aqua Eructo Charm on Harry Potter Wiki</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Aqua_Eructo">Aqua Eructo on Harry Potter Wiki</a>
  */
-public final class AQUA_ERUCTO extends BlockTransfiguration {
+public class AQUA_ERUCTO extends O2Spell {
     /**
-     * Minimum effect radius for AQUA_ERUCTO (1 block).
+     * Time-to-live for the water block placed by this spell, in ticks.
      *
-     * <p>AQUA_ERUCTO is a precision single-target spell with fixed radius of 1 block.</p>
+     * <p>Default is 1 second (20 ticks). After this duration, the water block is reverted
+     * to its original state via the revert system.</p>
      */
-    private static final int minRadiusConfig = 1;
+    public static final int waterBlockTTL = Ollivanders2Common.ticksPerSecond;
 
     /**
-     * Maximum effect radius for AQUA_ERUCTO (1 block).
+     * Whether this spell successfully extinguished a target.
      *
-     * <p>AQUA_ERUCTO is a precision single-target spell with fixed radius of 1 block.</p>
+     * <p>Set to true after finding and extinguishing a burning entity or item. Used to determine
+     * whether the spell should continue alive (maintaining the water block) or kill itself
+     * (if it hit a target but didn't extinguish anything).</p>
      */
-    private static final int maxRadiusConfig = 1;
+    private boolean extinguished = false;
 
     /**
-     * Default constructor for spell text generation and documentation.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
-     * <p>Used only for generating spell descriptions in spell books and UI displays.
-     * <strong>Do not use this constructor to cast the spell.</strong> Use the
-     * three-argument constructor instead.</p>
-     *
-     * <p>Initializes spell metadata including name, branch (CHARMS), and flavor text
-     * describing the Aqua Eructo water-jet spell.</p>
-     *
-     * @param plugin the Ollivanders2 plugin instance
+     * @param plugin the Ollivanders2 plugin
      */
-    public AQUA_ERUCTO(Ollivanders2 plugin) {
+    public AQUA_ERUCTO(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AQUA_ERUCTO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>() {{
-            add("The Aqua Eructo Charm");
-            add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
-        }};
-
-        text = "Shoots a jet of water from your wand tip to extinguish a fire.";
+        text = "Shoots water from your wand and extinguishes an entity or item that is on fire.";
     }
 
     /**
-     * Constructor for casting AQUA_ERUCTO spells.
+     * Constructor for casting the spell.
      *
-     * <p>Initializes AQUA_ERUCTO with player context, wand information, and spell-specific configuration:</p>
-     * <ul>
-     * <li>Radius: Fixed 1 block (precision single-target spell)</li>
-     * <li>Target materials: FIRE, SOUL_FIRE, LAVA, CAMPFIRE, SOUL_CAMPFIRE</li>
-     * <li>Transformations: Fire variants → Air/Logs, Lava → Obsidian</li>
-     * <li>Duration: Permanent; extinguished fire does not reignite</li>
-     * <li>Visual Effect: Blue ice particle stream (water jet)</li>
-     * <li>WorldGuard: Requires BUILD permission (if enabled)</li>
-     * </ul>
-     *
-     * <p>AQUA_ERUCTO is a precision spell designed for single-target fire extinguishing. Unlike
-     * most transfiguration spells, the effects are permanent and will not revert.</p>
-     *
-     * @param plugin    the Ollivanders2 plugin instance
-     * @param player    the player casting this spell
-     * @param rightWand the wand correctness factor (1.0 = correct wand, affects skill modifier)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using (correctness factor)
      */
     public AQUA_ERUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
-        spellType = O2SpellType.AQUA_ERUCTO;
-        branch = O2MagicBranch.CHARMS;
-
-        permanent = true;
-        minEffectRadius = minRadiusConfig;
-        maxEffectRadius = maxRadiusConfig;
-        successMessage = "A fire is doused by the water.";
-        failureMessage = "Nothing seems to happen.";
 
         moveEffectData = Material.BLUE_ICE;
 
-        // materials that can be transfigured by this spell
-        materialAllowList.add(Material.LAVA);
-        materialAllowList.add(Material.FIRE);
-        materialAllowList.add(Material.CAMPFIRE);
-        materialAllowList.add(Material.SOUL_FIRE);
-
-        // make sure none of these are on the pass-through list
-        projectilePassThrough.removeAll(materialAllowList);
-
-        // the map of what each material transfigures in to for this spell
-        transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
-        transfigurationMap.put(Material.FIRE, Material.AIR);
-        transfigurationMap.put(Material.CAMPFIRE, Material.OAK_LOG);
-        transfigurationMap.put(Material.SOUL_CAMPFIRE, Material.OAK_LOG);
-
-        // world-guard flags
-        if (Ollivanders2.worldGuardEnabled)
-            worldGuardFlags.add(Flags.BUILD);
+        spellType = O2SpellType.AQUA_ERUCTO;
+        branch = O2MagicBranch.CHARMS;
 
         initSpell();
+    }
+
+    /**
+     * Applies the water extinguishing effect to targets each tick.
+     *
+     * <p>This spell operates in three states:
+     * <ul>
+     * <li><strong>Traveling:</strong> Searches for nearby on-fire entities and items; extinguishes the first
+     * one found and places a water block at its location</li>
+     * <li><strong>Water Active:</strong> Projectile has hit and extinguished a target; waits for the
+     * water block TTL to expire before killing the spell</li>
+     * <li><strong>No Target:</strong> Projectile hit a location but found no on-fire target; kills the spell</li>
+     * </ul>
+     */
+    @Override
+    protected void doCheckEffect() {
+        if (!hasHitTarget()) {
+            for (Entity entity : getNearbyEntities(1.5)) {
+                if (entity.getUniqueId().equals(player.getUniqueId())) // don't target the caster
+                    continue;
+
+                if (canTarget(entity)) {
+                    stopProjectile();
+
+                    World world = location.getWorld();
+                    Block targetBlock;
+
+                    if (entity instanceof LivingEntity)
+                        targetBlock = ((LivingEntity) entity).getEyeLocation().getBlock();
+                    else
+                        targetBlock = entity.getLocation().getBlock();
+
+                    if (BlockCommon.isAirBlock(targetBlock) && !Ollivanders2API.getBlocks().isTemporarilyChangedBlock(targetBlock)) {
+                        Ollivanders2API.getBlocks().addTemporarilyChangedBlock(targetBlock, this);
+                        targetBlock.setType(Material.WATER);
+                    }
+
+                    if (world != null)
+                        world.playSound(location, Sound.ENTITY_GENERIC_SPLASH, 1, 0);
+
+                    effectEntity(entity);
+
+                    extinguished = true;
+                    break;
+                }
+            }
+        }
+        else if (extinguished) {
+            if (getAge() > waterBlockTTL)
+                kill();
+        }
+        else { // hasHitTarget && !extinguished
+            kill();
+        }
+    }
+
+    /**
+     * Determines whether this spell can target a given entity.
+     *
+     * <p>An entity is a valid target if it is currently on fire (has fire ticks > 0).
+     * This method can be overridden by subclasses to implement different targeting logic.</p>
+     *
+     * @param entity the entity to check
+     * @return true if the entity is on fire and can be targeted, false otherwise
+     */
+    boolean canTarget(Entity entity) {
+        common.printDebugMessage("AQUA_ERUCTO.canTarget(): checking " + entity.getType(), null, null, false);
+
+        if (entity.getFireTicks() > 0) { // entity is on fire
+            common.printDebugMessage("AQUA_ERUCTO.canTarget(): entity is on fire", null, null, false);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Applies the extinguishing effect to a target entity, assumes canTarget() has been checked.
+     *
+     * <p>Removes all fire from the entity by setting its fire ticks to 0.
+     * This method can be overridden by subclasses to implement different effect behaviors.</p>
+     *
+     * @param entity the entity to extinguish
+     */
+    void effectEntity(Entity entity) {
+        entity.setFireTicks(0);
+    }
+
+    /**
+     * Reverts the water block back to its original state.
+     *
+     * <p>Called when the spell ends or the water block TTL expires. Removes the temporary water block
+     * that was placed at the target location and restores it to its original material type.</p>
+     */
+    @Override
+    protected void revert() {
+        Ollivanders2API.getBlocks().revertTemporarilyChangedBlocksBy(this);
+    }
+
+    /**
+     * Whether this spell successfully extinguished a target.
+     *
+     * @return true if the spell found and extinguished a burning entity or item, false otherwise
+     */
+    public boolean isExtinguished() {
+        return extinguished;
     }
 }

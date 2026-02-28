@@ -52,6 +52,10 @@ public enum O2SpellType {
      */
     AQUA_ERUCTO(AQUA_ERUCTO.class, MagicLevel.OWL),
     /**
+     * {@link AQUA_ERUCTO_DUO}
+     */
+    AQUA_ERUCTO_DUO(AQUA_ERUCTO_DUO.class, MagicLevel.NEWT),
+    /**
      * {@link ARANIA_EXUMAI}
      */
     ARANIA_EXUMAI(ARANIA_EXUMAI.class, MagicLevel.OWL),
@@ -119,6 +123,10 @@ public enum O2SpellType {
      * {@link CANIS}
      */
     CANIS(CANIS.class, MagicLevel.NEWT),
+    /**
+     * {@link CARCEREM_AQUATICUM}
+     */
+    //CARCEREM_AQUATICUM (CARCEREM_AQUATICUM.class, MagicLevel.NEWT),
     /**
      * {@link CARPE_RETRACTUM}
      */
@@ -633,6 +641,10 @@ public enum O2SpellType {
      * {@link REPELLO_MUGGLETON}
      */
     REPELLO_MUGGLETON(REPELLO_MUGGLETON.class, MagicLevel.NEWT),
+    /**
+     * {@link REPLETUS}
+     */
+    //REPLETUS(REPLETUS.class, MagicLevel.OWL),
     /**
      * {@link RICTUSEMPRA}
      */

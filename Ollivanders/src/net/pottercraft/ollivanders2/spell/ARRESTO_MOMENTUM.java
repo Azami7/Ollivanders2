@@ -81,7 +81,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell {
         double modifier = usesModifier;
 
         // check for entities first
-        List<Entity> entities = getCloseEntities(defaultRadius);
+        List<Entity> entities = getNearbyEntities(defaultRadius);
 
         if (!entities.isEmpty()) {
             for (Entity entity : entities) {

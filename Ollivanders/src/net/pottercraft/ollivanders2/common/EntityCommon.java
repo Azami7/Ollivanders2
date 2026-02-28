@@ -44,7 +44,7 @@ public class EntityCommon {
     /**
      * Undead entities (for use with magic that targets undead)
      */
-    public static final List<EntityType> undeadEntities = new ArrayList<>() {{
+    private static final List<EntityType> undeadMobs = new ArrayList<>() {{
         add(EntityType.BOGGED);
         add(EntityType.DROWNED);
         add(EntityType.GIANT);
@@ -62,10 +62,17 @@ public class EntityCommon {
         add(EntityType.ZOGLIN);
     }};
 
+    private static final List<EntityType> fireMobs = new ArrayList<>() {{
+        add(EntityType.BLAZE);
+        add(EntityType.MAGMA_CUBE);
+        add(EntityType.GHAST);
+        add(EntityType.ENDER_DRAGON);
+    }};
+
     /**
      * Reasons an entity may get damaged which are caused by an attack (rather than falling, etc.)
      */
-    public static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>() {{
+    private static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>() {{
         add(EntityDamageEvent.DamageCause.DRAGON_BREATH);
         add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
         add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
@@ -81,7 +88,7 @@ public class EntityCommon {
     /**
      * All minecart entity types.
      */
-    public static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>() {{
+    private static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>() {{
         add(EntityType.FURNACE_MINECART);
         add(EntityType.MINECART);
         add(EntityType.CHEST_MINECART);
@@ -94,7 +101,7 @@ public class EntityCommon {
     /**
      * All boat entity types.
      */
-    public static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>() {{
+    private static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>() {{
         add(EntityType.ACACIA_BOAT);
         add(EntityType.ACACIA_CHEST_BOAT);
         add(EntityType.BIRCH_BOAT);
@@ -724,5 +731,59 @@ public class EntityCommon {
         }
 
         return distance;
+    }
+
+    /**
+     * Determines whether an entity type is an undead mob.
+     *
+     * @param entityType the entity type to check
+     * @return true if the entity type is an undead mob, false otherwise
+     */
+    public static boolean isUndeadMob(EntityType entityType) {
+        return undeadMobs.contains(entityType);
+    }
+
+    /**
+     * Determines whether an entity type is a fire-based mob.
+     *
+     * @param entityType the entity type to check
+     * @return true if the entity type is a fire mob, false otherwise
+     */
+    public static boolean isFireMob(EntityType entityType) {
+        return fireMobs.contains(entityType);
+    }
+
+    /**
+     * Determines whether a damage cause is from an attack.
+     *
+     * @param damageCause the damage cause to check
+     * @return true if the damage cause is an attack type, false otherwise
+     */
+    public static boolean isAttackDamageCause(EntityDamageEvent.DamageCause damageCause) {
+        return attackDamageCauses.contains(damageCause);
+    }
+
+    /**
+     * Gets a copy of all minecart entity types.
+     *
+     * @return a list of all minecart entity types
+     */
+    public static List<EntityType> getMinecarts() {
+        ArrayList<EntityType> entities = new ArrayList<>();
+        entities.addAll(minecarts);
+
+        return entities;
+    }
+
+    /**
+     * Gets a copy of all boat entity types.
+     *
+     * @return a list of all boat entity types
+     */
+    public static List<EntityType> getBoats() {
+        ArrayList<EntityType> entities = new ArrayList<>();
+        entities.addAll(boats);
+
+        return entities;
     }
 }
