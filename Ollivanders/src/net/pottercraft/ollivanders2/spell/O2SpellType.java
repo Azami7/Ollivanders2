@@ -644,7 +644,7 @@ public enum O2SpellType {
     /**
      * {@link REPLETUS}
      */
-    //REPLETUS(REPLETUS.class, MagicLevel.OWL),
+    REPLETUS(REPLETUS.class, MagicLevel.OWL),
     /**
      * {@link RICTUSEMPRA}
      */

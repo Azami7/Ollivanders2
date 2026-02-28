@@ -33,12 +33,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Isolated
 public class AlohomoraTest extends O2SpellTestSuper {
-    @Override @NotNull
+    @Override
+    @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.ALOHOMORA;
     }
 
-    @Override @Test
+    @Override
+    @Test
     void spellConstructionTest() {
     }
 
@@ -48,11 +50,12 @@ public class AlohomoraTest extends O2SpellTestSuper {
      * <p>Verifies that the spell sends a failure message when no COLLOPORTUS spells are found, leaves
      * other stationary spells unharmed, and successfully kills COLLOPORTUS spells at the target location.</p>
      */
-    @Override @Test
+    @Override
+    @Test
     void doCheckEffectTest() {
-        World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 100, 40, 100);
-        Location targetLocation = new Location(testWorld, 110, 40, 100);
+        World testWorld = mockServer.addSimpleWorld("Alohomora");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         targetLocation.getBlock().setType(Material.OAK_DOOR);
@@ -69,7 +72,7 @@ public class AlohomoraTest extends O2SpellTestSuper {
         MUFFLIATO muffliato = new MUFFLIATO(testPlugin, caster.getUniqueId(), targetLocation, 5, 200);
         Ollivanders2API.getStationarySpells().addStationarySpell(muffliato);
         mockServer.getScheduler().performTicks(20);
-        alohomora = (ALOHOMORA)castSpell(caster, location, targetLocation);
+        alohomora = (ALOHOMORA) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
         assertTrue(alohomora.isKilled());
         assertFalse(muffliato.isKilled(), "muffliato was killed");
@@ -78,7 +81,7 @@ public class AlohomoraTest extends O2SpellTestSuper {
         COLLOPORTUS colloportus = new COLLOPORTUS(testPlugin, caster.getUniqueId(), targetLocation);
         Ollivanders2API.getStationarySpells().addStationarySpell(colloportus);
         mockServer.getScheduler().performTicks(20);
-        alohomora = (ALOHOMORA)castSpell(caster, location, targetLocation);
+        alohomora = (ALOHOMORA) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
         assertTrue(alohomora.isKilled());
         assertTrue(colloportus.isKilled(), "colloportus not killed");
@@ -88,7 +91,8 @@ public class AlohomoraTest extends O2SpellTestSuper {
     /**
      * Alohomora has no revert actions
      */
-    @Override @Test
+    @Override
+    @Test
     void revertTest() {
 
     }

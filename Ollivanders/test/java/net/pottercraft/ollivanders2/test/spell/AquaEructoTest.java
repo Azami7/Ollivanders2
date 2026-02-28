@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Unit tests for the AQUA_ERUCTO water extinguishing spell.
  *
- * <p>Provides comprehensive test coverage for the spell's core functionality:
+ * <p>Provides comprehensive test coverage for the spell's core functionality:</p>
  * <ul>
  * <li><strong>Target Detection:</strong> Verifies the spell finds on-fire entities and items</li>
  * <li><strong>Extinguishing:</strong> Confirms fire ticks are removed from burning targets</li>

@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.EntityCommon;
@@ -51,10 +50,6 @@ public class PERMURATE extends ItemToItemTransfiguration {
 
         spellType = O2SpellType.PERMURATE;
         branch = O2MagicBranch.TRANSFIGURATION;
-
-        // world guard
-        if (Ollivanders2.worldGuardEnabled)
-            worldGuardFlags.add(Flags.ITEM_DROP);
 
         permanent = true;
 

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Subclasses must implement abstract methods to define what constitutes a valid/invalid target and
  * how to verify the spell's effect on those targets.</p>
  *
- * <p>Test coverage includes:
+ * <p>Test coverage includes:</p>
  * <ul>
  * <li><strong>Target Detection:</strong> Verifies the spell finds appropriate targets as the projectile travels</li>
  * <li><strong>Effect Application:</strong> Confirms the spell applies its effect (extinguish or damage) to targets</li>

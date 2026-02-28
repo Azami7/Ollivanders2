@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * eye location (for living entities) or center location (for items). The water block persists temporarily
  * to create a visual effect, then reverts to its original state.</p>
  *
- * <p>Spell behavior:
+ * <p>Spell behavior:</p>
  * <ul>
  * <li><strong>Target Detection:</strong> Searches for on-fire entities and items as the projectile travels</li>
  * <li><strong>Extinguishing:</strong> Removes fire ticks from any burning target found</li>

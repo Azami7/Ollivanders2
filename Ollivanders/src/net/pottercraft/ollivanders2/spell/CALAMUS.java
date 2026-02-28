@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -40,10 +39,6 @@ public final class CALAMUS extends ItemToItemTransfiguration {
         super(plugin, player, rightWand);
         spellType = O2SpellType.CALAMUS;
         branch = O2MagicBranch.TRANSFIGURATION;
-
-        // world guard
-        if (Ollivanders2.worldGuardEnabled)
-            worldGuardFlags.add(Flags.ITEM_DROP);
 
         transfigurationMap.put(Material.STICK, Material.ARROW);
         successMessage = "You changed a stick in to an arrow.";

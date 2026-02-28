@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Unit tests for the AQUA_ERUCTO_DUO fire-damaging spell.
  *
- * <p>Provides comprehensive test coverage for the spell's core functionality:
+ * <p>Provides comprehensive test coverage for the spell's core functionality:</p>
  * <ul>
  * <li><strong>Target Detection:</strong> Verifies the spell finds fire-based mobs (Blazes, Magma Cubes)</li>
  * <li><strong>Damage Effect:</strong> Confirms damage is dealt to fire mobs based on caster skill</li>
@@ -117,6 +117,7 @@ public class AquaEructoDuoTest extends AquaEructoSuperTest {
 
         assertTrue(aquaEructo.hasHitTarget());
         AttributeInstance healthAttribute = caster.getAttribute(Attribute.MAX_HEALTH);
+        assertNotNull(healthAttribute);
         assertEquals(healthAttribute.getValue(), caster.getHealth(), "caster was damaged");
         assertFalse(aquaEructo.isExtinguished(), "spell targeted caster");
     }
