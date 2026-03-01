@@ -44,7 +44,6 @@ public class ESSENTIAL_DARK_ARTS extends O2Book {
         // todo salvio hexia - https://harrypotter.fandom.com/wiki/Hex-deflection
         // todo jinx deflection
         spells.add(O2SpellType.ALARTE_ASCENDARE);
-        spells.add(O2SpellType.AQUA_ERUCTO);
         spells.add(O2SpellType.FUMOS_DUO);
         // todo knockback wolf
         // todo set fire to zombie (short duration)

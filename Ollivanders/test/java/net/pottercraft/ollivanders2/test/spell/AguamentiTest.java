@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -81,7 +80,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
      * @return FIRE material type
      */
     @Override
-    @Nullable
+    @NotNull
     Material getInvalidTargetType() {
         return Material.FIRE;
     }
@@ -204,7 +203,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
         assertEquals(blockTransfiguration.getSuccessMessage(), TestCommon.cleanChatMessage(message), "caster did not get expected success message");
         blockTransfiguration.kill();
 
-        testWorld.getBlockAt(targetLocation).setType(Material.FIRE);
+        testWorld.getBlockAt(targetLocation).setType(Material.SOUL_CAMPFIRE);
         blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
         assertFalse(blockTransfiguration.isTransfigured()); // should fail because the block is FIRE

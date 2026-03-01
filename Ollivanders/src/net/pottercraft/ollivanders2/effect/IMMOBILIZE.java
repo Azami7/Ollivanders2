@@ -1,8 +1,13 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
+import org.bukkit.Location;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -12,22 +17,25 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Complete immobilization effect that prevents all player movement and actions.
+ * Partial immobilization effect that prevents player movement but allows rotation.
  *
- * <p>IMMOBILIZE completely paralyzes the affected player by preventing all forms of movement
- * and interaction. The effect cancels all movement-related events (movement, velocity changes,
- * flight toggling, sprinting, sneaking) as well as player interaction events to ensure the
- * player cannot perform any action. The player is effectively frozen in place for the duration
- * of the effect.</p>
+ * <p>IMMOBILIZE prevents the affected player from moving or interacting with the environment while
+ * still allowing them to look around (change pitch and yaw). The effect cancels all movement-related
+ * events (location changes, velocity changes, flight toggling, sprinting, sneaking) as well as player
+ * interaction events. Teleport and apparate attempts are evaluated based on distance: long-distance
+ * teleports (> 100 blocks) remove this effect, allowing magical escape, while short-distance attempts
+ * are blocked to prevent trivial escape.</p>
  *
  * <p>Mechanism:</p>
  * <ul>
- * <li>Player movement events are cancelled</li>
+ * <li>Location changes are cancelled but rotation (pitch/yaw) changes are allowed</li>
  * <li>Velocity changes are cancelled</li>
  * <li>Flight toggling is cancelled</li>
  * <li>Sneak toggling is cancelled</li>
  * <li>Sprint toggling is cancelled</li>
  * <li>Interaction events (block breaking, placing, etc.) are cancelled</li>
+ * <li>Long-distance teleport/apparate (> 100 blocks) removes the effect</li>
+ * <li>Short-distance teleport/apparate (≤ 100 blocks) is cancelled</li>
  * <li>Detectable by mind-reading spells (Legilimens)</li>
  * <li>Detection text: "is unable to move"</li>
  * </ul>
@@ -35,6 +43,8 @@ import java.util.UUID;
  * @author Azami7
  */
 public class IMMOBILIZE extends O2Effect {
+    boolean allowRotation = true;
+
     /**
      * Constructor for creating a complete immobilization effect.
      *
@@ -88,6 +98,9 @@ public class IMMOBILIZE extends O2Effect {
      */
     @Override
     void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("IMMOBILIZE: cancelling PlayerInteractEvent", null, null, false);
     }
@@ -102,6 +115,9 @@ public class IMMOBILIZE extends O2Effect {
      */
     @Override
     void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleFlightEvent", null, null, false);
     }
@@ -116,6 +132,9 @@ public class IMMOBILIZE extends O2Effect {
      */
     @Override
     void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSneakEvent", null, null, false);
     }
@@ -130,6 +149,9 @@ public class IMMOBILIZE extends O2Effect {
      */
     @Override
     void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSprintEvent", null, null, false);
     }
@@ -144,20 +166,124 @@ public class IMMOBILIZE extends O2Effect {
      */
     @Override
     void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("IMMBOLIZE: cancelling PlayerVelocityEvent", null, null, false);
     }
 
     /**
-     * Prevent the player from moving while immobilized.
+     * Prevent the player from moving location while immobilized.
      *
-     * <p>Cancels player move events to ensure the immobilized player cannot change their location.</p>
+     * <p>Cancels player move events when location coordinates change (x, y, z). Rotation-only changes
+     * (pitch and yaw) are allowed unless allowRotation is false. This allows immobilized players to look
+     * around but prevents them from walking, jumping, or otherwise changing their position.</p>
      *
-     * @param event the player move event to cancel
+     * @param event the player move event to evaluate
      */
     @Override
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
-        event.setCancelled(true);
-        common.printDebugMessage("IMMBOLIZE: cancelling PlayerMoveEvent", null, null, false);
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
+        Location fromLocation = event.getFrom();
+        Location toLocation = event.getTo();
+
+        boolean cancel = false;
+
+        if (allowRotation) {
+            common.printDebugMessage("IMMBOLIZE: allowRotation", null, null, false);
+            if ((toLocation.getX() != fromLocation.getX()) || (toLocation.getY() != fromLocation.getY()) || (toLocation.getZ() != fromLocation.getZ())) {
+                cancel = true;
+            }
+            // else they are only changing pitch and yaw
+        }
+        else {
+            cancel = true;
+        }
+
+        if (cancel) {
+            event.setCancelled(true);
+            common.printDebugMessage("IMMBOLIZE: cancelling PlayerMoveEvent", null, null, false);
+        }
+    }
+
+    /**
+     * Handle teleportation attempts based on distance threshold.
+     *
+     * <p>When an immobilized player attempts to teleport via Bukkit's teleport system, the distance of
+     * the teleport is checked. If the distance is greater than 100 blocks, the effect is automatically
+     * removed, allowing long-distance magical escape from immobilization. For shorter distances (≤ 100
+     * blocks), the event is cancelled to prevent trivial escape attempts.</p>
+     *
+     * @param event the player teleport event
+     */
+    @Override
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
+        Location from = event.getFrom();
+        Location to = event.getTo();
+
+        if (to != null && from.distance(to) > 100) {
+            // remove the immobilize effect
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
+        }
+        else
+            event.setCancelled(true);
+    }
+
+    /**
+     * Handle coordinate-based apparition attempts based on distance threshold.
+     *
+     * <p>When an immobilized player attempts to use the APPARATE spell with specific coordinates, the
+     * distance of the apparition is checked. If the distance is greater than 100 blocks, the effect is
+     * automatically removed, allowing long-distance magical escape from immobilization. For shorter
+     * distances (≤ 100 blocks), the event is cancelled to prevent trivial escape attempts.</p>
+     *
+     * @param event the apparate by coordinates event
+     */
+    @Override
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
+        Location from = event.getPlayer().getLocation();
+        Location to = event.getDestination();
+
+        if (from.distance(to) > 100) {
+            // remove the immobilize effect
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
+        }
+        else
+            event.setCancelled(true);
+    }
+
+    /**
+     * Handle name-based apparition attempts based on distance threshold.
+     *
+     * <p>When an immobilized player attempts to use the APPARATE spell with a player name destination,
+     * the distance of the apparition is checked. If the distance is greater than 100 blocks, the effect
+     * is automatically removed, allowing long-distance magical escape from immobilization. For shorter
+     * distances (≤ 100 blocks), the event is cancelled to prevent trivial escape attempts.</p>
+     *
+     * @param event the apparate by name event
+     */
+    @Override
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
+        Location from = event.getPlayer().getLocation();
+        Location to = event.getDestination();
+
+        if (from.distance(to) > 100) {
+            // remove the immobilize effect
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
+        }
+        else
+            event.setCancelled(true);
     }
 }

@@ -186,6 +186,9 @@ public class BABBLING extends O2Effect {
      */
     @Override
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         // check to see if we will replace this chat with babbling chat
         // generate a random number between 0-99
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);

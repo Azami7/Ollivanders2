@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -58,6 +59,10 @@ public abstract class ItemToItemTransfiguration extends EntityTransfiguration {
         super(plugin, player, rightWand);
 
         entityAllowedList.add(EntityType.ITEM);
+
+        // world guard
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.ITEM_DROP);
     }
 
     /**
@@ -69,7 +74,7 @@ public abstract class ItemToItemTransfiguration extends EntityTransfiguration {
             // we've already transfigured something
             return;
 
-        for (Entity entity : getCloseEntities(defaultRadius)) {
+        for (Entity entity : getNearbyEntities(defaultRadius)) {
             common.printDebugMessage("checking " + entity.getName(), null, null, false);
 
             if (!(entity instanceof Item)) {

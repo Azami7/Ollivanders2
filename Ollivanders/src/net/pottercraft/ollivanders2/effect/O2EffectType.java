@@ -90,6 +90,10 @@ public enum O2EffectType {
      */
     FLYING(FLYING.class, MagicLevel.EXPERT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
+     *
+     */
+    FULL_IMMOBILIZE(FULL_IMMOBILIZE.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
      * {@link FUMOS}
      */
     FUMOS(FUMOS.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
@@ -192,7 +196,7 @@ public enum O2EffectType {
     /**
      * {@link SLEEPING}
      */
-    SLEEPING(SLEEPING.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    SLEEPING(SLEEPING.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link SLOWNESS}
      */
@@ -216,7 +220,7 @@ public enum O2EffectType {
     /**
      * {@link SUSPENSION}
      */
-    SUSPENSION(SUSPENSION.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    SUSPENSION(SUSPENSION.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link PlayerChangeSizeSuper}
      */

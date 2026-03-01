@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.IMMOBILIZE;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -8,12 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -84,6 +89,7 @@ public class ImmobolizeTest extends EffectTestSuper {
         doOnPlayerToggleSprintEventTest(target);
         doOnPlayerVelocityEventTest(target);
         doOnPlayerMoveEventTest(target);
+        doOnPlayerMoveEventRotationOnlyTest(target);
     }
 
     /**
@@ -185,6 +191,79 @@ public class ImmobolizeTest extends EffectTestSuper {
 
         mockServer.getScheduler().performTicks(5);
         assertTrue(event.isCancelled(), "PlayerMoveEvent not canceled by IMMOBILIZE");
+    }
+
+    /**
+     * Test that rotation-only movement is allowed by IMMOBILIZE.
+     *
+     * <p>Verifies that immobilized players can still change their pitch and yaw without restriction.
+     * The test creates a move event where only the rotation (pitch) changes but location remains the same,
+     * and ensures the event is not cancelled, allowing the player to look around.</p>
+     *
+     * @param target the immobilized player
+     */
+    void doOnPlayerMoveEventRotationOnlyTest(Player target) {
+        Location from = target.getLocation();
+        Location to = from.clone();
+        to.setPitch(from.getPitch() + 5);
+
+        PlayerMoveEvent event = new PlayerMoveEvent(target, from, to);
+        mockServer.getPluginManager().callEvent(event);
+        mockServer.getScheduler().performTicks(5);
+
+        assertFalse(event.isCancelled(), "PlayerMoveEvent with rotation only canceled by IMMOBILIZE");
+    }
+
+    /**
+     * Test that IMMOBILIZE is removed when the player teleports or apparates.
+     *
+     * <p>Verifies that immobilized players who attempt to teleport (via PlayerTeleportEvent) or apparate
+     * (via OllivandersApparateByCoordinatesEvent or OllivandersApparateByNameEvent) have the IMMOBILIZE
+     * effect automatically removed if distance > 100, freeing them from immobilization, or the event is canceled
+     * if distance < 100. This test validates three scenarios: standard Bukkit teleportation, coordinate-based
+     * apparition, and name-based apparition.</p>
+     */
+    @Test
+    void doOnPlayerTeleportEventsTests() {
+        Location from = new Location(testWorld, 100, 40, 100);
+        Location close = new Location(testWorld, 110, 40, 100);
+        Location far = new Location(testWorld, 210, 40, 100);
+        PlayerMock target = mockServer.addPlayer();
+        target.setLocation(from);
+
+        // PlayerTeleportEvent
+        IMMOBILIZE immobilize = (IMMOBILIZE) addEffect(target, 100, false);
+        mockServer.getScheduler().performTicks(10);
+        PlayerTeleportEvent teleportEvent = new PlayerTeleportEvent(target, from, close);
+        mockServer.getPluginManager().callEvent(teleportEvent);
+        mockServer.getScheduler().performTicks(5);
+        assertFalse(immobilize.isKilled(), "effect canceled when player teleported < 100 blocks");
+        teleportEvent = new PlayerTeleportEvent(target, from, far);
+        mockServer.getPluginManager().callEvent(teleportEvent);
+        mockServer.getScheduler().performTicks(5);
+        assertTrue(immobilize.isKilled(), "effect not canceled when player teleported");
+
+        immobilize = (IMMOBILIZE) addEffect(target, 100, false);
+        mockServer.getScheduler().performTicks(10);
+        OllivandersApparateByCoordinatesEvent apparateCoordEvent = new OllivandersApparateByCoordinatesEvent(target, close);
+        mockServer.getPluginManager().callEvent(apparateCoordEvent);
+        mockServer.getScheduler().performTicks(5);
+        assertFalse(immobilize.isKilled(), "effect canceled when player apparated by coordinates < 100 blocks");
+        apparateCoordEvent = new OllivandersApparateByCoordinatesEvent(target, far);
+        mockServer.getPluginManager().callEvent(apparateCoordEvent);
+        mockServer.getScheduler().performTicks(5);
+        assertTrue(immobilize.isKilled(), "effect not canceled when player apparated by coordinates");
+
+        immobilize = (IMMOBILIZE) addEffect(target, 100, false);
+        mockServer.getScheduler().performTicks(10);
+        OllivandersApparateByNameEvent apparateNameEvent = new OllivandersApparateByNameEvent(target, close, "to");
+        mockServer.getPluginManager().callEvent(apparateNameEvent);
+        mockServer.getScheduler().performTicks(5);
+        assertFalse(immobilize.isKilled(), "effect canceled when player apparated by name < 100 blocks");
+        apparateNameEvent = new OllivandersApparateByNameEvent(target, far, "to");
+        mockServer.getPluginManager().callEvent(apparateNameEvent);
+        mockServer.getScheduler().performTicks(5);
+        assertTrue(immobilize.isKilled(), "effect not canceled when player apparated by name");
     }
 
     /**

@@ -133,7 +133,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
             // we've already transfigured something
             return;
 
-        for (Entity entity : getCloseEntities(radius)) {
+        for (Entity entity : getNearbyEntities(radius)) {
             if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 

@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 
@@ -66,7 +65,7 @@ public class DuroTest extends BlockTransfigurationTest {
      * @return First unbreakable material from the global list
      */
     @Override
-    @Nullable
+    @NotNull
     Material getInvalidTargetType() {
         return Ollivanders2Common.getUnbreakableMaterials().getFirst();
     }

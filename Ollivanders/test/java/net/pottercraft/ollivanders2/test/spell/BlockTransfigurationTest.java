@@ -15,7 +15,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
@@ -61,7 +60,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
      *
      * @return a material type that cannot be transfigured, or null if no invalid type exists
      */
-    @Nullable
+    @NotNull
     abstract Material getInvalidTargetType();
 
     /**
@@ -87,21 +86,20 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = testWorld.getBlockAt(targetLocation);
+        TestCommon.createBlockBase(target.getRelative(BlockFace.DOWN).getLocation(), 3);
 
         Material invalidType = getInvalidTargetType();
-        if (invalidType != null) {
-            target.setType(invalidType);
+        target.setType(invalidType);
 
-            O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
-            assertInstanceOf(BlockTransfiguration.class, spell);
-            BlockTransfiguration blockTransfiguration = (BlockTransfiguration) spell;
+        O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        assertInstanceOf(BlockTransfiguration.class, spell);
+        BlockTransfiguration blockTransfiguration = (BlockTransfiguration) spell;
 
-            mockServer.getScheduler().performTicks(20);
+        mockServer.getScheduler().performTicks(20);
 
-            assertTrue(blockTransfiguration.hasHitTarget(), "hitTarget not set when spell hit invalid target");
-            assertFalse(blockTransfiguration.isBlockTransfigured(target), "invalid block was transfigured");
-            assertEquals(invalidType, target.getType(), "material for invalid block was changed");
-        }
+        assertTrue(blockTransfiguration.hasHitTarget(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.location.getBlock().getType());
+        assertFalse(blockTransfiguration.isBlockTransfigured(target), "invalid block was transfigured");
+        assertEquals(invalidType, target.getType(), "material for invalid block was changed");
     }
 
     /**
@@ -213,6 +211,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         Material transType = blockTransfiguration.getTransfigureType();
         target.setType(transType);
+
         mockServer.getScheduler().performTicks(20);
 
         assertEquals(transType, target.getType(), "target changed to unexpected material");
@@ -391,12 +390,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
         blockTransfiguration.kill();
 
         Material invalidType = getInvalidTargetType();
-        if (invalidType != null) {
-            target.setType(invalidType);
-        }
-        else {
-            target.setType(blockTransfiguration.getTransfigureType());
-        }
+        target.setType(invalidType);
+
         blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
         assertTrue(blockTransfiguration.isKilled());

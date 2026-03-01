@@ -34,6 +34,7 @@ public class THE_HEALERS_HELPMATE extends O2Book {
         spells.add(O2SpellType.BRACKIUM_EMENDO);
         spells.add(O2SpellType.EPISKEY);
         potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
+        spells.add(O2SpellType.AQUA_ERUCTO);
         // todo wound cleaning potion
         // todo pepperup potion
         potions.add(O2PotionType.WIDEYE_POTION);

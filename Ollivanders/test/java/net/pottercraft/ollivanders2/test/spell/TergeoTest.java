@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.test.spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 
@@ -34,7 +33,8 @@ public class TergeoTest extends BlockTransfigurationTest {
      *
      * @return TERGEO spell type
      */
-    @Override @NotNull
+    @Override
+    @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.TERGEO;
     }
@@ -46,7 +46,8 @@ public class TergeoTest extends BlockTransfigurationTest {
      *
      * @return WATER material type
      */
-    @Override @NotNull
+    @Override
+    @NotNull
     Material getValidTargetType() {
         return Material.WATER;
     }
@@ -59,7 +60,8 @@ public class TergeoTest extends BlockTransfigurationTest {
      *
      * @return STONE material type (or any non-water material)
      */
-    @Override @Nullable
+    @Override
+    @NotNull
     Material getInvalidTargetType() {
         return Material.STONE;
     }

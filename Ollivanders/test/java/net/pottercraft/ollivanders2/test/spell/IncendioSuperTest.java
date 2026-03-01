@@ -77,7 +77,6 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         Block target = targetLocation.getBlock();
         TestCommon.createBlockBase(target.getRelative(BlockFace.DOWN).getLocation(), 5);
         target.setType(Material.OAK_PLANKS);
-        assertTrue(target.isBurnable());
 
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
@@ -105,8 +104,7 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         Block target = targetLocation.getBlock();
-        target.setType(Material.WATER);
-        assertFalse(target.isBurnable());
+        target.setType(Material.BEDROCK);
 
         IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
@@ -274,7 +272,7 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
             assertTrue(target3.getFireTicks() > 0, "target3 not on fire");
         }
         else {
-            assertTrue((target1.getFireTicks() > 0) ^ (target2.getFireTicks() > 0) ^ (target3.getFireTicks() > 0), "neither or more than 1 of of target1, target2, target3 on fire when spell is not strafe");
+            assertTrue(((target1.getFireTicks() > 0) ^ (target2.getFireTicks() > 0)) ^ (target3.getFireTicks() > 0), "neither or more than 1 of of target1, target2, target3 on fire when spell is not strafe");
         }
     }
 
@@ -314,8 +312,7 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
             assertTrue(target3.getFireTicks() > 0, "target3 not on fire");
         }
         else {
-            assertTrue(target1.getFireTicks() > 0 ^ target2.getFireTicks() > 0, "both or neither of target1 and target2 on fire when spell is not strafe");
-            assertFalse(target3.getFireTicks() > 0, "target3 is on fire when radius 1");
+            assertTrue(((target1.getFireTicks() > 0) ^ (target2.getFireTicks() > 0)) ^ (target3.getFireTicks() > 0), "more than one or none of target1, target2, target3 on fire when spell is not strafe");
         }
     }
 

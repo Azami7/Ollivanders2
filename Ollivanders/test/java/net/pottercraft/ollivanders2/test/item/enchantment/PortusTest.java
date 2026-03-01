@@ -90,7 +90,6 @@ public class PortusTest extends EnchantmentTestSuper {
         ItemStack skeletonPortkey = makeEnchantedItem(1, defaultArgs);
 
         Skeleton skeleton = (Skeleton) testWorld.spawnEntity(skeletonOrigin, EntityType.SKELETON);
-        skeleton.setCanPickupItems(true);
         Item droppedSkeletonPortkey = skeleton.getWorld().dropItem(skeleton.getLocation(), skeletonPortkey);
         skeleton.getEquipment().setItemInMainHand(skeletonPortkey);
         EntityPickupItemEvent skeletonEvent = new EntityPickupItemEvent(skeleton, droppedSkeletonPortkey, 0);

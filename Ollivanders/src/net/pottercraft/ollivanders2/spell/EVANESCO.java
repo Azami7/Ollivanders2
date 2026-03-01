@@ -60,8 +60,8 @@ public final class EVANESCO extends EntityTransfiguration {
         }
 
         entityAllowedList.add(EntityType.ITEM);
-        entityAllowedList.addAll(EntityCommon.minecarts);
-        entityAllowedList.addAll(EntityCommon.boats);
+        entityAllowedList.addAll(EntityCommon.getMinecarts());
+        entityAllowedList.addAll(EntityCommon.getBoats());
 
         durationModifier = 4.0;
 

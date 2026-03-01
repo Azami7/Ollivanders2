@@ -11,7 +11,6 @@ import net.pottercraft.ollivanders2.player.Year;
 import net.pottercraft.ollivanders2.spell.ACCIO;
 import net.pottercraft.ollivanders2.spell.AGUAMENTI;
 import net.pottercraft.ollivanders2.spell.APARECIUM;
-import net.pottercraft.ollivanders2.spell.AQUA_ERUCTO;
 import net.pottercraft.ollivanders2.spell.ARRESTO_MOMENTUM;
 import net.pottercraft.ollivanders2.spell.BOMBARDA_MAXIMA;
 import net.pottercraft.ollivanders2.spell.BOTHYNUS;
@@ -26,6 +25,7 @@ import net.pottercraft.ollivanders2.spell.LUMOS;
 import net.pottercraft.ollivanders2.spell.MELOFORS;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import net.pottercraft.ollivanders2.spell.PYROSVESTIRAS;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
@@ -262,10 +262,10 @@ public class O2SpellTest {
 
         // test allow list only allows targeting that block type, hitting wrong block type kills the spell
         testWorld.getBlockAt(targetLocation).setType(Material.DIRT);
-        AQUA_ERUCTO aquaEructo = new AQUA_ERUCTO(testPlugin, caster, O2PlayerCommon.rightWand);
-        Ollivanders2API.getSpells().addSpell(caster, aquaEructo);
+        PYROSVESTIRAS pyrosvestiras = new PYROSVESTIRAS(testPlugin, caster, O2PlayerCommon.rightWand);
+        Ollivanders2API.getSpells().addSpell(caster, pyrosvestiras);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(aquaEructo.isKilled(), "aqua eructo not killed when it hit not allowed block type");
+        assertTrue(pyrosvestiras.isKilled(), "pyrovestiras not killed when it hit not allowed block type");
 
         // test blocked list, spell is killed if it hits a blocked type
         testWorld.getBlockAt(targetLocation).setType(Material.WATER);
@@ -444,7 +444,7 @@ public class O2SpellTest {
      * </ul>
      */
     @Test
-    void getCloseEntitiesTest() {
+    void getNearbyEntitiesTest() {
         World testWorld = mockServer.addSimpleWorld("world");
         Location castLocation = new Location(testWorld, 700, 40, 100);
         Location targetLocation = new Location(testWorld, 700, 40, 110);
@@ -456,11 +456,11 @@ public class O2SpellTest {
         Ollivanders2API.getSpells().addSpell(caster, arrestoMomentum);
 
         // at time 0, the player is the close entity but should be excluded from the list
-        assertTrue(arrestoMomentum.getCloseEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() included player");
+        assertTrue(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() included player");
 
         // run ahead 10 ticks and check for the rabbit entity
         mockServer.getScheduler().performTicks(10);
-        assertFalse(arrestoMomentum.getCloseEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() did not add Cow");
+        assertFalse(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() did not add Cow");
         arrestoMomentum.kill();
         entity.remove();
 
@@ -468,7 +468,7 @@ public class O2SpellTest {
         entity = testWorld.spawnEntity(targetLocation, EntityType.RABBIT);
         arrestoMomentum = new ARRESTO_MOMENTUM(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, arrestoMomentum);
-        assertTrue(arrestoMomentum.getCloseEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() included entity at 0th lifetick");
+        assertTrue(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() included entity at 0th lifetick");
         arrestoMomentum.kill();
         entity.remove();
 
@@ -477,7 +477,7 @@ public class O2SpellTest {
         arrestoMomentum = new ARRESTO_MOMENTUM(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, arrestoMomentum);
         mockServer.getScheduler().performTicks(10);
-        assertFalse(arrestoMomentum.getCloseEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities did not add minecart");
+        assertFalse(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities did not add minecart");
         arrestoMomentum.kill();
         entity.remove();
     }

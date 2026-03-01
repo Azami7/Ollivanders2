@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -70,7 +69,7 @@ public class PyrovestirasTest extends BlockTransfigurationTest {
      * @return First unbreakable material from the global list
      */
     @Override
-    @Nullable
+    @NotNull
     Material getInvalidTargetType() {
         return Ollivanders2Common.getUnbreakableMaterials().getFirst();
     }

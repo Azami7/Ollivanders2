@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>Tests the sleep induction effect that forces players into a debilitating sleep state. Verifies
  * core effect behaviors (aging, duration expiration) and specific SLEEPING mechanics:</p>
  * <ul>
- * <li>Applies secondary effects (SLEEP_SPEECH and IMMOBILIZE) to simulate sleep state</li>
+ * <li>Applies secondary effects (SLEEP_SPEECH and FULL_IMMOBILIZE) to simulate sleep state</li>
  * <li>Tilts player's head downward (pitch = 45 degrees)</li>
  * <li>Sends player notification when falling asleep</li>
  * <li>Is immediately killed when AWAKE effect is present (effect override)</li>
@@ -51,7 +51,7 @@ public class SleepingTest extends EffectTestSuper {
      * <p>Performs three comprehensive tests:</p>
      * <ol>
      * <li><strong>Test 1: SLEEPING applies secondary effects</strong> - Applies SLEEPING to a player,
-     * advances ticks to initialize it, and verifies that SLEEP_SPEECH and IMMOBILIZE secondary effects
+     * advances ticks to initialize it, and verifies that SLEEP_SPEECH and FULL_IMMOBILIZE secondary effects
      * are applied, player's head is tilted (pitch = 45 degrees), and the sleep notification message is sent.</li>
      * <li><strong>Test 2: SLEEPING is prevented if AWAKE already present</strong> - Applies AWAKE to a player first,
      * then applies SLEEPING and advances ticks. Verifies that SLEEPING is immediately killed because
@@ -73,8 +73,8 @@ public class SleepingTest extends EffectTestSuper {
         // Verify secondary effects were applied
         assertNotNull(Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.SLEEP_SPEECH),
             "SLEEP_SPEECH effect was not added by SLEEPING");
-        assertNotNull(Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.IMMOBILIZE),
-            "IMMOBILIZE effect was not added by SLEEPING");
+        assertNotNull(Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.FULL_IMMOBILIZE),
+            "FULL_IMMOBILIZE effect was not added by SLEEPING");
 
         // Verify player is sleeping (pitch = 45)
         assertTrue(target.getLocation().getPitch() == 45,
@@ -147,7 +147,7 @@ public class SleepingTest extends EffectTestSuper {
      * Verify that SLEEPING cleanup removes secondary effects.
      *
      * <p>Tests that when the SLEEPING effect is removed via doRemove(), the secondary effects
-     * (SLEEP_SPEECH and IMMOBILIZE) that were applied during sleep initialization are properly
+     * (SLEEP_SPEECH and FULL_IMMOBILIZE) that were applied during sleep initialization are properly
      * cleaned up. This ensures the player is fully restored when the sleep effect ends.</p>
      */
     @Override
@@ -163,7 +163,7 @@ public class SleepingTest extends EffectTestSuper {
         // Verify secondary effects were removed
         assertNull(Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.SLEEP_SPEECH),
             "SLEEP_SPEECH effect was not removed when SLEEPING was removed");
-        assertNull(Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.IMMOBILIZE),
-            "IMMOBILIZE effect was not removed when SLEEPING was removed");
+        assertNull(Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.FULL_IMMOBILIZE),
+            "FULL_IMMOBILIZE effect was not removed when SLEEPING was removed");
     }
 }

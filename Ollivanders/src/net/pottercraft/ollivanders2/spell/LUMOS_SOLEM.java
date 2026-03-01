@@ -109,7 +109,7 @@ public final class LUMOS_SOLEM extends O2Spell {
             if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
-            if (EntityCommon.undeadEntities.contains(entity.getType())) {
+            if (EntityCommon.isUndeadMob(entity.getType())) {
                 entity.setFireTicks(duration);
                 targetCount = targetCount - 1;
             }

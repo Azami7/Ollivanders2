@@ -42,9 +42,10 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book {
         spells.add(O2SpellType.REDUCTO);
         spells.add(O2SpellType.IMPEDIMENTA);
         spells.add(O2SpellType.LACARNUM_INFLAMARI);
+        spells.add(O2SpellType.AQUA_ERUCTO_DUO);
         // todo snake vanishing soell - https://harrypotter.fandom.com/wiki/Snake-Vanishing_Spell
-        // todo Everte Statum - make different than flippendo, maybe players vs entities - https://harrypotter.fandom.com/wiki/Everte_Statum
-        // todo Homenum Revelio - https://harrypotter.fandom.com/wiki/Human-presence-revealing_Spell
+        // todo Everte Statum - make different than flipendo, maybe players vs entities - https://harrypotter.fandom.com/wiki/Everte_Statum, https://github.com/Azami7/Ollivanders2/issues/37
+        // todo Homenum Revelio - https://harrypotter.fandom.com/wiki/Human-presence-revealing_Spell, https://github.com/Azami7/Ollivanders2/issues/38
         // todo jinx breaker
         spells.add(O2SpellType.MUFFLIATO);
         spells.add(O2SpellType.VERMILLIOUS_TRIA);

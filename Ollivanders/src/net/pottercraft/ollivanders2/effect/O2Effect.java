@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -19,6 +21,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -521,4 +524,37 @@ public abstract class O2Effect {
      */
     void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
     }
+
+    /**
+     * Handle effects when the player uses standard Bukkit teleportation.
+     *
+     * <p>Called when a PlayerTeleportEvent occurs and this effect is active.
+     * Subclasses can override to prevent teleportation, apply distance-based logic,
+     * or trigger teleportation-related effects.</p>
+     *
+     * @param event the player teleport event
+     */
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {}
+
+    /**
+     * Handle effects when the player uses coordinate-based apparition.
+     *
+     * <p>Called when an OllivandersApparateByCoordinatesEvent occurs and this effect is active.
+     * Subclasses can override to prevent apparition, apply distance-based logic,
+     * or trigger apparition-related effects.</p>
+     *
+     * @param event the apparate by coordinates event
+     */
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {}
+
+    /**
+     * Handle effects when the player uses name-based apparition.
+     *
+     * <p>Called when an OllivandersApparateByNameEvent occurs and this effect is active.
+     * Subclasses can override to prevent apparition, apply distance-based logic,
+     * or trigger apparition-related effects.</p>
+     *
+     * @param event the apparate by name event
+     */
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {}
 }
