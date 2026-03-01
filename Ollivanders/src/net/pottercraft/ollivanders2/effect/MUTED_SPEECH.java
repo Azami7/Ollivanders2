@@ -83,6 +83,9 @@ public class MUTED_SPEECH extends O2Effect {
      */
     @Override
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("MUTED_SPEECH: cancelling AsyncPlayerChatEvent", null, null, false);
     }

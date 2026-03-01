@@ -1,26 +1,32 @@
 package net.pottercraft.ollivanders2.spell;
 
-import net.pottercraft.ollivanders2.effect.IMMOBILIZE;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * Full Body-Bind Curse - Used to temporarily bind the victim's body in a position much like that of a soldier at attention.
+ * Petrificus Totalus - The Full Body-Bind Curse.
  *
- * @see <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse</a>
+ * <p>PETRIFICUS_TOTALUS is a curse that temporarily paralyzes the target player's entire body,
+ * preventing all movement and rotation. The victim becomes completely rigid and unable to perform any
+ * action, much like a soldier at attention. The spell can target any player regardless of size or status,
+ * making it a universally applicable immobilization curse.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Targets any player without restrictions</li>
+ * <li>Applies FULL_IMMOBILIZE effect (prevents all movement including rotation)</li>
+ * <li>No additional effects are applied</li>
+ * <li>Duration scales with spell usage (usesModifier), clamped to 30-300 seconds</li>
+ * <li>Complete immobilization leaves the victim helpless but unharmed</li>
+ * </ul>
+ *
+ * <p>Reference: <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">Harry Potter Wiki - Full Body-Bind Curse</a></p>
  */
-public class PETRIFICUS_TOTALUS extends O2Spell {
-    /**
-     * The maximum time the target player can be affected.
-     */
-    private final static int maxDurationInSeconds = 300;
-
+public class PETRIFICUS_TOTALUS extends ImmobilizePlayerSuper {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -54,32 +60,32 @@ public class PETRIFICUS_TOTALUS extends O2Spell {
         spellType = O2SpellType.PETRIFICUS_TOTALUS;
         branch = O2MagicBranch.CHARMS;
 
+        fullImmobilize = true;
+
         initSpell();
     }
 
     /**
-     * Find a nearby player and immobilize them
+     * Determine if a player can be targeted by this curse.
+     *
+     * <p>Petrificus Totalus can target any player without restrictions. There are no protective effects
+     * or conditions that would prevent this curse from affecting a player.</p>
+     *
+     * @param target the player to validate as a potential target
+     * @return always returns true, as any player can be targeted
      */
-    @Override
-    protected void doCheckEffect() {
-        // projectile has stopped, kill the spell
-        if (hasHitTarget())
-            kill();
+    boolean canTarget(Player target) {
+        return true; // we can target any player
+    }
 
-        for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId().equals(player.getUniqueId()))
-                continue;
-
-            int durationInSeconds = ((int) usesModifier + 30);
-            if (durationInSeconds > maxDurationInSeconds)
-                durationInSeconds = maxDurationInSeconds;
-
-            IMMOBILIZE immobilize = new IMMOBILIZE(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, false, target.getUniqueId());
-
-            Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
-
-            kill();
-            return;
-        }
+    /**
+     * Apply any spell-specific additional effects to the immobilized target.
+     *
+     * <p>Petrificus Totalus has no additional effects beyond the FULL_IMMOBILIZE effect applied by the
+     * parent class. The target is simply frozen in place without any secondary effects or conditions.</p>
+     *
+     * @param target the immobilized player (unused)
+     */
+    void addAdditionalEffects(Player target) {
     }
 }

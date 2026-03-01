@@ -163,7 +163,8 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
                     projectile.remove();
 
                     // do an explosion
-                    doExplosion(projectileLocation);
+                    if (!Ollivanders2.testMode)
+                        doExplosion(projectileLocation);
                 }
                 else
                     continue;
@@ -227,7 +228,8 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
             event.setCancelled(true);
 
             // do an explosion
-            doExplosion(projectileLocation);
+            if (!Ollivanders2.testMode)
+                doExplosion(projectileLocation);
         }
     }
 

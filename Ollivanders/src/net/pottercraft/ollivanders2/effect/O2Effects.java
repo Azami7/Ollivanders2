@@ -5,6 +5,8 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -25,6 +27,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -716,6 +719,33 @@ public class O2Effects implements Listener {
         for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
             for (O2Effect effect : activeEffects.values()) {
                 effect.doOnProjectileHitEvent(event);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
+                effect.doOnPlayerTeleportEvent(event);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
+                effect.doOnOllivandersApparateByCoordinatesEvent(event);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
+                effect.doOnOllivandersApparateByNameEvent(event);
             }
         }
     }

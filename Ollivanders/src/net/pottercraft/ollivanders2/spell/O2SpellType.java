@@ -126,7 +126,7 @@ public enum O2SpellType {
     /**
      * {@link CARCEREM_AQUATICUM}
      */
-    //CARCEREM_AQUATICUM (CARCEREM_AQUATICUM.class, MagicLevel.NEWT),
+    CARCEREM_AQUATICUM (CARCEREM_AQUATICUM.class, MagicLevel.NEWT),
     /**
      * {@link CARPE_RETRACTUM}
      */

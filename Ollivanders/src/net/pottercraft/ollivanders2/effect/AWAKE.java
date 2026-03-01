@@ -113,6 +113,9 @@ public class AWAKE extends O2Effect {
      */
     @Override
     void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
     }
 }

@@ -14,14 +14,14 @@ import java.util.UUID;
  * <p>SLEEPING is a temporary debilitating effect that simulates sleep for the target player since
  * Minecraft does not support actual sleep actions for non-player-initiated sleeps. When activated,
  * the effect immobilizes the player, tilts their head downward (pitch = 45 degrees), applies the
- * SLEEP_SPEECH effect to replace their chat with sleep sounds, and applies the IMMOBILIZE effect
+ * SLEEP_SPEECH effect to replace their chat with sleep sounds, and applies the FULL_IMMOBILIZE effect
  * to prevent all movement and interaction. The sleep state can be broken by applying the AWAKE effect,
  * which automatically kills this effect. When removed, all secondary effects (speech replacement and
  * immobilization) are cleaned up and the player is notified of awakening.</p>
  *
  * <p>Sleep Configuration:</p>
  * <ul>
- * <li>Secondary effects: SLEEP_SPEECH (sleep vocalizations) and IMMOBILIZE (paralysis)</li>
+ * <li>Secondary effects: SLEEP_SPEECH (sleep vocalizations) and FULL_IMMOBILIZE (paralysis)</li>
  * <li>Head tilt: downward pitch angle of 45 degrees</li>
  * <li>Sleep state tracking: boolean flag to detect sleep initialization</li>
  * <li>Breaking condition: AWAKE effect application</li>
@@ -31,7 +31,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @see SLEEP_SPEECH for the sleep vocalization effect applied during sleep
- * @see IMMOBILIZE for the paralysis effect applied during sleep
+ * @see FULL_IMMOBILIZE for the paralysis effect applied during sleep
  * @see AWAKE for the effect that breaks the sleep state
  */
 public class SLEEPING extends O2Effect {
@@ -97,14 +97,14 @@ public class SLEEPING extends O2Effect {
      * <ol>
      * <li>Attempts to put the player to sleep via Bukkit API (skipped in test mode)</li>
      * <li>If the player is not actually sleeping after the attempt, simulates sleep by tilting their head
-     * downward (pitch = 45 degrees) and applying the IMMOBILIZE effect for paralysis</li>
+     * downward (pitch = 45 degrees) and applying the FULL_IMMOBILIZE effect for paralysis</li>
      * <li>Always applies the SLEEP_SPEECH effect for sleep vocalizations</li>
      * <li>Notifies the player they have fallen into a deep sleep</li>
      * <li>Marks the sleeping flag as true to prevent re-application</li>
      * </ol>
      *
      * <p>This method is called once when the sleep effect first activates via checkEffect(). The head tilt
-     * and IMMOBILIZE are conditional to handle both real sleep (via Bukkit API) and simulated sleep
+     * and FULL_IMMOBILIZE are conditional to handle both real sleep (via Bukkit API) and simulated sleep
      * (when the player is not actually in a bed).</p>
      */
     private void playerSleep() {
@@ -121,7 +121,7 @@ public class SLEEPING extends O2Effect {
             target.teleport(newLoc);
 
             // immobilize them so they cannot move out of this position
-            Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, true, targetID));
+            Ollivanders2API.getPlayers().playerEffects.addEffect(new FULL_IMMOBILIZE(p, -1, true, targetID));
         }
 
         // add sleep speech
@@ -137,14 +137,14 @@ public class SLEEPING extends O2Effect {
      * Clean up the sleep effect and restore the player to normal state.
      *
      * <p>When the sleep effect is removed, this method cleans up the secondary effects (SLEEP_SPEECH
-     * and IMMOBILIZE) that were applied during sleep. The player is notified of awakening and the
+     * and FULL_IMMOBILIZE) that were applied during sleep. The player is notified of awakening and the
      * sleeping flag is reset. If the player is offline, cleanup is gracefully skipped.</p>
      */
     @Override
     public void doRemove() {
         // if we simulated sleep, remove those effects
         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
-        Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
+        Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.FULL_IMMOBILIZE);
 
         // if the player was properly put to sleep, wake them up
         if (!Ollivanders2.testMode) // MockBukkit does not have player sleep and doing this will cause an UnimplementedOperationException

@@ -329,6 +329,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      */
     @Override
     void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         Action action = event.getAction();
 
         if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK) {
@@ -347,6 +350,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      */
     @Override
     void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         if (event.isFlying()) {
             event.setCancelled(true);
             common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerToggleFlightEvent", null, null, false);
@@ -362,6 +368,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      */
     @Override
     void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {
+        if (!event.getEntity().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling EntityPickupItemEvent", null, null, false);
     }
@@ -375,6 +384,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      */
     @Override
     void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemHeldEvent", null, null, false);
 
@@ -389,6 +401,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      */
     @Override
     void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemConsumeEvent", null, null, false);
     }
@@ -402,6 +417,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      */
     @Override
     void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {
+        if (!event.getPlayer().getUniqueId().equals(targetID))
+            return;
+
         event.setCancelled(true);
         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);
     }

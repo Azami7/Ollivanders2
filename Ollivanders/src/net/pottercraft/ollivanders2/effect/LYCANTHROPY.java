@@ -220,6 +220,9 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      */
     @Override
     void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
+        if (!event.getDamager().getUniqueId().equals(targetID))
+            return;
+
         common.printDebugMessage("doOnEntityDamageByEntityEvent", null, null, false);
 
         // if something, like a protective effect, canceled this effect, we do nothing
