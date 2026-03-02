@@ -147,7 +147,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
      */
     @Override
     void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
-        O2SpellType type = event.getSpell().spellType;
+        O2SpellType type = event.getSpell().getSpellType();
         if (type == O2SpellType.AVADA_KEDAVRA)
             return;
 

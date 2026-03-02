@@ -15,22 +15,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The concealment charm - used to hide secret messages in books
- * <p>
- * {@link net.pottercraft.ollivanders2.item.enchantment.CELATUM}
+ * CELATUM - The Concealing Charm spell.
  *
- * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Concealing_charms">https://harrypotter.fandom.com/wiki/Concealing_charms</a>
- * @since 2.21
+ * <p>Enchants written books to hide their text content. When a CELATUM-enchanted book is picked up,
+ * the enchanted items system reveals the hidden text. The original book's pages are replaced with
+ * blank pages, preserving the author and title while concealing the content.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ *
+ * <ul>
+ * <li>Target: Written books only (WRITTEN_BOOK material)</li>
+ * <li>Enchantment argument: Book content (all pages concatenated with page delimiters)</li>
+ * <li>Item alteration: Original book pages replaced with blank pages</li>
+ * <li>Classification: Charms</li>
+ * </ul>
+ *
+ * @see net.pottercraft.ollivanders2.item.enchantment.CELATUM the enchantment that powers this spell
+ * @see <a href="https://harrypotter.fandom.com/wiki/Concealing_charms">Harry Potter Wiki - Concealing Charms</a>
  */
 public final class CELATUM extends ItemEnchant {
     /**
      * The page delimiter used when the books pages get compressed to one string
      */
-    public static String pageDelimiter = "##PAGE##";
+    public static final String pageDelimiter = "##PAGE##";
 
     /**
-     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     * Constructor for generating spell information.
+     *
+     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
+     * Use the full constructor with player and wand parameters instead.</p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -67,12 +80,16 @@ public final class CELATUM extends ItemEnchant {
     }
 
     /**
-     * Set the enchantment arg string to be the text of the book
+     * Extract and store the book's text content as enchantment arguments.
      *
-     * @param bookItem the item to enchant
+     * <p>Concatenates all pages from the written book into a single string, separating pages
+     * with the {@link #pageDelimiter} token. This content is stored and later revealed when
+     * the enchanted book is picked up.</p>
+     *
+     * @param bookItem the written book to extract text from
      */
     @Override
-    protected void initEnchantmentArgs(ItemStack bookItem) {
+    protected void createEnchantmentArgs(ItemStack bookItem) {
         BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
         if (bookMeta == null)
             return;
@@ -83,21 +100,29 @@ public final class CELATUM extends ItemEnchant {
             argBuilder.append(pageDelimiter);
         }
 
-        args = argBuilder.toString();
-        common.printDebugMessage("Celatum args = " + args, null, null, false);
+        enchantmentArgs = argBuilder.toString();
+        common.printDebugMessage("Celatum args = " + enchantmentArgs, null, null, false);
     }
 
     /**
-     * Delete the pages in the book so it is blank
+     * Clear the enchanted book's pages and return a blank book.
      *
-     * @param item the item to affect
+     * <p>Removes all text content from the enchanted book, leaving it blank while preserving
+     * the author and title metadata. The book is re-created and dropped at the same location
+     * to work around client caching issues. The concealed text is preserved in the enchantment
+     * arguments and revealed when the book is picked up.</p>
+     *
+     * @param item the enchanted book Item entity
+     * @return the blank book (it may be a replacement item if dropped at same location)
      */
-    protected Item alterItem(Item item) {
+    @Override
+    @NotNull
+    public Item alterItem(Item item) {
         ItemStack bookItem = item.getItemStack();
 
         BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
         if (bookMeta == null)
-            return null;
+            return item;
 
         bookMeta.setPages(new ArrayList<>());
 

@@ -72,7 +72,7 @@ public class FLAGRANTE extends Enchantment {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.FLAGRANTE;
 
-        damage = magnitude / 20.0;
+        damage = magnitude / 1.25 ;
         if (damage < minDamage)
             damage = minDamage;
         else if (damage > maxDamage)

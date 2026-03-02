@@ -168,7 +168,7 @@ public abstract class ShieldSpellEffect extends O2Effect {
 
             // this spell can only protect against spells up to one level higher than this spell
             O2Spell spell = event.getSpell();
-            if (spell.spellType.getLevel().ordinal() > effectType.getLevel().ordinal() + 1)
+            if (spell.getSpellType().getLevel().ordinal() > effectType.getLevel().ordinal() + 1)
                 canceled = false;
 
             event.setCancelled(canceled);

@@ -10,16 +10,29 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Places a flagrante effect on the item.
- * <p>
- * {@link net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE}
+ * FLAGRANTE - The Burning Curse spell.
  *
- * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Flagrante_Curse">https://harrypotter.fandom.com/wiki/Flagrante_Curse</a>
+ * <p>Enchants an item to burn its bearer when picked up. When a player touches a FLAGRANTE-enchanted
+ * item, the enchanted items system triggers the FLAGRANTE effect, dealing damage to the player.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ *
+ * <ul>
+ * <li>Classification: Dark Arts</li>
+ * <li>Can enchant any non-wand, non-enchanted item type</li>
+ * <li>No magnitude or strength modifiers (burns equally at all experience levels)</li>
+ * <li>Effect: FLAGRANTE enchantment effect on pickup (see {@link net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE})</li>
+ * </ul>
+ *
+ * @see net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE the enchantment that powers this spell
+ * @see <a href="https://harrypotter.fandom.com/wiki/Flagrante_Curse">Harry Potter Wiki - Flagrante Curse</a>
  */
 public final class FLAGRANTE extends ItemEnchant {
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Constructor for generating spell information.
+     *
+     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
+     * Use the full constructor with player and wand parameters instead.</p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -34,15 +47,19 @@ public final class FLAGRANTE extends ItemEnchant {
             add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
         }};
 
-        text = "Flagrante will cause an item to burn it's bearer when picked up.";
+        text = "Flagrante will cause an item to burn its bearer when picked up.";
     }
 
     /**
-     * Constructor.
+     * Constructor for casting the FLAGRANTE spell.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Initializes the spell with the player and wand information needed to cast and track the spell.
+     * Magnitude is not used for FLAGRANTE (all FLAGRANTE enchantments behave identically regardless
+     * of caster skill), but is still calculated following the standard ItemEnchant formula.</p>
+     *
+     * @param plugin    the Ollivanders2 plugin
+     * @param player    the player casting this spell
+     * @param rightWand the wand strength/correctness factor
      */
     public FLAGRANTE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

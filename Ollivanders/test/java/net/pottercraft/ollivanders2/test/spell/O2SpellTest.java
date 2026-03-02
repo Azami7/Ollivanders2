@@ -111,7 +111,7 @@ public class O2SpellTest {
     /**
      * Test spell uses modifier calculation based on experience, wand type, and player level.
      *
-     * <p>Verifies that {@link O2Spell#usesModifier} is correctly calculated considering:
+     * <p>Verifies that usesModifier is correctly calculated considering:
      * <ul>
      * <li>Spell usage count (experience)</li>
      * <li>Wand correctness (right wand, wrong wand, elder wand)</li>
@@ -132,7 +132,7 @@ public class O2SpellTest {
 
         // player has no experience in the spell
         ACCIO accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(0.0, accio.usesModifier, "not expected uses modifier for no experience");
+        assertEquals(0.0, accio.getUsesModifier(), "not expected uses modifier for no experience");
         accio.kill();
 
         // player has some experience
@@ -141,16 +141,16 @@ public class O2SpellTest {
         double spellcount = 30;
         o2p.setSpellCount(O2SpellType.ACCIO, (int)spellcount);
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount / O2PlayerCommon.rightWand, accio.usesModifier, "not expected uses modifier with correct wand");
+        assertEquals(spellcount / O2PlayerCommon.rightWand, accio.getUsesModifier(), "not expected uses modifier with correct wand");
         accio.kill();
 
         // player using wrong wand
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.wrongWand);
-        assertEquals(spellcount / O2PlayerCommon.wrongWand, accio.usesModifier, "not expected uses modifier for wrong wand");
+        assertEquals(spellcount / O2PlayerCommon.wrongWand, accio.getUsesModifier(), "not expected uses modifier for wrong wand");
         accio.kill();
 
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.elderWand);
-        assertEquals(spellcount / O2PlayerCommon.elderWand, accio.usesModifier, "not expected uses modifier for elder wand");
+        assertEquals(spellcount / O2PlayerCommon.elderWand, accio.getUsesModifier(), "not expected uses modifier for elder wand");
         accio.kill();
 
         Ollivanders2.useYears = true;
@@ -158,35 +158,35 @@ public class O2SpellTest {
         // if the spell is the same level as the player, usesModifier is unchanged
         o2p.setSpellCount(O2SpellType.LUMOS, (int)spellcount);
         LUMOS lumos = new LUMOS(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount / O2PlayerCommon.rightWand, lumos.usesModifier, "not expected uses modifier with correct wand and same level");
+        assertEquals(spellcount / O2PlayerCommon.rightWand, lumos.getUsesModifier(), "not expected uses modifier with correct wand and same level");
         lumos.kill();
 
         // uses modifier is half for 1 level above
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount / 2, accio.usesModifier, "not expected uses modifier with correct wand and 1 level higher");
+        assertEquals(spellcount / 2, accio.getUsesModifier(), "not expected uses modifier with correct wand and 1 level higher");
         accio.kill();
 
         // uses modifier is quartered for 2 or more levels above
         o2p.setSpellCount(O2SpellType.AGUAMENTI, (int)spellcount);
         AGUAMENTI aguamenti = new AGUAMENTI(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount / 4, aguamenti.usesModifier, "not expected uses modifier with correct wand and 2 levels higher");
+        assertEquals(spellcount / 4, aguamenti.getUsesModifier(), "not expected uses modifier with correct wand and 2 levels higher");
         aguamenti.kill();
 
         // uses modifier 50% higher when spell is 1 level below
         o2p.setYear(Year.YEAR_7);
         aguamenti = new AGUAMENTI(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount * 1.5, aguamenti.usesModifier, "not expected uses modifier with correct wand and 1 level lower");
+        assertEquals(spellcount * 1.5, aguamenti.getUsesModifier(), "not expected uses modifier with correct wand and 1 level lower");
         aguamenti.kill();
 
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount * 2, accio.usesModifier, "not expected uses modifier with correct wand and 2 levels lower");
+        assertEquals(spellcount * 2, accio.getUsesModifier(), "not expected uses modifier with correct wand and 2 levels lower");
         accio.kill();
         Ollivanders2.useYears = false;
 
         // uses modifier is set to 200 when maxSpellLevel set
         Ollivanders2.maxSpellLevel = true;
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(200.0, accio.usesModifier, "uses modifier not set to 200 when maxSpellLevel enabled");
+        assertEquals(200.0, accio.getUsesModifier(), "uses modifier not set to 200 when maxSpellLevel enabled");
         accio.kill();
         Ollivanders2.maxSpellLevel = false;
 
@@ -194,7 +194,7 @@ public class O2SpellTest {
         HIGHER_SKILL higherSkill = new HIGHER_SKILL(testPlugin, 200, false, caster.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(higherSkill);
         accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
-        assertEquals(spellcount * 2.0, accio.usesModifier, "uses modifier not doubled by HIGHER_SKILL");
+        assertEquals(spellcount * 2.0, accio.getUsesModifier(), "uses modifier not doubled by HIGHER_SKILL");
         accio.kill();
         higherSkill.kill();
     }
@@ -223,7 +223,7 @@ public class O2SpellTest {
 
         // call check effect should move the spell and increase its age by 1
         melofors.checkEffect();
-        assertNotEquals(castLocation, melofors.location, "Melofors did not move");
+        assertNotEquals(castLocation, melofors.getLocation(), "Melofors did not move");
         assertEquals(1, melofors.getProjectileAge(), "Melofors did not age by 1");
 
         // call check effect until the spell should age out
@@ -397,7 +397,7 @@ public class O2SpellTest {
         ACCIO accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
 
         accio.move();
-        assertNotEquals(castLocation, accio.location, "Projectile did not move");
+        assertNotEquals(castLocation, accio.getLocation(), "Projectile did not move");
 
         // move until the spell should be 1 move from expiring
         for (int i = 0; i < O2Spell.maxProjectileDistance; i++) {
@@ -415,10 +415,10 @@ public class O2SpellTest {
         assertThat(mockServer.getPluginManager(), hasFiredEventInstance(OllivandersSpellProjectileMoveEvent.class));
 
         // move does not run for killed spells
-        Location current = accio.location.clone();
+        Location current = accio.getLocation().clone();
         accio.kill();
         accio.move();
-        assertEquals(current, accio.location, "Accio moved after killed");
+        assertEquals(current, accio.getLocation(), "Accio moved after killed");
 
         // move will kill a spell if it is in a location it is not allowed
         testPlugin.getConfig().set("zones.test-world.type", "World");

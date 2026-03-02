@@ -97,7 +97,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(blockTransfiguration.hasHitTarget(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.location.getBlock().getType());
+        assertTrue(blockTransfiguration.hasHitTarget(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.getLocation().getBlock().getType());
         assertFalse(blockTransfiguration.isBlockTransfigured(target), "invalid block was transfigured");
         assertEquals(invalidType, target.getType(), "material for invalid block was changed");
     }

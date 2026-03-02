@@ -92,22 +92,22 @@ public abstract class O2Spell {
     /**
      * The player who cast this spell.
      */
-    public Player caster;
+    protected Player caster;
 
     /**
      * The O2Player for the caster.
      */
-    public O2Player casterO2P;
+    protected O2Player casterO2P;
 
     /**
      * The type this spell is.
      */
-    public O2SpellType spellType;
+    protected O2SpellType spellType;
 
     /**
      * The location of the spell projectile
      */
-    public Location location;
+    protected Location location;
 
     /**
      * How long has this spell been alive
@@ -127,27 +127,27 @@ public abstract class O2Spell {
     /**
      * The callback to the MC plugin
      */
-    final Ollivanders2 p;
+    protected final Ollivanders2 p;
 
     /**
      * Ollivanders common functions
      */
-    Ollivanders2Common common;
+    protected Ollivanders2Common common;
 
     /**
      * The modifier for this spell based on usage. This is for spells that change behavior based on the caster's experience.
      */
-    public double usesModifier = 1;
+    protected double usesModifier = 1;
 
     /**
      * The vector of the projectile.
      */
-    public Vector vector;
+    protected Vector vector;
 
     /**
      * Represents which wand the user was holding. See Ollivanders2Common.wandCheck()
      */
-    public double rightWand;
+    protected double rightWand;
 
     /**
      * Whether the projectile has hit a target
@@ -158,7 +158,7 @@ public abstract class O2Spell {
      * Does this spell do a spell projectile or not. Generally spells will send a projectile but any spell that targets
      * the caster, such as apparate, should not.
      */
-    public boolean noProjectile = false;
+    protected boolean noProjectile = false;
 
     /**
      * The sound this projectile makes as it moves.
@@ -199,37 +199,37 @@ public abstract class O2Spell {
     /**
      * The label for text in the localization strings in config.yml
      */
-    final static String textConfigLabel = "_Text";
+    protected final static String textConfigLabel = "_Text";
 
     /**
      * A list of block types that this spell is allowed to target. Takes precedence over deny list.
      */
-    List<Material> materialAllowList = new ArrayList<>();
+    protected List<Material> materialAllowList = new ArrayList<>();
 
     /**
      * A list of block types that cannot be affected by this spell
      */
-    List<Material> materialBlockedList = new ArrayList<>();
+    protected List<Material> materialBlockedList = new ArrayList<>();
 
     /**
      * A list of block types that this projectile will pass through
      */
-    List<Material> projectilePassThrough = new ArrayList<>();
+    protected List<Material> projectilePassThrough = new ArrayList<>();
 
     /**
      * A list of the worldguard permissions needed for this spell
      */
-    List<StateFlag> worldGuardFlags = new ArrayList<>();
+    protected List<StateFlag> worldGuardFlags = new ArrayList<>();
 
     /**
      * Message to display to the user on a successful cast of this spell.
      */
-    String successMessage = null;
+    protected String successMessage = null;
 
     /**
      * Message to display to the user on a failed cast of this spell.
      */
-    String failureMessage = "Nothing seems to happen.";
+    protected String failureMessage = "Nothing seems to happen.";
 
     /**
      * The default radius for spells when checking for conditions
@@ -953,5 +953,21 @@ public abstract class O2Spell {
         allowed.addAll(materialAllowList);
 
         return allowed;
+    }
+
+    public boolean isNoProjectile() {
+        return noProjectile;
+    }
+
+    public O2SpellType getSpellType() {
+        return spellType;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public double getUsesModifier() {
+        return usesModifier;
     }
 }
