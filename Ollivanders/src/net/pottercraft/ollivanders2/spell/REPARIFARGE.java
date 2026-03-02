@@ -105,23 +105,23 @@ public final class REPARIFARGE extends O2Spell {
                 return;
             }
             if (reparifargeBlock(getTargetBlock()))
-                player.sendMessage(Ollivanders2.chatColor + successMessage);
+                caster.sendMessage(Ollivanders2.chatColor + successMessage);
             else
-                player.sendMessage(Ollivanders2.chatColor + failureMessage);
+                caster.sendMessage(Ollivanders2.chatColor + failureMessage);
 
             kill();
         }
         else {
             // check the area around the current projectile location for entities that can be targeted
             for (Entity entity : getNearbyEntities(defaultRadius)) {
-                if (entity.getUniqueId().equals(player.getUniqueId()))
+                if (entity.getUniqueId().equals(caster.getUniqueId()))
                     continue;
 
                 if (entity instanceof EnderDragonPart) // if this is part of an Ender Dragon, get the parent Dragon entity
                     entity = ((EnderDragonPart) entity).getParent();
 
                 if (reparifargeEntity(entity)) {
-                    player.sendMessage(Ollivanders2.chatColor + successMessage);
+                    caster.sendMessage(Ollivanders2.chatColor + successMessage);
                     kill();
                     return;
                 }

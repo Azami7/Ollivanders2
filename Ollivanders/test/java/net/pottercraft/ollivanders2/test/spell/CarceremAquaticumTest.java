@@ -7,15 +7,11 @@ import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -111,6 +107,7 @@ public class CarceremAquaticumTest extends ImmobilizePlayerSuperTest {
         PlayerMock target = mockServer.addPlayer();
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), target.getX(), target.getY() - 1, target.getZ()), 3);
         target.setLocation(targetLocation);
+        assertEquals(Material.AIR, target.getEyeLocation().getBlock().getType());
 
         CARCEREM_AQUATICUM carceremAquaticum = (CARCEREM_AQUATICUM) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
@@ -118,26 +115,8 @@ public class CarceremAquaticumTest extends ImmobilizePlayerSuperTest {
         assertTrue(carceremAquaticum.hasHitTarget());
         assertTrue(target.hasPotionEffect(PotionEffectType.WATER_BREATHING), "target does not have water breathing");
 
-        Block center = target.getEyeLocation().getBlock();
-        checkBlockRow(carceremAquaticum.getRowBlocks(center), "center");
-        checkBlockRow(carceremAquaticum.getRowBlocks(center.getRelative(BlockFace.UP)), "up");
-        checkBlockRow(carceremAquaticum.getRowBlocks(center.getRelative(BlockFace.DOWN)), "down");
-    }
-
-    /**
-     * Verify that all blocks in a 3x3 grid row are water and properly tracked.
-     *
-     * <p>Helper method that validates each block in a 3x3 grid is water (Material.WATER)
-     * and is tracked as a temporarily changed block by the spell system.</p>
-     *
-     * @param blocks the list of blocks in the row to check
-     * @param row    the name of the row (e.g., "up", "center", "down") for error messages
-     */
-    void checkBlockRow(ArrayList<Block> blocks, String row) {
-        for (Block block : blocks) {
-            assertEquals(Material.WATER, block.getType(), "block in " + row + " not changed");
-            assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(block), "block in " + row + " not tracked");
-        }
+        assertEquals(Material.WATER, target.getEyeLocation().getBlock().getType(), "block at eye location not changed to Water");
+        assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target.getEyeLocation().getBlock()), "eye location block not added to tracking");
     }
 
     /**

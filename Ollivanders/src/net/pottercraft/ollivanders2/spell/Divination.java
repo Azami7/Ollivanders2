@@ -103,9 +103,9 @@ public abstract class Divination extends O2Spell {
      */
     @Override
     protected void setUsesModifier() {
-        usesModifier = p.getSpellCount(player, spellType);
+        usesModifier = p.getSpellCount(caster, spellType);
 
-        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(caster.getUniqueId(), O2EffectType.HIGHER_SKILL))
             usesModifier *= 2;
     }
 
@@ -115,7 +115,7 @@ public abstract class Divination extends O2Spell {
      * @param t the target player
      */
     public void setTarget(@NotNull Player t) {
-        if (player != null)
+        if (caster != null)
             target = t;
     }
 
@@ -128,9 +128,9 @@ public abstract class Divination extends O2Spell {
 
         // if this divination type requires the player be facing an block, like a crystal ball, check for the block
         if (facingBlock != null) {
-            Block facing = Ollivanders2Common.playerFacingBlockType(player, facingBlock);
+            Block facing = Ollivanders2Common.playerFacingBlockType(caster, facingBlock);
             if (facing == null) {
-                player.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
+                caster.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
                 kill();
                 return;
             }
@@ -138,7 +138,7 @@ public abstract class Divination extends O2Spell {
 
         // if this divination type requires the player hold an item, like an egg, check for the item
         if (itemHeld != null) {
-            ItemStack held = player.getInventory().getItemInMainHand();
+            ItemStack held = caster.getInventory().getItemInMainHand();
 
             // if the item has a display name, it is a custom item
             ItemMeta meta = held.getItemMeta();
@@ -150,19 +150,19 @@ public abstract class Divination extends O2Spell {
 
         // target must be logged in to make prophecy about them
         if (target == null || !target.isOnline()) {
-            player.sendMessage(Ollivanders2.chatColor + "Unable to find that player online.");
+            caster.sendMessage(Ollivanders2.chatColor + "Unable to find that player online.");
             kill();
             return;
         }
 
-        int experience = p.getO2Player(player).getSpellCount(spellType);
+        int experience = p.getO2Player(caster).getSpellCount(spellType);
 
         // create a prophecy of the correct type
         O2Divination divination;
         Class<?> divinationClass = divinationType.getClassName();
 
         try {
-            divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, int.class).newInstance(p, player, target, experience);
+            divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, int.class).newInstance(p, caster, target, experience);
         }
         catch (Exception e) {
             common.printDebugMessage("Exception creating divination", e, null, true);
@@ -174,8 +174,8 @@ public abstract class Divination extends O2Spell {
 
         // if requires consume item held, consume it
         if (itemHeld != null && consumeHeld) {
-            int amount = player.getInventory().getItemInMainHand().getAmount();
-            player.getInventory().getItemInMainHand().setAmount(amount - 1);
+            int amount = caster.getInventory().getItemInMainHand().getAmount();
+            caster.getInventory().getItemInMainHand().setAmount(amount - 1);
         }
 
         kill();
@@ -185,7 +185,7 @@ public abstract class Divination extends O2Spell {
      * When the player is holding the wrong item for this divinination
      */
     private void wrongItemHeld() {
-        player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
+        caster.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
         kill();
     }
 

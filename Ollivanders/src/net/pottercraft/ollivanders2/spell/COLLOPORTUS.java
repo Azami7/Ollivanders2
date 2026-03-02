@@ -4,7 +4,6 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Openable;
@@ -91,6 +90,6 @@ public final class COLLOPORTUS extends StationarySpell {
             targetBlock.setBlockData(blockData);
         }
 
-        return new net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS(p, player.getUniqueId(), location);
+        return new net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS(p, caster.getUniqueId(), location);
     }
 }

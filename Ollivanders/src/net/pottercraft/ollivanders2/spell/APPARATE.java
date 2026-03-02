@@ -137,7 +137,7 @@ public final class APPARATE extends O2Spell {
         }
 
         // are they allowed to apparate from this location?
-        Location source = player.getLocation();
+        Location source = caster.getLocation();
         if (!canApparateFrom(source)) {
             failureMessage = "A powerful protective magic blocks your spell.";
             sendFailureMessage();
@@ -154,9 +154,9 @@ public final class APPARATE extends O2Spell {
         }
 
         if (Ollivanders2.apparateLocations && destinationParsed)
-            apparateEvent = new OllivandersApparateByNameEvent(player, destination, namedLocation);
+            apparateEvent = new OllivandersApparateByNameEvent(caster, destination, namedLocation);
         else
-            apparateEvent = new OllivandersApparateByCoordinatesEvent(player, destination);
+            apparateEvent = new OllivandersApparateByCoordinatesEvent(caster, destination);
 
         p.getServer().getPluginManager().callEvent(apparateEvent);
 
@@ -174,7 +174,7 @@ public final class APPARATE extends O2Spell {
     private void doApparate() {
         if (!apparateEvent.isCancelled()) {
             p.getServer().getLogger().info("adding teleport event");
-            p.addTeleportAction(player, destination, true);
+            p.addTeleportAction(caster, destination, true);
         }
     }
 
@@ -207,7 +207,7 @@ public final class APPARATE extends O2Spell {
                     x = Double.parseDouble(xCoordinate);
                     y = Double.parseDouble(yCoordinate);
                     z = Double.parseDouble(zCoordinate);
-                    destination = new Location(player.getWorld(), x, y, z);
+                    destination = new Location(caster.getWorld(), x, y, z);
                 }
                 catch (Exception e) {
                 }
@@ -224,7 +224,7 @@ public final class APPARATE extends O2Spell {
      */
     @NotNull
     private Location getLineOfSightLocation() {
-        Location currentLocation = player.getEyeLocation();
+        Location currentLocation = caster.getEyeLocation();
         Material material = currentLocation.getBlock().getType();
 
         int distance = 0;
@@ -247,7 +247,7 @@ public final class APPARATE extends O2Spell {
         if (Ollivanders2.worldGuardEnabled) {
             Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
 
-            if (!wg.checkWGFlag(player, source, Flags.EXIT_VIA_TELEPORT)) {
+            if (!wg.checkWGFlag(caster, source, Flags.EXIT_VIA_TELEPORT)) {
                 return false;
             }
         }
@@ -266,7 +266,7 @@ public final class APPARATE extends O2Spell {
         if (Ollivanders2.worldGuardEnabled) {
             Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
 
-            if (!wg.checkWGFlag(player, destination, Flags.ENTRY)) {
+            if (!wg.checkWGFlag(caster, destination, Flags.ENTRY)) {
                 common.printDebugMessage("Player does not have ENTRY permissions to destination", null, null, false);
                 return false;
             }

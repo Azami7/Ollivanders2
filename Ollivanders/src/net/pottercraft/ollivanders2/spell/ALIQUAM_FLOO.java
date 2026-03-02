@@ -108,13 +108,13 @@ public final class ALIQUAM_FLOO extends O2Spell {
                         if (ali.getFlooName().equals(flooName) || ali.getBlock().equals(statLocation.getBlock())) {
                             kill();
 
-                            player.sendMessage(Ollivanders2.chatColor + "There is already a fireplace registered with the name " + flooName + ".");
+                            caster.sendMessage(Ollivanders2.chatColor + "There is already a fireplace registered with the name " + flooName + ".");
                             return;
                         }
                     }
                 }
 
-                net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO aliquam = new net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, flooName);
+                net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO aliquam = new net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO(p, caster.getUniqueId(), statLocation, flooName);
                 aliquam.flair(20);
                 Ollivanders2API.getStationarySpells().addStationarySpell(aliquam);
             }

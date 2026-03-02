@@ -80,7 +80,7 @@ public final class HORREAT_PROTEGAT extends O2Spell {
 
         List<O2StationarySpell> shieldSpells = new ArrayList<>();
         for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.isLocationInside(location) && stationarySpell.getCasterID().equals(player.getUniqueId())) {
+            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.isLocationInside(location) && stationarySpell.getCasterID().equals(caster.getUniqueId())) {
                 shieldSpells.add(stationarySpell);
                 kill();
             }

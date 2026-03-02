@@ -2,9 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.MagicLevel;
-import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -115,16 +113,9 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
         // add all small mobs as allowed targets by default
         entityAllowedList.addAll(smallFriendlyMobs);
 
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null)
-        {
-            common.printDebugMessage("Null o2player in FriendlyMobDisguise.doInitSpell()", null, null, true);
-            return;
-        }
-
         if (usesModifier > 50 || Ollivanders2.maxSpellLevel)
         {
-            if (!Ollivanders2.useYears || o2p.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.OWL.ordinal())
+            if (!Ollivanders2.useYears || casterO2P.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.OWL.ordinal())
                 entityAllowedList.addAll(mediumFriendlyMobs);
         }
 
@@ -132,7 +123,7 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
         {
             // if years are off or
             // if years are on and this player's year's max level is >= NEWT level
-            if (!Ollivanders2.useYears || o2p.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.NEWT.ordinal())
+            if (!Ollivanders2.useYears || casterO2P.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.NEWT.ordinal())
                 entityAllowedList.addAll(largeFriendlyMobs);
         }
     }

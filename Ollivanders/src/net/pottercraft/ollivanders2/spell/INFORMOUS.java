@@ -69,7 +69,7 @@ public final class INFORMOUS extends O2Spell {
 
         // check for entities
         for (LivingEntity entity : getNearbyLivingEntities(1.5)) {
-            if (entity.getUniqueId().equals(player.getUniqueId()))
+            if (entity.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             entityInfo(entity);
@@ -87,7 +87,7 @@ public final class INFORMOUS extends O2Spell {
 
             // if we didn't find a stationary spell, give information about the location
             if (!gaveInfo) {
-                Location playerLocation = player.getLocation();
+                Location playerLocation = caster.getLocation();
 
                 if (playerLocation.getY() > 256) {
                     String weather;
@@ -109,9 +109,9 @@ public final class INFORMOUS extends O2Spell {
                     int weatherTime = world.getWeatherDuration();
                     int thunderTime = world.getThunderDuration();
 
-                    player.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+                    caster.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
                     if (thunder) {
-                        player.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+                        caster.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
                     }
                 }
             }
@@ -135,27 +135,27 @@ public final class INFORMOUS extends O2Spell {
             entityName = entity.getType().toString();
 
         // health level
-        player.sendMessage(Ollivanders2.chatColor + entityName + " has " + entity.getHealth() + " health.");
+        caster.sendMessage(Ollivanders2.chatColor + entityName + " has " + entity.getHealth() + " health.");
 
         if (entity instanceof Player) {
             Player target = (Player) entity;
 
             // food level
-            player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
+            caster.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
 
             // exhaustion level
-            player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
+            caster.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
 
             // detectable effects
             String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
             if (infoText != null)
-                player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
+                caster.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
 
             // line of sight
-            if (target.canSee(player))
-                player.sendMessage(Ollivanders2.chatColor + " can see you.");
+            if (target.canSee(caster))
+                caster.sendMessage(Ollivanders2.chatColor + " can see you.");
             else
-                player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
+                caster.sendMessage(Ollivanders2.chatColor + " cannot see you.");
         }
     }
 
@@ -172,7 +172,7 @@ public final class INFORMOUS extends O2Spell {
             else
                 power = 1;
 
-            player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.getRadius() + " has " + power + " power left.");
+            caster.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.getRadius() + " has " + power + " power left.");
         }
         else if (spell instanceof HORCRUX) {
             Player caster = Bukkit.getPlayer(spell.getCasterID());
@@ -183,16 +183,16 @@ public final class INFORMOUS extends O2Spell {
             else
                 casterString = " cast by persons unknown ";
 
-            player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + casterString + " of radius " + spell.getRadius());
+            this.caster.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + casterString + " of radius " + spell.getRadius());
         }
         else if (spell instanceof ALIQUAM_FLOO) {
-            player.sendMessage(Ollivanders2.chatColor + "Floo registration of " + ((ALIQUAM_FLOO) spell).getFlooName());
+            caster.sendMessage(Ollivanders2.chatColor + "Floo registration of " + ((ALIQUAM_FLOO) spell).getFlooName());
         }
         else if (spell instanceof HARMONIA_NECTERE_PASSUS) {
-            player.sendMessage(Ollivanders2.chatColor + "Vanishing Cabinet");
+            caster.sendMessage(Ollivanders2.chatColor + "Vanishing Cabinet");
         }
         else {
-            player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.getRadius() + " has " + spell.getDuration() / Ollivanders2Common.ticksPerSecond + " seconds left.");
+            caster.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.getRadius() + " has " + spell.getDuration() / Ollivanders2Common.ticksPerSecond + " seconds left.");
         }
     }
 }

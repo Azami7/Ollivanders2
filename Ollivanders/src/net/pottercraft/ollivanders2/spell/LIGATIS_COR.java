@@ -65,7 +65,7 @@ public final class LIGATIS_COR extends O2Spell {
     protected void doCheckEffect() {
         // projectile has stopped, kill the spell
         if (hasHitTarget()) {
-            player.sendMessage(Ollivanders2.chatColor + "Spell failed to find a coreless wand.");
+            caster.sendMessage(Ollivanders2.chatColor + "Spell failed to find a coreless wand.");
             kill();
             return;
         }
@@ -109,7 +109,7 @@ public final class LIGATIS_COR extends O2Spell {
         if (wand == null)
             return;
 
-        Location dropLocation = player.getLocation();
+        Location dropLocation = caster.getLocation();
         if (dropLocation.getWorld() == null) {
             common.printDebugMessage("LIGATIS_COR.createAndDropWand: world is null", null, null, true);
             return;

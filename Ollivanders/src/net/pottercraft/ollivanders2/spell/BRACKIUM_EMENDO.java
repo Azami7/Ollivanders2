@@ -75,7 +75,7 @@ public final class BRACKIUM_EMENDO extends O2Spell {
 
         if (entities.size() > 0) {
             for (LivingEntity entity : entities) {
-                if (entity.getUniqueId().equals(player.getUniqueId()))
+                if (entity.getUniqueId().equals(caster.getUniqueId()))
                     continue;
 
                 EntityType type = entity.getType();
@@ -88,7 +88,7 @@ public final class BRACKIUM_EMENDO extends O2Spell {
                         damage = maxDamage;
                     }
 
-                    entity.damage(damage, player);
+                    entity.damage(damage, caster);
 
                     kill();
                     break;

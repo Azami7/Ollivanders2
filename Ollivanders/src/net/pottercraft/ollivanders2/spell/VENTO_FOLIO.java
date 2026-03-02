@@ -103,7 +103,7 @@ public final class VENTO_FOLIO extends O2Spell {
             duration = 100;
 
         if (rand < successRate) {
-            FLYING effect = new FLYING(p, duration, false, player.getUniqueId());
+            FLYING effect = new FLYING(p, duration, false, caster.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             common.printDebugMessage("VENTO_FOLIO: Adding effect ", null, null, false);

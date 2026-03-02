@@ -90,18 +90,18 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
             }
 
             // reduce their health and decrement a soul
-            AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+            AttributeInstance healthAttribute = caster.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
             if (healthAttribute == null) {
                 common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
                 kill();
                 return;
             }
 
-            p.getO2Player(player).subtractSoul();
+            p.getO2Player(caster).subtractSoul();
             healthAttribute.setBaseValue(futureHealth);
 
             // create a horcrux from this item
-            HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), item.getLocation(), item);
+            HORCRUX horcrux = new HORCRUX(p, caster.getUniqueId(), item.getLocation(), item);
             horcrux.flair(10);
             Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
 
@@ -115,28 +115,28 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
      */
     boolean canCreateHorcrux() {
         // does the caster have souls that can be used
-        if (p.getO2Player(player).getSouls() < 1) {
-            player.sendMessage(Ollivanders2.chatColor + "Your soul is not yet so damaged to allow this.");
+        if (p.getO2Player(caster).getSouls() < 1) {
+            caster.sendMessage(Ollivanders2.chatColor + "Your soul is not yet so damaged to allow this.");
             return false;
         }
 
         // do they already have a horcrux?
         for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            if (stationarySpell.getSpellType() == O2StationarySpellType.HORCRUX && stationarySpell.getCasterID().equals(player.getUniqueId())) {
-                player.sendMessage(Ollivanders2.chatColor + "You can have already divided your soul.");
+            if (stationarySpell.getSpellType() == O2StationarySpellType.HORCRUX && stationarySpell.getCasterID().equals(caster.getUniqueId())) {
+                caster.sendMessage(Ollivanders2.chatColor + "You can have already divided your soul.");
                 return false;
             }
         }
 
         // does the player have enough health to create a new horcrux?
-        AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        AttributeInstance healthAttribute = caster.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
         if (healthAttribute == null) {
             common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
             return false;
         }
         futureHealth = healthAttribute.getBaseValue() / 2;
         if (futureHealth < 2) {
-            player.sendMessage(Ollivanders2.chatColor + "You are not strong enough to split your soul.");
+            caster.sendMessage(Ollivanders2.chatColor + "You are not strong enough to split your soul.");
             return false;
         }
 

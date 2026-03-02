@@ -61,7 +61,7 @@ public final class LACARNUM_INFLAMARI extends O2Spell {
 
     @Override
     protected void doCheckEffect() {
-        player.launchProjectile(SmallFireball.class, vector);
+        caster.launchProjectile(SmallFireball.class, vector);
 
         kill();
     }

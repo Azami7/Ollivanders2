@@ -92,7 +92,12 @@ public abstract class O2Spell {
     /**
      * The player who cast this spell.
      */
-    public Player player;
+    public Player caster;
+
+    /**
+     * The O2Player for the caster.
+     */
+    public O2Player casterO2P;
 
     /**
      * The type this spell is.
@@ -249,13 +254,19 @@ public abstract class O2Spell {
      * @param rightWand wand check for the player
      */
     public O2Spell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
-        location = player.getEyeLocation();
-        this.player = player;
         p = plugin;
         common = new Ollivanders2Common(p);
 
+        caster = player;
+        casterO2P = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
+        if (casterO2P == null) {
+            common.printLogMessage("O2Spell: O2Players.getPlayer(caster) returned null", null, null, false);
+        }
+
+        location = caster.getEyeLocation();
         vector = location.getDirection().normalize();
         location.add(vector);
+
         this.rightWand = rightWand;
 
         // block types that cannot be affected by any spell
@@ -396,7 +407,7 @@ public abstract class O2Spell {
 
         // move the projectile and fire move event
         location.add(vector);
-        p.getServer().getPluginManager().callEvent(new OllivandersSpellProjectileMoveEvent(player, this, prevLoc, location));
+        p.getServer().getPluginManager().callEvent(new OllivandersSpellProjectileMoveEvent(caster, this, prevLoc, location));
         projectileDistance = projectileDistance + 1;
 
         // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
@@ -498,7 +509,7 @@ public abstract class O2Spell {
 
         // check every flag needed for this spell
         for (StateFlag flag : worldGuardFlags) {
-            if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag)) {
+            if (!Ollivanders2.worldGuardO2.checkWGFlag(caster, location, flag)) {
                 common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
                 return false;
             }
@@ -524,7 +535,7 @@ public abstract class O2Spell {
 
         for (Entity e : entities) {
             if (e instanceof LivingEntity) {
-                if (!e.equals(player))
+                if (!e.equals(caster))
                     close.add(e);
             }
             else
@@ -562,8 +573,8 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && projectileAge > 1)
-            living.add(player);
+        if (Ollivanders2Common.isInside(caster.getLocation(), location, (int) radius) && !entities.contains(caster) && projectileAge > 1)
+            living.add(caster);
 
         return living;
     }
@@ -585,8 +596,8 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && projectileAge > 1)
-            players.add(player);
+        if (Ollivanders2Common.isInside(caster.getLocation(), location, (int) radius) && !entities.contains(caster) && projectileAge > 1)
+            players.add(caster);
 
         return players;
     }
@@ -608,8 +619,8 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && projectileAge > 1)
-            damageable.add(player);
+        if (Ollivanders2Common.isInside(caster.getLocation(), location, (int) radius) && !entities.contains(caster) && projectileAge > 1)
+            damageable.add(caster);
 
         return damageable;
     }
@@ -626,18 +637,12 @@ public abstract class O2Spell {
      * </ul>
      */
     protected void setUsesModifier() {
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null) {
-            common.printLogMessage("Null o2player in O2Spell.setUsesModifier", null, null, true);
-            return;
-        }
-
         // if max skill is set, set usesModifier to max level
         if (Ollivanders2.maxSpellLevel)
             usesModifier = spellMasteryLevel * 2;
         else {
             // uses modifier is the number of times the spell has been cast
-            usesModifier = o2p.getSpellCount(spellType);
+            usesModifier = casterO2P.getSpellCount(spellType);
 
             // if it is not a wandless spell, uses modifier is halved if the player is not using their destined wand,
             // doubled if they are using the elder wand
@@ -645,13 +650,13 @@ public abstract class O2Spell {
                 usesModifier = usesModifier / rightWand;
 
             // if the caster is affected by HIGHER_SKILL, double their usesModifier
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(caster.getUniqueId(), O2EffectType.HIGHER_SKILL))
                 usesModifier *= 2;
         }
 
         // if years is enabled, spell usage is affected by caster's level
         if (Ollivanders2.useYears) {
-            MagicLevel maxLevelForPlayer = o2p.getYear().getHighestLevelForYear();
+            MagicLevel maxLevelForPlayer = casterO2P.getYear().getHighestLevelForYear();
 
             if (maxLevelForPlayer.ordinal() > (spellType.getLevel().ordinal() + 1))
                 // double skill level when 2 or more levels above
@@ -854,27 +859,27 @@ public abstract class O2Spell {
             return true;
 
         // players
-        if (entity instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.PVP))
+        if (entity instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(caster, location, Flags.PVP))
             return false;
 
         // friendly mobs
-        if (entity instanceof Animals && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.DAMAGE_ANIMALS))
+        if (entity instanceof Animals && !Ollivanders2.worldGuardO2.checkWGFlag(caster, location, Flags.DAMAGE_ANIMALS))
             return false;
 
         // items
-        if (entity instanceof Item && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ITEM_PICKUP))
+        if (entity instanceof Item && !Ollivanders2.worldGuardO2.checkWGFlag(caster, location, Flags.ITEM_PICKUP))
             return false;
 
         // vehicles
-        if (entity instanceof Vehicle && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.DESTROY_VEHICLE))
+        if (entity instanceof Vehicle && !Ollivanders2.worldGuardO2.checkWGFlag(caster, location, Flags.DESTROY_VEHICLE))
             return false;
 
         // item frames
-        if (entity instanceof ItemFrame && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ENTITY_ITEM_FRAME_DESTROY))
+        if (entity instanceof ItemFrame && !Ollivanders2.worldGuardO2.checkWGFlag(caster, location, Flags.ENTITY_ITEM_FRAME_DESTROY))
             return false;
 
         // paintings
-        return entity instanceof Painting && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ENTITY_PAINTING_DESTROY);
+        return entity instanceof Painting && !Ollivanders2.worldGuardO2.checkWGFlag(caster, location, Flags.ENTITY_PAINTING_DESTROY);
     }
 
     /**
@@ -882,7 +887,7 @@ public abstract class O2Spell {
      */
     public void sendSuccessMessage() {
         if (successMessage != null && !(successMessage.isEmpty()))
-            player.sendMessage(Ollivanders2.chatColor + successMessage);
+            caster.sendMessage(Ollivanders2.chatColor + successMessage);
     }
 
     /**
@@ -899,7 +904,7 @@ public abstract class O2Spell {
      */
     public void sendFailureMessage() {
         if (failureMessage != null && !(failureMessage.isEmpty()))
-            player.sendMessage(Ollivanders2.chatColor + failureMessage);
+            caster.sendMessage(Ollivanders2.chatColor + failureMessage);
         else
             common.printDebugMessage("failure message unset or 0 length", null, null, false);
     }

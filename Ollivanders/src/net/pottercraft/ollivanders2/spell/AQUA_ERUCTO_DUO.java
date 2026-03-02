@@ -105,6 +105,6 @@ public final class AQUA_ERUCTO_DUO extends AQUA_ERUCTO {
         else if (damage > maxDamage)
             damage = maxDamage;
 
-        ((LivingEntity) entity).damage(damage, player);
+        ((LivingEntity) entity).damage(damage, caster);
     }
 }

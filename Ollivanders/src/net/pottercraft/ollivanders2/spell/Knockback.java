@@ -109,7 +109,7 @@ public abstract class Knockback extends O2Spell {
         List<Entity> targets = new ArrayList<>();
 
         if (targetsSelf) {
-            targets.add(player);
+            targets.add(caster);
         }
         else { // look for a valid target at the location
             int numberOfTargets = calculateNumberOfTargets();
@@ -149,9 +149,9 @@ public abstract class Knockback extends O2Spell {
      * @return true if it can be targeted, false otherwise
      */
     boolean entityTargetCheck(Entity entity) {
-        if (entity.getUniqueId().equals(player.getUniqueId()) && !targetsSelf)
+        if (entity.getUniqueId().equals(caster.getUniqueId()) && !targetsSelf)
             return false;
-        else if (entity.getUniqueId().equals(player.getUniqueId()) && targetsSelf)
+        else if (entity.getUniqueId().equals(caster.getUniqueId()) && targetsSelf)
             return true;
 
         // check canTarget

@@ -91,7 +91,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
 
         if (Ollivanders2Common.isNaturalLog(blockType)) {
             if (O2WandWoodType.isWandWood(blockType)) {
-                player.sendMessage(Ollivanders2.chatColor + "The targeted log is not suitable for wand making.");
+                caster.sendMessage(Ollivanders2.chatColor + "The targeted log is not suitable for wand making.");
                 return;
             }
 
@@ -119,7 +119,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
             }
 
             target.getLocation().getWorld().createExplosion(target.getLocation(), 0);
-            player.getWorld().dropItemNaturally(target.getLocation(), corelessWands);
+            caster.getWorld().dropItemNaturally(target.getLocation(), corelessWands);
 
             target.setType(Material.AIR);
         }

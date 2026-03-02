@@ -134,7 +134,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
             return;
 
         for (Entity entity : getNearbyEntities(radius)) {
-            if (entity.getUniqueId().equals(player.getUniqueId()))
+            if (entity.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             if (isTransfigured) {
@@ -173,7 +173,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
-            common.printDebugMessage(player.getName() + " failed success check in canTransfigure()", null, null, false);
+            common.printDebugMessage(caster.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
 

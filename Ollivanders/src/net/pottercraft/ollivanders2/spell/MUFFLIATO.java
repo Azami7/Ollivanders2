@@ -60,6 +60,6 @@ public final class MUFFLIATO extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.MUFFLIATO(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.MUFFLIATO(p, caster.getUniqueId(), location, radius, duration);
     }
 }

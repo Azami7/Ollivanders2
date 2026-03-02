@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -68,7 +67,7 @@ public final class LUMOS_CAERULEUM extends O2Spell {
             return;
         }
         
-        ItemStack offHandItem = player.getInventory().getItemInOffHand();
+        ItemStack offHandItem = caster.getInventory().getItemInOffHand();
         
         // Check if the player is holding a glass bottle in their off-hand
         if (offHandItem.getType() == Material.GLASS_BOTTLE) {
@@ -86,10 +85,10 @@ public final class LUMOS_CAERULEUM extends O2Spell {
             }
             
             // Replace the glass bottle with the lantern
-            player.getInventory().setItemInOffHand(lantern);
+            caster.getInventory().setItemInOffHand(lantern);
             
             // Send success message
-            player.sendMessage(Ollivanders2.chatColor + "You capture bluebell flames in the bottle.");
+            caster.sendMessage(Ollivanders2.chatColor + "You capture bluebell flames in the bottle.");
         }
         // No failure message - spell simply does nothing if requirements aren't met
         

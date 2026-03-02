@@ -89,7 +89,7 @@ public final class EXPELLIARMUS extends O2Spell {
 
         if (livingEntities.size() > 0) {
             for (LivingEntity entity : livingEntities) {
-                if (entity.getUniqueId().equals(player.getUniqueId()))
+                if (entity.getUniqueId().equals(caster.getUniqueId()))
                     continue;
 
                 // is entity holding something
@@ -125,7 +125,7 @@ public final class EXPELLIARMUS extends O2Spell {
 
                 // drop the item the player held
                 Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);
-                item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(velocity));
+                item.setVelocity(caster.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(velocity));
 
                 kill();
                 return;

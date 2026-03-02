@@ -129,7 +129,7 @@ public abstract class ItemEnchant extends O2Spell {
      * Enchants the item held in the player's off-hand
      */
     protected void enchantHeldItem() {
-        ItemStack targetItem = player.getInventory().getItemInOffHand();
+        ItemStack targetItem = caster.getInventory().getItemInOffHand();
 
         // make sure they are actually holding something and that it can be enchanted
         if ((targetItem.getType() == Material.AIR) || !canBeEnchanted(targetItem)) {
@@ -237,12 +237,12 @@ public abstract class ItemEnchant extends O2Spell {
         enchantedItemStack = alterItem(enchantedItemStack);
 
         // enchant item
-        Item enchantedItem = player.getWorld().dropItem(location, enchantedItemStack);
+        Item enchantedItem = caster.getWorld().dropItem(location, enchantedItemStack);
         Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
 
         // drop the remainder of the original stack in world where the player is
         if (itemStack.getAmount() > 0) {
-            player.getWorld().dropItem(location, itemStack);
+            caster.getWorld().dropItem(location, itemStack);
         }
     }
 

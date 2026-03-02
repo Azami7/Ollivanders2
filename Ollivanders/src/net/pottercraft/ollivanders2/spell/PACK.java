@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -123,17 +124,19 @@ public final class PACK extends O2Spell {
 
             HashMap<Integer, ItemStack> overflow;
 
-            if (getTargetBlock().getType() == Material.ENDER_CHEST)
-                overflow = player.getEnderChest().addItem(item.getItemStack());
-            else if (getTargetBlock().getState() instanceof ShulkerBox)
-                overflow = ((ShulkerBox) getTargetBlock().getState()).getInventory().addItem(item.getItemStack());
+            Block targetBlock = getTargetBlock();
+
+            if (targetBlock != null && targetBlock.getType() == Material.ENDER_CHEST)
+                overflow = caster.getEnderChest().addItem(item.getItemStack());
+            else if (targetBlock != null && targetBlock.getState() instanceof ShulkerBox)
+                overflow = ((ShulkerBox) targetBlock.getState()).getInventory().addItem(item.getItemStack());
             else {
                 common.printDebugMessage("Target chest is not an ender chest or shulker box", null, null, true);
                 return;
             }
 
             // figure out how much fit
-            if (overflow.size() < 1)
+            if (overflow.isEmpty())
                 item.remove();
             else {
                 // how many did it stash

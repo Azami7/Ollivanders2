@@ -98,7 +98,7 @@ abstract public class ImmobilizePlayerSuper extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId().equals(player.getUniqueId()) || !canTarget(target)) {
+            if (target.getUniqueId().equals(caster.getUniqueId()) || !canTarget(target)) {
                 common.printDebugMessage("ImmobilizePlayerSuper.doCheckEffect: " + target.getName() + " cannot be targeting, skipping", null, null, false);
                 continue;
             }

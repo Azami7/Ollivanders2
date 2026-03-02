@@ -91,8 +91,8 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
         else if (playerMax < 1)
             playerMax = 1;
 
-        if (inferiCount.containsKey(player)) {
-            int curInferi = inferiCount.get(player);
+        if (inferiCount.containsKey(caster)) {
+            int curInferi = inferiCount.get(caster);
             if (curInferi >= playerMax) {
                 // if the number they currently have created exceeds their max based on skill, set success to 0
                 successRate = 0;
@@ -106,11 +106,11 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
     @Override
     void doRevert() {
         if (isTransfigured) {
-            int curInferi = inferiCount.get(player) - 1;
+            int curInferi = inferiCount.get(caster) - 1;
             if (curInferi <= 0)
-                inferiCount.remove(player);
+                inferiCount.remove(caster);
             else
-                inferiCount.put(player, curInferi);
+                inferiCount.put(caster, curInferi);
         }
     }
 
@@ -131,10 +131,10 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
         if (!EntityCommon.isAttackDamageCause(cause))
             return;
 
-        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))
+        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(caster.getUniqueId()))
             // prevent the inferi attacking its creator
             event.setCancelled(true);
-        else if (target.getUniqueId().equals(player.getUniqueId()) && transfiguredEntity instanceof LivingEntity)
+        else if (target.getUniqueId().equals(caster.getUniqueId()) && transfiguredEntity instanceof LivingEntity)
             // attack anyone who attacks the creator
             ((LivingEntity) transfiguredEntity).attack(attacker);
     }
@@ -155,7 +155,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
         if (target == null)
             return;
 
-        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))
+        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(caster.getUniqueId()))
             event.setCancelled(true);
     }
 }

@@ -72,7 +72,7 @@ public final class PORTUS extends ItemEnchant {
         super.doInitSpell();
 
         if (args == null || args.isEmpty()) {
-            Location loc = player.getLocation();
+            Location loc = caster.getLocation();
 
             World world = loc.getWorld();
             if (world == null) {

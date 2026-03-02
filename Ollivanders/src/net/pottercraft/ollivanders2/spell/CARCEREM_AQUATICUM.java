@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.WATER_BREATHING;
 import org.bukkit.Bukkit;
@@ -11,28 +12,32 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Carcerem Aquaticum - The Water Orb Spell.
  *
  * <p>CARCEREM_AQUATICUM traps the target player in a protective orb of non-flowing water, immobilizing them
- * while preventing drowning damage. The spell creates a 3x3 grid of water blocks above, at, and below the
- * player's eye level, preventing movement while allowing the player to breathe safely through the
- * WATER_BREATHING effect. The spell only affects players at normal or reduced size (scale ≤ 1.0).</p>
+ * while preventing drowning damage. The spell expands the player's bounding box by 1 block in all directions
+ * and fills all air blocks within that region with water, preventing movement while allowing the player to
+ * breathe safely through the WATER_BREATHING effect. The spell only affects players at normal or reduced
+ * size (scale ≤ 1.0).</p>
  *
  * <p>Spell Mechanics:</p>
  * <ul>
  * <li>Only targets players with scale attribute ≤ 1.0</li>
- * <li>Creates non-flowing water blocks in a 3x3 grid around player</li>
+ * <li>Expands player's bounding box by 1 block in all directions</li>
+ * <li>Converts all air blocks within the expanded region to non-flowing water</li>
+ * <li>Preserves any non-air blocks that exist within the region</li>
  * <li>Applies WATER_BREATHING effect to prevent drowning during immobilization</li>
- * <li>Automatically reverts water blocks after effect duration expires</li>
+ * <li>Automatically reverts all water blocks after effect duration expires</li>
  * <li>Uses partial immobilization (allows rotation but prevents movement)</li>
  * <li>Minimum effect duration: 2 minutes (ensures water breathing lasts through cleanup)</li>
  * </ul>
@@ -40,8 +45,6 @@ import java.util.ArrayList;
  * <p>Reference: <a href="https://harrypotter.fandom.com/wiki/Orb_of_Water">Harry Potter Wiki - Orb of Water</a></p>
  */
 public class CARCEREM_AQUATICUM extends ImmobilizePlayerSuper {
-    private static final double playerBlockHeight = 1.8;
-
     /**
      * Setting to 2 minutes, which is the min duration for the WATER_BREATHING effect
      */
@@ -94,7 +97,7 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayerSuper {
      * Determine if a player can be targeted by this spell.
      *
      * <p>Only players with a scale attribute of 1.0 or lower can be targeted. Oversized players cannot
-     * be trapped in the water orb due to the fixed size of the water block grid.</p>
+     * be trapped in the water orb due to the expanded bounding box being too small to contain them.</p>
      *
      * @param target the player to validate as a potential target
      * @return true if the player's scale is ≤ 1.0, false if oversized (or if scale attribute is null)
@@ -110,31 +113,6 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayerSuper {
         }
 
         return true;
-    }
-
-    /**
-     * Calculate the effective height of the target player in blocks.
-     *
-     * <p>Returns the player's height adjusted by their scale attribute. In test mode, always returns the
-     * standard player height (1.8 blocks). In normal mode, multiplies the player's scale attribute by
-     * the standard height to account for oversized or undersized players.</p>
-     *
-     * @param target the player whose height to calculate
-     * @return the effective player height in blocks, adjusted for scale
-     */
-    double getPlayerHeight(Player target) {
-        if (!Ollivanders2.testMode) {
-            AttributeInstance scaleAttribute = target.getAttribute(Attribute.SCALE);
-
-            double scale = 1.0;
-
-            if (scaleAttribute != null) // this should always be true or canTarget() would have failed
-                scale = scaleAttribute.getBaseValue();
-
-            return playerBlockHeight * scale;
-        }
-
-        return playerBlockHeight;
     }
 
     /**
@@ -165,43 +143,61 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayerSuper {
     }
 
     /**
-     * Create water blocks in a 3x3 grid pattern above, at, and around the target player.
+     * Create water blocks around the target player based on their bounding box.
      *
-     * <p>Creates rows of water blocks (3x3 grids) at three vertical levels: above the player's eyes,
-     * at eye level, and below (if player height ≤ 2 blocks). This creates a complete water orb that
-     * traps the player in place. All water blocks are set to level 0 (fully filled, non-flowing).</p>
+     * <p>Expands the target player's bounding box by 1 block in all directions, then converts
+     * all air blocks within that expanded region to non-flowing water. Only air blocks are changed,
+     * preserving any existing non-air blocks. All changed blocks are tracked as temporarily changed
+     * so they can be reverted when the effect expires.</p>
      *
      * @param target the player to surround with water blocks
      */
     void createWaterBlocks(Player target) {
-        Block headBlock = target.getEyeLocation().getBlock();
-
-        createWaterBlockRow(headBlock.getRelative(BlockFace.UP));
-        createWaterBlockRow(headBlock);
-
-        double playerHeight = getPlayerHeight(target);
-        if (playerHeight <= 2.0)
-            createWaterBlockRow(headBlock.getRelative(BlockFace.DOWN));
-    }
-
-    /**
-     * Create a 3x3 grid of non-flowing water blocks centered at the given block.
-     *
-     * <p>Creates a complete row of water blocks in a 3x3 pattern (center, north, south, east, west,
-     * and diagonal corners) all set to level 0 (fully filled, non-flowing water). All blocks are tracked
-     * as temporarily changed so they can be reverted when the effect ends.</p>
-     *
-     * @param center the center block around which to create the 3x3 water grid
-     */
-    void createWaterBlockRow(Block center) {
         Levelled waterData = (Levelled) Bukkit.createBlockData(Material.WATER);
         waterData.setLevel(0);
 
-        for (Block block : getRowBlocks(center)) {
-            Ollivanders2API.getBlocks().addTemporarilyChangedBlock(block, this);
-            block.setType(Material.WATER);
-            block.setBlockData(waterData);
+        List<Block> blocks = calculateBlocksToChange(target.getBoundingBox().expand(1.0));
+        for (Block block : blocks) {
+
+            if (BlockCommon.isAirBlock(block)) {
+                Ollivanders2API.getBlocks().addTemporarilyChangedBlock(block, this);
+                block.setType(Material.WATER);
+                block.setBlockData(waterData);
+            }
         }
+    }
+
+    /**
+     * Calculate all blocks within the expanded bounding box region.
+     *
+     * <p>Iterates through all integer block coordinates within the given bounding box and collects
+     * the Block objects. These blocks will be filtered later to only change air blocks to water.</p>
+     *
+     * @param boundingBox the expanded bounding box region to collect blocks from
+     * @return a list of all Block objects within the bounding box coordinates
+     */
+    List<Block> calculateBlocksToChange(BoundingBox boundingBox) {
+        ArrayList<Block> blocks = new ArrayList<>();
+
+        int minX = (int) Math.floor(boundingBox.getMinX());
+        int minY = (int) Math.floor(boundingBox.getMinY());
+        int minZ = (int) Math.floor(boundingBox.getMinZ());
+        int maxX = (int) Math.floor(boundingBox.getMaxX());
+        int maxY = (int) Math.floor(boundingBox.getMaxY());
+        int maxZ = (int) Math.floor(boundingBox.getMaxZ());
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    Block block = location.getWorld().getBlockAt(x, y, z);
+
+                    if (!blocks.contains(block))
+                        blocks.add(block);
+                }
+            }
+        }
+
+        return blocks;
     }
 
     /**
@@ -212,30 +208,5 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayerSuper {
      */
     void revertBlocks() {
         Ollivanders2API.getBlocks().revertTemporarilyChangedBlocksBy(this);
-    }
-
-    /**
-     * Get all blocks in a 3x3 grid pattern around the center block.
-     *
-     * <p>Returns a list of 9 blocks: the center block plus 8 adjacent blocks forming a 3x3 square.
-     * Includes the center, cardinal directions (north, south, east, west), and diagonal directions.</p>
-     *
-     * @param center the center block of the 3x3 grid
-     * @return an ArrayList containing the 9 blocks in the 3x3 grid pattern
-     */
-    public ArrayList<Block> getRowBlocks(Block center) {
-        ArrayList<Block> blocks = new ArrayList<>();
-
-        blocks.add(center);
-        blocks.add(center.getRelative(BlockFace.EAST));
-        blocks.add(center.getRelative(BlockFace.WEST));
-        blocks.add(center.getRelative(BlockFace.NORTH));
-        blocks.add(center.getRelative(BlockFace.SOUTH));
-        blocks.add(center.getRelative(BlockFace.NORTH).getRelative(BlockFace.EAST));
-        blocks.add(center.getRelative(BlockFace.NORTH).getRelative(BlockFace.WEST));
-        blocks.add(center.getRelative(BlockFace.SOUTH).getRelative(BlockFace.EAST));
-        blocks.add(center.getRelative(BlockFace.SOUTH).getRelative(BlockFace.WEST));
-
-        return blocks;
     }
 }
