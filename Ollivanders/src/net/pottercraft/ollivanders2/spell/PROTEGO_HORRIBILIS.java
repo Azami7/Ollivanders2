@@ -61,6 +61,6 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS(p, caster.getUniqueId(), location, radius, duration);
     }
 }

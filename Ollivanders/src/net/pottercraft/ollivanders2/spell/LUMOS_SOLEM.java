@@ -106,7 +106,7 @@ public final class LUMOS_SOLEM extends O2Spell {
         List<LivingEntity> entities = getNearbyLivingEntities(radius);
 
         for (LivingEntity entity : entities) {
-            if (entity.getUniqueId().equals(player.getUniqueId()))
+            if (entity.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             if (EntityCommon.isUndeadMob(entity.getType())) {

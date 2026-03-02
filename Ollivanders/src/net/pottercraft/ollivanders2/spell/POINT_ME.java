@@ -58,9 +58,9 @@ public class POINT_ME extends O2Spell {
             return;
         }
 
-        Location l = player.getLocation().clone();
+        Location l = caster.getLocation().clone();
         l.setYaw(180);
-        player.teleport(l);
+        caster.teleport(l);
 
         kill();
     }

@@ -55,7 +55,7 @@ public class REPARIFORS extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId().equals(player.getUniqueId()))
+            if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             // if they are affected by immobilized, reduce the duration of the effect

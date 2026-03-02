@@ -86,6 +86,12 @@ public abstract class O2SpellTestSuper {
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
+    /**
+     * Get the next location.
+     *
+     * @param world the world to create the location in
+     * @return the new location
+     */
     synchronized Location getNextLocation(World world) {
         Location location = new Location(world, nextX, 40, 100);
         nextX = nextX + 100;
@@ -139,7 +145,7 @@ public abstract class O2SpellTestSuper {
      * @param experience     the spell experience level to set on the player
      * @return the created and added spell
      */
-    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, int experience) {
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, double experience) {
         return castSpell(caster, fromLocation, targetLocation, wand, experience, getSpellType());
     }
 
@@ -157,13 +163,13 @@ public abstract class O2SpellTestSuper {
      * @param spellType      the type of spell to cast
      * @return the created and added spell
      */
-    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, int experience, O2SpellType spellType) {
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, double experience, O2SpellType spellType) {
         caster.setLocation(fromLocation);
 
         if (!fromLocation.equals(targetLocation)) {
             O2Player o2p = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
             assertNotNull(o2p, "Unable to get O2Player");
-            o2p.setSpellCount(getSpellType(), experience);
+            o2p.setSpellCount(getSpellType(), (int)experience);
 
             caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
         }

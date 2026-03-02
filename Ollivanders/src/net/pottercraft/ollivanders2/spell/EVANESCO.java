@@ -3,9 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
-import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -76,13 +74,10 @@ public final class EVANESCO extends EntityTransfiguration {
         float successMultiplier = 1f;
 
         if (Ollivanders2.useYears) {
-            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-            if (o2p != null) {
-                if (this.spellType.getLevel().ordinal() > o2p.getYear().getHighestLevelForYear().ordinal())
-                    successMultiplier = 2f;
-                else
-                    successMultiplier = 0.25f;
-            }
+            if (this.spellType.getLevel().ordinal() > casterO2P.getYear().getHighestLevelForYear().ordinal())
+                successMultiplier = 2f;
+            else
+                successMultiplier = 0.25f;
         }
 
         successRate = (int) ((usesModifier / 4) * successMultiplier);

@@ -60,7 +60,7 @@ public class PROPHETEIA extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId().equals(player.getUniqueId()))
+            if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
@@ -76,7 +76,7 @@ public class PROPHETEIA extends O2Spell {
                 }
             }
 
-            player.sendMessage(Ollivanders2.chatColor + "You do not discover anything.");
+            caster.sendMessage(Ollivanders2.chatColor + "You do not discover anything.");
 
             kill();
             return;

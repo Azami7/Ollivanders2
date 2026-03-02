@@ -56,7 +56,7 @@ public final class MULTICORFORS extends O2Spell {
             kill();
 
         for (LivingEntity live : getNearbyLivingEntities(defaultRadius)) {
-            if (live.getUniqueId().equals(player.getUniqueId()))
+            if (live.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             EntityEquipment equipment = live.getEquipment();

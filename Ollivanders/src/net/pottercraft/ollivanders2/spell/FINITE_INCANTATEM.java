@@ -102,7 +102,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
      */
     private void finiteIncantatemEntities() {
         for (LivingEntity live : getNearbyLivingEntities(defaultRadius)) {
-            if (live.getUniqueId().equals(player.getUniqueId()))
+            if (live.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             common.printDebugMessage("finite incantatem targeting " + live.getName(), null, null, false);
@@ -132,7 +132,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
                     MagicLevel level = O2Potions.getPotionEffectMagicLevel(effect.getType());
 
                     if (level.ordinal() <= spellType.getLevel().ordinal())
-                        player.removePotionEffect(effect.getType());
+                        caster.removePotionEffect(effect.getType());
 
                     targetsRemaining = targetsRemaining - 1;
                     if (targetsRemaining <= 0)
@@ -162,7 +162,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
                 item.remove();
 
                 // drop the new item in world
-                player.getWorld().dropItem(location, disenchantedItemStack);
+                caster.getWorld().dropItem(location, disenchantedItemStack);
             }
 
             kill();

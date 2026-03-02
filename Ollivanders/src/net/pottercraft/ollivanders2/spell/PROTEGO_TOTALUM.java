@@ -61,6 +61,6 @@ public final class PROTEGO_TOTALUM extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM(p, caster.getUniqueId(), location, radius, duration);
     }
 }

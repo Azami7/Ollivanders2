@@ -72,7 +72,7 @@ public final class DELETRIUS extends O2Spell {
 
         List<Item> items = getNearbyItems(defaultRadius);
 
-        if (items.size() > 0) {
+        if (items.isEmpty()) {
             // handle success chance
             int successRate = (int) (usesModifier / 4);
             if (successRate < Math.abs(Ollivanders2Common.random.nextInt() % 100)) {

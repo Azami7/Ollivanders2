@@ -168,7 +168,7 @@ public final class AGUAMENTI extends BlockTransfiguration {
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
-            common.printDebugMessage("Aguamenti.canTranfigure: " + player.getName() + " failed success check in canTransfigure()", null, null, false);
+            common.printDebugMessage("Aguamenti.canTranfigure: " + caster.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
         else if (Ollivanders2API.getBlocks().isTemporarilyChangedBlock(block)) {

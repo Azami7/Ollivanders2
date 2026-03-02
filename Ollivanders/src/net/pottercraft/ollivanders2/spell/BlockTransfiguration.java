@@ -260,7 +260,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
-            common.printDebugMessage("BlockTransfigure.canTranfigure: " + player.getName() + " failed success check in canTransfigure()", null, null, false);
+            common.printDebugMessage("BlockTransfigure.canTranfigure: " + caster.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
 

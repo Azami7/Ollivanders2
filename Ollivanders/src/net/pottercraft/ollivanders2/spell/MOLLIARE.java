@@ -60,6 +60,6 @@ public final class MOLLIARE extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.MOLLIARE(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.MOLLIARE(p, caster.getUniqueId(), location, radius, duration);
     }
 }

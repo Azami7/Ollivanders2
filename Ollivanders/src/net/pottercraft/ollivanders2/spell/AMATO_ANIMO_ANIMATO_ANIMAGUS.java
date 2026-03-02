@@ -82,20 +82,18 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
             return;
         }
 
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-
-        if (o2p == null) {
+        if (casterO2P == null) {
             kill();
             return;
         }
 
-        if (o2p.isAnimagus()) {
+        if (casterO2P.isAnimagus()) {
             // If the player is already an animagus, the incantation changes them to and from their animal form.
-            common.printDebugMessage(player.getDisplayName() + " is an Animagus.", null, null, false);
-            transform(o2p);
+            common.printDebugMessage(caster.getDisplayName() + " is an Animagus.", null, null, false);
+            transform(casterO2P);
         }
         else {
-            common.printDebugMessage(player.getDisplayName() + " is not an Animagus.", null, null, false);
+            common.printDebugMessage(caster.getDisplayName() + " is not an Animagus.", null, null, false);
             setAnimagusIncantation();
         }
 
@@ -110,7 +108,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
         boolean success = false;
 
         if (Ollivanders2.useStrictAnimagusConditions) {
-            long curTime = player.getWorld().getTime();
+            long curTime = caster.getWorld().getTime();
             if ((curTime >= 23000 && curTime <= 24000) || (curTime >= 12000 && curTime <= 13000))
                 success = true;
         }
@@ -118,13 +116,13 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
             success = true;
 
         if (success) {
-            ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, false, player.getUniqueId());
+            ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, false, caster.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
+            caster.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
         }
         else
-            player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
+            caster.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
     }
 
     /**
@@ -160,16 +158,16 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
             successRate = 100;
 
         if (rand < successRate) {
-            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, true, player.getUniqueId());
+            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, true, caster.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
-            player.sendMessage(Ollivanders2.chatColor + "You feel very different.");
+            caster.sendMessage(Ollivanders2.chatColor + "You feel very different.");
         }
         else {
-            player.sendMessage(Ollivanders2.chatColor + "You feel a momentary change but it quickly fades.");
+            caster.sendMessage(Ollivanders2.chatColor + "You feel a momentary change but it quickly fades.");
         }
 
-        p.setO2Player(player, o2p);
+        p.setO2Player(caster, o2p);
     }
 
     /**
@@ -177,9 +175,9 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
      */
     @Override
     protected void setUsesModifier() {
-        usesModifier = p.getSpellCount(player, spellType);
+        usesModifier = p.getSpellCount(caster, spellType);
 
-        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL)) {
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(caster.getUniqueId(), O2EffectType.HIGHER_SKILL)) {
             usesModifier *= 2;
         }
     }

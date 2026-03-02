@@ -5,7 +5,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -70,6 +69,6 @@ public final class LUMOS_FERVENS extends StationarySpell {
      */
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.LUMOS_FERVENS(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.LUMOS_FERVENS(p, caster.getUniqueId(), location, radius, duration);
     }
 }

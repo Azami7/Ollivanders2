@@ -2,10 +2,8 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -101,11 +99,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     @Override
     void setDuration() {
         if (usesModifier >= 200) {
-            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-            if (o2p == null)
-                common.printDebugMessage("Null o2player in BlockToEntityTransfiguration.setDuration()", null, null, true);
-
-            if (!Ollivanders2.useYears || (o2p != null && o2p.getYear().getHighestLevelForYear().ordinal() >= this.spellType.getLevel().ordinal()))
+            if (!Ollivanders2.useYears || (casterO2P.getYear().getHighestLevelForYear().ordinal() >= this.spellType.getLevel().ordinal()))
                 permanent = true;
         }
         else {
@@ -137,10 +131,10 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
         if (!EntityCommon.isAttackDamageCause(cause))
             return;
 
-        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))
+        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(caster.getUniqueId()))
             // prevent the golem attacking its creator
             event.setCancelled(true);
-        else if (target.getUniqueId().equals(player.getUniqueId()) && transfiguredEntity instanceof LivingEntity)
+        else if (target.getUniqueId().equals(caster.getUniqueId()) && transfiguredEntity instanceof LivingEntity)
             // attack anyone who attacks the creator
             ((LivingEntity) transfiguredEntity).attack(attacker);
     }
@@ -161,7 +155,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
         if (target == null)
             return;
 
-        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))
+        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(caster.getUniqueId()))
             event.setCancelled(true);
     }
 }

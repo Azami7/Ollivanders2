@@ -66,6 +66,6 @@ public final class REPELLO_MUGGLETON extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON(p, caster.getUniqueId(), location, radius, duration);
     }
 }

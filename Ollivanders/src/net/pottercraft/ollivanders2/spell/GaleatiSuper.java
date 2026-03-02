@@ -51,7 +51,7 @@ public abstract class GaleatiSuper extends O2Spell {
         List<Player> livingEntities = getNearbyPlayers(defaultRadius);
 
         for (Player target : livingEntities) {
-            if (target.getUniqueId().equals(player.getUniqueId()))
+            if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             EntityEquipment entityEquipment = target.getEquipment();

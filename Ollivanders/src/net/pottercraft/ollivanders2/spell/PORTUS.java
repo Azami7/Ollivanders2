@@ -4,10 +4,7 @@ import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,15 +13,32 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Creates a port key.
- * <p>
- * {@link net.pottercraft.ollivanders2.item.enchantment.PORTUS}
+ * PORTUS - The Portkey spell.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Portkey_Spell">https://harrypotter.fandom.com/wiki/Portkey_Spell</a>
+ * <p>Enchants an item to become a portkey that transports anyone who picks it up to the caster's
+ * current location. The destination coordinates are stored in the enchantment arguments. When a
+ * player picks up a PORTUS-enchanted item, the enchanted items system triggers the portkey effect,
+ * teleporting the player and nearby entities to the destination.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ *
+ * <ul>
+ * <li>Mode: Held-item (noProjectile = true) — enchants off-hand item instead of projectile target</li>
+ * <li>Enchantment argument: Destination coordinates (world name and x, y, z)</li>
+ * <li>Effect: Teleports holder and nearby entities to stored destination (see {@link net.pottercraft.ollivanders2.item.enchantment.PORTUS})</li>
+ * <li>Classification: Charms</li>
+ * <li>Target item type: Any (no restrictions)</li>
+ * </ul>
+ *
+ * @see net.pottercraft.ollivanders2.item.enchantment.PORTUS the enchantment that powers this spell
+ * @see <a href="https://harrypotter.fandom.com/wiki/Portkey_Spell">Harry Potter Wiki - Portkey Spell</a>
  */
 public final class PORTUS extends ItemEnchant {
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Constructor for generating spell information.
+     *
+     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
+     * Use the full constructor with player and wand parameters instead.</p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -43,15 +57,19 @@ public final class PORTUS extends ItemEnchant {
                 + "and hold the item you wish to enchant in your off-hand, then say the spell and flick your wand. "
                 + "You can leave this item in world and when the enchanted item is picked up, the holder and the entities "
                 + "around them will be teleported to the location. Anti-apparation spells in the location will "
-                + "will prevent a portkey being created for a location or from an existing portkey working.";
+                + "prevent a portkey being created for a location or from an existing portkey working.";
     }
 
     /**
-     * Constructor. This is here just in case some reflection tries to create this spell.
+     * Constructor for casting the PORTUS portkey spell.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Initializes the spell with the player and wand information needed to cast and track the spell.
+     * PORTUS uses held-item mode (noProjectile = true), enchanting the item held in the caster's
+     * off-hand. The caster's current location is stored as the portkey destination.</p>
+     *
+     * @param plugin    the Ollivanders2 plugin
+     * @param player    the player casting this spell
+     * @param rightWand the wand strength/correctness factor
      */
     public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -59,45 +77,31 @@ public final class PORTUS extends ItemEnchant {
         spellType = O2SpellType.PORTUS;
         branch = O2MagicBranch.CHARMS;
         enchantmentType = ItemEnchantmentType.PORTUS;
-        enchantsHeldItem = true;
+        noProjectile = true;
 
         initSpell();
     }
 
     /**
-     * Make the location where the player is
-     */
-    @Override
-    void doInitSpell() {
-        super.doInitSpell();
-
-        if (args == null || args.isEmpty()) {
-            Location loc = player.getLocation();
-
-            World world = loc.getWorld();
-            if (world == null) {
-                kill();
-                return;
-            }
-
-            args = world.getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ();
-        }
-    }
-
-    /**
-     * Can this item be enchanted by this spell? Make sure this location is not protected by apparate limits
+     * Store the portkey destination coordinates as enchantment arguments.
      *
-     * @param itemStack the item to check
-     * @return true if it can be enchanted, false otherwise
+     * <p>Extracts the caster's current location at enchantment time and formats it as
+     * "world_name x y z" for storage. This destination is used when the portkey is activated
+     * to teleport the holder to the specified location.</p>
+     *
+     * @param portkey the item being enchanted as a portkey
      */
     @Override
-    protected boolean canBeEnchanted(@NotNull ItemStack itemStack) {
-        // is this location inside a nullum apparebit
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
-            if (stationarySpell.getSpellType() == O2StationarySpellType.NULLUM_APPAREBIT)
-                return false;
+    protected void createEnchantmentArgs(ItemStack portkey) {
+        Location portkeyDestination = caster.getLocation();
+
+        World world = portkeyDestination.getWorld();
+        if (world == null) {
+            common.printLogMessage("PORTUS.createEnchantmentArgs: null world", null, null, true);
+            kill();
+            return;
         }
 
-        return super.canBeEnchanted(itemStack);
+        enchantmentArgs = world.getName() + " " + portkeyDestination.getX() + " " + portkeyDestination.getY() + " " + portkeyDestination.getZ();
     }
 }

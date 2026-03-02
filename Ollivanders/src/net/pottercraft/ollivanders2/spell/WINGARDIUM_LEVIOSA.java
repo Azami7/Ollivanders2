@@ -173,11 +173,11 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
                         }
                     }
                 }
-                length = player.getEyeLocation().distance(location);
+                length = caster.getEyeLocation().distance(location);
             }
         }
         else {
-            if (player.isSneaking()) {
+            if (caster.isSneaking()) {
                 List<Location> locList2 = new ArrayList<>(locList);
                 for (Block block : blockList) {
                     if (block.getType() == Material.AIR) {
@@ -190,8 +190,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
                 }
                 blockList.clear();
                 for (Location loc : locList) {
-                    Vector direction = player.getEyeLocation().getDirection().multiply(length);
-                    Location center = player.getEyeLocation().add(direction);
+                    Vector direction = caster.getEyeLocation().getDirection().multiply(length);
+                    Location center = caster.getEyeLocation().add(direction);
                     location = center;
                     Location toLoc = center.clone().add(loc);
                     if (toLoc.getBlock().getType() == Material.AIR) {
@@ -204,8 +204,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
                 for (Block block : blockList) {
                     block.setType(Material.AIR);
                 }
-                Vector direction = player.getEyeLocation().getDirection().multiply(length);
-                Location center = player.getEyeLocation().add(direction);
+                Vector direction = caster.getEyeLocation().getDirection().multiply(length);
+                Location center = caster.getEyeLocation().add(direction);
                 Vector moveVec = center.toVector().subtract(location.toVector());
                 for (Location loc : locList) {
                     Location toLoc = center.clone().add(loc);

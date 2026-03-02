@@ -111,7 +111,7 @@ public final class LEGILIMENS extends O2Spell {
 
         for (Player target : getNearbyPlayers(radius)) {
             common.printDebugMessage("LEGILIMENS.checkEffect: checking " + target.getName(), null, null, false);
-            if (target.getUniqueId().equals(player.getUniqueId())) {
+            if (target.getUniqueId().equals(caster.getUniqueId())) {
                 continue;
             }
 
@@ -186,7 +186,7 @@ public final class LEGILIMENS extends O2Spell {
         O2Player o2p = p.getO2Player(target);
 
         common.printDebugMessage("LEGILIMENS.readMind: usesModifier = " + usesModifier, null, null, false);
-        player.sendMessage(Ollivanders2.chatColor + "You search in to " + o2p.getPlayerName() + "'s mind ...");
+        caster.sendMessage(Ollivanders2.chatColor + "You search in to " + o2p.getPlayerName() + "'s mind ...");
 
         // this will dictate all the information the caster can detect
         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
@@ -199,12 +199,12 @@ public final class LEGILIMENS extends O2Spell {
         // muggle
         //
         if (o2p.isMuggle())
-            player.sendMessage(Ollivanders2.chatColor + target.getName() + " is a muggle.");
+            caster.sendMessage(Ollivanders2.chatColor + target.getName() + " is a muggle.");
         //
         // basic wizard information
         //
         else {
-            player.sendMessage(Ollivanders2.chatColor + target.getName() + " is a witch/wizard.");
+            caster.sendMessage(Ollivanders2.chatColor + target.getName() + " is a witch/wizard.");
 
             // detect house and year
             if (O2Houses.useHouses) {
@@ -226,15 +226,15 @@ public final class LEGILIMENS extends O2Spell {
                 else
                     message.append(" has not started school yet.");
 
-                player.sendMessage(message.toString());
+                caster.sendMessage(message.toString());
             }
 
             // 50% chance detect destined wand
             if (rand >= 50) {
                 if (o2p.foundWand())
-                    player.sendMessage(Ollivanders2.chatColor + " uses a " + o2p.getDestinedWandWood() + " and " + o2p.getDestinedWandCore() + " wand.");
+                    caster.sendMessage(Ollivanders2.chatColor + " uses a " + o2p.getDestinedWandWood() + " and " + o2p.getDestinedWandCore() + " wand.");
                 else
-                    player.sendMessage(Ollivanders2.chatColor + " has not gotten a wand.");
+                    caster.sendMessage(Ollivanders2.chatColor + " has not gotten a wand.");
             }
         }
 
@@ -244,7 +244,7 @@ public final class LEGILIMENS extends O2Spell {
             if (rand >= 50) {
                 O2SpellType lastSpell = o2p.getLastSpell();
                 if (lastSpell != null)
-                    player.sendMessage(Ollivanders2.chatColor + " last cast " + lastSpell.getSpellName() + ".");
+                    caster.sendMessage(Ollivanders2.chatColor + " last cast " + lastSpell.getSpellName() + ".");
             }
 
             if (usesModifier > (int)(O2Spell.spellMasteryLevel/3)) { // 33% mastery level
@@ -253,7 +253,7 @@ public final class LEGILIMENS extends O2Spell {
                     if (Ollivanders2.enableNonVerbalSpellCasting) {
                         O2SpellType masteredSpell = o2p.getMasterSpell();
                         if (masteredSpell != null)
-                            player.sendMessage(Ollivanders2.chatColor + " can non-verbally cast the spell " + masteredSpell.getSpellName() + ".");
+                            caster.sendMessage(Ollivanders2.chatColor + " can non-verbally cast the spell " + masteredSpell.getSpellName() + ".");
                     }
                 }
 
@@ -262,18 +262,18 @@ public final class LEGILIMENS extends O2Spell {
                     if (rand >= 40) {
                         String affectedBy = Ollivanders2API.getPlayers().playerEffects.detectEffectWithLegilimens(o2p.getID());
                         if (affectedBy != null)
-                            player.sendMessage(Ollivanders2.chatColor + " " + affectedBy + ".");
+                            caster.sendMessage(Ollivanders2.chatColor + " " + affectedBy + ".");
                     }
 
                     if (usesModifier >= O2Spell.spellMasteryLevel) { // mastery level
                         // 10% chance detect is animagus
                         if (rand >= 90) {
                             if (o2p.isAnimagus()) {
-                                player.sendMessage(Ollivanders2.chatColor + " is an animagus.");
+                                caster.sendMessage(Ollivanders2.chatColor + " is an animagus.");
 
                                 EntityType animagusForm = o2p.getAnimagusForm();
                                 if (animagusForm != null)
-                                    player.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + Ollivanders2Common.enumRecode(animagusForm.toString()) + ".");
+                                    caster.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + Ollivanders2Common.enumRecode(animagusForm.toString()) + ".");
                             }
                         }
                     }

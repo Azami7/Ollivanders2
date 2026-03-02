@@ -95,7 +95,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell {
             // is inside the radius of this spell, then target it
             // and the target spell is at or lower than this spell in level
             if (!spellBlockedList.contains(spell.getSpellType())
-                    && spell.getCasterID().equals(player.getUniqueId())
+                    && spell.getCasterID().equals(caster.getUniqueId())
                     && spell.getSpellType().getLevel().ordinal() <= this.spellType.getLevel().ordinal()) {
                 targetSpell = spell;
                 break;

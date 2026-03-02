@@ -68,6 +68,6 @@ public final class PROTEGO_MAXIMA extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, caster.getUniqueId(), location, radius, duration);
     }
 }

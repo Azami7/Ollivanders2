@@ -82,7 +82,7 @@ public class REPLETUS extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        ItemStack itemStack = player.getInventory().getItemInOffHand();
+        ItemStack itemStack = caster.getInventory().getItemInOffHand();
 
         ItemStack filled = null;
 
@@ -99,7 +99,7 @@ public class REPLETUS extends O2Spell {
         }
 
         if (filled != null) {
-            player.getInventory().setItemInOffHand(filled);
+            caster.getInventory().setItemInOffHand(filled);
             World world = location.getWorld();
             if (world != null)
                 world.playSound(location, Sound.ITEM_BOTTLE_FILL, 1, 0);

@@ -54,6 +54,6 @@ public final class NULLUM_APPAREBIT extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT(p, caster.getUniqueId(), location, radius, duration);
     }
 }

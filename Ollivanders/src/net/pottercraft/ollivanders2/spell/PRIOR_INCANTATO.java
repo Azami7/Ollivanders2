@@ -68,7 +68,7 @@ public class PRIOR_INCANTATO extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId().equals(player.getUniqueId()))
+            if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
@@ -76,7 +76,7 @@ public class PRIOR_INCANTATO extends O2Spell {
             if (usesModifier > rand)
                 doPriorIncantato((Player) target);
             else
-                player.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand resists your spell.");
+                caster.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand resists your spell.");
 
             kill();
             return;
@@ -98,7 +98,7 @@ public class PRIOR_INCANTATO extends O2Spell {
         O2SpellType prior = o2p.getPriorIncantatem();
 
         if (prior == null) {
-            player.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand has not cast a spell.");
+            caster.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand has not cast a spell.");
 
             return;
         }

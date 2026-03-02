@@ -109,13 +109,13 @@ public abstract class AddO2Effect extends O2Spell {
     @Override
     protected void doCheckEffect() {
         if (targetSelf) {
-            addEffectsToTarget(player);
+            addEffectsToTarget(caster);
             kill();
             return;
         }
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if ((target.getUniqueId().equals(player.getUniqueId())))
+            if ((target.getUniqueId().equals(caster.getUniqueId())))
                 continue;
 
             addEffectsToTarget(target);

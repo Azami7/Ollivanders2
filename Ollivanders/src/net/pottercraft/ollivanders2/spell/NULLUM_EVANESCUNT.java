@@ -56,6 +56,6 @@ public final class NULLUM_EVANESCUNT extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT(p, caster.getUniqueId(), location, radius, duration);
     }
 }

@@ -79,7 +79,7 @@ public final class FIANTO_DURI extends O2Spell {
         for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             // if the stationary spell type is not in the blocked list for this spell
             // was cast by the caster of this spell
-            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.getCasterID().equals(player.getUniqueId()))
+            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.getCasterID().equals(caster.getUniqueId()))
                 shieldSpells.add(stationarySpell);
         }
 

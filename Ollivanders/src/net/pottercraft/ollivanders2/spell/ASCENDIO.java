@@ -78,6 +78,6 @@ public final class ASCENDIO extends Knockback {
      * @return true if it can target the entity, false otherwise
      */
     boolean canTarget(Entity entity) {
-        return entity.getUniqueId().equals(player.getUniqueId());
+        return entity.getUniqueId().equals(caster.getUniqueId());
     }
 }

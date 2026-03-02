@@ -81,7 +81,7 @@ public abstract class RemovePotionEffect extends O2Spell {
             Ollivanders2Common.flair(location, (int) radius, 10);
 
         if (targetSelf) {
-            removePotionEffects(player);
+            removePotionEffects(caster);
             numberOfTargets = numberOfTargets - 1;
         }
 
@@ -92,7 +92,7 @@ public abstract class RemovePotionEffect extends O2Spell {
                 return;
             }
 
-            if (livingEntity.getUniqueId().equals(player.getUniqueId())) // already handled self above
+            if (livingEntity.getUniqueId().equals(caster.getUniqueId())) // already handled self above
                 continue;
 
             removePotionEffects(livingEntity);
