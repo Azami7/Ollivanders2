@@ -7,7 +7,9 @@ import net.pottercraft.ollivanders2.item.O2Items;
 import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,7 @@ import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +52,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * </ul>
  * </p>
  *
- * @author Test Suite
  * @see O2Items
  * @see O2ItemType
  * @see Ollivanders2API
@@ -591,6 +593,27 @@ public class O2ItemsTest {
         renamedItem.setItemMeta(meta);
         itemType = Ollivanders2API.getItems().getItemTypeByItemStack(renamedItem);
         assertNull(itemType, "getItemTypeByItemStack() did not return null for renamed vanilla item");
+    }
+
+    /**
+     * Test that custom recipes were loaded
+     */
+    @Test
+    void shapedRecipeTest() {
+        HashMap<O2ItemType, NamespacedKey> recipeKeys = Ollivanders2API.getItems().getRecipeKeys();
+        assertFalse(recipeKeys.isEmpty(), "no recipe keys");
+
+        for (O2ItemType itemType : recipeKeys.keySet()) {
+            Recipe recipe = mockServer.getRecipe(recipeKeys.get(itemType));
+            assertNotNull(recipe, "did not find recipe for " + itemType.getName());
+
+            ItemStack itemStack = itemType.getItem(1);
+            assertNotNull(itemStack);
+            ItemStack recipeResult = recipe.getResult();
+
+            assertEquals(itemStack.getType(), recipeResult.getType(), "unexpected item type for recipe");
+            assertEquals(itemStack.getItemMeta().displayName(), recipeResult.getItemMeta().displayName(), "unexpected item type for recipe");
+        }
     }
 
     /**
