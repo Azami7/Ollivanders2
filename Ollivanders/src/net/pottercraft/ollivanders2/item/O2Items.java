@@ -1,12 +1,14 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
 import net.pottercraft.ollivanders2.item.wand.O2Wands;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -19,7 +21,14 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Manager for all items in Ollivanders
+ * Manager for all custom items in Ollivanders2.
+ *
+ * <p>O2Items is responsible for managing all custom items in the Ollivanders2 plugin, including
+ * basic items, enchanted items, and wands. It provides methods to retrieve items by type, name,
+ * or name prefix, manage item metadata, and handle custom crafting recipes. The manager also
+ * coordinates with the EnchantedItems system for item enchantment functionality.</p>
+ *
+ * @author Azami7
  */
 public class O2Items {
     /**
@@ -31,6 +40,11 @@ public class O2Items {
      * A map of all items in the game by type
      */
     final private HashMap<O2ItemType, O2Item> O2ItemMap = new HashMap<>();
+
+    /**
+     * A list of the recipe namespacedKeys
+     */
+    final private HashMap<O2ItemType, NamespacedKey> recipeKeys = new HashMap<>();
 
     /**
      * The enchanted items manager - handles all enchantments on items
@@ -66,12 +80,58 @@ public class O2Items {
      * Load all items and enchantments
      */
     public void onEnable() {
+        Ollivanders2API.common.printLogMessage("Adding custom items", null, null, false);
+
         for (O2ItemType itemType : O2ItemType.values()) {
             O2Item item = new O2Item(p, itemType);
             O2ItemMap.put(item.getType(), item);
         }
 
         enchantedItems.onEnable();
+
+        // add custom recipes
+        addCustomRecipes();
+    }
+
+    /**
+     * Add custom item recipes
+     */
+    private void addCustomRecipes() {
+        Ollivanders2API.common.printLogMessage("Adding custom item recipes", null, null, false);
+
+        //
+        // BASIC_BROOM
+        //
+        ItemStack broom = O2ItemType.BASIC_BROOM.getItem(1);
+        if (broom != null) {
+            NamespacedKey broomKey = new NamespacedKey(p, "basicBroomRecipe_key");
+            ShapedRecipe broomRecipe = new ShapedRecipe(broomKey, broom);
+            broomRecipe.shape("**S", "*S*", "H**"); // shape must be set before ingredients are set
+            broomRecipe.setIngredient('S', Material.STICK);
+            broomRecipe.setIngredient('H', Material.HAY_BLOCK);
+            p.getServer().addRecipe(broomRecipe);
+            recipeKeys.put(O2ItemType.BASIC_BROOM, broomKey);
+        }
+        else {
+            Ollivanders2API.common.printLogMessage("O2Items.addCustomRecipes: BASIC_BROOM.getItem() returned null, recipe not added", null, null, true);
+        }
+
+        //
+        // FLOO_POWDER
+        //
+        ItemStack flooPower = O2ItemType.FLOO_POWDER.getItem(1);
+        if (flooPower != null) {
+            NamespacedKey flooKey = new NamespacedKey(p, "flooPowderRecipe_key");
+            ShapedRecipe flooRecipe = new ShapedRecipe(flooKey, flooPower);
+            flooRecipe.shape("*O*", "ORO", "*O*"); // shape must be set before ingredients are set
+            flooRecipe.setIngredient('R', Material.REDSTONE);
+            flooRecipe.setIngredient('O', Material.OBSIDIAN);
+            p.getServer().addRecipe(flooRecipe);
+            recipeKeys.put(O2ItemType.FLOO_POWDER, flooKey);
+        }
+        else {
+            Ollivanders2API.common.printLogMessage("O2Items.addCustomRecipes: FLOO_POWDER.getItem() returned null, recipe not added", null, null, true);
+        }
     }
 
     /**
@@ -81,7 +141,8 @@ public class O2Items {
      * no cleanup on disable because item data is read-only and loaded from configuration on
      * startup. No persistent state needs to be saved.</p>
      */
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     /**
      * Get an item by type
@@ -264,5 +325,21 @@ public class O2Items {
      */
     public O2Wands getWands() {
         return wands;
+    }
+
+    /**
+     * Get a copy of the recipe keys map.
+     *
+     * <p>Returns a new HashMap containing all custom item recipe NamespacedKeys indexed by
+     * their corresponding O2ItemType. The returned map is a copy, so modifications do not
+     * affect the internal state.</p>
+     *
+     * @return a copy of the item type to recipe key mapping
+     */
+    public HashMap<O2ItemType, NamespacedKey> getRecipeKeys() {
+        HashMap<O2ItemType, NamespacedKey> keys = new HashMap<>();
+        keys.putAll(recipeKeys);
+
+        return keys;
     }
 }

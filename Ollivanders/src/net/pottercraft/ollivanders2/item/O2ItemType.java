@@ -18,7 +18,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * All custom special items in Ollivanders2
+ * Enumeration of all custom items in Ollivanders2.
+ *
+ * <p>O2ItemType defines all special custom items available in the Ollivanders2 plugin, including
+ * potion ingredients, wand cores, magical artifacts, and enchanted items. Each item type specifies
+ * its base Minecraft material, display name, optional lore, color variant (for potions), and
+ * optional item enchantment. The enum provides methods to create ItemStacks, look up items by name,
+ * and verify if an ItemStack matches a specific item type via NBT metadata.</p>
+ *
+ * @author Azami7
  */
 public enum O2ItemType {
     /**
@@ -152,7 +160,7 @@ public enum O2ItemType {
     /**
      * floo powder
      */
-    FLOO_POWDER(Material.REDSTONE, null, "Floo Powder", "Glittery, silver powder", null),
+    FLOO_POWDER(Material.REDSTONE, null, "Floo Powder", "Glittery, red powder", null),
     /**
      * potion ingredient
      */
