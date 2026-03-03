@@ -444,11 +444,10 @@ public enum O2SpellType {
      * {@link LUMOS_FERVENS}
      */
     LUMOS_FERVENS(LUMOS_FERVENS.class, MagicLevel.OWL),
-    /*
     /**
      * {@link LUMOS_MAXIMA}
      */
-    //LUMOS_MAXIMA(LUMOS_MAXIMA.class, MagicLevel.OWL),
+    LUMOS_MAXIMA(LUMOS_MAXIMA.class, MagicLevel.NEWT),
     /**
      * {@link LUMOS_SOLEM}
      */

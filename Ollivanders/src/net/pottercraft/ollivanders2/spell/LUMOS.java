@@ -9,25 +9,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Gives night vision for an amount of time depending on the player's spell level.
+ * The Wand-Lighting Charm that grants night vision to the caster and nearby allies.
  *
- * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm">https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm</a>
+ * <p>Lumos is an instant-radius charm that applies Night Vision to the caster and all targets
+ * within the calculated effect radius. The effect duration depends on the caster's spell level,
+ * with a minimum duration of 30 seconds. The effect radius scales with spell experience and
+ * ranges from 5 to 20 blocks.</p>
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm">Wand-Lighting Charm</a>
  */
-public final class LUMOS extends AddPotionEffectInRadius {
-    /**
-     * the min radius of players affected by this spell
-     */
-    public static int minRadius = 5;
+public class LUMOS extends AddPotionEffectInRadius {
+    final static int minEffectRadiusConfig = 5;
+    final static int maxEffectRadiusConfig = 20;
+    private final static int minDurationInSecondsConfig = 30;
 
     /**
-     * the max radius of players affected by this spell
-     */
-    public static int maxRadius = 20;
-
-    /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text.
+     *
+     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -40,15 +39,18 @@ public final class LUMOS extends AddPotionEffectInRadius {
         flavorText = new ArrayList<>() {{
             add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
             add("The Wand-Lighting Charm");
-            add("\"Ron, where are you? Oh this is stupid - lumos!\"  She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
-            add("The Wand-Lighting Charm is simple, but requires concentration.  Take care not to accidentally set your wand alight as damage of this kind can be permanent.");
+            add("\"Ron, where are you? Oh this is stupid - lumos!\" She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
+            add("The Wand-Lighting Charm is simple, but requires concentration. Take care not to accidentally set your wand alight as damage of this kind can be permanent.");
         }};
 
-        text = "Gives night vision.";
+        text = "Gives night vision to all the players in a radius.";
     }
 
     /**
-     * Constructor.
+     * Constructor for casting the spell.
+     *
+     * <p>Applies Night Vision effect to the caster and nearby entities within the effect radius.
+     * Configures the spell with radius of 5-20 blocks and minimum duration of 30 seconds.</p>
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -61,25 +63,13 @@ public final class LUMOS extends AddPotionEffectInRadius {
         branch = O2MagicBranch.CHARMS;
 
         effectTypes.add(PotionEffectType.NIGHT_VISION);
-        amplifier = 1;
-        minDurationInSeconds = 30;
+        amplifier = 0; // Night Vision I
+
+        minDurationInSeconds = minDurationInSecondsConfig;
+        minEffectRadius = minEffectRadiusConfig;
+        maxEffectRadius = maxEffectRadiusConfig;
         targetSelf = true;
 
         initSpell();
-    }
-
-    @Override
-    void doInitSpell() {
-        durationInSeconds = (int) usesModifier;
-        if (durationInSeconds < minDurationInSeconds)
-            durationInSeconds = minDurationInSeconds;
-        else if (durationInSeconds > maxDurationInSeconds)
-            durationInSeconds = maxDurationInSeconds;
-
-        radius = ((int) usesModifier) / 10;
-        if (radius < minRadius)
-            radius = minRadius;
-        else if (radius > maxRadius)
-            radius = maxRadius;
     }
 }

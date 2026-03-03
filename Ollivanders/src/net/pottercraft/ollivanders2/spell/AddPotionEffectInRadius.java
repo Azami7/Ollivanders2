@@ -5,18 +5,17 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spells that add a potion effect to all targets within a radius of the caster - not a spell projectile
+ * Base class for instant-radius potion effect spells.
  *
- * @author Azami7
+ * <p>These spells apply potion effects to all targets within a radius of the caster without
+ * using a projectile. The spell fires immediately and affects multiple targets based on the
+ * configured radius and target filtering settings.</p>
  */
 public abstract class AddPotionEffectInRadius extends AddPotionEffect {
     /**
-     * Radius of the spell from the caster.
-     */
-    int radius = 5;
-
-    /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text.
+     *
+     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -25,7 +24,10 @@ public abstract class AddPotionEffectInRadius extends AddPotionEffect {
     }
 
     /**
-     * Constructor.
+     * Constructor for casting the spell.
+     *
+     * <p>Configures the spell as an instant radius effect with no projectile. All eligible
+     * targets within the calculated radius are affected.</p>
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -34,17 +36,7 @@ public abstract class AddPotionEffectInRadius extends AddPotionEffect {
     public AddPotionEffectInRadius(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        durationInSeconds = minDurationInSeconds;
-    }
-
-    /**
-     * If a target player is within the radius of the caster, add the potion effect to the player.
-     */
-    @Override
-    public void checkEffect() {
-        if (isSpellAllowed())
-            affectRadius(radius, true);
-
-        kill();
+        noProjectile = true;
+        affectSingleTarget = false;
     }
 }
