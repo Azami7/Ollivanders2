@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm">https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm">https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm</a>
  */
 public final class NOX extends RemovePotionEffectInRadius {
     /**
@@ -61,9 +61,9 @@ public final class NOX extends RemovePotionEffectInRadius {
         // use the same min and max radius and Lumos
 
         radius = ((int) usesModifier) / 10;
-        if (radius < LUMOS.minRadius)
-            radius = LUMOS.minRadius;
-        else if (radius > LUMOS.maxRadius)
-            radius = LUMOS.maxRadius;
+        if (radius < LUMOS.minEffectRadiusConfig)
+            radius = LUMOS.minEffectRadiusConfig;
+        else if (radius > LUMOS.maxEffectRadiusConfig)
+            radius = LUMOS.maxEffectRadiusConfig;
     }
 }
