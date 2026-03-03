@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Fancier version of VERDIMILLIOUS
  */
-public class VERDIMILLIOUS_DUO extends SparksBase {
+public class VERDIMILLIOUS_DUO extends Sparks {
     /**
      * The cursed items the spell found
      */

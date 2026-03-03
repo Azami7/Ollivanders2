@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.21
  */
-public final class VERDIMILLIOUS extends SparksBase {
+public final class VERDIMILLIOUS extends Sparks {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *

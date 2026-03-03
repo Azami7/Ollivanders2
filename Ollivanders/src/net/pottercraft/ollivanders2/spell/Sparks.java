@@ -17,7 +17,7 @@ import java.util.List;
  * @author Azami7
  * @since 2.21
  */
-public abstract class SparksBase extends O2Spell {
+public abstract class Sparks extends O2Spell {
     /**
      * modifier on damage based on this spell's power, example if usesModifier is 200 (max) and damageModifier is 0.25,
      * damage = 0.25 (200/10) = 5, which would kill most small passive mobs like rabbits or fish
@@ -39,7 +39,7 @@ public abstract class SparksBase extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public SparksBase(Ollivanders2 plugin) {
+    public Sparks(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -52,7 +52,7 @@ public abstract class SparksBase extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public SparksBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public Sparks(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         moveEffectData = Material.GLASS;

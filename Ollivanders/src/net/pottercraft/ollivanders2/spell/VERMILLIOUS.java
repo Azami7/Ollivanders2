@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.21
  */
-public class VERMILLIOUS extends SparksBase {
+public class VERMILLIOUS extends Sparks {
     /**
      * Default constructor for use in generating spell book text.  Do not use to cast the spell.
      *
