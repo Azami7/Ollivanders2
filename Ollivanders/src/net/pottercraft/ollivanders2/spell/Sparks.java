@@ -149,7 +149,7 @@ public abstract class Sparks extends O2Spell {
      *
      * @param entity the entity to affect
      */
-    void doOtherEffects(LivingEntity entity){}
+    void doOtherEffects(@NotNull LivingEntity entity){}
 
     /**
      * Checks if this spell damages entities.

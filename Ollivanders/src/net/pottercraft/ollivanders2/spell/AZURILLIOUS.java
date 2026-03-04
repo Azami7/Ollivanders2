@@ -83,7 +83,7 @@ public class AZURILLIOUS extends Sparks {
      * @param target the entity that was hit by the spell
      */
     @Override
-    void doOtherEffects(LivingEntity target) {
+    void doOtherEffects(@NotNull LivingEntity target) {
         World world = target.getWorld();
         Location loc = target.getLocation();
 

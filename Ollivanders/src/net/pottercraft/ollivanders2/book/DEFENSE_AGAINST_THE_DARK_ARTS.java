@@ -32,7 +32,6 @@ public class DEFENSE_AGAINST_THE_DARK_ARTS extends O2Book {
 
         bookType = O2BookType.DEFENSE_AGAINST_THE_DARK_ARTS;
 
-        spells.add(O2SpellType.ASCENDIO);
         spells.add(O2SpellType.MORTUOS_SUSCITATE);
         // todo counter to kill zombies
         spells.add(O2SpellType.INCENDIO_TRIA);

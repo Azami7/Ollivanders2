@@ -1,10 +1,13 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public final class ASCENDIO extends Knockback {
     /**
      * The max distance
      */
-    public static double maxDistanceConfig = 3;
+    public static double maxDistanceConfig = 10;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -42,8 +45,9 @@ public final class ASCENDIO extends Knockback {
         branch = O2MagicBranch.CHARMS;
 
         flavorText = new ArrayList<>() {{
-            add("The Climbing Charm");
+            add("The Ascension Charm");
             add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
+            add("Newt points his wand at the ceiling. \"Ascendio!\" The towers rise once again from the floor, lifting Newt and the Zouwu high up into the air.");
         }};
 
         text = "Propels the caster into the air or to the surface of the water, if underwater.";
@@ -79,5 +83,18 @@ public final class ASCENDIO extends Knockback {
      */
     boolean canTarget(Entity entity) {
         return entity.getUniqueId().equals(caster.getUniqueId());
+    }
+
+    /**
+     * Add slow falling to the target, which should be the caster, so that they do not damage themselves when they come down.
+     *
+     * @param target the entity to affect
+     */
+    void addOtherEffects(@NotNull Entity target) {
+        if (target.getUniqueId() != caster.getUniqueId()) // we should not be affecting other entities
+            return;
+
+        if (!caster.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Ollivanders2Common.ticksPerSecond * 30, 0));
     }
 }
