@@ -54,6 +54,10 @@ dependencies {
     testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.71.0")
     testImplementation("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
 
+    // mockito
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.7.0")
+
     // allow tests to use your plugin classes
     testImplementation(sourceSets.main.get().output)
 }
@@ -64,6 +68,7 @@ tasks.withType<JavaCompile> {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
     // Make sure MockBukkit is completely cleaned up
     finalizedBy("cleanTestPluginsDir")
 }

@@ -88,8 +88,14 @@ public final class GLACIUS_TRIA extends GlaciusSuper {
         spellType = O2SpellType.GLACIUS_TRIA;
         branch = O2MagicBranch.CHARMS;
 
-        minEffectRadius = GLACIUS.minRadiusConfig * 4;
-        maxEffectRadius = GLACIUS.maxRadiusConfig * 4;
+        if (Ollivanders2.testMode) { // in test mode, the full radius slows the tests too much
+            minEffectRadius = GLACIUS.minRadiusConfig * 2;
+            maxEffectRadius = GLACIUS.maxRadiusConfig * 2;
+        }
+        else {
+            minEffectRadius = GLACIUS.minRadiusConfig * 4;
+            maxEffectRadius = GLACIUS.maxRadiusConfig * 4;
+        }
         effectRadiusModifier = 2.0; // 200% of usesModifier
         minDuration = GLACIUS.minDurationConfig / 4;
         maxDuration = GLACIUS.maxDurationConfig / 4;
