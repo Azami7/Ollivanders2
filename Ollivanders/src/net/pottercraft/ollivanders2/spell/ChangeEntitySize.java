@@ -9,11 +9,24 @@ import org.bukkit.entity.Slime;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Change the size of growing entity
+ * Abstract base class for spells that change the size of living entities.
+ *
+ * <p>This class provides the core logic for spells that grow or shrink entities within a
+ * target radius. Supports aging mechanics for Ageable creatures (baby/adult) and size changes
+ * for Slimes based on player skill level.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Target Detection: Scans nearby radius for living entities (configurable per subclass)</li>
+ * <li>Target Limit: Affects up to 10 entities per cast</li>
+ * <li>Radius Limit: Maximum 20 blocks</li>
+ * <li>Hostile Restrictions: Only affects hostile mobs if skill level exceeds 100</li>
+ * <li>Size Changes: Slimes scale by 1-2 blocks based on skill level; Ageable creatures toggle baby/adult</li>
+ * </ul>
  *
  * @author Azami7
  */
-public abstract class ChangeEntitySizeSuper extends O2Spell {
+public abstract class ChangeEntitySize extends O2Spell {
     /**
      * Max number of entities that can be targeted
      */
@@ -40,17 +53,17 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
     boolean growing;
 
     /**
-     * How much can this change a slimes size
+     * Maximum size change for Slimes per cast
      */
     static final int maxSlimeSizeChange = 2;
 
     /**
-     * How much can this change a slimes size
+     * Minimum Slime size (smallest possible)
      */
     static final int minSlimeSize = 1;
 
     /**
-     * How much can this change a slimes size
+     * Maximum Slime size (largest possible)
      */
     static final int maxSlimeSize = 3;
 
@@ -59,7 +72,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ChangeEntitySizeSuper(Ollivanders2 plugin) {
+    public ChangeEntitySize(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -70,12 +83,19 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ChangeEntitySizeSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public ChangeEntitySize(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
     /**
-     * Look for entities within the projectile range and change their size, if possible
+     * Scans for living entities within the effect radius and changes their size.
+     *
+     * <p>Each tick, this method searches for nearby living entities (up to the target limit)
+     * and attempts to change their size if they are Ageable (baby/adult toggle) or Slimes
+     * (size scaling). Respects WorldGuard entity harm restrictions and skips the caster.
+     * Hostile entities can only be affected if the caster's skill level exceeds 100.</p>
+     *
+     * <p>Terminates after affecting the target count or if the spell projectile hits a block.</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -111,8 +131,12 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
     }
 
     /**
+     * Changes the age state (baby/adult) of an Ageable entity.
      *
-     * @param entity
+     * <p>For hostile mobs, only applies the change if the caster's skill level exceeds 100.
+     * Non-hostile creatures (farm animals, pets) can always be aged.</p>
+     *
+     * @param entity the Ageable entity to change (baby to adult, or adult to baby)
      */
     private void changeEntityAge(@NotNull Ageable entity) {
         // only change hostile mob sizes when skill level is above 100
@@ -126,9 +150,12 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
     }
 
     /**
-     * Make the target slime smaller.
+     * Changes the size of a Slime entity based on spell direction and skill level.
      *
-     * @param slime the smile to reduce the size of
+     * <p>Size change is calculated as (usesModifier / 25) + 1, capped at maxSlimeSizeChange (2 blocks).
+     * The new size is bounded between minSlimeSize (1) and maxSlimeSize (3) to keep Slimes valid.</p>
+     *
+     * @param slime the Slime entity to resize (grows or shrinks depending on spell type)
      */
     private void changeSlimeSize(@NotNull Slime slime) {
         int delta = (int) (usesModifier / 25) + 1;

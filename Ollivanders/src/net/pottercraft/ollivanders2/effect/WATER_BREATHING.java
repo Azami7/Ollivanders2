@@ -17,9 +17,9 @@ import java.util.UUID;
  * which report the target "can breathe in water".</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class WATER_BREATHING extends PotionEffectSuper {
+public class WATER_BREATHING extends PotionEffect {
     /**
      * Constructor for creating a water breathing effect.
      *

@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the CONFUSION potion effect.
  *
  * <p>ConfusionTest validates that the CONFUSION effect correctly applies Minecraft's native
- * confusion potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * confusion potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on CONFUSION-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see CONFUSION for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class ConfusionTest extends PotionEffectSuperTest {
+public class ConfusionTest extends PotionEffectTest {
     /**
      * Create a CONFUSION effect for testing.
      *

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * Verifies that the antidote correctly reduces or removes AWAKE effects
  * based on its partial strength, and does not affect unrelated effects.</p>
  */
-public class AwakeAntidoteLesserTest extends O2EffectAntidoteSuperTest {
+public class AwakeAntidoteLesserTest extends O2EffectAntidoteTest {
     /**
      * Create an AWAKE_ANTIDOTE_LESSER effect for testing.
      *

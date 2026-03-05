@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Engorgement_Charm">https://harrypotter.fandom.com/wiki/Engorgement_Charm</a>
  */
-public final class ENGORGIO extends ChangeEntitySizeSuper {
+public final class ENGORGIO extends ChangeEntitySize {
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Metelojinx">https://harrypotter.fandom.com/wiki/Metelojinx</a>
  */
-public final class METELOJINX extends MetelojinxSuper {
+public final class METELOJINX extends MetelojinxBase {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *

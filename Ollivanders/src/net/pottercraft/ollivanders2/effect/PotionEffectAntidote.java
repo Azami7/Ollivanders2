@@ -37,7 +37,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public abstract class PotionEffectAntidoteSuper extends O2Effect {
+public abstract class PotionEffectAntidote extends O2Effect {
     /**
      * The type of Minecraft potion effect this antidote targets.
      *
@@ -74,7 +74,7 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      * @param isPermanent ignored - antidotes are immediately applied and resolved
      * @param pid         the unique ID of the target player to receive this antidote
      */
-    public PotionEffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+    public PotionEffectAntidote(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, false, pid);
     }
 

@@ -19,7 +19,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class STRENGTH extends PotionEffectSuper {
+public class STRENGTH extends PotionEffect {
     /**
      * Constructor for STRENGTH effect.
      *

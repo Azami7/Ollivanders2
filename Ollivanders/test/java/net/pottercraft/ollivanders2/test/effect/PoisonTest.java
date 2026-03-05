@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the POISON potion effect.
  *
  * <p>PoisonTest validates that the POISON effect correctly applies Minecraft's native
- * poison potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * poison potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on POISON-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see POISON for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class PoisonTest extends PotionEffectSuperTest {
+public class PoisonTest extends PotionEffectTest {
     /**
      * Create a POISON effect for testing.
      *

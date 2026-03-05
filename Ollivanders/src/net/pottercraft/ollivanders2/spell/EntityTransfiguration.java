@@ -33,10 +33,10 @@ import java.util.List;
  * <p>Subclasses must implement {@link #transfigureEntity(Entity)} to define the actual transformation logic.</p>
  *
  * @author Azami7
- * @see TransfigurationBase for base transfiguration mechanics
+ * @see Transfiguration for base transfiguration mechanics
  * @see BlockTransfiguration for block transfiguration alternative
  */
-public abstract class EntityTransfiguration extends TransfigurationBase {
+public abstract class EntityTransfiguration extends Transfiguration {
     /**
      * The type of entity this will transfigure.
      */
@@ -183,8 +183,8 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
 
         // is this entity already transfigured?
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
-            if (spell instanceof TransfigurationBase) {
-                if (((TransfigurationBase) spell).isEntityTransfigured(entity)) {
+            if (spell instanceof Transfiguration) {
+                if (((Transfiguration) spell).isEntityTransfigured(entity)) {
                     common.printDebugMessage(entity.getName() + " is already transfigured", null, null, false);
                     return false;
                 }

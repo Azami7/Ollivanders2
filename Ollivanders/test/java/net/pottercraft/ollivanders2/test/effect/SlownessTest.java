@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the SLOWNESS potion effect.
  *
  * <p>SlownessTest validates that the SLOWNESS effect correctly applies Minecraft's native
- * slowness potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * slowness potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on SLOWNESS-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see SLOWNESS for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class SlownessTest extends PotionEffectSuperTest {
+public class SlownessTest extends PotionEffectTest {
     /**
      * Create a SLOWNESS effect for testing.
      *

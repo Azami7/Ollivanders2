@@ -17,9 +17,9 @@ import java.util.UUID;
  * player receives a notification of "You feel sluggish." when the effect is applied.</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class SLOWNESS extends PotionEffectSuper {
+public class SLOWNESS extends PotionEffect {
     /**
      * Constructor for creating a movement slowness effect.
      *

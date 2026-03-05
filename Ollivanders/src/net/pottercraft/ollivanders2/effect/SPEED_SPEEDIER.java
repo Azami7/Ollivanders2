@@ -18,9 +18,9 @@ import java.util.UUID;
  *
  * @author Azami7
  * @see SPEED for the standard speed enhancement effect
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class SPEED_SPEEDIER extends PotionEffectSuper {
+public class SPEED_SPEEDIER extends PotionEffect {
     /**
      * Constructor for creating an enhanced movement speed effect.
      *

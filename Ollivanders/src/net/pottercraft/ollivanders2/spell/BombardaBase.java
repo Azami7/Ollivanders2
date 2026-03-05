@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public abstract class BombardaSuper extends O2Spell {
+public abstract class BombardaBase extends O2Spell {
     // todo limit blocks this can effect to align with https://harrypotter.fandom.com/wiki/Bombardment_Spell
     double minStrength = 1;
     double maxStrength = 4.0; // 4.0 is the strength of TNT
@@ -25,7 +25,7 @@ public abstract class BombardaSuper extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    BombardaSuper(Ollivanders2 plugin) {
+    BombardaBase(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -36,7 +36,7 @@ public abstract class BombardaSuper extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    BombardaSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    BombardaBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         // world guard flags

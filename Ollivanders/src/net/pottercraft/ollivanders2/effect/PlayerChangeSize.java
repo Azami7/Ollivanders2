@@ -40,7 +40,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public abstract class PlayerChangeSizeSuper extends O2Effect {
+public abstract class PlayerChangeSize extends O2Effect {
     /**
      * A list of the scale effect types that can affect player size.
      *
@@ -73,7 +73,7 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
      * @param isPermanent is this effect permanent (does not age)
      * @param pid         the ID of the player this effect acts on
      */
-    public PlayerChangeSizeSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+    public PlayerChangeSize(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, isPermanent, pid);
     }
 

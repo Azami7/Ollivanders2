@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public final class COLOVARIA_VERMICULO extends ColoroSuper {
+public final class COLOVARIA_VERMICULO extends ChangeColorable {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

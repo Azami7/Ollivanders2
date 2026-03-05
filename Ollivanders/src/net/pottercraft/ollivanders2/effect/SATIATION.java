@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class SATIATION extends PotionEffectSuper {
+public class SATIATION extends PotionEffect {
     /**
      * Constructor for SATIATION effect.
      *

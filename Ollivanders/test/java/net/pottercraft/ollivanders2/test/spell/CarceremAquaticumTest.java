@@ -38,10 +38,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * </ul>
  *
  * @see net.pottercraft.ollivanders2.spell.CARCEREM_AQUATICUM for the spell implementation
- * @see ImmobilizePlayerSuperTest for inherited test framework
+ * @see ImmobilizePlayerTest for inherited test framework
  */
 @Isolated
-public class CarceremAquaticumTest extends ImmobilizePlayerSuperTest {
+public class CarceremAquaticumTest extends ImmobilizePlayerTest {
     /**
      * Get the spell type being tested.
      *

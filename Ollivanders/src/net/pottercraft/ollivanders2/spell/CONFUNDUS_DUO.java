@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Confundus_Duo">Confundus Duo</a>
  */
-public final class CONFUNDUS_DUO extends ConfundusSuper {
+public final class CONFUNDUS_DUO extends ConfundoBase {
     /**
      * Default constructor for use in generating spell text.
      *

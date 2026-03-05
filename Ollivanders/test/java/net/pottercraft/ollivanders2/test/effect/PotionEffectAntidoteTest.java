@@ -3,22 +3,23 @@ package net.pottercraft.ollivanders2.test.effect;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.ollivanders2.effect.O2Effect;
-import net.pottercraft.ollivanders2.effect.O2EffectAntidoteSuper;
+import net.pottercraft.ollivanders2.effect.PotionEffectAntidote;
+import net.pottercraft.ollivanders2.effect.PotionEffect;
 import org.bukkit.entity.Player;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract test base class for antidote effects.
+ * Abstract test base class for potion effect antidote effects.
  *
- * <p>Provides comprehensive testing for antidote effects that counteract other magical effects.
+ * <p>Provides comprehensive testing for potion effect antidotes that counteract potion effects.
  * Tests verify both full-strength antidotes (that completely remove target effects) and
  * partial-strength antidotes (that reduce target effect duration by a percentage). Also verifies
  * that antidotes only affect their specified target effect type and do not harm unrelated effects.</p>
  */
-abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper {
+abstract public class PotionEffectAntidoteTest extends NotPermanentEffectTestSuper {
     /**
      * Test the core antidote effect mechanism including strength-based reduction and effect targeting.
      *
@@ -50,32 +51,42 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
     void checkEffectTest() {
         Player target = mockServer.addPlayer();
 
-        // add the specific effect to the target and event manager
+        // add the specific potion effect to the target and event manager
         O2Effect effect = addEffectToTarget(target, 100);
+        PotionEffect potionEffect = (PotionEffect) effect;
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        int duration = effect.getMinDuration();
 
-        // advance the server 1 tick
+        // advance the server 1 tick to apply the potion effect
         mockServer.getScheduler().performTicks(1);
+
+        // get the applied potion effect from the player
+        org.bukkit.potion.PotionEffect appliedEffect = target.getPotionEffect(potionEffect.getPotionEffectType());
+        assertNotNull(appliedEffect, "Potion effect was not applied to player");
+        int originalDuration = appliedEffect.getDuration();
 
         // create the antidote and add it to the event manager
-        O2EffectAntidoteSuper antidote = createEffect(target, 5, false);
+        PotionEffectAntidote antidote = createEffect(target, 5, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(antidote);
 
-        // advance the server 1 tick
+        // advance the server 1 tick to apply the antidote
         mockServer.getScheduler().performTicks(1);
 
-        // the antidote should reduce the effect based on its strength
+        // the antidote should reduce the potion effect based on its strength
         double strength = antidote.getStrength();
         if (strength < 1.0) {
-            // subtract 2 ticks from duration because we performed 2 ticks above
-            duration = duration - 2;
-
-            double reduction = ((duration) * strength);
-            assertEquals((duration) - (int) reduction, effect.getRemainingDuration(), "Antidote of strength " + strength + " did not reduce " + effect.effectType + " as expected.");
+            // For potion effect antidotes, the new duration is originalDuration * strength
+            int expectedDuration = (int) (originalDuration * strength);
+            org.bukkit.potion.PotionEffect reducedEffect = target.getPotionEffect(potionEffect.getPotionEffectType());
+            assertNotNull(reducedEffect, "Potion effect was removed by antidote");
+            // Account for floating point rounding by allowing 1 tick difference
+            assertTrue(Math.abs(expectedDuration - reducedEffect.getDuration()) <= 1,
+                "Antidote of strength " + strength + " did not reduce potion effect duration as expected. Expected: " + expectedDuration + ", Got: " + reducedEffect.getDuration());
         }
-        else
-            assertTrue(effect.isKilled(), "Antidote of strength " + strength + " did not kill " + effect.effectType);
+        else {
+            // Full-strength antidote should remove the potion effect completely
+            org.bukkit.potion.PotionEffect removedEffect = target.getPotionEffect(potionEffect.getPotionEffectType());
+            assertTrue(removedEffect == null || removedEffect.getDuration() == 0, "Antidote of strength " + strength + " did not remove potion effect");
+        }
 
         // antidote is killed
         assertTrue(antidote.isKilled(), "Antidote not killed after use.");
@@ -84,7 +95,7 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
         mockServer.getScheduler().performTicks(1);
 
         // add an effect not affected by this antidote type
-        effect = addUnrelatedEffectToTarget(target, duration);
+        effect = addUnrelatedEffectToTarget(target, originalDuration);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         // add the antidote
@@ -107,7 +118,7 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
      * @param isPermanent     whether the antidote is permanent
      * @return the created antidote effect
      */
-    abstract O2EffectAntidoteSuper createEffect(Player target, int durationInTicks, boolean isPermanent);
+    abstract PotionEffectAntidote createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
      * Add the effect this antidote counters to the target.

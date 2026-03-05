@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Glacius_Tria">Glacius Tria on Harry Potter Wiki</a>
  */
-public final class GLACIUS_TRIA extends GlaciusSuper {
+public final class GLACIUS_TRIA extends GlaciusBase {
     /**
      * Default constructor for spell text generation and documentation.
      *

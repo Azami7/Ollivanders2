@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Shrinking_Charm">https://harrypotter.fandom.com/wiki/Shrinking_Charm</a>
  */
-public final class REDUCIO extends ChangeEntitySizeSuper {
+public final class REDUCIO extends ChangeEntitySize {
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 

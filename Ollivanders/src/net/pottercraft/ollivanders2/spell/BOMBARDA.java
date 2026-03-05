@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @version Ollivanders2
  * @see <a href = "https://harrypotter.fandom.com/wiki/Bombardment_Spell">https://harrypotter.fandom.com/wiki/Bombardment_Spell</a>
  */
-public final class BOMBARDA extends BombardaSuper {
+public final class BOMBARDA extends BombardaBase {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

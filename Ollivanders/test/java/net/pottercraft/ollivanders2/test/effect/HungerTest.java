@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the HUNGER potion effect.
  *
  * <p>HungerTest validates that the HUNGER effect correctly applies Minecraft's native
- * hunger potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * hunger potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on HUNGER-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see HUNGER for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class HungerTest extends PotionEffectSuperTest {
+public class HungerTest extends PotionEffectTest {
     /**
      * Create a HUNGER effect for testing.
      *

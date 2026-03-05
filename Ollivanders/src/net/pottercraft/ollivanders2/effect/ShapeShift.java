@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public abstract class ShapeShiftSuper extends O2Effect {
+public abstract class ShapeShift extends O2Effect {
     /**
      * Tracks whether the player is currently transformed into another form.
      *
@@ -92,7 +92,7 @@ public abstract class ShapeShiftSuper extends O2Effect {
      * @param isPermanent is this effect permanent (does not age)
      * @param pid         the unique ID of the player to transform
      */
-    public ShapeShiftSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+    public ShapeShift(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, isPermanent, pid);
     }
 

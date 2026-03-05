@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto">https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto</a>
  */
-public final class METELOJINX_RECANTO extends MetelojinxSuper {
+public final class METELOJINX_RECANTO extends MetelojinxBase {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

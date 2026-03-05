@@ -24,9 +24,9 @@ import java.util.UUID;
  * </ul>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism and randomized duration
+ * @see PotionEffect for the potion effect application mechanism and randomized duration
  */
-public class BLINDNESS extends PotionEffectSuper {
+public class BLINDNESS extends PotionEffect {
     /**
      * Constructor for creating a blindness potion effect.
      *

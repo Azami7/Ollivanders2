@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @version Ollivanders2
  * @see <a href = "https://harrypotter.fandom.com/wiki/Bombarda_Maxima">https://harrypotter.fandom.com/wiki/Bombarda_Maxima</a>
  */
-public final class BOMBARDA_MAXIMA extends BombardaSuper {
+public final class BOMBARDA_MAXIMA extends BombardaBase {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

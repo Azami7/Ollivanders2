@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the HARM potion effect.
  *
  * <p>HarmTest validates that the HARM effect correctly applies Minecraft's native
- * harm potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * harm potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on HARM-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see HARM for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class HarmTest extends PotionEffectSuperTest {
+public class HarmTest extends PotionEffectTest {
     /**
      * Create a HARM effect for testing.
      *

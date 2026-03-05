@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @version Ollivanders2
  * @see <a href = "https://harrypotter.fandom.com/wiki/Herbifors">https://harrypotter.fandom.com/wiki/Herbifors</a>
  */
-public final class HERBIFORS extends GaleatiSuper {
+public final class HERBIFORS extends Galeati {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

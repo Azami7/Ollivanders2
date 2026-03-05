@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.effect.PlayerChangeSizeSuper;
+import net.pottercraft.ollivanders2.effect.PlayerChangeSize;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * </ul>
  *
  * @author Azami7
- * @see PlayerChangeSizeSuper for the effect implementation being tested
+ * @see PlayerChangeSize for the effect implementation being tested
  * @see EffectTestSuper for the base testing framework
  */
 public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
@@ -51,7 +51,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
      * @return the newly created PlayerChangeSizeSuper instance
      */
     @Override
-    abstract PlayerChangeSizeSuper createEffect(Player target, int durationInTicks, boolean isPermanent);
+    abstract PlayerChangeSize createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
      * Test that size-changing effects correctly modify a player's scale attribute.
@@ -62,7 +62,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
      * <li>Records the original scale (1.0, normal size)</li>
      * <li>Applies a size-changing effect with a 5-second duration</li>
      * <li>Advances the server scheduler by 5 ticks to allow the effect's startEffect runnable to execute</li>
-     * <li>Verifies the effect's internal state reflects transformation via {@link PlayerChangeSizeSuper#isTransformed()}</li>
+     * <li>Verifies the effect's internal state reflects transformation via {@link PlayerChangeSize#isTransformed()}</li>
      * <li>Verifies the player's actual scale attribute changed</li>
      * <li>Verifies the new scale equals the effect's scale multiplier (when starting from 1.0)</li>
      * <li>Calls {@link #changeSizeEffectStacking()} to validate stacking behavior with multiple effects</li>
@@ -81,7 +81,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         assertNotNull(originalScaleAttribute, "originalScaleAttribute was null");
         double originalScale = originalScaleAttribute.getBaseValue();
 
-        PlayerChangeSizeSuper effect = (PlayerChangeSizeSuper) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
+        PlayerChangeSize effect = (PlayerChangeSize) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
         // advance the server make sure the startEffect runnable has executed - it is on a 5-tick delay
         mockServer.getScheduler().performTicks(5);
 
@@ -127,7 +127,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         registerScaleAttribute(target);
 
         // Apply the first effect
-        PlayerChangeSizeSuper effect1 = (PlayerChangeSizeSuper) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
+        PlayerChangeSize effect1 = (PlayerChangeSize) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
         mockServer.getScheduler().performTicks(5);
 
         // Verify the first effect applied
@@ -138,7 +138,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         double effect1Multiplier = effect1.getScaleMultiplier();
 
         // Apply a second (conflicting) size effect
-        PlayerChangeSizeSuper effect2 = (PlayerChangeSizeSuper) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
+        PlayerChangeSize effect2 = (PlayerChangeSize) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
         mockServer.getScheduler().performTicks(5);
 
         // Verify the first effect was removed (should be killed)
@@ -240,7 +240,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         registerScaleAttribute(target);
 
         // Apply a size-changing effect
-        PlayerChangeSizeSuper effect = (PlayerChangeSizeSuper) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
+        PlayerChangeSize effect = (PlayerChangeSize) addEffect(target, Ollivanders2Common.ticksPerSecond * 5, false);
         mockServer.getScheduler().performTicks(5);
 
         // Verify the effect changed the player's scale

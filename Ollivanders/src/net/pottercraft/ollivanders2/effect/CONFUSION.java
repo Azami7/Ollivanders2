@@ -24,9 +24,9 @@ import java.util.UUID;
  * </ul>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism and randomized duration
+ * @see PotionEffect for the potion effect application mechanism and randomized duration
  */
-public class CONFUSION extends PotionEffectSuper {
+public class CONFUSION extends PotionEffect {
     /**
      * Constructor for creating a confusion (nausea) potion effect.
      *

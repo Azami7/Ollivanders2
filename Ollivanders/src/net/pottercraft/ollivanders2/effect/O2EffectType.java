@@ -222,9 +222,9 @@ public enum O2EffectType {
      */
     SUSPENSION(SUSPENSION.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
-     * {@link PlayerChangeSizeSuper}
+     * {@link PlayerChangeSize}
      */
-    SWELLING(PlayerChangeSizeSuper.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    SWELLING(PlayerChangeSize.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link TICKLING}
      */

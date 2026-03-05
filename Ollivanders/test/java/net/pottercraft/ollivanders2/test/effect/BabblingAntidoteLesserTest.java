@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * Verifies that the antidote correctly reduces or removes BABBLING effects
  * based on its partial strength, and does not affect unrelated effects.</p>
  */
-public class BabblingAntidoteLesserTest extends O2EffectAntidoteSuperTest {
+public class BabblingAntidoteLesserTest extends O2EffectAntidoteTest {
     /**
      * Create a BABBLING_ANTIDOTE_LESSER effect for testing.
      *

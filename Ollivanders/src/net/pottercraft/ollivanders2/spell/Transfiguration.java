@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @see BlockTransfiguration for block-specific transfiguration implementation
  * @see EntityTransfiguration for entity-specific transfiguration implementation
  */
-public abstract class TransfigurationBase extends O2Spell {
+public abstract class Transfiguration extends O2Spell {
     /**
      * Whether the transfiguration has successfully occurred on a target.
      *
@@ -99,7 +99,7 @@ public abstract class TransfigurationBase extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public TransfigurationBase(Ollivanders2 plugin) {
+    public Transfiguration(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -112,7 +112,7 @@ public abstract class TransfigurationBase extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public TransfigurationBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public Transfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.TRANSFIGURATION;

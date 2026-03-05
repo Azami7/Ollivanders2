@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * @see FULL_IMMOBILIZE for complete immobilization effect
  * @see O2Spell for the base spell class
  */
-abstract public class ImmobilizePlayerSuper extends O2Spell {
+abstract public class ImmobilizePlayer extends O2Spell {
     /**
      * The minimum time the target player can be affected.
      */
@@ -58,7 +58,7 @@ abstract public class ImmobilizePlayerSuper extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ImmobilizePlayerSuper(Ollivanders2 plugin) {
+    public ImmobilizePlayer(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -69,7 +69,7 @@ abstract public class ImmobilizePlayerSuper extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ImmobilizePlayerSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public ImmobilizePlayer(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 

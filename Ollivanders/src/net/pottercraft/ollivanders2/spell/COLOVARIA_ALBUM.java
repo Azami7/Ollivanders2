@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.2.8
  */
-public final class COLOVARIA_ALBUM extends ColoroSuper {
+public final class COLOVARIA_ALBUM extends ChangeColorable {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

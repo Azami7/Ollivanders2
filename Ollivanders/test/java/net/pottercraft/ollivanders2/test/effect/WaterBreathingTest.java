@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the WATER_BREATHING potion effect.
  *
  * <p>WaterBreathingTest validates that the WATER_BREATHING effect correctly applies Minecraft's native
- * water breathing potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * water breathing potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on WATER_BREATHING-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see WATER_BREATHING for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class WaterBreathingTest extends PotionEffectSuperTest {
+public class WaterBreathingTest extends PotionEffectTest {
     /**
      * Create a WATER_BREATHING effect for testing.
      *

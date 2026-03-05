@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class REGENERATION extends PotionEffectSuper {
+public class REGENERATION extends PotionEffect {
     /**
      * Constructor for REGENERATION effect.
      *

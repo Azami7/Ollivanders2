@@ -27,10 +27,10 @@ import java.util.ArrayList;
  * <p>The spell will set blocks on fire and apply burn effects to living entities and items within the
  * 1-block radius, with burn duration scaled by the caster's spell proficiency.</p>
  *
- * @see IncendioSuper
+ * @see IncendioBase
  * @see <a href="https://harrypotter.fandom.com/wiki/Fire-Making_Spell">https://harrypotter.fandom.com/wiki/Fire-Making_Spell</a>
  */
-public final class INCENDIO extends IncendioSuper {
+public final class INCENDIO extends IncendioBase {
     private static final int maxBurnDurationConfig = Ollivanders2Common.ticksPerSecond * 10;
 
     /**
