@@ -17,9 +17,9 @@ import java.util.UUID;
  * notification of "You feel unlucky." when the effect is applied.</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class UNLUCK extends PotionEffectSuper {
+public class UNLUCK extends PotionEffect {
     /**
      * Constructor for creating an unluck effect.
      *

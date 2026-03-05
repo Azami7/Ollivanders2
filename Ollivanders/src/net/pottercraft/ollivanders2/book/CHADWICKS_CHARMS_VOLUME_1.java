@@ -31,7 +31,6 @@ public class CHADWICKS_CHARMS_VOLUME_1 extends O2Book {
 
         bookType = O2BookType.CHADWICKS_CHARMS_VOLUME_1;
 
-        spells.add(O2SpellType.ASCENDIO);
         spells.add(O2SpellType.CRESCERE_PROTEGAT);
         spells.add(O2SpellType.HORREAT_PROTEGAT);
         spells.add(O2SpellType.MOV_FOTIA);

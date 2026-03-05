@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Creates or ends a storm for a variable duration.
  */
-public abstract class MetelojinxSuper extends O2Spell {
+public abstract class MetelojinxBase extends O2Spell {
     /**
      * True to make a storm, false to clear the weather
      */
@@ -19,7 +19,7 @@ public abstract class MetelojinxSuper extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MetelojinxSuper(Ollivanders2 plugin) {
+    public MetelojinxBase(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -30,7 +30,7 @@ public abstract class MetelojinxSuper extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MetelojinxSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public MetelojinxBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 

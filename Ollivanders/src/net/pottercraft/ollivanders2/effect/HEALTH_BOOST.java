@@ -18,10 +18,10 @@ import java.util.UUID;
  * is detectable by mind-reading spells (Legilimens) which report the target "feels stronger".</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  * @see HEAL for the instant healing effect alternative
  */
-public class HEALTH_BOOST extends PotionEffectSuper {
+public class HEALTH_BOOST extends PotionEffect {
     /**
      * Constructor for creating a sustained health boost potion effect.
      *

@@ -15,13 +15,13 @@ import org.junit.jupiter.api.parallel.Isolated;
  * <li><strong>Duration:</strong> 4x modifier - burn duration is four times that of INCENDIO</li>
  * </ul>
  *
- * <p>This test class runs all inherited tests from {@link IncendioSuperTest} with INCENDIO_TRIA
+ * <p>This test class runs all inherited tests from {@link IncendioBaseTest} with INCENDIO_TRIA
  * as the spell type, validating that the large radius and strafe behavior work correctly.</p>
  *
- * @see IncendioSuperTest
+ * @see IncendioBaseTest
  */
 @Isolated
-public class IncendioTriaTest extends IncendioSuperTest {
+public class IncendioTriaTest extends IncendioBaseTest {
     /**
      * Returns the spell type being tested.
      *

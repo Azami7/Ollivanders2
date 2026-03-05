@@ -1129,9 +1129,9 @@ public class O2Effects implements Listener {
 
         // Prevent multiple shape-shifting effects: only one transformation allowed at a time
         // Shape-shifting effects are mutually exclusive to prevent conflicting appearance changes
-        if (effect instanceof ShapeShiftSuper) {
+        if (effect instanceof ShapeShift) {
             for (O2Effect ef : playerEffects.values()) {
-                if (ef instanceof ShapeShiftSuper) {
+                if (ef instanceof ShapeShift) {
                     return;  // Already has a shape-shift effect, reject this new one
                 }
             }

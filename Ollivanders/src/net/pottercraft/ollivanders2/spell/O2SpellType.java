@@ -86,6 +86,10 @@ public enum O2SpellType {
     /**
      * {@link BAO_ZHONG_CHA}
      */
+    AZURILLIOUS(AZURILLIOUS.class, MagicLevel.NEWT),
+    /**
+     * {@link AZURILLIOUS}
+     */
     BAO_ZHONG_CHA(BAO_ZHONG_CHA.class, MagicLevel.BEGINNER),
     /**
      * {@link BOMBARDA}
@@ -330,7 +334,7 @@ public enum O2SpellType {
     /**
      * {@link GEMINO}
      */
-    GEMINO(GEMINO.class, MagicLevel.NEWT),
+    GEMINO(GEMINO.class, MagicLevel.EXPERT),
     // todo add GEMINIO the charm - https://harrypotter.fandom.com/wiki/Doubling_Charm
     /**
      * {@link GLACIUS}

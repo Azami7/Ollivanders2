@@ -139,8 +139,16 @@ public abstract class Knockback extends O2Spell {
                 velocity = Ollivanders2Common.calculateVelocityForDistance(location, distance, calculateDragFactor(target), isPull());
 
             target.setVelocity(velocity);
+            addOtherEffects(target);
         }
     }
+
+    /**
+     * To be overridden by child classes if they want to add additional effects to the target.
+     *
+     * @param target the entity to affect
+     */
+    void addOtherEffects(@NotNull Entity target) {}
 
     /**
      * Determine if this entity can be targeted

@@ -14,7 +14,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class FIRE_RESISTANCE extends PotionEffectSuper {
+public class FIRE_RESISTANCE extends PotionEffect {
     /**
      * Constructor for Fire Resistance effect.
      *

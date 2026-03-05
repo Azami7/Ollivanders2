@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
  * Tests the effect's properties, duration handling, and permanent effect support using the
  * base test infrastructure.</p>
  *
- * @see PotionEffectSuperTest for the base test infrastructure
+ * @see PotionEffectTest for the base test infrastructure
  */
-public class SatiationTest extends PotionEffectSuperTest {
+public class SatiationTest extends PotionEffectTest {
     /**
      * Create a SATIATION effect instance for testing.
      *

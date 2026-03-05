@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Confundus_Charm">Confundus Charm</a>
  */
-public final class CONFUNDO extends ConfundusSuper {
+public final class CONFUNDO extends ConfundoBase {
     static final int minDurationInSecondsConfig = 15;
     static final int maxDurationInSecondsConfig = 120;
 

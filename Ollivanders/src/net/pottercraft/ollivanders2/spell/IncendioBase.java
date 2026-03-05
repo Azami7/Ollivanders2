@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public abstract class IncendioSuper extends O2Spell {
+public abstract class IncendioBase extends O2Spell {
     /**
      * The time remaining for the burn effect, in ticks.
      *
@@ -114,7 +114,7 @@ public abstract class IncendioSuper extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public IncendioSuper(Ollivanders2 plugin) {
+    public IncendioBase(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -125,7 +125,7 @@ public abstract class IncendioSuper extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public IncendioSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public IncendioBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         // spell cannot pass through water or fire

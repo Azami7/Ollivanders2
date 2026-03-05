@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * Verifies that the antidote correctly reduces or removes UNLUCK effects
  * based on its partial strength, and does not affect unrelated effects.</p>
  */
-public class UnluckAntidoteLesserTest extends PotionEffectAntidoteSuperTest {
+public class UnluckAntidoteLesserTest extends PotionEffectAntidoteTest {
     /**
      * Create an UNLUCK_ANTIDOTE_LESSER effect for testing.
      *

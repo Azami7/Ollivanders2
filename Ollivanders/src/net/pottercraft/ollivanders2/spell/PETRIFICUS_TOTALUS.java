@@ -26,7 +26,7 @@ import java.util.ArrayList;
  *
  * <p>Reference: <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">Harry Potter Wiki - Full Body-Bind Curse</a></p>
  */
-public class PETRIFICUS_TOTALUS extends ImmobilizePlayerSuper {
+public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

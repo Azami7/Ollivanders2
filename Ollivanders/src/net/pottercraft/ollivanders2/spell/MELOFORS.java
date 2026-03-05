@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx">https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx</a>
  */
-public final class MELOFORS extends GaleatiSuper {
+public final class MELOFORS extends Galeati {
     static Material[] melons = {
             Material.MELON,
             Material.JACK_O_LANTERN,

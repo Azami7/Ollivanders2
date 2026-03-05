@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the SPEED_SPEEDIEST potion effect.
  *
  * <p>SpeedSpeediestTest validates that the SPEED_SPEEDIEST effect correctly applies Minecraft's native
- * speed potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * speed potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on SPEED_SPEEDIEST-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see SPEED_SPEEDIEST for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class SpeedSpeediestTest extends PotionEffectSuperTest {
+public class SpeedSpeediestTest extends PotionEffectTest {
     /**
      * Create a SPEED_SPEEDIEST effect for testing.
      *

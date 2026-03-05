@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the WEAKNESS potion effect.
  *
  * <p>WeaknessTest validates that the WEAKNESS effect correctly applies Minecraft's native
- * weakness potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * weakness potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on WEAKNESS-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see WEAKNESS for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class WeaknessTest extends PotionEffectSuperTest {
+public class WeaknessTest extends PotionEffectTest {
     /**
      * Create a WEAKNESS effect for testing.
      *

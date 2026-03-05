@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
  * Tests the effect's properties, duration handling, and permanent effect support using the
  * base test infrastructure.</p>
  *
- * @see PotionEffectSuperTest for the base test infrastructure
+ * @see PotionEffectTest for the base test infrastructure
  */
-public class RegenerationTest extends PotionEffectSuperTest {
+public class RegenerationTest extends PotionEffectTest {
     /**
      * Create a REGENERATION effect instance for testing.
      *

@@ -6,13 +6,24 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A stronger Red Sparks Charm
+ * The enhanced Red Sparks charm that damages entities with a large effect radius.
  *
- * @see VERMILLIOUS
+ * <p>VERMILLIOUS_DUO is a more powerful variant of VERMILLIOUS that shoots red sparks
+ * from the caster's wand and deals damage to nearby entities upon impact.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Visual Effect: RED_STAINED_GLASS projectile trail</li>
+ * <li>Damage: Enabled with 0.125 modifier (scales with player skill)</li>
+ * <li>Radius: 4 blocks for entity detection</li>
+ * <li>Purpose: Damaging charm with larger effect radius</li>
+ * </ul>
+ *
  * @author Azami7
+ * @see VERMILLIOUS for the basic non-damaging variant
  * @since 2.21
  */
-public class VERMILLIOUS_DUO extends SparksBase {
+public class VERMILLIOUS_DUO extends Sparks {
     /**
      * Default constructor for use in generating spell book text.  Do not use to cast the spell.
      *
@@ -23,32 +34,28 @@ public class VERMILLIOUS_DUO extends SparksBase {
 
         spellType = O2SpellType.VERMILLIOUS_DUO;
 
-        text = "A stronger Red Sparks Charm that shoots red sparks from the caster's wand and can damage entities.";
+        text = "A stronger Red Sparks Charm that shoots red sparks from the caster's wand and damages entities.";
     }
 
     /**
-     * Constructor.
+     * Constructor for casting VERMILLIOUS_DUO spells.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Initializes the spell with RED_STAINED_GLASS visual effect, damage enabled,
+     * 0.125 damage modifier, and a 4-block entity detection radius.</p>
+     *
+     * @param plugin    the Ollivanders2 plugin
+     * @param player    the player casting this spell
+     * @param rightWand the wand correctness factor (1.0 = correct wand)
      */
     public VERMILLIOUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.VERMILLIOUS_DUO;
         moveEffectData = Material.RED_STAINED_GLASS;
+        doDamage = true;
         damageModifier = 0.125;
         radius = 4;
 
         initSpell();
-    }
-
-    /**
-     * Set the damage for this spell based on caster's skill level in this spell
-     */
-    @Override
-    void doInitSpell() {
-        setDamage();
     }
 }

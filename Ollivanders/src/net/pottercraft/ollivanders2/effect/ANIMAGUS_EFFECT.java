@@ -64,9 +64,9 @@ import org.jetbrains.annotations.NotNull;
  * human form.</p>
  *
  * @author Azami7
- * @see ShapeShiftSuper for the parent class handling transformation mechanics
+ * @see ShapeShift for the parent class handling transformation mechanics
  */
-public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
+public class ANIMAGUS_EFFECT extends ShapeShift {
     /**
      * The color or type variant for the animal form.
      *

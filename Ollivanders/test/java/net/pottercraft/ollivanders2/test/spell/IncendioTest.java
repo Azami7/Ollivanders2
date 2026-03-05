@@ -15,13 +15,13 @@ import org.junit.jupiter.api.parallel.Isolated;
  * <li><strong>Entity Radius:</strong> 1 block - only entities directly at target location are affected</li>
  * </ul>
  *
- * <p>This test class runs all inherited tests from {@link IncendioSuperTest} with INCENDIO
+ * <p>This test class runs all inherited tests from {@link IncendioBaseTest} with INCENDIO
  * as the spell type, validating that the basic single-target fire spell behavior works correctly.</p>
  *
- * @see IncendioSuperTest
+ * @see IncendioBaseTest
  */
 @Isolated
-public class IncendioTest extends IncendioSuperTest {
+public class IncendioTest extends IncendioBaseTest {
     /**
      * Returns the spell type being tested.
      *

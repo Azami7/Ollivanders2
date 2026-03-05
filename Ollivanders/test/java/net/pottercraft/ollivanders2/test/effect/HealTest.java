@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the HEAL potion effect.
  *
  * <p>HealTest validates that the HEAL effect correctly applies Minecraft's native
- * heal potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * heal potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on HEAL-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see HEAL for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class HealTest extends PotionEffectSuperTest {
+public class HealTest extends PotionEffectTest {
     /**
      * Create a HEAL effect for testing.
      *

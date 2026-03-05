@@ -17,9 +17,9 @@ import java.util.UUID;
  * notification of "You feel hungry." when the effect is applied.</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class HUNGER extends PotionEffectSuper {
+public class HUNGER extends PotionEffect {
     /**
      * Constructor for creating a hunger potion effect.
      *

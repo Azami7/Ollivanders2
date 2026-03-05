@@ -28,10 +28,10 @@ import java.util.ArrayList;
  * <p>The spell will set all blocks and entities on fire within the 2-block radius, with burn duration
  * scaled by the caster's spell proficiency and doubled compared to basic INCENDIO.</p>
  *
- * @see IncendioSuper
+ * @see IncendioBase
  * @see <a href="https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell">https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell</a>
  */
-public final class INCENDIO_DUO extends IncendioSuper {
+public final class INCENDIO_DUO extends IncendioBase {
     private static final int maxBurnDurationConfig = Ollivanders2Common.ticksPerSecond * 20;
 
     /**

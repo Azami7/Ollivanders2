@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
  * Tests the effect's properties, duration handling, and permanent effect support using the
  * base test infrastructure.</p>
  *
- * @see PotionEffectSuperTest for the base test infrastructure
+ * @see PotionEffectTest for the base test infrastructure
  */
-public class FireResistanceTest extends PotionEffectSuperTest {
+public class FireResistanceTest extends PotionEffectTest {
     /**
      * Create a FIRE_RESISTANCE effect instance for testing.
      *

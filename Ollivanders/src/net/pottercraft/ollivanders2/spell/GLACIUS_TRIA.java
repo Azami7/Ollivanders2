@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Glacius_Tria">Glacius Tria on Harry Potter Wiki</a>
  */
-public final class GLACIUS_TRIA extends GlaciusSuper {
+public final class GLACIUS_TRIA extends GlaciusBase {
     /**
      * Default constructor for spell text generation and documentation.
      *
@@ -88,8 +88,14 @@ public final class GLACIUS_TRIA extends GlaciusSuper {
         spellType = O2SpellType.GLACIUS_TRIA;
         branch = O2MagicBranch.CHARMS;
 
-        minEffectRadius = GLACIUS.minRadiusConfig * 4;
-        maxEffectRadius = GLACIUS.maxRadiusConfig * 4;
+        if (Ollivanders2.testMode) { // in test mode, the full radius slows the tests too much
+            minEffectRadius = GLACIUS.minRadiusConfig * 2;
+            maxEffectRadius = GLACIUS.maxRadiusConfig * 2;
+        }
+        else {
+            minEffectRadius = GLACIUS.minRadiusConfig * 4;
+            maxEffectRadius = GLACIUS.maxRadiusConfig * 4;
+        }
         effectRadiusModifier = 2.0; // 200% of usesModifier
         minDuration = GLACIUS.minDurationConfig / 4;
         maxDuration = GLACIUS.maxDurationConfig / 4;

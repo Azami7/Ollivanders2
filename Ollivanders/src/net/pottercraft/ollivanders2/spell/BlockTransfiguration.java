@@ -33,9 +33,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  * @see EntityTransfiguration for entity transfiguration alternative
- * @see TransfigurationBase for base transfiguration mechanics
+ * @see Transfiguration for base transfiguration mechanics
  */
-public abstract class BlockTransfiguration extends TransfigurationBase {
+public abstract class BlockTransfiguration extends Transfiguration {
     /**
      * Minimum effect radius (1 block by default).
      *

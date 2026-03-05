@@ -16,10 +16,10 @@ import java.util.UUID;
  * damage effect that requires additional healing or stronger antidotes to fully remove.</p>
  *
  * @author Azami7
- * @see PotionEffectAntidoteSuper for the antidote strength mechanism
+ * @see PotionEffectAntidote for the antidote strength mechanism
  * @see HARM for the instant damage effect this antidote counteracts
  */
-public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
+public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidote {
     /**
      * Constructor for creating a reduced-potency harm antidote.
      *

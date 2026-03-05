@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public abstract class GlaciusSuper extends BlockTransfiguration {
+public abstract class GlaciusBase extends BlockTransfiguration {
     /**
      * Default constructor for spell text generation and documentation.
      *
@@ -45,7 +45,7 @@ public abstract class GlaciusSuper extends BlockTransfiguration {
      *
      * @param plugin the Ollivanders2 plugin instance
      */
-    public GlaciusSuper(Ollivanders2 plugin) {
+    public GlaciusBase(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -69,7 +69,7 @@ public abstract class GlaciusSuper extends BlockTransfiguration {
      * @param player    the player casting this spell
      * @param rightWand the wand correctness factor (1.0 = correct wand, affects skill modifier)
      */
-    public GlaciusSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public GlaciusBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         branch = O2MagicBranch.CHARMS;
 

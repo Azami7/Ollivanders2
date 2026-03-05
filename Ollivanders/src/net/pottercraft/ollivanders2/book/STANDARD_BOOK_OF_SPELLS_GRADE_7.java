@@ -36,6 +36,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book {
         spells.add(O2SpellType.LUMOS_SOLEM);
         spells.add(O2SpellType.OBLIVIATE);
         spells.add(O2SpellType.REPELLO_MUGGLETON);
+        spells.add(O2SpellType.ASCENDIO);
         // todo anti-alohomora - https://harrypotter.fandom.com/wiki/Anti-Alohomora_Charm
         // todo impervious - https://harrypotter.fandom.com/wiki/Impervius_Charm
         // todo Imperturbable Charm - like muffliato but not a stationary spell, less range, targets self - https://harrypotter.fandom.com/wiki/Imperturbable_Charm

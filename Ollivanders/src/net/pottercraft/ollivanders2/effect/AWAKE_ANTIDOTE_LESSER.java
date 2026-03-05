@@ -23,9 +23,9 @@ import java.util.UUID;
  * </ul>
  *
  * @author Azami7
- * @see O2EffectAntidoteSuper for the antidote mechanism and strength-based duration reduction
+ * @see O2EffectAntidote for the antidote mechanism and strength-based duration reduction
  */
-public class AWAKE_ANTIDOTE_LESSER extends O2EffectAntidoteSuper {
+public class AWAKE_ANTIDOTE_LESSER extends O2EffectAntidote {
     /**
      * Constructor for creating a weak AWAKE antidote effect.
      *

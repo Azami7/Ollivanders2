@@ -44,7 +44,7 @@ import java.util.List;
  *
  * <p>Reference: <a href="https://harrypotter.fandom.com/wiki/Orb_of_Water">Harry Potter Wiki - Orb of Water</a></p>
  */
-public class CARCEREM_AQUATICUM extends ImmobilizePlayerSuper {
+public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
     /**
      * Setting to 2 minutes, which is the min duration for the WATER_BREATHING effect
      */

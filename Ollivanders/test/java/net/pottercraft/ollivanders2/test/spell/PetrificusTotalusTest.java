@@ -22,10 +22,10 @@ import org.junit.jupiter.api.parallel.Isolated;
  * </ul>
  *
  * @see net.pottercraft.ollivanders2.spell.PETRIFICUS_TOTALUS for the spell implementation
- * @see ImmobilizePlayerSuperTest for inherited test framework
+ * @see ImmobilizePlayerTest for inherited test framework
  */
 @Isolated
-public class PetrificusTotalusTest extends ImmobilizePlayerSuperTest {
+public class PetrificusTotalusTest extends ImmobilizePlayerTest {
     /**
      * Get the spell type being tested.
      *

@@ -16,10 +16,10 @@ import java.util.UUID;
  * fully remove.</p>
  *
  * @author Azami7
- * @see PotionEffectAntidoteSuper for the antidote strength mechanism
+ * @see PotionEffectAntidote for the antidote strength mechanism
  * @see POISON for the poison potion effect this antidote counteracts
  */
-public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
+public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidote {
     /**
      * Constructor for creating a reduced-potency poison antidote.
      *

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * Verifies that the antidote correctly reduces or removes POISON effects
  * based on its partial strength, and does not affect unrelated effects.</p>
  */
-public class PoisonAntidoteLesserTest extends PotionEffectAntidoteSuperTest {
+public class PoisonAntidoteLesserTest extends PotionEffectAntidoteTest {
     /**
      * Create a POISON_ANTIDOTE_LESSER effect for testing.
      *

@@ -52,9 +52,9 @@ import org.jetbrains.annotations.NotNull;
  * @author azami7
  * @see AGGRESSION for the aggressive behavior applied during transformation
  * @see LYCANTHROPY_SPEECH for the wolf-like speech applied during transformation
- * @see ShapeShiftSuper for the shape-shifting transformation mechanism
+ * @see ShapeShift for the shape-shifting transformation mechanism
  */
-public class LYCANTHROPY extends ShapeShiftSuper {
+public class LYCANTHROPY extends ShapeShift {
     /**
      * Tracks additional effects applied during werewolf transformation.
      *

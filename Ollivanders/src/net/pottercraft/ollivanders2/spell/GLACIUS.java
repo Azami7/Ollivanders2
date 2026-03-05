@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Freezing_Spell">Freezing Spell on Harry Potter Wiki</a>
  */
-public final class GLACIUS extends GlaciusSuper {
+public final class GLACIUS extends GlaciusBase {
     /**
      * Minimum effect radius for GLACIUS (1 block).
      *

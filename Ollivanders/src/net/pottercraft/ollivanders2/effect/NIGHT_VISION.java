@@ -16,9 +16,9 @@ import java.util.UUID;
  * (Legilimens) and information spells (Informous) which report the target "can see in darkness".</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class NIGHT_VISION extends PotionEffectSuper {
+public class NIGHT_VISION extends PotionEffect {
     /**
      * Constructor for creating a night vision potion effect.
      *

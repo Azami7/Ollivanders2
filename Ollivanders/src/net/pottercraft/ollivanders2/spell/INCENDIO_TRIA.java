@@ -29,10 +29,10 @@ import java.util.ArrayList;
  * scaled by the caster's spell proficiency and quadrupled compared to basic INCENDIO. The large 4-block
  * block radius makes it effective for clearing forests or large structures.</p>
  *
- * @see IncendioSuper
+ * @see IncendioBase
  * @see <a href="https://harrypotter.fandom.com/wiki/Incendio_Tria">https://harrypotter.fandom.com/wiki/Incendio_Tria</a>
  */
-public final class INCENDIO_TRIA extends IncendioSuper {
+public final class INCENDIO_TRIA extends IncendioBase {
     private static final int maxBurnDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
 
     /**

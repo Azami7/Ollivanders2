@@ -17,9 +17,9 @@ import java.util.UUID;
  * spells (Informous) which report the target "feels sick".</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  */
-public class POISON extends PotionEffectSuper {
+public class POISON extends PotionEffect {
     /**
      * Constructor for creating a poison potion effect.
      *

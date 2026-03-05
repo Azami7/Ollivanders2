@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <li><strong>Reversion:</strong> Verifies temporary blocks are properly reverted</li>
  * </ul>
  */
-abstract public class AquaEructoSuperTest extends O2SpellTestSuper {
+abstract public class AquaEructoBaseTest extends O2SpellTestSuper {
     /**
      * Tests spell construction. No special construction code needed for AQUA_ERUCTO variants.
      */

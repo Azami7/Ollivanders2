@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Glacius_Duo">Glacius Duo on Harry Potter Wiki</a>
  */
-public final class GLACIUS_DUO extends GlaciusSuper {
+public final class GLACIUS_DUO extends GlaciusBase {
     /**
      * Default constructor for spell text generation and documentation.
      *

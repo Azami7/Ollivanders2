@@ -8,12 +8,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Makes certain entities grow into adults, slimes and magma cubes grow larger
+ * Engorgement Charm that makes entities grow larger.
+ *
+ * <p>When cast, the spell targets living entities within a skill-based radius (up to 20 blocks)
+ * and grows them. Baby peaceful creatures become adults, while Slimes and Magma Cubes increase
+ * in size. At higher skill levels (100+), the spell can also affect hostile mobs.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Target Limit: Up to 10 entities per cast (scales with skill)</li>
+ * <li>Range: 20-block maximum detection radius (scales with skill)</li>
+ * <li>Effects: Babies → Adults, Slimes grow 1-2 sizes</li>
+ * <li>Restrictions: Hostile mobs require skill level &ge; 100</li>
+ * </ul>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Engorgement_Charm">https://harrypotter.fandom.com/wiki/Engorgement_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Engorgement_Charm">Engorgement Charm</a>
  */
-public final class ENGORGIO extends ChangeEntitySizeSuper {
+public final class ENGORGIO extends ChangeEntitySize {
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 
@@ -50,22 +62,21 @@ public final class ENGORGIO extends ChangeEntitySizeSuper {
 
         growing = true;
         maxTargets = maxTargetsConfig;
-        maxRadius = maxRadiusConfig;
+        maxEffectRadius = maxRadiusConfig;
 
         initSpell();
     }
 
     /**
-     * Set number of targets and spell radius based on caster's skill
+     * Initializes the spell by calculating targets and effect radius based on caster skill.
+     *
+     * <p>Called during spell initialization to set up dynamic values that scale with the
+     * caster's experience with the spell. Both target count and effect radius are clamped
+     * to their configured limits (10 targets max, 20 blocks max).</p>
      */
     @Override
     void doInitSpell() {
-        targets = (int) (usesModifier / 10) + 1;
-        if (targets > maxTargets)
-            targets = maxTargets;
-
-        radius = (int) (usesModifier / 10) + 1;
-        if (radius > maxRadius)
-            radius = maxRadius;
+        calculateNumberOfTargets();
+        calculateEffectRadius();
     }
 }

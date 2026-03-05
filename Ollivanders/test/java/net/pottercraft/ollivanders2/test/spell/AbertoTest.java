@@ -57,9 +57,9 @@ public class AbertoTest extends O2SpellTestSuper {
      */
     @Override @Test
     void doCheckEffectTest() {
-        World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 100, 40, 100);
-        Location targetLocation = new Location(testWorld, 110, 40, 100);
+        World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 3, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
         Block doorBlock = targetLocation.getBlock();
 
@@ -98,11 +98,8 @@ public class AbertoTest extends O2SpellTestSuper {
         assertNotNull(message, "caster did not get failure message");
     }
 
-    /**
-     * Aberto has no revert actions.
-     */
     @Override @Test
     void revertTest() {
-
+        // aberto has no revert actions
     }
 }

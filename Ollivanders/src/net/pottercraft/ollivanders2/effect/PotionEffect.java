@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +28,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public abstract class PotionEffectSuper extends O2Effect {
+public abstract class PotionEffect extends O2Effect {
     /**
      * The amplifier level of this potion effect.
      *
@@ -64,7 +63,7 @@ public abstract class PotionEffectSuper extends O2Effect {
      * @param isPermanent ignored - potion effects cannot be permanent
      * @param pid         the unique ID of the target player
      */
-    public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+    public PotionEffect(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, false, pid);
     }
 
@@ -83,7 +82,7 @@ public abstract class PotionEffectSuper extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        target.addPotionEffect(new PotionEffect(potionEffectType, duration, strength));
+        target.addPotionEffect(new org.bukkit.potion.PotionEffect(potionEffectType, duration, strength));
 
         kill();
     }

@@ -17,10 +17,10 @@ import java.util.UUID;
  * report the target "feels unwell".</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  * @see BURNING for a time-based damage alternative
  */
-public class HARM extends PotionEffectSuper {
+public class HARM extends PotionEffect {
     /**
      * Constructor for creating an instant damage potion effect.
      *

@@ -1,9 +1,8 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.effect.PotionEffectSuper;
+import net.pottercraft.ollivanders2.effect.PotionEffect;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,10 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * and will validate the effect's behavior automatically.</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the abstract class being tested
+ * @see PotionEffect for the abstract class being tested
  * @see NotPermanentEffectTestSuper for non-permanent effect testing infrastructure
  */
-abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper {
+abstract public class PotionEffectTest extends NotPermanentEffectTestSuper {
     /**
      * Create a PotionEffectSuper instance for testing.
      *
@@ -50,7 +49,7 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
      * @param isPermanent     ignored - potion effects cannot be permanent
      * @return the newly created PotionEffectSuper instance of the type being tested
      */
-    abstract PotionEffectSuper createEffect(Player target, int durationInTicks, boolean isPermanent);
+    abstract PotionEffect createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
      * Test that the potion effect is properly applied to the target player with correct parameters.
@@ -79,7 +78,7 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
         PlayerMock target = mockServer.addPlayer();
 
         // create the potion effect and add it to the effect manager
-        PotionEffectSuper potionEffect = createEffect(target, 100, false);
+        PotionEffect potionEffect = createEffect(target, 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(potionEffect);
         int strength = potionEffect.getStrength();
 
@@ -87,7 +86,7 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
         mockServer.getScheduler().performTicks(1);
 
         // verify the effect adds the correct PotionEffectType, correct strength, and for the correct duration
-        PotionEffect appliedEffect = target.getPotionEffect(potionEffect.getPotionEffectType());
+        org.bukkit.potion.PotionEffect appliedEffect = target.getPotionEffect(potionEffect.getPotionEffectType());
         assertNotNull(appliedEffect, potionEffect.getPotionEffectType().toString() + " did not apply " + potionEffect.getPotionEffectType());
 
         assertEquals(potionEffect.getMinDuration(), appliedEffect.getDuration(), "Potion effect did not have expected duration");

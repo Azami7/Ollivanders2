@@ -36,7 +36,7 @@ public enum ItemEnchantmentType {
      * holding flagrante-cursed items. Cursed items cannot be picked up by block inventories.
      * </p>
      */
-    FLAGRANTE("flagrante", FLAGRANTE.class, null, MagicLevel.EXPERT, true),
+    FLAGRANTE("flagrante", FLAGRANTE.class, null, MagicLevel.NEWT, true),
     /**
      * Duplication curse that spawns duplicates of items.
      * <p>

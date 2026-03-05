@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the UNLUCK potion effect.
  *
  * <p>UnluckTest validates that the UNLUCK effect correctly applies Minecraft's native
- * unlock potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * unlock potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on UNLUCK-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see UNLUCK for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class UnluckTest extends PotionEffectSuperTest {
+public class UnluckTest extends PotionEffectTest {
     /**
      * Create a UNLUCK effect for testing.
      *

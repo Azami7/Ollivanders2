@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the HEALTH_BOOST potion effect.
  *
  * <p>HealthBoostTest validates that the HEALTH_BOOST effect correctly applies Minecraft's native
- * health boost potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * health boost potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on HEALTH_BOOST-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see HEALTH_BOOST for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class HealthBoostTest extends PotionEffectSuperTest {
+public class HealthBoostTest extends PotionEffectTest {
     /**
      * Create a HEALTH_BOOST effect for testing.
      *

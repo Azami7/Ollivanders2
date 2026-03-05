@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
-import net.pottercraft.ollivanders2.spell.ImmobilizePlayerSuper;
+import net.pottercraft.ollivanders2.spell.ImmobilizePlayer;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -32,10 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * </ul>
  *
  * @author Azami7
- * @see ImmobilizePlayerSuper for the spell superclass being tested
+ * @see ImmobilizePlayer for the spell superclass being tested
  * @see O2SpellTestSuper for the base spell testing framework
  */
-abstract public class ImmobilizePlayerSuperTest extends O2SpellTestSuper {
+abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     /**
      * Test that the immobilize spell correctly targets and applies effects to nearby players.
      *
@@ -55,7 +55,7 @@ abstract public class ImmobilizePlayerSuperTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3);
         target.setLocation(targetLocation);
 
-        ImmobilizePlayerSuper immobilize = (ImmobilizePlayerSuper) castSpell(caster, location, targetLocation);
+        ImmobilizePlayer immobilize = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
         assertTrue(immobilize.hasHitTarget(), "did not hit target player");
@@ -83,7 +83,7 @@ abstract public class ImmobilizePlayerSuperTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3);
         target.setLocation(targetLocation);
 
-        ImmobilizePlayerSuper immobilize = (ImmobilizePlayerSuper) castSpell(caster, location, targetLocation);
+        ImmobilizePlayer immobilize = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
         assertTrue(immobilize.hasHitTarget());
@@ -110,7 +110,7 @@ abstract public class ImmobilizePlayerSuperTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3);
         target.setLocation(targetLocation);
 
-        ImmobilizePlayerSuper immobilize = (ImmobilizePlayerSuper) castSpell(caster, location, targetLocation);
+        ImmobilizePlayer immobilize = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
         PlayerMoveEvent event = new PlayerMoveEvent(target, targetLocation, location);

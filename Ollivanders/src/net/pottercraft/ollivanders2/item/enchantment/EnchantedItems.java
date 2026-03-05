@@ -300,15 +300,26 @@ public class EnchantedItems implements Listener {
      */
     public boolean isCursedLevelBased(@NotNull Item item, @NotNull MagicLevel level) {
         // if an item is not cursed, always return false regardless of level
-        if (!isCursed(item))
+        if (!isCursed(item)) {
+            common.printDebugMessage("EnchantedItems.isCursedLevelBased: item is not cursed", null, null, false);
             return false;
+        }
+
+        common.printDebugMessage("EnchantedItems.isCursedLevelBased: item is cursed", null, null, false);
 
         ItemEnchantmentType enchantmentType = getEnchantmentType(item.getItemStack());
         if (enchantmentType == null) // this should never happen because isCursed would have been false, this is to make the linter happy
             return false;
 
+        common.printDebugMessage("curse level is " + enchantmentType.getLevel() + ", detection level is" + level, null, null, false);
         // Can they detect this curse? Return true if curse level is not too high
-        return enchantmentType.getLevel().ordinal() <= (level.ordinal() + 1);
+        if (enchantmentType.getLevel().ordinal() <= (level.ordinal() + 1)) {
+            common.printDebugMessage("EnchantedItems.isCursedLevelBased: curse can be detected", null, null, false);
+            return true;
+        }
+        // else
+        common.printDebugMessage("EnchantedItems.isCursedLevelBased: curse cannot be detected", null, null, false);
+        return false;
     }
 
     /**

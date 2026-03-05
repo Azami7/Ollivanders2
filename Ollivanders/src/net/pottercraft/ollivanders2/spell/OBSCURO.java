@@ -61,6 +61,7 @@ public final class OBSCURO extends AddPotionEffect {
         minDurationInSeconds = minDurationInSecondsConfig;
         maxDurationInSeconds = maxDurationInSecondsConfig;
         durationModifier = 1.0;
+        affectSingleTarget = false;
 
         effectTypes.add(PotionEffectType.BLINDNESS);
 

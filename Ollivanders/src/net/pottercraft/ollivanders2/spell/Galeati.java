@@ -16,7 +16,7 @@ import java.util.List;
  * In HP, these would be Transfiguration spells but for code purposes they behave like charm projectiles, so we
  * extend Charms then override the spell type.
  */
-public abstract class GaleatiSuper extends O2Spell {
+public abstract class Galeati extends O2Spell {
     Material materialType = Material.AIR;
 
     /**
@@ -24,7 +24,7 @@ public abstract class GaleatiSuper extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public GaleatiSuper(Ollivanders2 plugin) {
+    public Galeati(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -35,7 +35,7 @@ public abstract class GaleatiSuper extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GaleatiSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public Galeati(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 

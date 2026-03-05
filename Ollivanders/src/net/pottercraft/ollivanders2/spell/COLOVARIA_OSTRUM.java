@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public final class COLOVARIA_OSTRUM extends ColoroSuper {
+public final class COLOVARIA_OSTRUM extends ChangeColorable {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

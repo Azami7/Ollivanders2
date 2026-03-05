@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * Verifies that the antidote correctly reduces or removes HARM effects
  * based on its partial strength, and does not affect unrelated effects.</p>
  */
-public class HarmAntidoteLesserTest extends PotionEffectAntidoteSuperTest {
+public class HarmAntidoteLesserTest extends PotionEffectAntidoteTest {
     /**
      * Create a HARM_ANTIDOTE_LESSER effect for testing.
      *

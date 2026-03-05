@@ -16,10 +16,10 @@ import java.util.UUID;
  * detectable by mind-reading spells (Legilimens) which report the target "feels healthy".</p>
  *
  * @author Azami7
- * @see PotionEffectSuper for the potion effect application mechanism
+ * @see PotionEffect for the potion effect application mechanism
  * @see HARM for the instant damage counterpart to this healing effect
  */
-public class HEAL extends PotionEffectSuper {
+public class HEAL extends PotionEffect {
     /**
      * Constructor for creating an instant healing potion effect.
      *

@@ -16,10 +16,10 @@ import java.util.UUID;
  * fully remove.</p>
  *
  * @author Azami7
- * @see PotionEffectAntidoteSuper for the antidote strength mechanism
+ * @see PotionEffectAntidote for the antidote strength mechanism
  * @see UNLUCK for the unluck potion effect this antidote counteracts
  */
-public class UNLUCK_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
+public class UNLUCK_ANTIDOTE_LESSER extends PotionEffectAntidote {
     /**
      * Constructor for creating a reduced-potency unluck antidote.
      *

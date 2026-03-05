@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import net.pottercraft.ollivanders2.spell.IncendioSuper;
+import net.pottercraft.ollivanders2.spell.IncendioBase;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Azami7
  */
-abstract public class IncendioSuperTest extends O2SpellTestSuper {
+abstract public class IncendioBaseTest extends O2SpellTestSuper {
     /**
      * Tests spell construction and configuration.
      *
@@ -106,11 +106,11 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         Block target = targetLocation.getBlock();
         target.setType(Material.BEDROCK);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
         assertNotEquals(Material.FIRE, target.getRelative(BlockFace.UP).getType(), "target block is on fire when it is not a valid target");
-        assertTrue(incendioSuper.isKilled(), "spell not killed when target was invalid");
+        assertTrue(incendioBase.isKilled(), "spell not killed when target was invalid");
     }
 
     /**
@@ -137,14 +137,14 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(target.getRelative(BlockFace.DOWN).getLocation(), 5);
         target.setType(Material.SOUL_SAND);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation);
 
         mockServer.getScheduler().performTicks(20);
         assertEquals(Material.FIRE, target.getRelative(BlockFace.UP).getType());
         assertFalse(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target), "target added to temporary block tracking when it is a staysLit block");
 
-        mockServer.getScheduler().performTicks(incendioSuper.getBurnDuration() + 1);
-        assertTrue(incendioSuper.isKilled());
+        mockServer.getScheduler().performTicks(incendioBase.getBurnDuration() + 1);
+        assertTrue(incendioBase.isKilled());
         assertEquals(Material.FIRE, target.getRelative(BlockFace.UP).getType());
     }
 
@@ -198,9 +198,9 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(target.getRelative(BlockFace.DOWN).getLocation(), 5);
         Entity target1 = testWorld.spawnEntity(targetLocation, EntityType.SPIDER);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertFalse(incendioSuper.isKilled(), "spell failed to target target1");
+        assertFalse(incendioBase.isKilled(), "spell failed to target target1");
         assertTrue(target1.getFireTicks() > 0, "target1 is not on fire");
     }
 
@@ -223,16 +223,16 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
 
         TestCommon.createBlockBase(targetLocation, 3, Material.OAK_PLANKS);
         mockServer.getScheduler().performTicks(20);
 
-        if (incendioSuper.isStrafe() && incendioSuper.getBlockRadius() > 1) {
-            assertTrue(Ollivanders2API.getBlocks().getBlocksChangedBySpell(incendioSuper).size() > 1, "strafe did not target multiple blocks");
+        if (incendioBase.isStrafe() && incendioBase.getBlockRadius() > 1) {
+            assertTrue(Ollivanders2API.getBlocks().getBlocksChangedBySpell(incendioBase).size() > 1, "strafe did not target multiple blocks");
         }
         else {
-            assertEquals(1, Ollivanders2API.getBlocks().getBlocksChangedBySpell(incendioSuper).size(), "targeted multiple blocks when strafe not set");
+            assertEquals(1, Ollivanders2API.getBlocks().getBlocksChangedBySpell(incendioBase).size(), "targeted multiple blocks when strafe not set");
         }
     }
 
@@ -263,10 +263,10 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         Entity target3 = testWorld.spawnEntity(center.getRelative(BlockFace.NORTH).getLocation(), EntityType.SPIDER);
         mockServer.getScheduler().performTicks(5);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
 
-        if (incendioSuper.isStrafe() && incendioSuper.getBlockRadius() > 1) {
+        if (incendioBase.isStrafe() && incendioBase.getBlockRadius() > 1) {
             assertTrue(target1.getFireTicks() > 0, "target1 not on fire");
             assertTrue(target2.getFireTicks() > 0, "target2 not on fire");
             assertTrue(target3.getFireTicks() > 0, "target3 not on fire");
@@ -303,10 +303,10 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         Item target3 = testWorld.dropItem(center.getRelative(BlockFace.EAST).getLocation(), new ItemStack(Material.ARROW, 1));
         mockServer.getScheduler().performTicks(5);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
 
-        if (incendioSuper.isStrafe() && incendioSuper.getBlockRadius() > 1) {
+        if (incendioBase.isStrafe() && incendioBase.getBlockRadius() > 1) {
             assertTrue(target1.getFireTicks() > 0, "target1 not on fire");
             assertTrue(target2.getFireTicks() > 0, "target2 not on fire");
             assertTrue(target3.getFireTicks() > 0, "target3 not on fire");
@@ -337,11 +337,11 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
 
         TestCommon.createBlockBase(targetLocation, 3);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(incendioSuper.getBurnDuration() <= incendioSuper.getMaxBurnDuration(), "burn duration > max burn duration");
-        assertTrue(incendioSuper.getBurnDuration() >= incendioSuper.getMinBurnDuration(), "burn duration < min burn duration");
+        assertTrue(incendioBase.getBurnDuration() <= incendioBase.getMaxBurnDuration(), "burn duration > max burn duration");
+        assertTrue(incendioBase.getBurnDuration() >= incendioBase.getMinBurnDuration(), "burn duration < min burn duration");
     }
 
     /**
@@ -372,15 +372,15 @@ abstract public class IncendioSuperTest extends O2SpellTestSuper {
         target.setType(Material.OAK_PLANKS);
         above.setType(Material.AIR);
 
-        IncendioSuper incendioSuper = (IncendioSuper) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(incendioSuper.hasHitTarget());
+        assertTrue(incendioBase.hasHitTarget());
         assertEquals(Material.FIRE, above.getType());
         assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(above), "above block not added to temporarily changed block tracking");
         assertFalse(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target), "target block was added to temporarily changed block tracking");
 
-        incendioSuper.kill();
+        incendioBase.kill();
         mockServer.getScheduler().performTicks(1);
         assertEquals(Material.AIR, above.getType(), "above block not reverted to original type");
         assertFalse(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(above), "above block still in temporarily changed block tracking");

@@ -23,9 +23,9 @@ import java.util.UUID;
  * </ul>
  *
  * @author Azami7
- * @see PlayerChangeSizeSuper for the size adjustment mechanism
+ * @see PlayerChangeSize for the size adjustment mechanism
  */
-public class SHRINKING extends PlayerChangeSizeSuper {
+public class SHRINKING extends PlayerChangeSize {
     /**
      * Constructor for creating a size reduction effect.
      *

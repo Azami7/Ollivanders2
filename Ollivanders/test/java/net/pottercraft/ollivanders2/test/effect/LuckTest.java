@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Test suite for the LUCK potion effect.
  *
  * <p>LuckTest validates that the LUCK effect correctly applies Minecraft's native
- * luck potion effect to target players. This test class extends {@link PotionEffectSuperTest}
+ * luck potion effect to target players. This test class extends {@link PotionEffectTest}
  * to inherit comprehensive testing of potion effect behavior while focusing on LUCK-specific
  * implementation details.</p>
  *
@@ -26,9 +26,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  * @see LUCK for the effect implementation being tested
- * @see PotionEffectSuperTest for the comprehensive potion effect testing framework
+ * @see PotionEffectTest for the comprehensive potion effect testing framework
  */
-public class LuckTest extends PotionEffectSuperTest {
+public class LuckTest extends PotionEffectTest {
     /**
      * Create a LUCK effect for testing.
      *
