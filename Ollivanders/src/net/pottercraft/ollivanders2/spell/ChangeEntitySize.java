@@ -35,7 +35,7 @@ public abstract class ChangeEntitySize extends O2Spell {
     /**
      * Max possible radius for the spell
      */
-    static int maxRadius = 20;
+    static int maxEffectRadius = 20;
 
     /**
      * The number of entities to target
@@ -45,7 +45,7 @@ public abstract class ChangeEntitySize extends O2Spell {
     /**
      * The radius to affect
      */
-    int radius;
+    double effectRadius;
 
     /**
      * Is this spell growing or shrinking the entity?
@@ -104,7 +104,7 @@ public abstract class ChangeEntitySize extends O2Spell {
             return;
         }
 
-        for (LivingEntity livingEntity : getNearbyLivingEntities(radius)) {
+        for (LivingEntity livingEntity : getNearbyLivingEntities(effectRadius)) {
             if (targets < 1) {
                 kill();
                 return;
@@ -119,7 +119,7 @@ public abstract class ChangeEntitySize extends O2Spell {
                 continue;
 
             if (livingEntity instanceof Ageable) {
-                changeEntityAge((Ageable)livingEntity);
+                changeEntityAge((Ageable) livingEntity);
             }
             else if (livingEntity instanceof Slime)
                 changeSlimeSize((Slime) livingEntity);
@@ -128,6 +128,24 @@ public abstract class ChangeEntitySize extends O2Spell {
 
             targets = targets - 1;
         }
+    }
+
+    void calculateNumberOfTargets() {
+        targets = (int) (usesModifier / 10);
+
+        if (targets < 1)
+            targets = 1;
+        else if (targets > maxTargets)
+            targets = maxTargets;
+    }
+
+    void calculateEffectRadius() {
+        effectRadius = usesModifier / 10;
+
+        if (effectRadius < defaultRadius)
+            effectRadius = defaultRadius;
+        else if (effectRadius > maxEffectRadius)
+            effectRadius = maxEffectRadius;
     }
 
     /**
@@ -176,5 +194,14 @@ public abstract class ChangeEntitySize extends O2Spell {
             newSize = minSlimeSize;
 
         slime.setSize(newSize);
+    }
+
+    /**
+     * Returns whether this spell grows entities (true) or shrinks them (false).
+     *
+     * @return true if growing, false if shrinking
+     */
+    public boolean isGrowing() {
+        return growing;
     }
 }

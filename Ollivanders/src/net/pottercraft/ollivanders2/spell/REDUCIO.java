@@ -2,16 +2,28 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.
+ * Shrinking Charm that makes entities smaller.
+ *
+ * <p>When cast, the spell targets living entities within a skill-based radius (up to 20 blocks)
+ * and shrinks them. Adult peaceful creatures become babies, while Slimes and Magma Cubes decrease
+ * in size. At higher skill levels (100+), the spell can also affect hostile mobs.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Target Limit: Up to 10 entities per cast (scales with skill)</li>
+ * <li>Range: 20-block maximum detection radius (scales with skill)</li>
+ * <li>Effects: Adults → Babies, Slimes shrink 1-2 sizes</li>
+ * <li>Restrictions: Hostile mobs require skill level &ge; 100</li>
+ * </ul>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Shrinking_Charm">https://harrypotter.fandom.com/wiki/Shrinking_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Shrinking_Charm">Shrinking Charm</a>
  */
 public final class REDUCIO extends ChangeEntitySize {
     private static final int maxRadiusConfig = 20;
@@ -51,22 +63,21 @@ public final class REDUCIO extends ChangeEntitySize {
 
         growing = false;
         maxTargets = maxTargetsConfig;
-        maxRadius = maxRadiusConfig;
+        maxEffectRadius = maxRadiusConfig;
 
         initSpell();
     }
 
     /**
-     * Set the number of targets and the radius based on caster's experience.
+     * Initializes the spell by calculating targets and effect radius based on caster skill.
+     *
+     * <p>Called during spell initialization to set up dynamic values that scale with the
+     * caster's experience with the spell. Both target count and effect radius are clamped
+     * to their configured limits (10 targets max, 20 blocks max).</p>
      */
     @Override
     void doInitSpell() {
-        targets = (int) (usesModifier / 10) + 1;
-        if (targets > maxTargets)
-            targets = maxTargets;
-
-        radius = (int) (usesModifier / 10) + 1;
-        if (radius > maxRadius)
-            radius = maxRadius;
+        calculateNumberOfTargets();
+        calculateEffectRadius();
     }
 }

@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * </ul>
  */
 @Isolated
-public class AquaEructoDuoTest extends AquaEructoSuperTest {
+public class AquaEructoDuoTest extends AquaEructoBaseTest {
     /**
      * Returns the spell type being tested.
      *
