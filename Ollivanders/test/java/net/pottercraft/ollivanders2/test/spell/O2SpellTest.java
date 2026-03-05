@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.HIGHER_SKILL;
-import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.Year;
@@ -17,10 +16,10 @@ import net.pottercraft.ollivanders2.spell.BOTHYNUS;
 import net.pottercraft.ollivanders2.spell.BRACKIUM_EMENDO;
 import net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO;
 import net.pottercraft.ollivanders2.spell.DEFODIO;
-import net.pottercraft.ollivanders2.spell.DELETRIUS;
 import net.pottercraft.ollivanders2.spell.DEPRIMO;
 import net.pottercraft.ollivanders2.spell.DIFFINDO;
 import net.pottercraft.ollivanders2.spell.EPISKEY;
+import net.pottercraft.ollivanders2.spell.FIANTO_DURI;
 import net.pottercraft.ollivanders2.spell.LUMOS;
 import net.pottercraft.ollivanders2.spell.MELOFORS;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -712,31 +711,26 @@ public class O2SpellTest {
      */
     @Test
     void sendFailureMessageTest() {
-        World testWorld = mockServer.addSimpleWorld("world");
-        Location castLocation = new Location(testWorld, 1200, 40, 100);
-        Location targetLocation = new Location(testWorld, 1200, 40, 110);
+        World testWorld = mockServer.addSimpleWorld("O2Spell");
+        Location location = new Location (testWorld, 1200, 40, 100);
+        Location targetLocation = new Location(testWorld, location.getX() + 3, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
-        caster.setLocation(TestCommon.faceTarget(castLocation, targetLocation));
 
-        DELETRIUS deletrius = new DELETRIUS(testPlugin, caster, O2PlayerCommon.rightWand);
-        deletrius.sendFailureMessage();
-        mockServer.getScheduler().performTicks(10);
+        FIANTO_DURI fiantoDuri = new FIANTO_DURI(testPlugin, caster, O2PlayerCommon.rightWand);
+        fiantoDuri.sendFailureMessage();
 
         String message = caster.nextMessage();
         assertNotNull(message, "player did not get spell failure message");
-        assertEquals(deletrius.getFailureMessage(), TestCommon.cleanChatMessage(message), "player did not get expected failure message");
+        assertEquals(fiantoDuri.getFailureMessage(), TestCommon.cleanChatMessage(message), "player did not get expected failure message");
 
         // verify failure message sends when spell actually fails
-        testWorld.getBlockAt(targetLocation).getRelative(BlockFace.DOWN).setType(Material.DIRT);
-        ItemStack broom = O2ItemType.BROOMSTICK.getItem(1);
-        assertNotNull(broom);
-        testWorld.dropItem(targetLocation, broom);
-        Ollivanders2API.getSpells().addSpell(caster, deletrius);
+        TestCommon.createNorthSouthBlockWall(targetLocation, 5);
+        Ollivanders2API.getSpells().addSpell(caster, fiantoDuri);
         mockServer.getScheduler().performTicks(20);
 
         message = caster.nextMessage();
         assertNotNull(message, "player did not get spell failure message when spell failed");
-        assertEquals(deletrius.getFailureMessage(), TestCommon.cleanChatMessage(message), "player did not get expected failure message when spell failed");
+        assertEquals(fiantoDuri.getFailureMessage(), TestCommon.cleanChatMessage(message), "player did not get expected failure message when spell failed");
     }
 
     @Nullable

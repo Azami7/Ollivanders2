@@ -28,6 +28,12 @@ sourceSets {
         }
     }
 }
+configurations.all {
+    resolutionStrategy {
+        force("org.apache.commons:commons-lang3:3.18.0")
+    }
+}
+
 dependencies {
     implementation("org.jetbrains:annotations:26.0.1")
     implementation("com.google.code.gson:gson:2.11.0")
