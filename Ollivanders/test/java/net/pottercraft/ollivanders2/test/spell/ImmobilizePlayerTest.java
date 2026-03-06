@@ -5,19 +5,22 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.spell.ImmobilizePlayer;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for testing ImmobilizePlayerSuper spell implementations.
+ * Abstract base class for testing ImmobilizePlayer spell implementations.
  *
- * <p>ImmobilizePlayerSuperTest provides a common testing framework for all spell subclasses that extend
- * ImmobilizePlayerSuper, which are spells that target and immobilize a nearby player. This test class
+ * <p>ImmobilizePlayerTest provides a common testing framework for all spell subclasses that extend
+ * ImmobilizePlayer, which are spells that target and immobilize a nearby player. This test class
  * validates that the spell correctly targets players, applies appropriate immobilization effects, and
  * respects duration and immobilization type (full vs. partial).</p>
  *
@@ -29,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <li>Movement restriction - verifies location changes are prevented while rotation may be allowed</li>
  * <li>Full immobilization - verifies FULL_IMMOBILIZE prevents all movement including rotation</li>
  * <li>Partial immobilization - verifies IMMOBILIZE allows rotation but prevents location changes</li>
+ * <li>Prison block creation and reversion (for spells with imprison = true)</li>
  * </ul>
  *
  * @author Azami7
@@ -36,6 +40,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see O2SpellTestSuper for the base spell testing framework
  */
 abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
+    /**
+     * Overridden to do nothing. Immobilize spells have no construction requirements beyond
+     * those covered by inherited base class tests.
+     */
+    @Override
+    @Test
+    void spellConstructionTest() {
+    }
+
     /**
      * Test that the immobilize spell correctly targets and applies effects to nearby players.
      *
@@ -136,31 +149,89 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     /**
      * Test that the spell correctly rejects invalid targets.
      *
-     * <p>Abstract method that concrete subclasses must implement to test spell-specific target validation
-     * logic. Examples of invalid targets may include players with certain attributes, effects, or conditions
-     * that prevent the spell from affecting them.</p>
+     * <p>No-op by default. Subclasses may override to test spell-specific target validation logic,
+     * such as verifying that players with certain attributes or conditions cannot be targeted.</p>
      */
     @Test
-    abstract void invalidTargetTest();
+    void invalidTargetTest() {
+    }
+
+    /**
+     * Test that prison blocks are created correctly when the spell imprisons the target.
+     *
+     * <p>For spells with imprison = true, verifies that the prison material is placed adjacent to the
+     * target's eye location and that the block is tracked as a temporarily changed block. For spells
+     * where prisonIsShell = false, also verifies that the block at the target's eye location itself
+     * is changed. For non-imprisoning spells, verifies that no blocks are changed.</p>
+     */
+    @Test
+    void imprisonEffectTest() {
+        World testWorld = mockServer.addSimpleWorld("Immobilize");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
+        PlayerMock caster = mockServer.addPlayer();
+
+        PlayerMock target = mockServer.addPlayer();
+        TestCommon.createBlockBase(new Location(targetLocation.getWorld(), target.getX(), target.getY() - 1, target.getZ()), 3);
+        target.setLocation(targetLocation);
+        assertEquals(Material.AIR, target.getEyeLocation().getBlock().getType());
+
+        ImmobilizePlayer immobilizePlayer = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
+        mockServer.getScheduler().performTicks(20);
+        assertTrue(immobilizePlayer.hasHitTarget());
+
+        if (immobilizePlayer.doesImprison()) {
+            Material prisonMaterial = immobilizePlayer.getImprisonMaterial();
+
+            assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was changed");
+            assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target.getEyeLocation().getBlock().getRelative(BlockFace.EAST)), "block not added to tracking");
+            if (!immobilizePlayer.isPrisonShell()) {
+                assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getType(), "block at eye location not changed to Water");
+            }
+        }
+        else
+            assertEquals(Material.AIR, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was changed");
+    }
 
     /**
      * Test that the spell applies any spell-specific additional effects to the target.
      *
-     * <p>Abstract method that concrete subclasses must implement to test additional effects beyond the
-     * base immobilization effect. Different immobilize spells may apply supplementary effects such as
-     * potion effects or environmental changes as part of their mechanics.</p>
+     * <p>No-op by default. Subclasses may override to verify supplementary effects such as
+     * potion effects or environmental changes applied beyond the base immobilization.</p>
      */
     @Test
-    abstract void additionalEffectsTest();
+    void additionalEffectsTest() {
+    }
 
     /**
-     * Test that the spell effects revert after expiration.
+     * Test that prison blocks are reverted after the effect duration expires.
      *
-     * <p>This test is left empty for immobilize spells as the revert behavior is handled by the standard
-     * effect expiration mechanism and is not spell-specific.</p>
+     * <p>Verifies that when the immobilization effect duration expires, all prison blocks
+     * are automatically reverted to their original state (AIR) and are no longer tracked
+     * as temporarily changed blocks.</p>
      */
     @Override
     @Test
     void revertTest() {
+        World testWorld = mockServer.addSimpleWorld("Immobilize");
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
+        PlayerMock caster = mockServer.addPlayer();
+
+        ImmobilizePlayer immobilizePlayer = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
+
+        if (immobilizePlayer.doesImprison()) {
+            PlayerMock target = mockServer.addPlayer();
+            TestCommon.createBlockBase(new Location(targetLocation.getWorld(), target.getX(), target.getY() - 1, target.getZ()), 3);
+            target.setLocation(targetLocation);
+
+            mockServer.getScheduler().performTicks(20);
+
+            assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(targetLocation.getBlock().getRelative(BlockFace.EAST)));
+            mockServer.getScheduler().performTicks(immobilizePlayer.getEffectDuration());
+
+            assertFalse(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(targetLocation.getBlock().getRelative(BlockFace.EAST)), "prison block still being tracked");
+            assertEquals(Material.AIR, targetLocation.getBlock().getType(), "prison block not reverted");
+        }
     }
 }

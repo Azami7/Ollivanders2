@@ -10,13 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Shield Charm - Protego - was a charm that protected the caster with an invisible shield that deflects spells
- * and projectiles.
- * <p>
- * {@link net.pottercraft.ollivanders2.effect.PROTEGO}
+ * The Shield Charm - applies the {@link net.pottercraft.ollivanders2.effect.O2EffectType#PROTEGO} O2Effect
+ * to the caster, providing a shield that deflects spells and projectiles.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Shield_Charm">https://harrypotter.fandom.com/wiki/Shield_Charm</a>
- * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
+ * @see <a href="https://harrypotter.fandom.com/wiki/Shield_Charm">Shield Charm</a>
+ * @see net.pottercraft.ollivanders2.effect.PROTEGO
+ * @see net.pottercraft.ollivanders2.stationaryspell.ShieldSpell
  */
 public final class PROTEGO extends AddO2Effect {
     /**
@@ -49,7 +48,7 @@ public final class PROTEGO extends AddO2Effect {
     public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.FUMOS;
+        spellType = O2SpellType.PROTEGO;
         branch = O2MagicBranch.CHARMS;
 
         effectsToAdd.add(O2EffectType.PROTEGO);

@@ -10,12 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Causes blindness in a radius larger than fumos.
+ * The Stronger Smoke-Screen Spell - applies the {@link net.pottercraft.ollivanders2.effect.O2EffectType#FUMOS_DUO}
+ * effect to the caster, creating a larger defensive smoke cloud than {@link FUMOS} that lasts longer.
  *
- * @author lownes
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Fumos_Duo">https://harrypotter.fandom.com/wiki/Fumos_Duo</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Fumos_Duo">Stronger Smoke-Screen Spell</a>
  */
 public final class FUMOS_DUO extends AddO2Effect {
     /**

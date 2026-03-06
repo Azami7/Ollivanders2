@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * The Tickling Charm, also known as the Tickle Charm - Rictusempra - is a charm that caused the target to buckle with laughter.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Tickling_Charm">https://harrypotter.fandom.com/wiki/Tickling_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Tickling_Charm">Tickling Charm</a>
  * @since 2.21
  */
 public class RICTUSEMPRA extends AddO2Effect {

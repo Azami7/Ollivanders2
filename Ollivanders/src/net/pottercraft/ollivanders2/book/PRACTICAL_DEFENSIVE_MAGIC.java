@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.REDUCTO}<br>
  * {@link net.pottercraft.ollivanders2.spell.IMPEDIMENTA}<br>
  * {@link net.pottercraft.ollivanders2.spell.LACARNUM_INFLAMARI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AQUA_ERUCTO_DUO}<br>
  * {@link net.pottercraft.ollivanders2.spell.MUFFLIATO}<br>
  * {@link net.pottercraft.ollivanders2.spell.VERMILLIOUS_TRIA}
  * </p>

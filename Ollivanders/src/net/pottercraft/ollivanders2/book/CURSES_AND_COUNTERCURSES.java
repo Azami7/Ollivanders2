@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.spell.GEMINO;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.spell.PETRIFICUS_TOTALUS}<br>
- * {@link GEMINO}<br>
- * {@link net.pottercraft.ollivanders2.spell.LOQUELA_INEPTIAS}
+ * {@link net.pottercraft.ollivanders2.spell.GEMINO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LOQUELA_INEPTIAS}<br>
  * </p>
  *
  * @author Azami7
@@ -40,6 +39,6 @@ public class CURSES_AND_COUNTERCURSES extends O2Book {
         // todo confringo - https://harrypotter.fandom.com/wiki/Blasting_Curse
         // todo conjuntivitis curse - https://harrypotter.fandom.com/wiki/Conjunctivitis_Curse
         // todo expluso - https://harrypotter.fandom.com/wiki/Expulso_Curse
-        // slugus eructo - https://harrypotter.fandom.com/wiki/Slug-Vomiting_Charm
+        // todo slugus eructo - https://harrypotter.fandom.com/wiki/Slug-Vomiting_Charm
     }
 }

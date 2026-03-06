@@ -40,6 +40,10 @@ public enum O2SpellType {
      */
     AMATO_ANIMO_ANIMATO_ANIMAGUS(AMATO_ANIMO_ANIMATO_ANIMAGUS.class, MagicLevel.NEWT),
     /**
+     * {@link ANAPNEO}
+     */
+    ANAPNEO(ANAPNEO.class, MagicLevel.NEWT),
+    /**
      * {@link APARECIUM}
      */
     APARECIUM(APARECIUM.class, MagicLevel.BEGINNER),

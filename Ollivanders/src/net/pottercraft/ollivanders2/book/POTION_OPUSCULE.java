@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.potion.FORGETFULNESS_POTION;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.potion.BABBLING_BEVERAGE}<br>
- * {@link FORGETFULNESS_POTION}
+ * {@link net.pottercraft.ollivanders2.potion.FORGETFULNESS_POTION}
  * </p>
  *
  * @author Azami7

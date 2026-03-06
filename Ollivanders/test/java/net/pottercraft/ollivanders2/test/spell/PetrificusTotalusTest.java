@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 
 /**
@@ -35,38 +34,5 @@ public class PetrificusTotalusTest extends ImmobilizePlayerTest {
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.PETRIFICUS_TOTALUS;
-    }
-
-    /**
-     * Test spell construction and initial configuration.
-     *
-     * <p>Overridden to do nothing as PETRIFICUS_TOTALUS has no spell-specific construction
-     * requirements beyond those tested in the base class.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
-     * Test that no players are invalid targets for this spell.
-     *
-     * <p>PETRIFICUS_TOTALUS can target any player without restrictions. This test is overridden
-     * to do nothing as there are no invalid target conditions to test.</p>
-     */
-    @Override
-    @Test
-    void invalidTargetTest() {
-    }
-
-    /**
-     * Test that no additional effects are applied beyond immobilization.
-     *
-     * <p>PETRIFICUS_TOTALUS applies only the FULL_IMMOBILIZE effect with no additional effects.
-     * This test is overridden to do nothing as there are no additional effects to test.</p>
-     */
-    @Override
-    @Test
-    void additionalEffectsTest() {
     }
 }

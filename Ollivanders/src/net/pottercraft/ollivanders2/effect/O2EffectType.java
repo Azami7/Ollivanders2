@@ -100,7 +100,7 @@ public enum O2EffectType {
     /**
      * {@link FUMOS_DUO}
      */
-    FUMOS_DUO(FUMOS.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    FUMOS_DUO(FUMOS_DUO.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link HARM}
      */

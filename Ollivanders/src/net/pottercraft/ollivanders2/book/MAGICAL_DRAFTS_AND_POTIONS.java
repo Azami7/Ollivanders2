@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.potion.FORGETFULNESS_POTION;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,15 +8,18 @@ import org.jetbrains.annotations.NotNull;
  * Magical Drafts and Potions - OWL potions book
  * <p>
  * {@link net.pottercraft.ollivanders2.potion.COMMON_ANTIDOTE_POTION}<br>
- * {@link FORGETFULNESS_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.FORGETFULNESS_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.HERBICIDE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.CURE_FOR_BOILS}<br>
  * {@link net.pottercraft.ollivanders2.potion.OCULUS_FELIS}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIGGENWELD_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.ICE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.STRENGTHENING_SOLUTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.WEAKNESS_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.HUNGER_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.SATIATION_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.SWELLING_SOLUTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.SHRINKING_SOLUTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.SLEEPING_DRAUGHT}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIT_SHARPENING_POTION}

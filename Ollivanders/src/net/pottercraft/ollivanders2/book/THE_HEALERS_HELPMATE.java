@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.AGUAMENTI}<br>
  * {@link net.pottercraft.ollivanders2.spell.BRACKIUM_EMENDO}<br>
  * {@link net.pottercraft.ollivanders2.spell.EPISKEY}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AQUA_ERUCTO}<br>
  * {@link net.pottercraft.ollivanders2.potion.COMMON_ANTIDOTE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
  * </p>
@@ -33,8 +34,8 @@ public class THE_HEALERS_HELPMATE extends O2Book {
         spells.add(O2SpellType.AGUAMENTI);
         spells.add(O2SpellType.BRACKIUM_EMENDO);
         spells.add(O2SpellType.EPISKEY);
-        potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
         spells.add(O2SpellType.AQUA_ERUCTO);
+        potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
         // todo wound cleaning potion
         // todo pepperup potion
         potions.add(O2PotionType.WIDEYE_POTION);

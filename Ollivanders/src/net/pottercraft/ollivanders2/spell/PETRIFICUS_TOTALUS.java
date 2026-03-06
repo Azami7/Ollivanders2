@@ -24,7 +24,8 @@ import java.util.ArrayList;
  * <li>Complete immobilization leaves the victim helpless but unharmed</li>
  * </ul>
  *
- * <p>Reference: <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">Harry Potter Wiki - Full Body-Bind Curse</a></p>
+ * @author Azami7
+ * @see <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">Harry Potter Wiki - Full Body-Bind Curse</a></p>
  */
 public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
     /**
@@ -76,16 +77,5 @@ public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
      */
     boolean canTarget(Player target) {
         return true; // we can target any player
-    }
-
-    /**
-     * Apply any spell-specific additional effects to the immobilized target.
-     *
-     * <p>Petrificus Totalus has no additional effects beyond the FULL_IMMOBILIZE effect applied by the
-     * parent class. The target is simply frozen in place without any secondary effects or conditions.</p>
-     *
-     * @param target the immobilized player (unused)
-     */
-    void addAdditionalEffects(Player target) {
     }
 }

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * Chadwick's Charms - O.W.L level charms book
  * <p>
  * Contents:<br>
- * {@link net.pottercraft.ollivanders2.spell.ASCENDIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.CRESCERE_PROTEGAT}<br>
  * {@link net.pottercraft.ollivanders2.spell.HORREAT_PROTEGAT}<br>
  * {@link net.pottercraft.ollivanders2.spell.MOV_FOTIA}<br>
