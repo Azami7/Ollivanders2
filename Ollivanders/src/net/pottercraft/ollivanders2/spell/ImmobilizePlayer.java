@@ -206,10 +206,13 @@ abstract public class ImmobilizePlayer extends O2Spell {
      */
     void imprisonPlayer(Player target) {
         BlockData additionalBlockData = getAdditionalPrisonBlockData();
-        BoundingBox playerBoundingBox = prisonIsShell ? target.getBoundingBox() : null;
-        if (playerBoundingBox == null) {
-            common.printDebugMessage("ImmobilizePlayer.imprisonPlayer: playerBoundingBox is null", null, null, true);
-            return;
+        BoundingBox playerBoundingBox = null;
+        if (prisonIsShell) {
+            playerBoundingBox = target.getBoundingBox();
+            if (playerBoundingBox == null) {
+                common.printDebugMessage("ImmobilizePlayer.imprisonPlayer: playerBoundingBox is null", null, null, true);
+                return;
+            }
         }
 
         List<Block> blocks = calculateBlocksToChange(target.getBoundingBox().expand(1.0));

@@ -151,10 +151,12 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         AddO2Effect addO2Effect = (AddO2Effect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1);
+        addO2Effect.calculateEffectDurationInSeconds();
         assertTrue(addO2Effect.getDurationInSeconds() >= addO2Effect.getMinDurationInSeconds(), "duration < min duration at skill level 1");
         assertTrue(addO2Effect.getDurationInSeconds() <= addO2Effect.getMaxDurationInSeconds(), "duration > max duration at skill level 1");
 
         addO2Effect = (AddO2Effect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
+        addO2Effect.calculateEffectDurationInSeconds();
         assertTrue(addO2Effect.getDurationInSeconds() >= addO2Effect.getMinDurationInSeconds(), "duration < min duration at skill level mastery * 2");
         assertTrue(addO2Effect.getDurationInSeconds() <= addO2Effect.getMaxDurationInSeconds(), "duration > max duration at skill level mastery * 2");
     }
