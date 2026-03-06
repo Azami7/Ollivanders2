@@ -21,12 +21,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Transfigures an iron golem from a block of iron, and snow golem from block of snow.
- * <p>
- * There is no spell like this in HP universe though we know there must be some sort of animation spell which McGonagall
- * used on the giant wizards chess board in 1991.
+ * Piertotum Locomotor - The Animation Charm.
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Animation_Charm">https://harrypotter.fandom.com/wiki/Animation_Charm</a>
+ * <p>Transfigures a block of iron into an iron golem or a block of snow into a snow golem. The spawned
+ * golem is loyal to its creator—it will not attack the caster and will defend them against attackers.
+ * The transfiguration can be temporary (duration depends on caster skill) or permanent (for highly
+ * skilled casters).</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Targets iron blocks and snow blocks only</li>
+ * <li>Spawns an iron golem from iron blocks, a snow golem from snow blocks</li>
+ * <li>Spawned golem is loyal to the caster and will not attack them</li>
+ * <li>Golem will automatically attack entities that attack the caster</li>
+ * <li>Temporary transfigurations revert when duration expires or the golem is killed</li>
+ * <li>Permanent transfigurations require spell mastery level ≥ 1.5 (adjusted for houses)</li>
+ * </ul>
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Animation_Charm">Animation Charm</a>
  */
 public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     private static final int minDurationConfig = 30 * Ollivanders2Common.ticksPerSecond;
@@ -87,25 +99,25 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
 
     @Override
     void doInitSpell() {
-        // ensure it is always 100
         successRate = 100;
-
-        setDuration();
     }
 
     /**
-     * Set duration, including making the spell permanent, based on caster's skill.
+     * Calculate the transfiguration duration or make it permanent based on caster skill.
+     *
+     * <p>At spell mastery level ≥ 1.5, the transfiguration becomes permanent (subject to house/year
+     * restrictions if enabled). Below that threshold, duration is calculated from experience and
+     * clamped to the configured min/max bounds.</p>
      */
     @Override
     void setDuration() {
-        if (usesModifier >= 200) {
+        if (usesModifier >= O2Spell.spellMasteryLevel * 1.5) {
             if (!Ollivanders2.useYears || (casterO2P.getYear().getHighestLevelForYear().ordinal() >= this.spellType.getLevel().ordinal()))
                 permanent = true;
         }
         else {
             permanent = false;
 
-            // spell duration
             effectDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
             if (effectDuration < minDuration)
                 effectDuration = minDuration;
@@ -115,12 +127,18 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     }
 
     /**
-     * Prevent the golem from harming its creator and have it attack anyone who does
+     * Prevent the golem from attacking its creator and make it retaliate against attackers.
      *
-     * @param event the entity damage event
+     * <p>When the spawned golem takes damage from an attack, this handler ensures:
+     * <ul>
+     * <li>If the golem attacks its creator, the attack is cancelled</li>
+     * <li>If someone attacks the creator, the golem retaliates against the attacker</li>
+     * </ul></p>
+     *
+     * @param event the entity damage by entity event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamage(EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if (transfiguredEntity == null)
             return;
 
@@ -132,20 +150,21 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
             return;
 
         if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(caster.getUniqueId()))
-            // prevent the golem attacking its creator
             event.setCancelled(true);
         else if (target.getUniqueId().equals(caster.getUniqueId()) && transfiguredEntity instanceof LivingEntity)
-            // attack anyone who attacks the creator
             ((LivingEntity) transfiguredEntity).attack(attacker);
     }
 
     /**
-     * Prevent golem from targeting its creator.
+     * Prevent the golem from targeting its creator.
+     *
+     * <p>When the golem attempts to acquire a target, this handler ensures it will not target
+     * its creator.</p>
      *
      * @param event the entity target event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTarget(EntityTargetEvent event) {
+    public void onEntityTargetEvent(EntityTargetEvent event) {
         if (transfiguredEntity == null)
             return;
 

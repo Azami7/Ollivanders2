@@ -252,6 +252,23 @@ public class EntityCommon {
     }
 
     /**
+     * Get the living entity at a specific location
+     *
+     * @param location the location to get the living entity at
+     * @return the living entity or null if none present at the location
+     */
+    @Nullable
+    public static LivingEntity getLivingEntityAtLocation(@NotNull Location location) {
+        for (Entity entity : location.getWorld().getEntities()) {
+            if (entity instanceof LivingEntity && entity.getLocation().equals(location)) {
+                return (LivingEntity) entity;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Gets item entities within a bounding box around a location.
      *
      * @param location the center location for the bounding box
@@ -769,10 +786,9 @@ public class EntityCommon {
      * @return a list of all minecart entity types
      */
     public static List<EntityType> getMinecarts() {
-        ArrayList<EntityType> entities = new ArrayList<>();
-        entities.addAll(minecarts);
-
-        return entities;
+        return new ArrayList<>() {{
+            addAll(minecarts);
+        }};
     }
 
     /**
@@ -781,9 +797,8 @@ public class EntityCommon {
      * @return a list of all boat entity types
      */
     public static List<EntityType> getBoats() {
-        ArrayList<EntityType> entities = new ArrayList<>();
-        entities.addAll(boats);
-
-        return entities;
+        return new ArrayList<>() {{
+            addAll(boats);
+        }};
     }
 }

@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Transform a block in to an entity.
+ * Abstract base class for spells that transfigure blocks into entities.
+ *
+ * <p>When cast, this spell transforms a target block into a living entity. The spell can optionally
+ * be configured to have a time limit (temporary transfiguration) or be permanent. Temporary
+ * transfigurations are automatically reverted when the effect duration expires or when the spawned
+ * entity dies. The block is tracked as temporarily changed so it can be properly restored.</p>
+ *
+ * <p>Subclasses configure behavior by populating {@link #transfigurationMap} and {@link #materialAllowList},
+ * then calling {@link #initSpell()} in their constructor.</p>
+ *
+ * @author Azami7
  */
 public abstract class BlockToEntityTransfiguration extends BlockTransfiguration implements Listener {
     /**
@@ -33,14 +44,14 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
 
     /**
      * If this is populated, a map of materials and what entity type to change them in to.
-     * <p>
-     * For use with spells that can do more than one type of change. Add each material that can
-     * be changed to this map. Any missing material will fall back to the default entityType.
-     * <p>
-     * If the spell can only target one or more specific material types, and they all change to
-     * the same thing, add that to materialWhitelist and set entityType.
-     * <p>
-     * If the spell can target any material, make materialWhitelist blank and set entityType.
+     *
+     * <p>For use with spells that can do more than one type of change. Add each material that can
+     * be changed to this map. Any missing material will fall back to the default entityType.</p>
+     *
+     * <p>If the spell can only target one or more specific material types, and they all change to
+     * the same thing, add that to materialWhitelist and set entityType.</p>
+     *
+     * <p>If the spell can target any material, make materialWhitelist blank and set entityType.</p>
      */
     protected Map<Material, EntityType> transfigurationMap = new HashMap<>();
 
@@ -67,18 +78,14 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
     }
 
     /**
-     * Register the listeners for this spell
-     */
-    @Override
-    void initSpell() {
-        super.initSpell();
-
-        // register listeners
-        p.getServer().getPluginManager().registerEvents(this, p);
-    }
-
-    /**
-     * Transfigure the block in to the desired entity type.
+     * Transfigure the target block into the desired entity type.
+     *
+     * <p>Validates the target block using {@link #canTransfigure(Block)}, converts it to air,
+     * spawns the entity at the block's location, and registers event handlers to track the spawned
+     * entity's lifetime. If the transfiguration is temporary, the block is added to the temporarily
+     * changed block tracking system so it will be restored after the effect duration expires.
+     * Subclasses can override {@link #customizeEntity()} to apply additional configuration to the
+     * spawned entity.</p>
      */
     @Override
     protected void transfigure() {
@@ -108,32 +115,19 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
 
         // spawn the entity in this location
         if (entityType != null) {
-            transfiguredEntity = target.getWorld().spawnEntity(location, entityType);
+            transfiguredEntity = target.getWorld().spawnEntity(target.getLocation(), entityType);
             customizeEntity();
         }
         else {
             kill();
             common.printDebugMessage("Entity type was null in " + spellType.toString(), null, null, true);
-            sendFailureMessage();
             return;
         }
 
         // register listeners
-        p.getServer().getPluginManager().registerEvents((Listener) this, p);
+        p.getServer().getPluginManager().registerEvents(this, p);
 
         sendSuccessMessage();
-    }
-
-    /**
-     * Despawn the created entity unless this spell is permanent.
-     */
-    @Override
-    void doRevert() {
-        if (permanent)
-            return;
-
-        if (transfiguredEntity != null)
-            transfiguredEntity.remove();
     }
 
     /**
@@ -165,13 +159,23 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
     }
 
     /**
-     * Let child spells optionally customize the spawned entity. This must be overridden by the child classes.
+     * Optionally customize the spawned entity before it becomes active.
+     *
+     * <p>Called immediately after the entity is spawned but before listeners are registered.
+     * Subclasses can override this method to apply entity-specific configuration such as name,
+     * equipment, attributes, or behavior modifications. The spawned entity is available via the
+     * {@link #transfiguredEntity} field.</p>
      */
     void customizeEntity() {
     }
 
     /**
      * Handle when the transfigured entity is killed.
+     *
+     * <p>When the spawned entity dies, this method terminates the spell. For permanent
+     * transfigurations, the spell ends but the entity is not reverted (as it is now dead).
+     * For temporary transfigurations, the entity remains as-is until the effect duration expires
+     * and {@link #doRevert()} handles the final cleanup.</p>
      *
      * @param event the entity death event
      */
@@ -182,7 +186,35 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
 
         Entity entity = event.getEntity();
         if (entity.getUniqueId().equals(transfiguredEntity.getUniqueId()))
-            // the entity was killed, kill this spell
             kill();
+    }
+
+    /**
+     * Get a copy of the transfiguration map.
+     *
+     * @return a new map containing the material-to-entity-type mappings
+     */
+    public Map<Material, EntityType> getEntityTransfigurationMap() {
+        return new HashMap<>() {{
+            putAll(transfigurationMap);
+        }};
+    }
+
+    /**
+     * Unregister event handlers and despawn the created entity if the transfiguration is temporary.
+     *
+     * <p>Called when the spell's effect duration expires. This method unregisters the spell's event
+     * handlers to clean up any registered listeners, then removes the spawned entity if the
+     * transfiguration is not permanent.</p>
+     */
+    @Override
+    void doRevert() {
+        HandlerList.unregisterAll(this);
+
+        if (permanent)
+            return;
+
+        if (transfiguredEntity != null)
+            transfiguredEntity.remove();
     }
 }
