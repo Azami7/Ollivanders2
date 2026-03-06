@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.IMMOBULUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.ARANIA_EXUMAI}<br>
  * {@link net.pottercraft.ollivanders2.spell.ALARTE_ASCENDARE}<br>
- * {@link net.pottercraft.ollivanders2.spell.AQUA_ERUCTO}<br>
  * {@link net.pottercraft.ollivanders2.spell.FUMOS_DUO}
  * </p>
  *

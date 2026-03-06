@@ -11,11 +11,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Adds a MUCUS_AD_NAUSEAM oeffect to the player
+ * The Curse of the Bogies - applies the {@link net.pottercraft.ollivanders2.effect.O2EffectType#MUCUS}
+ * O2Effect to a target player.
  *
- * @author lownes
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Curse_of_the_Bogies">https://harrypotter.fandom.com/wiki/Curse_of_the_Bogies</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Curse_of_the_Bogies">Curse of the Bogies</a>
  */
 public final class MUCUS_AD_NAUSEAM extends AddO2Effect {
     /**

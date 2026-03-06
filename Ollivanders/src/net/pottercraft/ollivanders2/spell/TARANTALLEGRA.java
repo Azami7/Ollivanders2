@@ -13,9 +13,9 @@ import java.util.ArrayList;
  * The Dancing Feet Spell - Tarantallegra - is a charm that makes a target's legs spasm wildly out of control, making it
  * appear as though they are dancing.
  *
- * @since 2.21
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell">https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell">Dancing Feet Spell</a>
+ * @since 2.21
  */
 public class TARANTALLEGRA extends AddO2Effect {
     /**
@@ -48,7 +48,7 @@ public class TARANTALLEGRA extends AddO2Effect {
     public TARANTALLEGRA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        branch = O2MagicBranch.CHARMS;
+        branch = O2MagicBranch.DARK_ARTS;
         spellType = O2SpellType.TARANTALLEGRA;
 
         effectsToAdd.add(O2EffectType.DANCING_FEET);

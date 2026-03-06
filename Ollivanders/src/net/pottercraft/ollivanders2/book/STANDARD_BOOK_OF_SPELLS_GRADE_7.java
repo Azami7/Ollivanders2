@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.LUMOS_SOLEM}<br>
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}<br>
  * {@link net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ASCENDIO}<br>
  * </p>
  *
  * @author Azami7

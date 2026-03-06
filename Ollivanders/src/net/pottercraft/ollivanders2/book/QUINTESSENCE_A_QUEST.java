@@ -10,8 +10,11 @@ import org.jetbrains.annotations.NotNull;
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO}<br>
  * {@link net.pottercraft.ollivanders2.spell.APARECIUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CELATUM}<br>
  * {@link net.pottercraft.ollivanders2.spell.GLACIUS_TRIA}<br>
  * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
+ * {@link net.pottercraft.ollivanders2.spell.AZURILLIOUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ANAPNEO}<br>
  * </p>
  *
  * @author Azami7
@@ -34,5 +37,6 @@ public class QUINTESSENCE_A_QUEST extends O2Book {
         spells.add(O2SpellType.GLACIUS_TRIA);
         spells.add(O2SpellType.MOLLIARE);
         spells.add(O2SpellType.AZURILLIOUS);
+        spells.add(O2SpellType.ANAPNEO);
     }
 }

@@ -2,27 +2,38 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.FULL_IMMOBILIZE;
 import net.pottercraft.ollivanders2.effect.IMMOBILIZE;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract base class for player immobilization spells.
  *
- * <p>ImmobilizePlayerSuper provides the common implementation for spells that immobilize a target player
- * by applying immobilization effects. This class handles target detection, effect duration calculation,
- * and immobilization effect application. Concrete subclasses must implement target validation (canTarget)
- * and any additional spell-specific effects (addAdditionalEffects).</p>
+ * <p>ImmobilizePlayer provides the common implementation for spells that immobilize a target player.
+ * This class handles target detection, effect duration calculation, immobilization effect application,
+ * and optional prison block creation. Concrete subclasses must implement target validation (canTarget)
+ * and may override addAdditionalEffects() for spell-specific extras.</p>
  *
  * <p>Spell Mechanics:</p>
  * <ul>
  * <li>Searches for nearby players within the spell's default radius</li>
  * <li>Validates each nearby player using canTarget() to determine if they can be affected</li>
  * <li>Calculates immobilization duration based on spell uses, clamped to min/max bounds</li>
- * <li>Applies either IMMOBILIZE (partial) or FULL_IMMOBILIZE (complete) based on spell type</li>
+ * <li>Applies either IMMOBILIZE (partial) or FULL_IMMOBILIZE (complete) based on fullImmobilize</li>
  * <li>Triggers spell-specific additional effects via addAdditionalEffects()</li>
+ * <li>Optionally surrounds the target with prison blocks if imprison is true</li>
  * <li>Kills the spell after successfully targeting a player</li>
  * </ul>
  *
@@ -52,6 +63,22 @@ abstract public class ImmobilizePlayer extends O2Spell {
      * will allow pitch and yaw changes.
      */
     boolean fullImmobilize = false;
+
+    /**
+     * If true, surrounds the target player with prison blocks when the spell hits.
+     */
+    boolean imprison = false;
+
+    /**
+     * The material used to create the prison blocks around the target player.
+     */
+    Material imprisonMaterial = Material.AIR;
+
+    /**
+     * If true, only the outer shell of the expanded bounding box is filled with prison blocks,
+     * leaving the blocks the player physically occupies unchanged to prevent suffocation damage.
+     */
+    boolean prisonIsShell = false;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -109,6 +136,9 @@ abstract public class ImmobilizePlayer extends O2Spell {
             addImmobilizationEffect(target);
             addAdditionalEffects(target);
 
+            if (imprison)
+                imprisonPlayer(target);
+
             kill();
             return;
         }
@@ -164,15 +194,105 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
+     * Surround the target player with prison blocks.
+     *
+     * <p>Expands the target player's bounding box by 1 block in all directions, then converts all air
+     * blocks within that expanded region to the spell's imprisonMaterial. Only air blocks are changed,
+     * preserving any existing non-air blocks. If prisonIsShell is true, blocks the player physically
+     * occupies are skipped to prevent suffocation. All changed blocks are tracked so they can be
+     * reverted when the effect expires.</p>
+     *
+     * @param target the player to surround with prison blocks
+     */
+    void imprisonPlayer(Player target) {
+        BlockData additionalBlockData = getAdditionalPrisonBlockData();
+        BoundingBox playerBoundingBox = prisonIsShell ? target.getBoundingBox() : null;
+        if (playerBoundingBox == null) {
+            common.printDebugMessage("ImmobilizePlayer.imprisonPlayer: playerBoundingBox is null", null, null, true);
+            return;
+        }
+
+        List<Block> blocks = calculateBlocksToChange(target.getBoundingBox().expand(1.0));
+        for (Block block : blocks) {
+            if (prisonIsShell) {
+                BoundingBox blockBox = new BoundingBox(block.getX(), block.getY(), block.getZ(), block.getX() + 1, block.getY() + 1, block.getZ() + 1);
+                if (playerBoundingBox.overlaps(blockBox))
+                    continue;
+            }
+
+            if (BlockCommon.isAirBlock(block)) {
+                Ollivanders2API.getBlocks().addTemporarilyChangedBlock(block, this);
+                block.setType(imprisonMaterial);
+                if (additionalBlockData != null)
+                    block.setBlockData(additionalBlockData);
+            }
+        }
+
+        // clean up the blocks
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                revertBlocks();
+            }
+        }.runTaskLater(p, effectDuration);
+    }
+
+    /**
+     * Get optional additional block data to apply to each prison block after setting its material.
+     *
+     * <p>Returns null by default. Subclasses may override this to apply extra block state (e.g., water
+     * level data) to each prison block immediately after the material is set.</p>
+     *
+     * @return block data to apply, or null if none
+     */
+    @Nullable
+    BlockData getAdditionalPrisonBlockData() {
+        return null;
+    }
+
+    /**
      * Apply any spell-specific additional effects to the immobilized target.
      *
-     * <p>Abstract method that concrete subclasses must implement to apply spell-specific effects beyond
-     * the base immobilization effect. Examples include potion effects, block modifications, or other
-     * environmental changes specific to the spell's mechanics.</p>
+     * <p>No-op by default. Subclasses may override to apply extra effects such as potion effects
+     * or other environmental changes beyond the base immobilization.</p>
      *
      * @param target the immobilized player
      */
-    abstract void addAdditionalEffects(Player target);
+    void addAdditionalEffects(Player target) {
+    }
+
+    /**
+     * Calculate all blocks within the given bounding box region.
+     *
+     * <p>Iterates through all integer block coordinates within the given bounding box and collects
+     * the Block objects. These blocks will be filtered in the caller to only change eligible blocks.</p>
+     *
+     * @param boundingBox the bounding box region to collect blocks from
+     * @return a list of all Block objects within the bounding box coordinates
+     */
+    List<Block> calculateBlocksToChange(BoundingBox boundingBox) {
+        ArrayList<Block> blocks = new ArrayList<>();
+
+        int minX = (int) Math.floor(boundingBox.getMinX());
+        int minY = (int) Math.floor(boundingBox.getMinY());
+        int minZ = (int) Math.floor(boundingBox.getMinZ());
+        int maxX = (int) Math.floor(boundingBox.getMaxX());
+        int maxY = (int) Math.floor(boundingBox.getMaxY());
+        int maxZ = (int) Math.floor(boundingBox.getMaxZ());
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    Block block = location.getWorld().getBlockAt(x, y, z);
+
+                    if (!blocks.contains(block))
+                        blocks.add(block);
+                }
+            }
+        }
+
+        return blocks;
+    }
 
     /**
      * Get the calculated immobilization duration in game ticks.
@@ -199,5 +319,44 @@ abstract public class ImmobilizePlayer extends O2Spell {
      */
     public int getMaxEffectDuration() {
         return maxEffectDuration;
+    }
+
+    /**
+     * Whether this spell surrounds the target with prison blocks.
+     *
+     * @return true if the spell creates a prison around the target, false otherwise
+     */
+    public boolean doesImprison() {
+        return imprison;
+    }
+
+    /**
+     * Get the material used to build the prison around the target player.
+     *
+     * @return the prison block material
+     */
+    public Material getImprisonMaterial() {
+        return imprisonMaterial;
+    }
+
+    /**
+     * Whether this spell builds only the outer shell of the prison, leaving the player's
+     * occupied blocks unchanged to prevent suffocation damage.
+     *
+     * @return true if only the shell is built, false if the entire expanded region is filled
+     */
+    public boolean isPrisonShell() {
+        return prisonIsShell;
+    }
+
+    /**
+     * Revert all prison blocks created by this spell.
+     *
+     * <p>Reverts all temporarily changed blocks created by imprisonPlayer(). This is automatically
+     * called after the effect duration expires via a scheduled task.</p>
+     */
+    void revertBlocks() {
+        if (imprison)
+            Ollivanders2API.getBlocks().revertTemporarilyChangedBlocksBy(this);
     }
 }

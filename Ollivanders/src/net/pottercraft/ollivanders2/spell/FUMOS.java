@@ -10,12 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Causes blindness in a radius
+ * The Smoke-Screen Spell - applies the {@link net.pottercraft.ollivanders2.effect.O2EffectType#FUMOS} effect
+ * to the caster, creating a defensive smoke cloud that causes blindness to those outside it.
  *
- * @author lownes
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Smokescreen_Spell">https://harrypotter.fandom.com/wiki/Smokescreen_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Smokescreen_Spell">Smoke-Screen Spell</a>
  */
 public final class FUMOS extends AddO2Effect {
     /**
@@ -58,18 +57,5 @@ public final class FUMOS extends AddO2Effect {
         targetSelf = true;
 
         initSpell();
-    }
-
-    /**
-     * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-     * constants.
-     */
-    @Override
-    void doInitSpell() {
-        durationInSeconds = (int) (usesModifier / 2);
-        if (durationInSeconds < minDurationInSeconds)
-            durationInSeconds = minDurationInSeconds;
-        else if (durationInSeconds > maxDurationInSeconds)
-            durationInSeconds = maxDurationInSeconds;
     }
 }

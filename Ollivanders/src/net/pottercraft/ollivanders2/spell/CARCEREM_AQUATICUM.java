@@ -4,22 +4,15 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.WATER_BREATHING;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Carcerem Aquaticum - The Water Orb Spell.
@@ -59,7 +52,7 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
         super(plugin);
 
         spellType = O2SpellType.CARCEREM_AQUATICUM;
-        branch = O2MagicBranch.DEFENSE_AGAINST_THE_DARK_ARTS;
+        branch = O2MagicBranch.CHARMS;
 
         flavorText = new ArrayList<>() {{
             add("The Water Orb Spell");
@@ -82,10 +75,13 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
         moveEffectData = Material.BLUE_ICE;
 
         spellType = O2SpellType.CARCEREM_AQUATICUM;
-        branch = O2MagicBranch.DEFENSE_AGAINST_THE_DARK_ARTS;
+        branch = O2MagicBranch.CHARMS;
 
         fullImmobilize = false;
         minEffectDuration = minEffectDurationConfig;
+        imprison = true;
+        imprisonMaterial = Material.WATER;
+        prisonIsShell = false;
 
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.BUILD);
@@ -116,97 +112,17 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
     }
 
     /**
-     * Create water blocks and breathing effect to trap and protect the target.
+     * Apply a WATER_BREATHING effect to prevent the target from drowning inside the water orb.
      *
-     * <p>Creates non-flowing water blocks around the target player and applies a WATER_BREATHING effect to
-     * prevent drowning. The water breathing effect lasts 10 ticks longer than the immobilization effect to
-     * ensure it persists through cleanup. A scheduled task will automatically revert all water blocks after
-     * the effect duration expires.</p>
+     * <p>The water breathing effect lasts 10 ticks longer than the immobilization effect to ensure
+     * it persists through cleanup when the water blocks are reverted.</p>
      *
-     * @param target the immobilized player to surround with water
+     * @param target the immobilized player
      */
+    @Override
     void addAdditionalEffects(Player target) {
-        // create water blocks around the player
-        createWaterBlocks(target);
-
         // add water breathing with just over duration time to make sure it doesn't expire before we clean up the water blocks
         WATER_BREATHING waterBreathing = new WATER_BREATHING(p, effectDuration + 10, false, target.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(waterBreathing);
-
-        // clean up the blocks
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                revertBlocks();
-            }
-        }.runTaskLater(p, effectDuration);
-    }
-
-    /**
-     * Create water blocks around the target player based on their bounding box.
-     *
-     * <p>Expands the target player's bounding box by 1 block in all directions, then converts
-     * all air blocks within that expanded region to non-flowing water. Only air blocks are changed,
-     * preserving any existing non-air blocks. All changed blocks are tracked as temporarily changed
-     * so they can be reverted when the effect expires.</p>
-     *
-     * @param target the player to surround with water blocks
-     */
-    void createWaterBlocks(Player target) {
-        Levelled waterData = (Levelled) Bukkit.createBlockData(Material.WATER);
-        waterData.setLevel(0);
-
-        List<Block> blocks = calculateBlocksToChange(target.getBoundingBox().expand(1.0));
-        for (Block block : blocks) {
-
-            if (BlockCommon.isAirBlock(block)) {
-                Ollivanders2API.getBlocks().addTemporarilyChangedBlock(block, this);
-                block.setType(Material.WATER);
-                block.setBlockData(waterData);
-            }
-        }
-    }
-
-    /**
-     * Calculate all blocks within the expanded bounding box region.
-     *
-     * <p>Iterates through all integer block coordinates within the given bounding box and collects
-     * the Block objects. These blocks will be filtered later to only change air blocks to water.</p>
-     *
-     * @param boundingBox the expanded bounding box region to collect blocks from
-     * @return a list of all Block objects within the bounding box coordinates
-     */
-    List<Block> calculateBlocksToChange(BoundingBox boundingBox) {
-        ArrayList<Block> blocks = new ArrayList<>();
-
-        int minX = (int) Math.floor(boundingBox.getMinX());
-        int minY = (int) Math.floor(boundingBox.getMinY());
-        int minZ = (int) Math.floor(boundingBox.getMinZ());
-        int maxX = (int) Math.floor(boundingBox.getMaxX());
-        int maxY = (int) Math.floor(boundingBox.getMaxY());
-        int maxZ = (int) Math.floor(boundingBox.getMaxZ());
-
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    Block block = location.getWorld().getBlockAt(x, y, z);
-
-                    if (!blocks.contains(block))
-                        blocks.add(block);
-                }
-            }
-        }
-
-        return blocks;
-    }
-
-    /**
-     * Revert all water blocks created by this spell.
-     *
-     * <p>Reverts all temporarily changed blocks that were created as part of the water orb. This is
-     * automatically called after the effect duration expires via a scheduled task.</p>
-     */
-    void revertBlocks() {
-        Ollivanders2API.getBlocks().revertTemporarilyChangedBlocksBy(this);
     }
 }

@@ -10,12 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Tickling Hex - Titillando - also known as the Tickling Spell, is a hex that tickled and subsequently weakened the
- * target.
+ * The Tickling Hex - applies the {@link net.pottercraft.ollivanders2.effect.O2EffectType#LAUGHING},
+ * {@link net.pottercraft.ollivanders2.effect.O2EffectType#TICKLING}, and
+ * {@link net.pottercraft.ollivanders2.effect.O2EffectType#WEAKNESS} O2Effects to a target player,
+ * causing uncontrollable laughter, tickling, and weakness.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Tickling_Hex">https://harrypotter.fandom.com/wiki/Tickling_Hex</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Tickling_Hex">Tickling Hex</a>
  */
 public class TITILLANDO extends AddO2Effect {
     /**

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * Defence Against the Dark Arts by Galatea Merrythought - 7th year Defense against the dark arts book
  * <p>
  * Contents:<br>
- * {@link net.pottercraft.ollivanders2.spell.ASCENDIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.MORTUOS_SUSCITATE}<br>
  * {@link net.pottercraft.ollivanders2.spell.INCENDIO_TRIA}<br>
  * {@link net.pottercraft.ollivanders2.spell.NULLUM_APPAREBIT}<br>

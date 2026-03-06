@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Babbling curse is a curse that causes uncontrollable babbling.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Babbling_Curse">https://harrypotter.fandom.com/wiki/Babbling_Curse</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Babbling_Curse">Babbling Curse</a>
  * @since 2.2.7
  */
 public class LOQUELA_INEPTIAS extends AddO2Effect {
@@ -50,9 +50,6 @@ public class LOQUELA_INEPTIAS extends AddO2Effect {
         spellType = O2SpellType.LOQUELA_INEPTIAS;
 
         effectsToAdd.add(O2EffectType.BABBLING);
-
-        // duration
-        maxDurationInSeconds = 300;
 
         // pass-through materials
         projectilePassThrough.remove(Material.WATER);
