@@ -51,7 +51,6 @@ public final class ANAPNEO extends AddO2Effect {
         effectsToAdd.add(O2EffectType.WATER_BREATHING);
         strengthModifier = 1;
         minDurationInSeconds = 30;
-        durationModifier = 0;
         targetSelf = true;
 
         initSpell();

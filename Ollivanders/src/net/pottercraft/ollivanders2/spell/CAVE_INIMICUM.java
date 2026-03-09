@@ -52,9 +52,9 @@ public class CAVE_INIMICUM extends StationarySpell {
         branch = O2MagicBranch.CHARMS;
 
         durationModifierInSeconds = 15;
-        radiusModifier = 1;
+        radiusModifier = 5;
         flairSize = 10;
-        centerOnCaster = true;
+        noProjectile = true;
         minRadius = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.minRadiusConfig;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.maxRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.minDurationConfig;

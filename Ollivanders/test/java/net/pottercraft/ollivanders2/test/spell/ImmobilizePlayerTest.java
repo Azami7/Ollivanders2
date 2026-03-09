@@ -183,14 +183,14 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
         if (immobilizePlayer.doesImprison()) {
             Material prisonMaterial = immobilizePlayer.getImprisonMaterial();
 
-            assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was changed");
+            assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was not changed");
             assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target.getEyeLocation().getBlock().getRelative(BlockFace.EAST)), "block not added to tracking");
             if (!immobilizePlayer.isPrisonShell()) {
                 assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getType(), "block at eye location not changed to Water");
             }
         }
         else
-            assertEquals(Material.AIR, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was changed");
+            assertEquals(Material.AIR, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was changed when spell does not do imprison");
     }
 
     /**

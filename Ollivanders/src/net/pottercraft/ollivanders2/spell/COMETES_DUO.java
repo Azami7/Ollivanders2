@@ -11,7 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * A fancier version of COMETES.
+ * Cometes Duo - Enhanced Orange Burst Fireworks with Effects.
+ *
+ * <p>Launches one or more orange burst-effect fireworks with trailing, flicker, and fade effects.
+ * The fireworks fade to yellow and white, creating an enhanced visual display. The number of
+ * fireworks spawned depends on the caster's experience level, up to a maximum of 10. Each
+ * firework explodes in a burst pattern with orange color and includes trailing, flicker,
+ * and yellow-to-white fade effects.</p>
  */
 public final class COMETES_DUO extends Pyrotechnia {
     /**
@@ -44,9 +50,9 @@ public final class COMETES_DUO extends Pyrotechnia {
         fireworkColors.add(Color.ORANGE);
         fireworkType = Type.BURST;
 
-        hasTrails = true;
-        hasFlicker = true;
-        hasFade = true;
+        trails = true;
+        flicker = true;
+        fade = true;
 
         fadeColors = new ArrayList<>();
         fadeColors.add(Color.YELLOW);
@@ -55,13 +61,5 @@ public final class COMETES_DUO extends Pyrotechnia {
         maxFireworks = 10;
 
         initSpell();
-    }
-
-    /**
-     * Set the number of fireworks that can be cast based on the user's experience.
-     */
-    @Override
-    void doInitSpell() {
-        setNumberOfFireworks();
     }
 }

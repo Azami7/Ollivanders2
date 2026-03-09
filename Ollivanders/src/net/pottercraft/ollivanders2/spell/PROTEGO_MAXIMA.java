@@ -57,7 +57,7 @@ public final class PROTEGO_MAXIMA extends StationarySpell {
         durationModifierInSeconds = 10;
         radiusModifier = 1;
         flairSize = 10;
-        centerOnCaster = true;
+        noProjectile = true;
         minRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minRadiusConfig;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minDurationConfig;

@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @see net.pottercraft.ollivanders2.spell.CONFUNDO for the spell implementation
  * @see AddPotionEffectTest for inherited test framework
  */
+@Isolated
 public class ConfundoTest extends AddPotionEffectTest {
     /**
      * Get the spell type being tested.

@@ -11,11 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Shoots red burst fireworks in to the air.
+ * Periculum - The Red Burst Fireworks Spell.
  *
- * @author lownes
+ * <p>Launches one or more red burst-pattern fireworks into the air. The number of fireworks
+ * spawned depends on the caster's experience level, up to a maximum of 10. Each firework
+ * explodes in a burst pattern with a red color.</p>
+ *
  * @author Azami7
- * @see Pyrotechnia
  */
 public final class PERICULUM extends Pyrotechnia {
     /**
@@ -55,7 +57,10 @@ public final class PERICULUM extends Pyrotechnia {
     }
 
     /**
-     * Set the number of fireworks that can be cast based on the user's experience.
+     * Calculate the number of fireworks to spawn on initialization.
+     *
+     * <p>Called during spell initialization to determine how many fireworks this spell
+     * will launch based on the caster's experience level.</p>
      */
     @Override
     void doInitSpell() {

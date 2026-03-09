@@ -35,11 +35,6 @@ import java.util.UUID;
  */
 public abstract class AddO2Effect extends O2Spell {
     /**
-     * The duration for this effect.
-     */
-    int durationInSeconds;
-
-    /**
      * If temporary, the longest this effect can last.
      */
     int maxDurationInSeconds = 300; // 5 minutes;
@@ -50,9 +45,9 @@ public abstract class AddO2Effect extends O2Spell {
     int minDurationInSeconds = 5; // 5 seconds
 
     /**
-     * Duration modifier
+     * The duration for this effect.
      */
-    int durationModifier = 10;
+    int durationInSeconds = minDurationInSeconds;
 
     /**
      * Duration multiplier - this is multiplied with the usesModifier
@@ -117,7 +112,6 @@ public abstract class AddO2Effect extends O2Spell {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.CHARMS;
-        durationInSeconds = minDurationInSeconds;
     }
 
     /**
@@ -200,7 +194,7 @@ public abstract class AddO2Effect extends O2Spell {
      * stored in {@link #durationInSeconds} and can be retrieved via {@link #getDurationInSeconds()}.</p>
      */
     public void calculateEffectDurationInSeconds() {
-        durationInSeconds = ((int) (usesModifier * durationMultiplier) + durationModifier);
+        durationInSeconds = (int) (usesModifier * durationMultiplier);
 
         if (durationInSeconds > maxDurationInSeconds)
             durationInSeconds = maxDurationInSeconds;

@@ -53,7 +53,6 @@ public final class FUMOS extends AddO2Effect {
         minDurationInSeconds = 10;
         maxDurationInSeconds = 60;
         durationMultiplier = 0.5;
-        durationModifier = 0;
         targetSelf = true;
 
         initSpell();
