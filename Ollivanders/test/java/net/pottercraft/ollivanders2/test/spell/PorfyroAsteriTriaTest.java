@@ -15,7 +15,7 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @see PyrotechniaTest for inherited test framework
  */
 @Isolated
-public class PorfyroAsteriTria extends PyrotechniaTest {
+public class PorfyroAsteriTriaTest extends PyrotechniaTest {
     /**
      * Get the spell type being tested.
      *
