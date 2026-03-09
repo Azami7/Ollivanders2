@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.test.spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the EBUBLIO spell.
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
  * @see net.pottercraft.ollivanders2.spell.EBUBLIO for the spell implementation
  * @see ImmobilizePlayerTest for the inherited test framework
  */
+@Isolated
 public class EbublioTest extends ImmobilizePlayerTest {
     /**
      * Get the spell type being tested.

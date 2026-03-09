@@ -55,7 +55,7 @@ public final class REPELLO_MUGGLETON extends StationarySpell {
         durationModifierInSeconds = 15;
         radiusModifier = 1;
         flairSize = 10;
-        centerOnCaster = true;
+        noProjectile = true;
         minRadius = net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON.minRadiusConfig;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON.maxRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON.minDurationConfig;

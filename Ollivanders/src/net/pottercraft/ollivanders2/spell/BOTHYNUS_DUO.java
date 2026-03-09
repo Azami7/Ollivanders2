@@ -11,7 +11,12 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A fancier version of Bothynus.
+ * Bothynus Duo - Enhanced Yellow and Orange Star Fireworks.
+ *
+ * <p>Launches one or more yellow and orange star-burst fireworks with trails. The number
+ * of fireworks spawned depends on the caster's experience level, up to a maximum of 10.
+ * Each firework explodes in a star pattern with dual yellow and orange colors and includes
+ * trailing effects.</p>
  */
 public final class BOTHYNUS_DUO extends Pyrotechnia {
     /**
@@ -44,18 +49,10 @@ public final class BOTHYNUS_DUO extends Pyrotechnia {
         fireworkColors.add(Color.YELLOW);
         fireworkColors.add(Color.ORANGE);
         fireworkType = Type.STAR;
-        hasTrails = true;
+        trails = true;
 
         maxFireworks = 10;
 
         initSpell();
-    }
-
-    /**
-     * Set the number of fireworks that can be cast based on the user's experience.
-     */
-    @Override
-    void doInitSpell() {
-        setNumberOfFireworks();
     }
 }

@@ -111,7 +111,13 @@ public enum O2StationarySpellType {
      *
      * @see REPELLO_MUGGLETON
      */
-    REPELLO_MUGGLETON(REPELLO_MUGGLETON.class, MagicLevel.NEWT);
+    REPELLO_MUGGLETON(REPELLO_MUGGLETON.class, MagicLevel.NEWT),
+    /**
+     * Tranquillus: pacifies an area and prevents combat
+     *
+     * @see TRANQUILLUS
+     */
+    TRANQUILLUS(TRANQUILLUS.class, MagicLevel.NEWT);
 
     /**
      * The implementation class for this stationary spell.

@@ -36,14 +36,14 @@ public abstract class StationarySpell extends O2Spell {
     int radiusModifier = 1;
 
     /**
+     * Do flair when casting the stationary spell
+     */
+    boolean flair = true;
+
+    /**
      * Flair size
      */
     int flairSize = 10;
-
-    /**
-     * Is the location for this stationary spell centered at the caster or a projectile target
-     */
-    boolean centerOnCaster = false;
 
     /**
      * The maximum duration a stationary spell can last, if it is not permanent
@@ -88,7 +88,6 @@ public abstract class StationarySpell extends O2Spell {
         branch = O2MagicBranch.CHARMS;
 
         // world guard flags
-        // world guard flags
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.BUILD);
 
@@ -104,32 +103,18 @@ public abstract class StationarySpell extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        // we do not want a spell projectile if the spell centers on the caster, this will set the target on the caster
-        if (centerOnCaster)
-            stopProjectile();
-
-        // if we have not hit a target, continue
-        if (!hasHitTarget())
+        if (!noProjectile && !hasHitTarget()) // if we have not hit a target, continue
             return;
 
-        // set duration to be base time plus a modifier seconds per experience level for this spell
-        duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond * durationModifierInSeconds);
-
-        if (duration > maxDuration)
-            duration = maxDuration;
-        else if (duration < minDuration)
-            duration = minDuration;
-
-        radius = (int) usesModifier * radiusModifier;
-        if (radius > maxRadius)
-            radius = maxRadius;
-        else if (radius < minRadius)
-            radius = minRadius;
+        setDuration();
+        setRadius();
 
         O2StationarySpell stationarySpell = createStationarySpell();
 
         if (stationarySpell != null) {
-            stationarySpell.flair(flairSize);
+            if (flair)
+                stationarySpell.flair(flairSize);
+
             Ollivanders2API.getStationarySpells().addStationarySpell(stationarySpell);
 
             sendSuccessMessage();
@@ -138,6 +123,23 @@ public abstract class StationarySpell extends O2Spell {
             sendFailureMessage();
 
         kill();
+    }
+
+    void setDuration() {
+        duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond) + (Ollivanders2Common.ticksPerSecond * durationModifierInSeconds);
+
+        if (duration > maxDuration)
+            duration = maxDuration;
+        else if (duration < minDuration)
+            duration = minDuration;
+    }
+
+    void setRadius() {
+        radius = (int) usesModifier / radiusModifier;
+        if (radius > maxRadius)
+            radius = maxRadius;
+        else if (radius < minRadius)
+            radius = minRadius;
     }
 
     /**

@@ -1,8 +1,11 @@
 package net.pottercraft.ollivanders2.common;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,6 +15,7 @@ import org.bukkit.entity.Cat;
 import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -20,6 +24,7 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -800,5 +805,46 @@ public class EntityCommon {
         return new ArrayList<>() {{
             addAll(boats);
         }};
+    }
+
+    /**
+     * Shoots a firework rocket with the specified effects at the location.
+     *
+     * @param location the starting location for the rocket
+     * @param hasTrails does this firework have trails
+     * @param hasFade does this firework do fade
+     * @param hasFlicker does this firework have flicker
+     * @param fireworkPower the power for the firework, power of 1 or 2 is a normal firework
+     * @param fireworkColors the list of colors for the firework
+     * @param fadeColors the list of colors the firework fades to, if it fades. This can be null.
+     * @param fireworkType the firework shape
+     */
+    public static void shootFirework(Location location, boolean hasTrails, boolean hasFade, boolean hasFlicker, int fireworkPower, @NotNull List<Color> fireworkColors, @Nullable List<Color> fadeColors, @NotNull FireworkEffect.Type fireworkType) {
+        World world = location.getWorld();
+        if (world == null) {
+            Ollivanders2API.common.printDebugMessage("Pyrotechnia.checkEffect: world is null", null, null, true);
+            return;
+        }
+
+        Firework firework = (Firework) (world.spawnEntity(location, EntityType.FIREWORK_ROCKET));
+
+        FireworkMeta meta = firework.getFireworkMeta();
+        meta.setPower(fireworkPower);
+
+        FireworkEffect.Builder builder = FireworkEffect.builder();
+
+        builder.withColor(fireworkColors);
+        builder.with(fireworkType);
+
+        builder.flicker(hasFlicker);
+        builder.trail(hasTrails);
+
+        if (hasFade) {
+            if (fadeColors != null && !fadeColors.isEmpty())
+                builder.withFade(fadeColors);
+        }
+
+        meta.addEffect(builder.build());
+        firework.setFireworkMeta(meta);
     }
 }

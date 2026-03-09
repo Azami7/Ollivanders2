@@ -50,7 +50,7 @@ public final class PROTEGO_TOTALUM extends StationarySpell {
         durationModifierInSeconds = 10;
         radiusModifier = 1;
         flairSize = 10;
-        centerOnCaster = true;
+        noProjectile = true;
         minRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM.minRadiusConfig;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM.maxRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM.minDurationConfig;

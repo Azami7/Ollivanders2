@@ -50,7 +50,7 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell {
         durationModifierInSeconds = 10;
         radiusModifier = 1;
         flairSize = 10;
-        centerOnCaster = true;
+        noProjectile = true;
         minRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS.maxRadiusConfig;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS.minRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS.maxDurationConfig;

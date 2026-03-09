@@ -43,7 +43,7 @@ public final class NULLUM_APPAREBIT extends StationarySpell {
         durationModifierInSeconds = 15;
         radiusModifier = 1;
         flairSize = 10;
-        centerOnCaster = true;
+        noProjectile = true;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT.maxRadiusConfig;
         minRadius = net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT.minRadiusConfig;
         maxDuration = net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT.maxDurationConfig;

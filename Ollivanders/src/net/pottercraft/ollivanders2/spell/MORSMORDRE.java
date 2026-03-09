@@ -1,22 +1,55 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Cast the dark mark in the sky.
+ * Morsmordre - The Dark Mark Conjuration.
+ *
+ * <p>Conjures the Dark Mark (a skull with a serpent protruding from its mouth) in the sky above
+ * the caster's location. The spell launches a green creeper-effect firework and applies the
+ * BAD_OMEN potion effect to nearby players within a radius based on caster experience.</p>
+ *
+ * <p>Spell Mechanics:</p>
+ * <ul>
+ * <li>Creates a green skull firework with creeper burst effect</li>
+ * <li>Applies BAD_OMEN effect to nearby players within 10-20 blocks</li>
+ * <li>Effect duration ranges from 5-10 minutes depending on caster skill</li>
+ * <li>Launches the Dark Mark as a visual flair effect at the spell's location</li>
+ * </ul>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Morsmordre">https://harrypotter.fandom.com/wiki/Morsmordre</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Morsmordre">Morsmordre - Harry Potter Wiki</a>
  */
-public final class MORSMORDRE extends Pyrotechnia {
+public final class MORSMORDRE extends AddPotionEffectInRadius {
+    /**
+     * The power level for the firework
+     */
+    static final int fireworkPower = 1;
+
+    /**
+     * The color for the fireworks
+     */
+    static final List<Color> fireworkColors = new ArrayList<>() {{
+        add(Color.GREEN);
+    }};
+
+    /**
+     * The firework effect type
+     */
+    static final FireworkEffect.Type fireworkType = Type.CREEPER;
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -49,21 +82,25 @@ public final class MORSMORDRE extends Pyrotechnia {
         branch = O2MagicBranch.DARK_ARTS;
         spellType = O2SpellType.MORSMORDRE;
 
-        fireworkColors = new ArrayList<>();
-        fireworkColors.add(Color.GREEN);
-        fireworkType = Type.CREEPER;
+        flair = true;
+        minEffectRadius = 10;
+        maxEffectRadius = 20;
+        minDurationInSeconds = 300; // 5 mins
+        maxDurationInSeconds = 600; // 10 mins
+        targetSelf = false;
+
+        effectTypes.add(PotionEffectType.BAD_OMEN);
 
         initSpell();
-
-        // do this after initSpell because this should always be 1 firework
-        maxFireworks = 1;
     }
 
     /**
-     * Set the number of fireworks, will always be 1
+     * Display the Dark Mark firework as a visual flair effect.
+     *
+     * <p>Launches a green creeper-effect firework at the spell's location to create the
+     * visual appearance of the Dark Mark appearing in the sky.</p>
      */
-    @Override
-    void doInitSpell() {
-        setNumberOfFireworks();
+    void doFlair() {
+        EntityCommon.shootFirework(location, false, false, false, fireworkPower, fireworkColors, null, fireworkType);
     }
 }

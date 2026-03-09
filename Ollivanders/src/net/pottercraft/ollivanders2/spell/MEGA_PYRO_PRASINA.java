@@ -9,7 +9,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Fancier version of PYRO_PRASINA
+ * Mega Pyro Prasina - Enhanced Green and Lime Ball Fireworks.
+ *
+ * <p>Launches one or more large green and lime ball-burst fireworks with trailing effects.
+ * The number of fireworks spawned depends on the caster's experience level, up to a maximum
+ * of 10. Each firework explodes in a large ball pattern with dual green and lime colors
+ * and includes trailing effects.</p>
  */
 public class MEGA_PYRO_PRASINA extends Pyrotechnia {
     /**
@@ -41,17 +46,9 @@ public class MEGA_PYRO_PRASINA extends Pyrotechnia {
         fireworkColors.add(Color.LIME);
 
         fireworkType = FireworkEffect.Type.BALL_LARGE;
-        hasTrails = true;
+        trails = true;
         maxFireworks = 10;
 
         initSpell();
-    }
-
-    /**
-     * Set the number of fireworks that can be cast based on the user's experience.
-     */
-    @Override
-    void doInitSpell() {
-        setNumberOfFireworks();
     }
 }
