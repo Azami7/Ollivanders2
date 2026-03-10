@@ -69,8 +69,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     void doCheckEffectTest() {
         // test for invalid entity case, other cases in other tests
         World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 200, 40, 100);
-        Location targetLocation = new Location(testWorld, 210, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3); // create a base for the entity to stand on
@@ -100,8 +100,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     @Test
     void doCheckEffectTargetsSelf() {
         World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 400, 40, 100);
-        Location targetLocation = new Location(testWorld, 410, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel); // cast with high experience to ensure >0 velocity magnitude
@@ -126,8 +126,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     @Test
     void doCheckEffectNoTargetFoundTest() {
         World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 500, 40, 100);
-        Location targetLocation = new Location(testWorld, 510, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         // spell exits with no failure message if it fails to find any entities
@@ -155,8 +155,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     @Test
     void doCheckEffectVelocityTest() {
         World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 600, 40, 100);
-        Location targetLocation = new Location(testWorld, 610, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3); // create a base for the entity to stand on
@@ -201,8 +201,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     @Test
     void doCheckEffectTargetMultipleTest() {
         World testWorld = mockServer.addSimpleWorld("world");
-        Location location = new Location(testWorld, 700, 40, 100);
-        Location targetLocation = new Location(testWorld, 710, 40, 100);
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3); // create a base for the entities to stand on

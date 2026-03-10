@@ -1,8 +1,8 @@
 package net.pottercraft.ollivanders2.block;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2Spell;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
@@ -40,18 +40,15 @@ public final class O2Blocks implements Listener {
     private final Ollivanders2 p;
 
     /**
-     * Utility class for common operations and message printing
-     */
-    private final Ollivanders2Common common;
-
-    /**
      * Container for tracking a changed block's original state and the spell that changed it.
      */
-    private class ChangedBlockData {
+    private static class ChangedBlockData {
         /** Original block data before the spell changed it */
         BlockData blockData;
         /** The spell that changed this block */
         O2Spell changedBy;
+        /** The stationary spell that changed this block */
+        O2StationarySpell changedByStationary;
 
         /**
          * Constructor.
@@ -59,9 +56,10 @@ public final class O2Blocks implements Listener {
          * @param data  the original block data
          * @param spell the spell that changed the block
          */
-        ChangedBlockData(@NotNull BlockData data, @NotNull O2Spell spell) {
+        ChangedBlockData(@NotNull BlockData data, @Nullable O2Spell spell, @Nullable O2StationarySpell stationarySpell) {
             blockData = data;
             changedBy = spell;
+            changedByStationary = stationarySpell;
         }
     }
 
@@ -72,7 +70,6 @@ public final class O2Blocks implements Listener {
      */
     public O2Blocks(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         p.getServer().getPluginManager().registerEvents(this, p);
     }
@@ -98,7 +95,26 @@ public final class O2Blocks implements Listener {
         if (blockData == null)
             return false;
 
-        temporarilyChangedBlocks.put(block, new ChangedBlockData(blockData, changedBy));
+        temporarilyChangedBlocks.put(block, new ChangedBlockData(blockData, changedBy, null));
+        return true;
+    }
+
+    /**
+     * Add a block *before* it has been changed. This should not be used for blocks that should not be reverted when the
+     * magic that created them is killed or the server is restarted.
+     *
+     * @param block     the block
+     * @param changedBy the stationary spell that changed the block
+     */
+    public synchronized boolean addTemporarilyChangedBlock(@NotNull Block block, @NotNull O2StationarySpell changedBy) {
+        if (temporarilyChangedBlocks.containsKey(block))
+            return false;
+
+        BlockData blockData = block.getBlockData();
+        if (blockData == null)
+            return false;
+
+        temporarilyChangedBlocks.put(block, new ChangedBlockData(blockData, null, changedBy));
         return true;
     }
 
@@ -125,7 +141,28 @@ public final class O2Blocks implements Listener {
         for (Block block : temporarilyChangedBlocks.keySet()) {
             ChangedBlockData changedBlockData = temporarilyChangedBlocks.get(block);
 
-            if (changedBlockData.changedBy.equals(spell)) {
+            if (changedBlockData.changedBy != null && changedBlockData.changedBy.equals(spell)) {
+                changed.add(block);
+            }
+        }
+
+        return changed;
+    }
+
+    /**
+     * Get all blocks that were changed by a specific stationary spell.
+     *
+     * @param spell the stationary spell to query
+     * @return list of blocks changed by the spell
+     */
+    @NotNull
+    public List<Block> getBlocksChangedByStationarySpell(@NotNull O2StationarySpell spell) {
+        ArrayList<Block> changed = new ArrayList<>();
+
+        for (Block block : temporarilyChangedBlocks.keySet()) {
+            ChangedBlockData changedBlockData = temporarilyChangedBlocks.get(block);
+
+            if (changedBlockData.changedByStationary != null && changedBlockData.changedByStationary.equals(spell)) {
                 changed.add(block);
             }
         }
@@ -148,6 +185,20 @@ public final class O2Blocks implements Listener {
     }
 
     /**
+     * Get the stationary spell that changed a block.
+     *
+     * @param block the block to query
+     * @return the stationary spell that changed the block, or null if not tracked
+     */
+    @Nullable
+    public O2StationarySpell getChangedByStationary(@NotNull Block block) {
+        if (!temporarilyChangedBlocks.containsKey(block))
+            return null;
+
+        return temporarilyChangedBlocks.get(block).changedByStationary;
+    }
+
+    /**
      * Revert a list of temporarily changed blocks to their original state.
      *
      * @param blocks the list of blocks to revert
@@ -166,6 +217,19 @@ public final class O2Blocks implements Listener {
      */
     public void revertTemporarilyChangedBlocksBy(@NotNull O2Spell spell) {
         List<Block> blocks = getBlocksChangedBySpell(spell);
+
+        for (Block block : blocks) {
+            revertTemporarilyChangedBlock(block);
+        }
+    }
+
+    /**
+     * Revert all blocks that were changed by a specific stationary spell.
+     *
+     * @param spell the stationary spell whose blocks should be reverted
+     */
+    public void revertTemporarilyChangedBlocksBy(@NotNull O2StationarySpell spell) {
+        List<Block> blocks = getBlocksChangedByStationarySpell(spell);
 
         for (Block block : blocks) {
             revertTemporarilyChangedBlock(block);
@@ -208,8 +272,9 @@ public final class O2Blocks implements Listener {
      * Revert any temporarily changed blocks that are still changed.
      */
     public synchronized void onDisable() {
-        Set<Block> blocks = new HashSet<>();
-        blocks.addAll(temporarilyChangedBlocks.keySet());
+        Set<Block> blocks = new HashSet<>() {{
+            addAll(temporarilyChangedBlocks.keySet());
+        }};
 
         for (Block block : blocks) {
             revertTemporarilyChangedBlock(block);

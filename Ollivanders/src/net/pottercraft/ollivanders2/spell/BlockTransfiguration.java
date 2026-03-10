@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sk89q.worldguard.protection.flags.Flags;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.block.O2Blocks;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -178,7 +179,7 @@ public abstract class BlockTransfiguration extends Transfiguration {
         setEffectRadius();
         common.printDebugMessage("BlockTransfiguration.transfigure: effect radius is " + effectRadius, null, null, false);
 
-        List<Block> blocksInRadius = Ollivanders2Common.getBlocksInRadius(getTargetBlock().getLocation(), effectRadius); // we use getTargetBlock since spells like Aguamenti target the block above location
+        List<Block> blocksInRadius = BlockCommon.getBlocksInRadius(getTargetBlock().getLocation(), effectRadius); // we use getTargetBlock since spells like Aguamenti target the block above location
 
         // get the blocks to be transfigured
         for (Block blockToChange : blocksInRadius) {
@@ -369,10 +370,9 @@ public abstract class BlockTransfiguration extends Transfiguration {
      */
     @NotNull
     public Map<Material, Material> getTransfigurationMap() {
-        Map<Material, Material> map = new HashMap<>();
-        map.putAll(transfigurationMap);
-
-        return map;
+        return new HashMap<>() {{
+            putAll(transfigurationMap);
+        }};
     }
 
     /**

@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.stationaryspell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -252,7 +253,7 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
     public void upkeep() {
         if (duration % 10 == 0) {
             // kill any plant blocks in the radius
-            for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+            for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
                 // replace plant blocks with "dead" alternatives
                 Material blockType = block.getType();
                 if (blocksReplacements.containsKey(blockType)) {

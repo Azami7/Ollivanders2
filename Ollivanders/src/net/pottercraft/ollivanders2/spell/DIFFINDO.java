@@ -6,6 +6,7 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Drops random items from a player's inventory. Also cuts down trees.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Severing_Charm">https://harrypotter.fandom.com/wiki/Severing_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Severing_Charm">https://harrypotter.fandom.com/wiki/Severing_Charm</a>
  */
 // todo why does this spell do two totally unrelated things? fix this to align with books
 public final class DIFFINDO extends O2Spell {
@@ -125,7 +126,7 @@ public final class DIFFINDO extends O2Spell {
         }
 
         if (Ollivanders2Common.isNaturalLog(target)) {
-            for (Block nearbyBlock : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+            for (Block nearbyBlock : BlockCommon.getBlocksInRadius(location, radius)) {
                 if (Ollivanders2Common.isNaturalLog(nearbyBlock))
                     nearbyBlock.breakNaturally();
             }

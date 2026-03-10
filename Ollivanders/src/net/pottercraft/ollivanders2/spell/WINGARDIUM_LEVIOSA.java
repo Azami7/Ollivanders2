@@ -8,7 +8,7 @@ import java.util.Map;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -155,7 +155,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
                     }
                 }
 
-                for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+                for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
                     boolean insideCollo = false;
                     for (COLLOPORTUS collo : collos) {
                         if (collo.isLocationInside(block.getLocation())) {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Herbivicus causes crops in a radius to grow.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Herbivicus_Charm">https://harrypotter.fandom.com/wiki/Herbivicus_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Herbivicus_Charm">https://harrypotter.fandom.com/wiki/Herbivicus_Charm</a>
  */
 public final class HERBIVICUS extends O2Spell {
     private final static int maxRadius = 15;
@@ -100,7 +100,7 @@ public final class HERBIVICUS extends O2Spell {
         if (!hasHitTarget())
             return;
 
-        for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+        for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
             BlockData blockData = block.getBlockData();
 
             if (blockData instanceof Ageable) {

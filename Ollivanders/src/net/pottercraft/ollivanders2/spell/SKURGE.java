@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * @author Azami7
  * @since 2.21
- * @see <a href = "https://harrypotter.fandom.com/wiki/Skurge_Charm">https://harrypotter.fandom.com/wiki/Skurge_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Skurge_Charm">https://harrypotter.fandom.com/wiki/Skurge_Charm</a>
  */
 public class SKURGE extends O2Spell {
     /**
@@ -86,7 +86,7 @@ public class SKURGE extends O2Spell {
         if (!hasHitTarget())
             return;
 
-        for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+        for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
             if (block.getType() == Material.SLIME_BLOCK) {
                 block.setType(Material.AIR);
             }

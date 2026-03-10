@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.stationaryspell;
 
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -63,7 +63,7 @@ public abstract class ThrownPotionStationarySpell extends O2StationarySpell {
         }
 
         for (StateFlag flag : worldGuardFlags) { // check every flag relevant to this spell
-            for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) { // check at every block location in the spell's radius
+            for (Block block : BlockCommon.getBlocksInRadius(location, radius)) { // check at every block location in the spell's radius
                 if (!Ollivanders2.worldGuardO2.checkWGFlag(caster, block.getLocation(), flag)) {
                     common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
 

@@ -6,7 +6,7 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turns all blocks in a radius into fallingBlock entities
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Deprimo_Spell">https://harrypotter.fandom.com/wiki/Deprimo_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Deprimo_Spell">https://harrypotter.fandom.com/wiki/Deprimo_Spell</a>
  */
 public final class DEPRIMO extends O2Spell {
     /**
@@ -103,7 +103,7 @@ public final class DEPRIMO extends O2Spell {
         if (!hasHitTarget())
             return;
 
-        List<Block> nearbyBlocks = Ollivanders2Common.getBlocksInRadius(location, radius);
+        List<Block> nearbyBlocks = BlockCommon.getBlocksInRadius(location, radius);
 
         for (Block block : nearbyBlocks) {
             common.printDebugMessage("block type is " + block.getType().toString(), null, null, false);

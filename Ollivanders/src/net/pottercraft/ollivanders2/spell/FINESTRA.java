@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Breaks glass.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Finestra_spell">https://harrypotter.fandom.com/wiki/Finestra_spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Finestra_spell">https://harrypotter.fandom.com/wiki/Finestra_spell</a>
  */
 public final class FINESTRA extends O2Spell
 {
@@ -78,7 +78,7 @@ public final class FINESTRA extends O2Spell
 
         if (isGlass(getTargetBlock()))
         {
-            for (Block nearbyBlock : Ollivanders2Common.getBlocksInRadius(location, radius))
+            for (Block nearbyBlock : BlockCommon.getBlocksInRadius(location, radius))
             {
                 if (isGlass(nearbyBlock))
                     nearbyBlock.breakNaturally();

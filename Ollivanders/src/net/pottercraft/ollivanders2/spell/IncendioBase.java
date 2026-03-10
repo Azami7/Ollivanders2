@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Effect;
@@ -185,7 +186,7 @@ public abstract class IncendioBase extends O2Spell {
                 setBlockOnFire(target);
             }
             else {
-                for (Block block : Ollivanders2Common.getBlocksInRadius(target.getLocation(), blockRadius))
+                for (Block block : BlockCommon.getBlocksInRadius(target.getLocation(), blockRadius))
                     setBlockOnFire(block);
             }
 
