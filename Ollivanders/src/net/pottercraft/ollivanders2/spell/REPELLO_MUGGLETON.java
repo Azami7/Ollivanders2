@@ -10,15 +10,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Muggle-Repelling -Repello Muggletum - is a charm that prevents Muggles from seeing or entering an area. Any
- * non-magic person gets close to the vicinity of the enchantment remembers something urgent to do and leave.
- * <p>
- * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
+ * Repello Muggleton is a Muggle-repelling charm that conceals magical areas from non-magical people.
+ * When Muggles approach the protected area, they are compelled to leave and remember an urgent task elsewhere.
+ *
+ * <p>Spell Mechanics:</p>
+ *
+ * <ul>
+ * <li>Creates a stationary spell centered on the caster's location</li>
+ * <li>Conceals players inside the spell's radius from Muggles outside</li>
+ * <li>Prevents Muggles from entering the protected area</li>
+ * <li>Muggles who approach become disoriented and must leave</li>
+ * <li>No projectile required - cast directly on the caster</li>
+ * <li>Radius range: varies by configuration</li>
+ * <li>Duration range: varies by configuration (scales with caster experience)</li>
+ * </ul>
  *
  * @author Azami7
- * @version Ollivanders2
  * @see <a href="https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm">https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm</a>
- * @since 2.21
+ * @see net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON
  */
 public final class REPELLO_MUGGLETON extends StationarySpell {
     /**
@@ -40,11 +49,15 @@ public final class REPELLO_MUGGLETON extends StationarySpell {
     }
 
     /**
-     * Constructor.
+     * Constructs a new REPELLO_MUGGLETON spell cast by a player.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Sets up the spell-specific parameters including duration modifier, radius modifier,
+     * and min/max values for radius and duration. The spell is cast centered on the caster
+     * with no projectile required.</p>
+     *
+     * @param plugin    a callback to the MC plugin (not null)
+     * @param player    the player who cast this spell (not null)
+     * @param rightWand the wand correctness factor (not null)
      */
     public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -64,6 +77,13 @@ public final class REPELLO_MUGGLETON extends StationarySpell {
         initSpell();
     }
 
+    /**
+     * Creates the stationary spell instance.
+     *
+     * <p>Instantiates a new REPELLO_MUGGLETON stationary spell with the calculated radius and duration.</p>
+     *
+     * @return the created stationary spell instance
+     */
     @Override
     protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON(p, caster.getUniqueId(), location, radius, duration);

@@ -14,7 +14,6 @@ import java.util.ArrayList;
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Bluebell_Flames">https://harrypotter.fandom.com/wiki/Bluebell_Flames</a>
- * @since 2.21.4
  */
 public final class LUMOS_FERVENS extends StationarySpell {
     /**

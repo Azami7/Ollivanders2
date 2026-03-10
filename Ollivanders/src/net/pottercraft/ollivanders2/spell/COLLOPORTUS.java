@@ -16,9 +16,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Locks doors, trapdoors, and chests.
+ * Colloportus is a locking spell that locks doors, trapdoors, and chests so they cannot be opened or broken.
+ * The spell is permanent and can only be removed by the Unlocking Spell, Alohomora.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
+ * <p>Spell Mechanics:</p>
+ *
+ * <ul>
+ * <li>Locks doors, trapdoors, and chests at the target location</li>
+ * <li>Prevents the target from being opened by any means</li>
+ * <li>Prevents the target from being broken or destroyed</li>
+ * <li>Permanent spell - duration and radius do not apply</li>
+ * <li>Can only be removed with the Alohomora (unlocking) spell</li>
+ * <li>Fixed radius (all locked objects are treated the same)</li>
+ * </ul>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
+ * @see net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS
  */
 public final class COLLOPORTUS extends StationarySpell {
     /**
@@ -40,11 +54,15 @@ public final class COLLOPORTUS extends StationarySpell {
     }
 
     /**
-     * Constructor.
+     * Constructs a new COLLOPORTUS spell cast by a player.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * <p>Sets up the spell-specific parameters. Since COLLOPORTUS is a permanent locking spell,
+     * it has a fixed radius (no duration/radius scaling). The spell requires a projectile to hit
+     * a valid target (door, trapdoor, or chest) to succeed.</p>
+     *
+     * @param plugin    a callback to the MC plugin (not null)
+     * @param player    the player who cast this spell (not null)
+     * @param rightWand the wand correctness factor (not null)
      */
     public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -64,9 +82,12 @@ public final class COLLOPORTUS extends StationarySpell {
     }
 
     /**
-     * Create the colloportus stationary spell at the location if the target block is a door, trapdoor, or chest
+     * Creates the colloportus stationary spell at the target location.
      *
-     * @return the stationary spell created or null on failure
+     * <p>Validates that the target block is a door, trapdoor, or chest. If so, ensures the block
+     * is closed before creating the lock. Returns null if the target block is invalid.</p>
+     *
+     * @return the stationary spell instance, or null if the target block is not a valid lockable object
      */
     @Override
     @Nullable

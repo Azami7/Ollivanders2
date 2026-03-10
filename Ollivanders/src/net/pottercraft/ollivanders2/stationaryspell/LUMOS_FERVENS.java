@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -257,7 +258,7 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         Block targetBlock = event.getBlock();
 
         // Check if the target block is at or adjacent to the fire block
-        if (targetBlock.equals(fireBlock) || Ollivanders2Common.isAdjacentTo(targetBlock, fireBlock)) {
+        if (targetBlock.equals(fireBlock) || BlockCommon.isAdjacentTo(targetBlock, fireBlock)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage("The bluebell flames resist your attempt to extinguish them with water!");
         }
