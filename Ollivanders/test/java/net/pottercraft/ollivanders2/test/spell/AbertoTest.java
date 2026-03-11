@@ -38,12 +38,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Isolated
 public class AbertoTest extends O2SpellTestSuper {
-    @Override @NotNull
+    @Override
+    @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.ABERTO;
     }
 
-    @Override @Test
+    @Override
+    @Test
     void spellConstructionTest() {
         // aberto has no spell-specific settings
     }
@@ -55,7 +57,8 @@ public class AbertoTest extends O2SpellTestSuper {
      * opens doors by setting their Openable state to true, and fails to open doors protected
      * by COLLOPORTUS stationary spells.</p>
      */
-    @Override @Test
+    @Override
+    @Test
     void doCheckEffectTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
         Location location = getNextLocation(testWorld);
@@ -65,7 +68,7 @@ public class AbertoTest extends O2SpellTestSuper {
 
         // spell fails when not cast at a door
         doorBlock.setType(Material.STONE);
-        ABERTO aberto = (ABERTO)castSpell(caster, location, targetLocation);
+        ABERTO aberto = (ABERTO) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
         assertTrue(aberto.isKilled(), "spell not killed");
         String message = caster.nextMessage();
@@ -75,13 +78,13 @@ public class AbertoTest extends O2SpellTestSuper {
         // spell opens the door when the target is a closed door/trapdoor/gate
         assertFalse(Ollivanders2Common.getDoors().isEmpty());
         doorBlock.setType(Ollivanders2Common.getDoors().getFirst());
-        Openable door = (Openable)doorBlock.getBlockData();
+        Openable door = (Openable) doorBlock.getBlockData();
         door.setOpen(false);
         doorBlock.setBlockData(door);
 
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        door = (Openable)doorBlock.getBlockData();
+        door = (Openable) doorBlock.getBlockData();
         assertTrue(door.isOpen(), "door was not opened");
 
         // spell fails if a colloportus is present
@@ -92,13 +95,14 @@ public class AbertoTest extends O2SpellTestSuper {
 
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        door = (Openable)doorBlock.getBlockData();
+        door = (Openable) doorBlock.getBlockData();
         assertFalse(door.isOpen(), "door was opened when colloportus present");
         message = caster.nextMessage();
         assertNotNull(message, "caster did not get failure message");
     }
 
-    @Override @Test
+    @Override
+    @Test
     void revertTest() {
         // aberto has no revert actions
     }
