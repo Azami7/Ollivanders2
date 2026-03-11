@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -162,5 +163,17 @@ public class BlockCommonTest {
 
         block.setType(Material.AIR);
         assertTrue(BlockCommon.isAirBlock(block), "isAirBlock() returned false for Material.AIR");
+    }
+
+    /**
+     * Tear down the mock Bukkit server after all tests complete.
+     *
+     * <p>Static teardown method called once after all tests in this class have finished.
+     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
+     * test execution in subsequent test classes.</p>
+     */
+    @AfterAll
+    static void globalTearDown() {
+        MockBukkit.unmock();
     }
 }

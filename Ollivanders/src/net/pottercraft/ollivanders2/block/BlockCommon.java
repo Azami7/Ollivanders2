@@ -67,7 +67,7 @@ public class BlockCommon {
      * @return List of blocks that are within radius of the location and are the specified type.
      */
     @NotNull
-    static public List<Block> getBlocksInRadiusByType(@NotNull Location location, double radius, Material blockType) {
+    static public List<Block> getBlocksInRadiusByType(@NotNull Location location, double radius, @NotNull Material blockType) {
         List<Block> blockList = getBlocksInRadius(location, radius);
         List<Block> matchingBlocks = new ArrayList<>();
 

@@ -59,7 +59,7 @@ public class O2HousesTest {
     @BeforeAll
     static void globalSetUp() {
         mockServer = MockBukkit.mock();
-        testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/houses_config.yml"));
+        testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
         // set up world
         testWorld = mockServer.addSimpleWorld("world");
 

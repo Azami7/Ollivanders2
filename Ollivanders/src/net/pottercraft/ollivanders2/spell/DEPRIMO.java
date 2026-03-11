@@ -106,7 +106,7 @@ public final class DEPRIMO extends O2Spell {
         List<Block> nearbyBlocks = BlockCommon.getBlocksInRadius(location, radius);
 
         for (Block block : nearbyBlocks) {
-            common.printDebugMessage("block type is " + block.getType().toString(), null, null, false);
+            common.printDebugMessage("block type is " + block.getType(), null, null, false);
 
             if (materialBlockedList.contains(block.getType()))
                 continue;

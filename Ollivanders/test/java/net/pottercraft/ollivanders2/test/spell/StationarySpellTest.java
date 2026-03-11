@@ -15,14 +15,52 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Abstract base test class for stationary spell implementations.
+ *
+ * <p>Provides common test infrastructure for testing spells that create stationary effects
+ * in the world (as opposed to instant-cast spells). Subclasses must implement the spell-specific
+ * setup and behavior testing.</p>
+ *
+ * <p>Test Coverage:</p>
+ *
+ * <ul>
+ * <li>doCheckEffectTest: Verifies that stationary spells are correctly created with proper radius and duration</li>
+ * <li>targetLocationSetup: Hook for subclasses to set up the target location for spell casting</li>
+ * </ul>
+ *
+ * @author Azami7
+ * @see O2SpellTestSuper
+ * @see StationarySpell
+ */
 abstract public class StationarySpellTest extends O2SpellTestSuper {
+    /**
+     * Gets the spell type for this test.
+     *
+     * @return the stationary spell type being tested
+     */
     abstract O2StationarySpellType getStationarySpellType();
 
+    /**
+     * Spell construction test (overridden with empty implementation).
+     */
     @Override
     @Test
     void spellConstructionTest() {
     }
 
+    /**
+     * Tests the core effects of stationary spell creation and configuration.
+     *
+     * <p>Verifies that:
+     * <ul>
+     * <li>The spell is killed appropriately (immediately for noProjectile, after hitting target otherwise)</li>
+     * <li>Radius and duration are calculated and clamped to min/max bounds</li>
+     * <li>A stationary spell instance is created at the correct location</li>
+     * <li>The stationary spell has the correct radius and duration values</li>
+     * </ul>
+     * </p>
+     */
     @Override
     @Test
     void doCheckEffectTest() {
@@ -77,9 +115,21 @@ abstract public class StationarySpellTest extends O2SpellTestSuper {
         }
     }
 
+    /**
+     * Hook for subclasses to set up the target location before spell effects are verified.
+     *
+     * <p>Subclasses should override this to place any necessary blocks, entities, or other setup
+     * required for testing spell effects at the target location.</p>
+     *
+     * @param location the target location where the spell will take effect
+     */
     abstract void targetLocationSetup(Location location);
 
+    /**
+     * Revert test (overridden with empty implementation).
+     */
     @Override
     @Test
-    void revertTest() {}
+    void revertTest() {
+    }
 }

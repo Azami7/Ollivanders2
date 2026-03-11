@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Moves a group of blocks.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Levitation_Charm">https://harrypotter.fandom.com/wiki/Levitation_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Levitation_Charm">https://harrypotter.fandom.com/wiki/Levitation_Charm</a>
  */
 public final class WINGARDIUM_LEVIOSA extends O2Spell {
     /**

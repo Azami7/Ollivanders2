@@ -89,6 +89,10 @@ public enum O2StationarySpellType {
      */
     NULLUM_EVANESCUNT(NULLUM_EVANESCUNT.class, MagicLevel.EXPERT),
     /**
+     * Protego Diabolica: Surrounds the caster in a blue flame that will harm anyone not in their house who crosses it
+     */
+    PROTEGO_DIABOLICA(PROTEGO_DIABOLICA.class, MagicLevel.EXPERT),
+    /**
      * Protego Horribilis: A protection curse that defends against attacks.
      *
      * @see PROTEGO_HORRIBILIS

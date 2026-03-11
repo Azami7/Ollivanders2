@@ -597,6 +597,10 @@ public enum O2SpellType {
      */
     PROTEGO(PROTEGO.class, MagicLevel.OWL),
     /**
+     * {@link PROTEGO_DIABOLICA}
+     */
+    PROTEGO_DIABOLICA(PROTEGO_DIABOLICA.class, MagicLevel.EXPERT),
+    /**
      * {@link PROTEGO_HORRIBILIS}
      */
     PROTEGO_HORRIBILIS(PROTEGO_HORRIBILIS.class, MagicLevel.EXPERT),

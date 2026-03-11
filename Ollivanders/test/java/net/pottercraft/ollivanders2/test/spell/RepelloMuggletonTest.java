@@ -11,7 +11,7 @@ import org.junit.jupiter.api.parallel.Isolated;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Isolated
-public class RepelloMuggleton extends StationarySpellTest {
+public class RepelloMuggletonTest extends StationarySpellTest {
     @Override
     @NotNull
     O2SpellType getSpellType() {

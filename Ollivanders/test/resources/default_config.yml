@@ -37,7 +37,7 @@ fastSpells: false
 # Houses
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses-and-years
-houses: false
+houses: true
 displayMessageOnSort: false
 gryffindorName: "Gryffindor"
 hufflepuffName: "Hufflepuff"
