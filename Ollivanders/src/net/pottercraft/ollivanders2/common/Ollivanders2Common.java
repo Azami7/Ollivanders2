@@ -87,6 +87,13 @@ public class Ollivanders2Common {
     public static final int ticksPerHour = 20 * 60 * 60;
 
     /**
+     * Number of ticks in a Minecraft day
+     *
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
+     */
+    public static final int ticksPerDay = 24000;
+
+    /**
      * The drag factor for players moving underwater.
      *
      * @see <a href="https://learn.microsoft.com/en-us/minecraft/creator/reference/content/entityreference/examples/entitycomponents/minecraftcomponent_water_movement?view=minecraft-bedrock-stable">Entity Documentation - minecraft:water_movement</a>

@@ -434,4 +434,10 @@ public class TestCommon {
         }
     }
 
+    public static void clearMessageQueue(PlayerMock player) {
+        String message = player.nextMessage();
+        while (message != null) {
+            message = player.nextMessage();
+        }
+    }
 }
