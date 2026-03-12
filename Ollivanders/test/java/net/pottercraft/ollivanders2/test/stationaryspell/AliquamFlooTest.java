@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -57,6 +58,7 @@ import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventCl
  *
  * @author Azami7
  */
+@Isolated
 public class AliquamFlooTest {
     /**
      * Shared mock Bukkit server instance for all tests.
@@ -135,12 +137,13 @@ public class AliquamFlooTest {
         mockServer.getScheduler().performTicks(20);
         assertTrue(aliquamFloo1.isPermanent(), "Aliquam Floo not permanent");
         assertEquals(ALIQUAM_FLOO.minRadiusConfig, aliquamFloo1.getRadius(), "Aliquam floo radius expected");
-        assertFalse(ALIQUAM_FLOO.getFlooFireplaceNames().isEmpty(), "floo1 is not registered in the network");
+        assertFalse(ALIQUAM_FLOO.getFlooFireplaceNames().isEmpty(), "no registered floo fireplaces");
+        assertTrue(ALIQUAM_FLOO.getFlooFireplaceNames().contains(floo1Name), "floo1 is not registered in the network");
 
         // create a second floo fireplace
         ALIQUAM_FLOO aliquamFloo2 = new ALIQUAM_FLOO(testPlugin, player.getUniqueId(), location2, floo2Name);
         Ollivanders2API.getStationarySpells().addStationarySpell(aliquamFloo2);
-        assertEquals(2, ALIQUAM_FLOO.getFlooFireplaceNames().size(), "floo2 is not registered in the network");
+        assertTrue(ALIQUAM_FLOO.getFlooFireplaceNames().contains(floo2Name), "floo2 is not registered in the network");
 
         // dropping random item in the fire does nothing
         ItemStack notFlooPowder = O2ItemType.ACONITE.getItem(1);
@@ -310,6 +313,33 @@ public class AliquamFlooTest {
         int activeSpellsAfter = Ollivanders2API.getStationarySpells().getActiveStationarySpells().size();
         assertEquals(activeSpellsBefore, activeSpellsAfter, "Loaded spell count does not match saved spell count");
         assertEquals(2, ALIQUAM_FLOO.getFlooFireplaceNames().size(), "Floo network not restored from save");
+
+        // verify deserialized floos work for teleportation
+        ALIQUAM_FLOO deserializedFloo1 = null;
+        ALIQUAM_FLOO deserializedFloo2 = null;
+        for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+            if (spell instanceof ALIQUAM_FLOO floo) {
+                if (floo.getFlooName().equals(floo1Name))
+                    deserializedFloo1 = floo;
+                else if (floo.getFlooName().equals(floo2Name))
+                    deserializedFloo2 = floo;
+            }
+        }
+        assertNotNull(deserializedFloo1, "Deserialized floo1 not found");
+        assertNotNull(deserializedFloo2, "Deserialized floo2 not found");
+
+        // activate floo1 and teleport to floo2
+        player.setLocation(location1);
+        flooPowder = O2ItemType.FLOO_POWDER.getItem(1);
+        assertNotNull(flooPowder);
+        testWorld.dropItem(location1, flooPowder);
+        mockServer.getScheduler().performTicks(20);
+        assertTrue(deserializedFloo1.isWorking(), "Deserialized floo1 not active after floo powder");
+
+        chatEvent = new AsyncPlayerChatEvent(false, player, floo2Name, new HashSet<>());
+        mockServer.getPluginManager().callEvent(chatEvent);
+        mockServer.getScheduler().performTicks(500);
+        assertEquals(location2, player.getLocation(), "Player not teleported to deserialized floo2");
     }
 
     /**

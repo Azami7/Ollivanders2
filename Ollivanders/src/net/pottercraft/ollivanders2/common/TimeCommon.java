@@ -45,7 +45,11 @@ public enum TimeCommon {
     /**
      * Moonrise (13000 ticks)
      */
-    MOONRISE(13000);
+    MOONRISE(13000),
+    /**
+     * Sunrise (24000 ticks)
+     */
+    SUNRISE(24000);
 
     /**
      * The day-relative tick for this enumerated time of day

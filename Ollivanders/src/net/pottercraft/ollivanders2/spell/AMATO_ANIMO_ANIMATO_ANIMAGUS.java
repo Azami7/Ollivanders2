@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.effect.ANIMAGUS_EFFECT;
 import net.pottercraft.ollivanders2.effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
@@ -14,13 +15,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Amato Animo Animato Animagus is an incantation used in the process of becoming an Animagus. The spell alone is
- * not enough to change a player in to an Animagus. The spell has to be recited either at sunrise or sunset
- * and the player must drink the Animagus potion after saying the incantation. The potion must be consumed during
- * a lightning storm. Once the player has successfully become an Animagus it will require considerable practice
- * before they can consistently take the form.
+ * Amato Animo Animato Animagus is an incantation used in the process of becoming an Animagus.
+ *
+ * <p>This spell serves two purposes depending on the caster's Animagus status:</p>
+ *
+ * <ul>
+ * <li>Non-Animagus: Applies the {@link ANIMAGUS_INCANTATION} effect, which is the first step in the
+ * transformation process. The player must then drink the Animagus potion within 15 seconds.</li>
+ * <li>Animagus: Toggles between human and animal form. Success rate scales with spell experience.</li>
+ * </ul>
+ *
+ * <p>When strict conditions are enabled, the incantation must be said at dawn or sunset, and the potion
+ * must be consumed during a thunderstorm.</p>
  *
  * @author Azami7
+ * @see ANIMAGUS_INCANTATION
+ * @see ANIMAGUS_EFFECT
  * @since 2.2.6
  */
 public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
@@ -69,24 +79,19 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
         spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
+        noProjectile = true;
+
         initSpell();
     }
 
     /**
-     * Perform the Animagus spell
+     * Checks the spell effect based on the caster's Animagus status.
+     *
+     * <p>If the caster is already an Animagus, toggles between human and animal form. Otherwise, applies the
+     * {@link ANIMAGUS_INCANTATION} effect as the first step of the transformation process.</p>
      */
     @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
-        if (casterO2P == null) {
-            kill();
-            return;
-        }
-
+    protected void doCheckEffect() {
         if (casterO2P.isAnimagus()) {
             // If the player is already an animagus, the incantation changes them to and from their animal form.
             common.printDebugMessage(caster.getDisplayName() + " is an Animagus.", null, null, false);
@@ -101,15 +106,21 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
     }
 
     /**
-     * If the player is not an animagus, saying the incantation at the correct time of day is the first
-     * step to becoming one. Once said, the player must drink the Animagus potion within 15 seconds.
+     * Applies the {@link ANIMAGUS_INCANTATION} effect if the time-of-day conditions are met.
+     *
+     * <p>When strict conditions are enabled, the incantation only succeeds during dawn (dawn to sunrise)
+     * or dusk (sunset to moonrise). With strict conditions disabled, it always succeeds.</p>
+     *
+     * <p>The effect lasts 300 ticks (15 seconds), during which the player must drink the Animagus potion
+     * to complete the transformation.</p>
      */
     private void setAnimagusIncantation() {
         boolean success = false;
 
         if (Ollivanders2.useStrictAnimagusConditions) {
             long curTime = caster.getWorld().getTime();
-            if ((curTime >= 23000 && curTime <= 24000) || (curTime >= 12000 && curTime <= 13000))
+            if ((curTime >= TimeCommon.DAWN.getTick() && curTime <= TimeCommon.SUNRISE.getTick())
+                    || (curTime >= TimeCommon.SUNSET.getTick() && curTime <= TimeCommon.MOONRISE.getTick()))
                 success = true;
         }
         else
@@ -119,16 +130,20 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
             ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, false, caster.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            caster.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
+            successMessage = "You feel slightly different.";
+            sendSuccessMessage();
         }
-        else
-            caster.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
+        else {
+            failureMessage = "Nothing seems to happen.";
+            sendFailureMessage();
+        }
     }
 
     /**
-     * If the player is an animagus, saying the incantation will toggle them to and from their
-     * animal form. Changing to animal form takes practice to do consistently. Players can always
-     * return to their human form once transformed.
+     * Toggles the caster between human and animal form.
+     *
+     * <p>If the caster currently has the {@link ANIMAGUS_EFFECT}, it is removed to return them to human form.
+     * Otherwise, attempts to transform them to animal form with a success rate based on experience.</p>
      *
      * @param o2p the player casting this spell
      */
@@ -142,36 +157,49 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
         }
     }
 
+    /**
+     * Attempts to transform the caster into their animal form.
+     *
+     * <p>Success rate scales with spell experience:</p>
+     *
+     * <ul>
+     * <li>Under 25 uses: 10%</li>
+     * <li>25 or more uses: usesModifier / 2 </li>
+     * </ul>
+     *
+     * @param o2p the player casting this spell
+     */
     private void transformToAnimalForm(@NotNull O2Player o2p) {
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
-        int uses = (int) (usesModifier * 10);
 
         // set success rate based on their experience
         int successRate;
-        if (uses < 25)
-            successRate = 5;
-        else if (uses < 100)
+        if (usesModifier < (O2Spell.spellMasteryLevel * 0.20)) // 20% spell mastery or lower
             successRate = 10;
-        else if (uses < 200)
-            successRate = uses / 2;
         else
-            successRate = 100;
+            successRate = (int) Math.floor(usesModifier / 2);
 
         if (rand < successRate) {
             ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, true, caster.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
-            caster.sendMessage(Ollivanders2.chatColor + "You feel very different.");
+            successMessage = "You feel very different.";
+            sendSuccessMessage();
         }
         else {
-            caster.sendMessage(Ollivanders2.chatColor + "You feel a momentary change but it quickly fades.");
+            failureMessage = "You feel a momentary change but it quickly fades.";
+            sendFailureMessage();
         }
 
         p.setO2Player(caster, o2p);
     }
 
     /**
-     * Override setUsesModifier because this spell does not require holding a wand.
+     * Overrides the default uses modifier calculation since this spell is an incantation that does not
+     * require holding a wand.
+     *
+     * <p>Uses the raw spell count rather than wand-based calculation, doubled if the player has the
+     * {@link O2EffectType#HIGHER_SKILL} effect.</p>
      */
     @Override
     protected void setUsesModifier() {
@@ -180,9 +208,5 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(caster.getUniqueId(), O2EffectType.HIGHER_SKILL)) {
             usesModifier *= 2;
         }
-    }
-
-    @Override
-    protected void doCheckEffect() {
     }
 }

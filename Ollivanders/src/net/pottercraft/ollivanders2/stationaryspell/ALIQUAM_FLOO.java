@@ -136,8 +136,6 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
         permanent = true;
         radius = minRadius;
         loadFlooConfig();
-
-        flooNetworkLocations.add(this);
     }
 
     /**
@@ -161,7 +159,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
         fireType = location.getBlock().getType();
 
         flooNetworkLocations.add(this);
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        common.printDebugMessage("Creating aliquam floo stationary spell with a floo name of " + flooName, null, null, false);
     }
 
     /**
@@ -349,6 +347,15 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
         flooName = spellData.get(flooNameLabel);
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+
+        if (active && !flooNetworkLocations.contains(this)) {
+            flooNetworkLocations.add(this);
+        }
     }
 
     /**
