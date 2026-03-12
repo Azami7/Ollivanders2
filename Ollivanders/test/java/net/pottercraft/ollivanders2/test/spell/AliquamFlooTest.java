@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.test.spell;
 
 import net.kyori.adventure.text.Component;
-import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.spell.ALIQUAM_FLOO;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -140,7 +139,6 @@ public class AliquamFlooTest extends O2SpellTestSuper {
      */
     @Test
     void duplicateFlooNameTest() {
-        Ollivanders2.debug = true;
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
         Location location = getNextLocation(testWorld);
         Location targetLocation = new Location(testWorld, location.getX() + 20, location.getY(), location.getZ());

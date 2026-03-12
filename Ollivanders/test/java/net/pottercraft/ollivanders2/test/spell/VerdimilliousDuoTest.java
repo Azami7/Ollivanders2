@@ -58,7 +58,7 @@ public class VerdimilliousDuoTest extends SparksTest {
      */
     @Test
     void cursedItemsTest() {
-        World testWorld = mockServer.addSimpleWorld("VerdimilliousDuo");
+        World testWorld = mockServer.addSimpleWorld("VerdimilliousDuo_cursed");
         World spyWorld = Mockito.spy(testWorld);
         Location location = getNextLocation(spyWorld);
         Location targetLocation = new Location(spyWorld, location.getX() + 10, location.getY(), location.getZ());
@@ -96,7 +96,7 @@ public class VerdimilliousDuoTest extends SparksTest {
      */
     @Test
     void undetectableCurseTest() {
-        World testWorld = mockServer.addSimpleWorld("VerdimilliousDuo");
+        World testWorld = mockServer.addSimpleWorld("VerdimilliousDuo_undetectable");
         World spyWorld = Mockito.spy(testWorld);
         Location location = getNextLocation(spyWorld);
         Location targetLocation = new Location(spyWorld, location.getX() + 10, location.getY(), location.getZ());
@@ -131,7 +131,7 @@ public class VerdimilliousDuoTest extends SparksTest {
      */
     @Test
     void notCursedItemTest() {
-        World testWorld = mockServer.addSimpleWorld("VerdimilliousDuo");
+        World testWorld = mockServer.addSimpleWorld("VerdimilliousDuo_notCursed");
         World spyWorld = Mockito.spy(testWorld);
         Location location = getNextLocation(spyWorld);
         Location targetLocation = new Location(spyWorld, location.getX() + 10, location.getY(), location.getZ());

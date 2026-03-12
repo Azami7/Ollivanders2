@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.book.O2BookType;
-import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.spell.CELATUM;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
@@ -74,20 +73,12 @@ public class CelatumTest extends ItemEnchantTest {
     /**
      * Create an invalid O2ItemType for CELATUM testing.
      *
-     * <p>Tests that O2ItemType.BROOMSTICK cannot be enchanted by CELATUM even though
-     * the base Material check passes for some broomstick types.</p>
-     *
-     * @return a BROOMSTICK item or BARRIER as fallback
+     * @return a Book item stack
      */
     @Override
     @NotNull
     ItemStack createInvalidItem() {
-        ItemStack itemStack = O2ItemType.BROOMSTICK.getItem(1);
-
-        if (itemStack == null)
-            itemStack = new ItemStack(Material.BARRIER, 1);
-
-        return itemStack;
+        return new ItemStack(Material.BOOK, 1);
     }
 
     /**
