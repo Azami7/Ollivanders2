@@ -12,7 +12,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <li><strong>Reversion:</strong> Verifies temporary water blocks are properly reverted</li>
  * </ul>
  */
-@Isolated
 public class AquaEructoTest extends AquaEructoBaseTest {
     /**
      * Returns the spell type being tested.

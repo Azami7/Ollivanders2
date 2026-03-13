@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for REDUCIO, the Shrinking Charm.
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  *
  * @author Azami7
  */
-@Isolated
 public class ReducioTest extends ChangeEntitySizeTest {
     @Override
     @NotNull

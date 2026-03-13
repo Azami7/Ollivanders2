@@ -5,7 +5,6 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Test suite for the DURO spell (hardening charm).
@@ -29,7 +28,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.DURO
  */
-@Isolated
 public class DuroTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.

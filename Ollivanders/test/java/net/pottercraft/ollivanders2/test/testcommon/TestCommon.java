@@ -71,6 +71,30 @@ public class TestCommon {
     }
 
     /**
+     * Collects all pending messages from a player's message queue into a single string.
+     *
+     * <p>Repeatedly calls nextMessage() to drain the queue, concatenating all messages with space
+     * separators. Used to gather multi-line output into a single string for assertion checking.</p>
+     *
+     * @param player the player to collect messages from
+     * @return concatenated message string with spaces between lines, or null if no messages are pending
+     */
+    @Nullable
+    public static String getWholeMessage(PlayerMock player) {
+        String message = player.nextMessage();
+        if (message == null)
+            return null;
+
+        StringBuilder wholeMessage = new StringBuilder();
+        while (message != null) {
+            wholeMessage.append(message).append(" ");
+            message = player.nextMessage();
+        }
+
+        return wholeMessage.toString();
+    }
+
+    /**
      * Make a player run a command and get the server response.
      *
      * @param player the player running the command

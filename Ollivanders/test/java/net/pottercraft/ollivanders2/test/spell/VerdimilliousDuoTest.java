@@ -16,7 +16,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import org.mockito.Mockito;
 
@@ -37,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * <p>Tests use Mockito spies to verify the spell's sound effect and proper spell termination.</p>
  */
-@Isolated
 public class VerdimilliousDuoTest extends SparksTest {
     @Override
     @NotNull

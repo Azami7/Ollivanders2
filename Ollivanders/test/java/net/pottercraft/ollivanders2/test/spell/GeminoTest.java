@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the GEMINO spell.
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @see net.pottercraft.ollivanders2.spell.GEMINO for the spell implementation
  * @see ItemEnchantTest for inherited test framework
  */
-@Isolated
 public class GeminoTest extends ItemEnchantTest {
     /**
      * Get the spell type being tested.

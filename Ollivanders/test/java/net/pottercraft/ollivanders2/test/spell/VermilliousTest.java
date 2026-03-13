@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the VERMILLIOUS red sparks emergency signal charm.
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  *
  * @author Azami7
  */
-@Isolated
 public class VermilliousTest extends SparksTest {
     @Override
     @NotNull

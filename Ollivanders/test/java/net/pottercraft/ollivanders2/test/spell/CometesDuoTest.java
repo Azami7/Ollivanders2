@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the COMETES_DUO spell.
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @see net.pottercraft.ollivanders2.spell.COMETES_DUO for the spell implementation
  * @see PyrotechniaTest for inherited test framework
  */
-@Isolated
 public class CometesDuoTest extends PyrotechniaTest {
     /**
      * Get the spell type being tested.

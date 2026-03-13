@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see net.pottercraft.ollivanders2.spell.ARRESTO_MOMENTUM for the spell implementation
  * @see O2SpellTestSuper for inherited test framework
  */
-@Isolated
 public class ArrestoMomentumTest extends O2SpellTestSuper {
     /**
      * Get the spell type being tested.

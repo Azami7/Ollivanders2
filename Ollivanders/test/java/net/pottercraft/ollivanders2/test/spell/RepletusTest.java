@@ -10,7 +10,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <li><strong>Spell Termination:</strong> Confirms spell is killed after refilling or failing</li>
  * </ul>
  */
-@Isolated
 public class RepletusTest extends O2SpellTestSuper {
     /**
      * Returns the spell type being tested.

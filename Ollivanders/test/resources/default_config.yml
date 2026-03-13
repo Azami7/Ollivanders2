@@ -29,7 +29,7 @@ useStrictAnimagusConditions: true
 deathExpLoss: false
 apparateLocations: false
 maxSpellLevel: false
-maxApparateDistance: 10000
+maxApparateDistance: 1000
 enableLycanthropy: true
 # Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
 fastSpells: false

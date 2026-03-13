@@ -6,23 +6,38 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Isolated
+/**
+ * Tests for the {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM} spell.
+ *
+ * <p>Verifies the spell creates a stationary barrier that prevents any entities from crossing its boundary by testing that
+ * a dirt block is properly set up before the spell is cast.</p>
+ *
+ * @author Azami7
+ * @see net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM
+ * @see net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM
+ */
 public class ProtegoTotalumTest extends StationarySpellTest {
+    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.PROTEGO_TOTALUM;
     }
 
+    /** {@inheritDoc} */
     @Override
     O2StationarySpellType getStationarySpellType() {
         return O2StationarySpellType.PROTEGO_TOTALUM;
     }
 
+    /**
+     * Sets up a dirt block at the target location for the spell to cast upon.
+     *
+     * @param location the target location
+     */
     @Override
     void targetLocationSetup(Location location) {
         World world = location.getWorld();

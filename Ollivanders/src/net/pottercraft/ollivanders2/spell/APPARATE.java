@@ -24,39 +24,67 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Apparition code for players who have over 100 uses in apparition.
+ * Teleportation spell that allows players to disappear and reappear at a chosen destination.
+ *
+ * <p>Supports two modes of apparation:</p>
+ *
+ * <ul>
+ * <li>Named locations: Apparate to a pre-registered named location</li>
+ * <li>Coordinates: Apparate to specified X, Y, Z coordinates</li>
+ * <li>Line of sight: Apparate in the direction the player is looking (up to 160 blocks)</li>
+ * </ul>
+ *
+ * <p>Subject to distance limits, WorldGuard restrictions, and event cancellation.</p>
  *
  * @author Azami7
  * @version Ollivanders2
  */
 public final class APPARATE extends O2Spell {
     /**
-     * The maximum apparate distance, value less than or equal 0 means no limit
+     * Maximum distance (in blocks) a player can apparate. A value of 0 or less means no limit.
+     * Loaded from config on spell cast.
      */
-    public static int maxApparateDistance = 0;
+    private static int maxApparateDistance = 0;
 
     /**
-     * Apparate locations
+     * Named apparate locations that players can teleport to. Keys are lowercase location names.
      */
     private static HashMap<String, Location> apparateLocations = new HashMap<>();
 
     /**
-     * The arguments to the apparate spell
+     * Command arguments: [0] = spell name, [1..3] = coordinates or location name.
      */
     private final String[] wordsArray;
+
+    /**
+     * Name of the apparate location if apparating to a named location.
+     */
     private String namedLocation = "unset";
+
+    /**
+     * The target location for this apparation.
+     */
     private Location destination;
+
+    /**
+     * The event fired after all validation, before teleportation occurs.
+     */
     private ApparateEvent apparateEvent;
 
     /**
-     * Max distance to apparate for line of sight apparating
+     * Cached WorldGuard instance for checking location restrictions.
      */
-    private final int maxLineOfSight = 160;
+    private Ollivanders2WorldGuard wg = null;
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Maximum distance (in blocks) for line-of-sight apparation.
+     */
+    private static final int maxLineOfSight = 160;
+
+    /**
+     * Constructor for spell info generation. Do not use to cast the spell.
      *
-     * @param plugin the Ollivanders2 plugin
+     * @param plugin the Ollivanders2 plugin instance
      */
     public APPARATE(Ollivanders2 plugin) {
         super(plugin);
@@ -72,12 +100,12 @@ public final class APPARATE extends O2Spell {
 
         if (Ollivanders2.apparateLocations) {
             text = "To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
-                    + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
+                    + "To apparate to the location of your cursor, within 160 meters, just say the word apparate. "
                     + "Your accuracy is determined by the distance traveled and your experience.";
         }
         else {
             text = "To apparate to a predetermined location, simply say apparate and the name of the place you wish to apparate to. "
-                    + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
+                    + "To apparate to the location of your cursor, within 160 meters, just say the word apparate. "
                     + "Your accuracy is determined by the distance traveled and your experience.";
         }
 
@@ -85,33 +113,42 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Constructor.
+     * Constructor to cast the apparate spell.
      *
-     * @param plugin     a callback to the MC plugin
-     * @param player     the player who cast this spell
-     * @param rightWand  which wand the player was using
-     * @param wordsArray the arguments to the apparate spell
+     * @param plugin     the Ollivanders2 plugin instance
+     * @param player     the player casting the spell
+     * @param rightWand  the wand being used
+     * @param wordsArray spell arguments: [0] = "apparate", [1..3] = coordinates or location name
      */
     public APPARATE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand, @NotNull String[] wordsArray) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.APPARATE;
         branch = O2MagicBranch.CHARMS;
 
+        noProjectile = true;
         this.wordsArray = wordsArray;
+
+        APPARATE.maxApparateDistance = p.getConfig().getInt("maxApparateDistance", 0);
 
         initSpell();
     }
 
     /**
-     * Teleport the caster to the location, or close to it, depending on skill level
+     * Validates apparation and schedules the teleport if successful.
+     *
+     * <p>Performs the following checks in order:</p>
+     *
+     * <ul>
+     * <li>Parses destination from arguments or line-of-sight</li>
+     * <li>Checks WorldGuard ENTRY permission at destination</li>
+     * <li>Checks WorldGuard EXIT_VIA_TELEPORT permission at source</li>
+     * <li>Verifies distance does not exceed maximum</li>
+     * </ul>
+     *
+     * <p>If all checks pass, fires an ApparateEvent and schedules the teleport for 2 ticks later.</p>
      */
     @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
+    protected void doCheckEffect() {
         boolean destinationParsed = false;
         destination = getDestination();
 
@@ -171,17 +208,23 @@ public final class APPARATE extends O2Spell {
         kill();
     }
 
+    /**
+     * Performs the actual teleportation if the apparate event was not canceled.
+     */
     private void doApparate() {
         if (!apparateEvent.isCancelled()) {
-            p.getServer().getLogger().info("adding teleport event");
+            common.printDebugMessage("APPARATE.doApparate: adding teleport event", null, null, false);
             p.addTeleportAction(caster, destination, true);
         }
     }
 
     /**
-     * Get the apparate destination.
+     * Parses the apparate destination from the spell arguments.
      *
-     * @return the destination or null if no destination specified
+     * <p>If named locations are enabled, expects a location name.
+     * Otherwise, expects three numeric coordinates (X, Y, Z).</p>
+     *
+     * @return the parsed destination, or null if arguments are invalid or incomplete
      */
     @Nullable
     private Location getDestination() {
@@ -196,6 +239,7 @@ public final class APPARATE extends O2Spell {
         }
         else {
             if (wordsArray.length == 4) {
+                // wordsArray[0] = "apparate"
                 String xCoordinate = wordsArray[1];
                 String yCoordinate = wordsArray[2];
                 String zCoordinate = wordsArray[3];
@@ -218,9 +262,12 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Get a line of sight location for apparating without specifying a location.
+     * Determines the apparation destination by tracing the caster's line of sight.
      *
-     * @return a line of sight location up to max blocks
+     * <p>Traces forward from the caster's eye location, stopping at the first solid block
+     * and returning the location just before it.</p>
+     *
+     * @return the line-of-sight destination (never null)
      */
     @NotNull
     private Location getLineOfSightLocation() {
@@ -238,14 +285,18 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Check to see if the player can apparate out of this location.
+     * Checks if the player has permission to apparate from this location.
      *
-     * @return true if the player can apparate, false otherwise
+     * <p>If WorldGuard is enabled, verifies the EXIT_VIA_TELEPORT flag is allowed.</p>
+     *
+     * @param source the location to check
+     * @return true if apparation is permitted, false otherwise
      */
     private boolean canApparateFrom(@NotNull Location source) {
         // check world guard permissions at location
         if (Ollivanders2.worldGuardEnabled) {
-            Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
+            if (wg == null)
+                wg = new Ollivanders2WorldGuard(p);
 
             if (!wg.checkWGFlag(caster, source, Flags.EXIT_VIA_TELEPORT)) {
                 return false;
@@ -256,15 +307,18 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Check to see if the player can apparate to the destination
+     * Checks if the player has permission to apparate to this location.
      *
-     * @param destination the target location to apparate to
-     * @return true if the player can apparate, false otherwise
+     * <p>If WorldGuard is enabled, verifies the ENTRY flag is allowed.</p>
+     *
+     * @param destination the target location to check
+     * @return true if apparation is permitted, false otherwise
      */
     private boolean canApparateTo(@NotNull Location destination) {
         // check world guard permissions at destination
         if (Ollivanders2.worldGuardEnabled) {
-            Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
+            if (wg == null)
+                wg = new Ollivanders2WorldGuard(p);
 
             if (!wg.checkWGFlag(caster, destination, Flags.ENTRY)) {
                 common.printDebugMessage("Player does not have ENTRY permissions to destination", null, null, false);
@@ -276,11 +330,11 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Determine if the distance a player is trying to apparate exceeds the max apparate distance in the X or Z coordinates.
+     * Checks if the apparation distance exceeds the configured maximum.
      *
-     * @param fromLoc the location they are apparating from
-     * @param toLoc   the location they are apparating to
-     * @return true if the locations are less than maxApparateDistance apart, false otherwise
+     * @param fromLoc the source location
+     * @param toLoc   the destination location
+     * @return true if the distance exceeds maxApparateDistance, false otherwise
      */
     private boolean exceedsMaxDistance(@NotNull Location fromLoc, @NotNull Location toLoc) {
         // value less 1 means there is no limit
@@ -288,19 +342,13 @@ public final class APPARATE extends O2Spell {
             return false;
 
         // ensure the player is not trying to go more than maxApparateDistance blocks in the x and z directions
-        if (Math.abs(fromLoc.getX() - toLoc.getX()) > maxApparateDistance)
-            return true;
-
-        if (Math.abs(fromLoc.getZ() - toLoc.getZ()) > maxApparateDistance)
-            return true;
-
-        return false;
+        return (fromLoc.distance(toLoc) > maxApparateDistance);
     }
 
     /**
-     * List all apparate locations
+     * Sends the player a formatted list of all saved apparate locations.
      *
-     * @param player player to display the list to
+     * @param player the player to send the list to
      */
     public static void listApparateLocations(@NotNull Player player) {
         if (apparateLocations.isEmpty()) {
@@ -322,57 +370,59 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Add an apparate location
+     * Registers a named apparate location that players can teleport to.
      *
-     * @param name  the name of the location to add
-     * @param world the location world
+     * <p>Blank names are ignored. Names are stored in lowercase.</p>
+     *
+     * @param name  the location name
+     * @param world the world containing the location
      * @param x     x-coordinate
      * @param y     y-coordinate
      * @param z     z-coordinate
-     * @return true if successfully added, false otherwise
      */
-    public static boolean addLocation(@NotNull String name, @NotNull World world, double x, double y, double z) {
+    public static void addLocation(@NotNull String name, @NotNull World world, double x, double y, double z) {
+        if (name.isBlank())
+            return;
+
         Location location = new Location(world, x, y, z);
 
         apparateLocations.put(name.toLowerCase(), location);
-
-        return false;
     }
 
     /**
-     * Remove an apparate location
+     * Removes a named apparate location.
      *
-     * @param name the name of the location to remove
+     * @param name the location name (case-insensitive)
      */
     public static void removeLocation(@NotNull String name) {
         apparateLocations.remove(name.toLowerCase());
     }
 
     /**
-     * Check if a named apparate location exists.
+     * Checks if a named apparate location exists.
      *
-     * @param name the location name
-     * @return true if it exists in the list, false otherwise
+     * @param name the location name (case-insensitive)
+     * @return true if the location exists, false otherwise
      */
     public static boolean doesLocationExist(@NotNull String name) {
         return apparateLocations.containsKey(name.toLowerCase());
     }
 
     /**
-     * Return an apparate location by name
+     * Retrieves a named apparate location.
      *
-     * @param name the location name
+     * @param name the location name (case-insensitive)
      * @return the location if found, null otherwise
      */
     @Nullable
-    public Location getLocationByName(@NotNull String name) {
+    Location getLocationByName(@NotNull String name) {
         return apparateLocations.get(name.toLowerCase());
     }
 
     /**
-     * Return a map of all apparate locations
+     * Returns a defensive copy of all saved apparate locations.
      *
-     * @return a map of all apparate locations
+     * @return a map of location names to coordinates (never null)
      */
     @NotNull
     public static Map<String, Location> getAllApparateLocations() {
@@ -380,14 +430,14 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Clears all apparate locations
+     * Removes all saved apparate locations.
      */
     public static void clearApparateLocations() {
-        apparateLocations = new HashMap<>();
+        apparateLocations.clear();
     }
 
     /**
-     * Save all apparate locations
+     * Persists all apparate locations to disk (if enabled in config).
      */
     public static void saveApparateLocations() {
         if (!Ollivanders2.apparateLocations)
@@ -398,9 +448,9 @@ public final class APPARATE extends O2Spell {
     }
 
     /**
-     * Load all saved apparate locations
+     * Loads saved apparate locations from disk (if enabled in config).
      *
-     * @param p a callback to the plugin
+     * @param p the plugin instance
      */
     public static void loadApparateLocations(Ollivanders2 p) {
         if (!Ollivanders2.apparateLocations)
@@ -415,7 +465,21 @@ public final class APPARATE extends O2Spell {
         p.getLogger().info("Loaded " + apparateLocations.size() + " apparate locations.");
     }
 
-    @Override
-    protected void doCheckEffect() {
+    /**
+     * Gets the configured maximum apparate distance.
+     *
+     * @return the maximum distance in blocks, or 0 if unlimited
+     */
+    public static int getMaxApparateDistance() {
+        return maxApparateDistance;
+    }
+
+    /**
+     * Gets the maximum distance for line-of-sight apparation.
+     *
+     * @return the maximum line-of-sight distance in blocks
+     */
+    public static int getMaxLineOfSight() {
+        return maxLineOfSight;
     }
 }

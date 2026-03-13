@@ -18,9 +18,7 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.util.List;
@@ -49,7 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Azami7
  */
-@Isolated
 public class LegilimensTest extends O2SpellTestSuper {
     @Override @NotNull
     O2SpellType getSpellType() {
@@ -87,7 +84,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         LEGILIMENS legilimens = (LEGILIMENS) castSpell(caster, location, location, O2PlayerCommon.rightWand, 0);
         mockServer.getScheduler().performTicks(5);
         assertTrue(legilimens.isKilled(), "Legilimens not immediately killed");
-        String message = getWholeMessage(caster);
+        String message = TestCommon.getWholeMessage(caster);
         assertNotNull(message, "caster did not receive a failure message when mind read failed on target");
         assertTrue(message.contains(LEGILIMENS.mindReadFailureMessage), "caster did not receive expected failure message when mind read failed on target");
 
@@ -95,7 +92,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         Ollivanders2.maxSpellLevel = true;
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message);
         assertTrue(message.contains(" is a muggle."), "not expected message when target is a muggle");
 
@@ -104,7 +101,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         O2Houses.useHouses = true;
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message);
         assertTrue(message.contains(" is a witch/wizard."), "not expected message when target is a wizard");
 
@@ -120,7 +117,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         Ollivanders2.useYears = true;
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message);
 
         assertTrue(message.contains(O2HouseType.HUFFLEPUFF.getName()), "not expected message when target has been sorted");
@@ -137,7 +134,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         Ollivanders2.enableNonVerbalSpellCasting = true;
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message);
 
         // the last spell a player cast
@@ -152,7 +149,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         mockServer.getScheduler().performTicks(20);
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message);
 
         assertNotNull(awake.getLegilimensText());
@@ -165,7 +162,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         playerO2P.setAnimagusForm(EntityType.RABBIT);
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message);
         assertTrue(message.contains(" has the animagus form of a "), "not expected message when target is an animagus");
 
@@ -182,7 +179,7 @@ public class LegilimensTest extends O2SpellTestSuper {
 
         castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
-        message = getWholeMessage(caster);
+        message = TestCommon.getWholeMessage(caster);
         assertNotNull(message, "caster did not get a result message when target in animagus form and skill level above mastery"); // they'll either get a failure message or the legilmens data
         Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT);
 
@@ -203,30 +200,6 @@ public class LegilimensTest extends O2SpellTestSuper {
         message = caster.nextMessage();
         assertNotNull(message, "caster did not get isAllowed failure message");
         assertEquals(O2Spell.isAllowedFailureMessage, TestCommon.cleanChatMessage(message), "Player did not get expected failure message");
-    }
-
-    /**
-     * Collects all pending messages from a player's message queue into a single string.
-     *
-     * <p>Repeatedly calls nextMessage() to drain the queue, concatenating all messages with space
-     * separators. Used to gather multi-line readMind() output into a single string for assertion checking.</p>
-     *
-     * @param player the player to collect messages from
-     * @return concatenated message string with spaces between lines, or null if no messages are pending
-     */
-    @Nullable
-    String getWholeMessage(PlayerMock player) {
-        String message = player.nextMessage();
-        if (message == null)
-            return null;
-
-        StringBuilder wholeMessage = new StringBuilder();
-        while (message != null) {
-            wholeMessage.append(message).append(" ");
-            message = player.nextMessage();
-        }
-
-        return wholeMessage.toString();
     }
 
     /**
