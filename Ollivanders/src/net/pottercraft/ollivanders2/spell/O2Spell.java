@@ -110,6 +110,11 @@ public abstract class O2Spell {
     protected Location location;
 
     /**
+     * The world the spell is happening in
+     */
+    protected World world;
+
+    /**
      * How long has this spell been alive
      */
     private int age = 0;
@@ -278,6 +283,11 @@ public abstract class O2Spell {
         projectilePassThrough.add(Material.WATER);
         projectilePassThrough.add(Material.FIRE);
         projectilePassThrough.add(Material.SOUL_FIRE);
+
+        world = location.getWorld();
+        if (world == null) {
+            common.printLogMessage("O2Spell: null world", null, null, true);
+        }
     }
 
     /**
