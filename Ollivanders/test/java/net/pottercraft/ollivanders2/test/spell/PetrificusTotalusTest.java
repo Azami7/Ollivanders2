@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the PETRIFICUS_TOTALUS spell.
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @see net.pottercraft.ollivanders2.spell.PETRIFICUS_TOTALUS for the spell implementation
  * @see ImmobilizePlayerTest for inherited test framework
  */
-@Isolated
 public class PetrificusTotalusTest extends ImmobilizePlayerTest {
     /**
      * Get the spell type being tested.

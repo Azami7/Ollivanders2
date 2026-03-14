@@ -9,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see net.pottercraft.ollivanders2.spell.CARCEREM_AQUATICUM for the spell implementation
  * @see ImmobilizePlayerTest for inherited test framework
  */
-@Isolated
 public class CarceremAquaticumTest extends ImmobilizePlayerTest {
     /**
      * Get the spell type being tested.

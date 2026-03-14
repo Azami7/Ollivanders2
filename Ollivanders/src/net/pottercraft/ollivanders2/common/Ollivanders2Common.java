@@ -287,7 +287,7 @@ public class Ollivanders2Common {
     }
 
     @NotNull
-    private static List<Material> getAllMaterialsThatEndWith(@NotNull String endsWith) {
+    public static List<Material> getAllMaterialsThatEndWith(@NotNull String endsWith) {
         ArrayList<Material> materials = new ArrayList<>();
 
         for (Material material : Material.values()) {

@@ -13,25 +13,26 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Killing Curse - https://harrypotter.fandom.com/wiki/Killing_Curse - does direct damage to a living entity according
- * to your level in the spell.
+ * The Killing Curse—an unforgivable dark magic spell that inflicts damage on a living entity.
+ *
+ * <p>Damage dealt is determined by the caster's spell level (usesModifier).
+ * Subject to WorldGuard PVP and damage animal restrictions.</p>
+ *
+ * <p>Reference: <a href="https://harrypotter.fandom.com/wiki/Killing_Curse">Killing Curse</a></p>
  */
-public final class AVADA_KEDAVRA extends O2Spell
-{
+public final class AVADA_KEDAVRA extends O2Spell {
     /**
-     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     * Constructor for spell info generation. Do not use to cast the spell.
      *
-     * @param plugin the Ollivanders2 plugin
+     * @param plugin the Ollivanders2 plugin instance
      */
-    public AVADA_KEDAVRA(Ollivanders2 plugin)
-    {
+    public AVADA_KEDAVRA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AVADA_KEDAVRA;
         branch = O2MagicBranch.DARK_ARTS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Killing Curse");
             add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
             add("\"Yes, the last and worst. Avada Kedavra. ...the Killing Curse.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
@@ -41,20 +42,18 @@ public final class AVADA_KEDAVRA extends O2Spell
     }
 
     /**
-     * Constructor.
+     * Constructor to cast the Avada Kedavra spell.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * @param plugin    the Ollivanders2 plugin instance
+     * @param player    the player casting the spell
+     * @param rightWand the wand being used
      */
-    public AVADA_KEDAVRA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AVADA_KEDAVRA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.AVADA_KEDAVRA;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.PVP);
             worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
         }
@@ -65,24 +64,23 @@ public final class AVADA_KEDAVRA extends O2Spell
     }
 
     /**
-     * Harm or kill a damageable entity
+     * Finds and damages the nearest damageable entity within range.
+     *
+     * <p>Skips the caster themselves. Damage is scaled by the caster's spell level.</p>
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
         List<Damageable> entities = getNearbyDamageableEntities(defaultRadius);
-        if (!entities.isEmpty())
-        {
-            for (Damageable entity : entities)
-            {
+        if (!entities.isEmpty()) {
+            for (Damageable entity : entities) {
                 if (entity.getUniqueId().equals(caster.getUniqueId()))
                     continue;
 
-                entity.damage(usesModifier * 2, caster);
-                common.printDebugMessage("Targeting " + entity.getName(), null, null, false) ;
+                entity.damage(usesModifier, caster);
+                common.printDebugMessage("Targeting " + entity.getName(), null, null, false);
 
                 kill();
                 return;

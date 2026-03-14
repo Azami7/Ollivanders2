@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Azami7
  * @see PYROSVESTIRAS
  */
-@Isolated
 public class PyrovestirasTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.

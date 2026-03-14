@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the PORFYRO_ASTERI_TRIA spell.
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @see net.pottercraft.ollivanders2.spell.PORFYRO_ASTERI_TRIA for the spell implementation
  * @see PyrotechniaTest for inherited test framework
  */
-@Isolated
 public class PorfyroAsteriTriaTest extends PyrotechniaTest {
     /**
      * Get the spell type being tested.

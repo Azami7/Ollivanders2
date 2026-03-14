@@ -6,11 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Isolated
 public class CaveInimicumTest extends StationarySpellTest {
     @Override
     @NotNull

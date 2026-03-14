@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see net.pottercraft.ollivanders2.spell.PORTUS for the spell implementation
  * @see ItemEnchantTest for inherited test framework
  */
-@Isolated
 public class PortusTest extends ItemEnchantTest {
     /**
      * Get the spell type being tested.

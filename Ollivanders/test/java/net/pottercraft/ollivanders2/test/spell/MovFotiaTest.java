@@ -12,7 +12,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.util.List;
@@ -20,23 +19,36 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Isolated
+/**
+ * Tests for the {@link MOV_FOTIA} spell, which creates purple firecracker fireworks.
+ *
+ * <p>Verifies the spell creates firework rockets at the impact location.</p>
+ *
+ * @author Azami7
+ * @see MOV_FOTIA
+ */
 public class MovFotiaTest extends StationarySpellTest {
+    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.MOV_FOTIA;
     }
 
+    /** {@inheritDoc} */
     @Override
     O2StationarySpellType getStationarySpellType() {
         return O2StationarySpellType.TRANQUILLUS;
     }
 
+    /** {@inheritDoc} */
     @Override
     void targetLocationSetup(Location location) {
     }
 
+    /**
+     * Verifies that the MOV_FOTIA spell creates a firework rocket at the impact location.
+     */
     @Test
     void createStationarySpellTest() {
         World testWorld = mockServer.addSimpleWorld("world");

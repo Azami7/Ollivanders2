@@ -9,18 +9,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Creates an explosion at the target location twice as powerful as bombarda.
+ * A more powerful variant of Bombarda that creates a larger explosion.
  *
- * @author lownes
+ * <p>An advanced bombing spell with greater blast radius and block-breaking power.
+ * Can break blocks with blast resistance up to 3.0 and hardness up to 2.0.
+ * Capable of breaking doors.</p>
+ *
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Bombarda_Maxima">https://harrypotter.fandom.com/wiki/Bombarda_Maxima</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Bombarda_Maxima">Bombarda Maxima</a>
  */
 public final class BOMBARDA_MAXIMA extends BombardaBase {
+    static final double minEffectRadiusConfig = 2;
+    static final double maxEffectRadiusConfig = 6;
+
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Constructor for spell info generation. Do not use to cast the spell.
      *
-     * @param plugin the Ollivanders2 plugin
+     * @param plugin the Ollivanders2 plugin instance
      */
     public BOMBARDA_MAXIMA(Ollivanders2 plugin) {
         super(plugin);
@@ -31,25 +36,29 @@ public final class BOMBARDA_MAXIMA extends BombardaBase {
         flavorText = new ArrayList<>() {{
             add("A more powerful explosion incantation.");
             add("\"Come on, let’s get destroying... Confringo? Stupefy? Bombarda? Which would you use?\" -Albus Potter");
+            add("\"I'll make short work of this. Bombarda Maxima.\" -Dolores Umbridge");
         }};
 
-        text = "Bombarda Maxima creates an explosion twice as powerful as Bombarda which doesn't damage the terrain.";
+        text = "Bombarda Maxima creates an explosion twice as powerful as Bombarda.";
     }
 
     /**
-     * Constructor.
+     * Constructor to cast the Bombarda Maxima spell.
      *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
+     * @param plugin    the Ollivanders2 plugin instance
+     * @param player    the player casting the spell
+     * @param rightWand the wand being used
      */
     public BOMBARDA_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.BOMBARDA_MAXIMA;
         branch = O2MagicBranch.CHARMS;
 
-        strengthMultiplier = 0.5;
-        maxStrength = 8.0; // double TNT strength
+        maxBlastResistance = 3.0;
+        maxHardness = 2.0;
+        breaksDoors = true;
+        minEffectRadius = minEffectRadiusConfig;
+        maxEffectRadius = maxEffectRadiusConfig;
 
         initSpell();
     }

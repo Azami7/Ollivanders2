@@ -6,23 +6,38 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Isolated
+/**
+ * Tests for the {@link net.pottercraft.ollivanders2.spell.MOLLIARE} spell.
+ *
+ * <p>Verifies the spell creates a stationary cushioning effect at the target location by testing that
+ * a dirt block is properly set up before the spell is cast.</p>
+ *
+ * @author Azami7
+ * @see net.pottercraft.ollivanders2.spell.MOLLIARE
+ * @see net.pottercraft.ollivanders2.stationaryspell.MOLLIARE
+ */
 public class MolliareTest extends StationarySpellTest {
+    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.MOLLIARE;
     }
 
+    /** {@inheritDoc} */
     @Override
     O2StationarySpellType getStationarySpellType() {
         return O2StationarySpellType.MOLLIARE;
     }
 
+    /**
+     * Sets up a dirt block at the target location for the spell to cast upon.
+     *
+     * @param location the target location
+     */
     @Override
     void targetLocationSetup(Location location) {
         World world = location.getWorld();

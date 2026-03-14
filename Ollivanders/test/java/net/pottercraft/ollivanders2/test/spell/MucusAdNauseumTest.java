@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.test.spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ import java.util.List;
  *
  * @author Azami7
  */
-@Isolated
 public class MucusAdNauseumTest extends AddO2EffectTest {
     @Override
     @NotNull

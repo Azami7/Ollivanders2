@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Test suite for the SPONGIFY spell (softening charm).
@@ -27,7 +26,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.SPONGIFY
  */
-@Isolated
 public class SpongifyTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.

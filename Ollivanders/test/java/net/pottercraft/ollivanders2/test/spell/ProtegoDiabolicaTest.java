@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -19,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author Azami7
  */
-@Isolated
 public class ProtegoDiabolicaTest extends StationarySpellTest {
     @Override
     @NotNull

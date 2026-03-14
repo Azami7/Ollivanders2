@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Unit tests for the INCENDIO_TRIA fire spell.
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  *
  * @see IncendioBaseTest
  */
-@Isolated
 public class IncendioTriaTest extends IncendioBaseTest {
     /**
      * Returns the spell type being tested.

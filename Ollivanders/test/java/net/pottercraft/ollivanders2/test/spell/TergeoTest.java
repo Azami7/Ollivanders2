@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Test suite for the TERGEO spell (water siphoning spell).
@@ -26,7 +25,6 @@ import org.junit.jupiter.api.parallel.Isolated;
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.TERGEO
  */
-@Isolated
 public class TergeoTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.

@@ -8,7 +8,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Azami7
  */
-@Isolated
 public class AzurilliousTest extends SparksTest {
     @Override
     @NotNull

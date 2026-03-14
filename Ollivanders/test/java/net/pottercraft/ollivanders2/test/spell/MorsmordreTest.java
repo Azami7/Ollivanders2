@@ -9,7 +9,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @see net.pottercraft.ollivanders2.spell.MORSMORDRE for the spell implementation
  * @see AddPotionEffectTest for inherited test framework
  */
-@Isolated
 public class MorsmordreTest extends AddPotionEffectTest {
     /**
      * Get the spell type being tested.

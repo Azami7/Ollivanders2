@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -167,9 +166,7 @@ public abstract class O2SpellTestSuper {
         caster.setLocation(fromLocation);
 
         if (!fromLocation.equals(targetLocation)) {
-            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
-            assertNotNull(o2p, "Unable to get O2Player");
-            o2p.setSpellCount(getSpellType(), (int)experience);
+            TestCommon.setPlayerSpellExperience(testPlugin, caster, getSpellType(), (int)Math.floor(experience));
 
             caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
         }
