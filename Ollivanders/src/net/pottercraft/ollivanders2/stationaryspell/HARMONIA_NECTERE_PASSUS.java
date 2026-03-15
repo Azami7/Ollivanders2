@@ -5,7 +5,6 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -139,13 +138,6 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      */
     @Override
     public void upkeep() {
-        World world = location.getWorld();
-        if (world == null) {
-            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.checkEffect: world is null", null, null, false);
-            kill();
-            return;
-        }
-
         HARMONIA_NECTERE_PASSUS twinCabinet = getTwin();
 
         if (twinCabinet == null) {

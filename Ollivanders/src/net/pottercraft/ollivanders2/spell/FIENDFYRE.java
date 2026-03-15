@@ -9,7 +9,6 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -117,14 +116,6 @@ public final class FIENDFYRE extends O2Spell
      */
     private void spawnCreatures()
     {
-        World world = location.getWorld();
-        if (world == null)
-        {
-            common.printDebugMessage("FIENDFYE.spawnCreatues: world is null", null, null, true);
-            kill();
-            return;
-        }
-
         common.printDebugMessage("spawning " + numCreatures + " fiendfyre creatures...", null, null, false);
 
         if (usesModifier > 100)

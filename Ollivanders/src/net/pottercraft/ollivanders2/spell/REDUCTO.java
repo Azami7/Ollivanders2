@@ -5,7 +5,6 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,11 +94,7 @@ public final class REDUCTO extends O2Spell {
             return;
 
         Location backLoc = location.clone().subtract(vector);
-        World world = backLoc.getWorld();
-        if (world == null)
-            common.printDebugMessage("REDUCTO.doCheckEffect: world is null", null, null, true);
-        else
-            world.createExplosion(backLoc, power);
+        world.createExplosion(backLoc, power);
 
         kill();
     }

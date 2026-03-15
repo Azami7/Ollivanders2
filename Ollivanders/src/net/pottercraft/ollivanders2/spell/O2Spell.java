@@ -428,14 +428,6 @@ public abstract class O2Spell {
         }
 
         // play the project moving effect
-
-        World world = location.getWorld();
-        if (world == null) {
-            common.printDebugMessage("O2Spell.move: world null", null, null, true);
-            kill();
-            return;
-        }
-
         if (!Ollivanders2.testMode)
             world.playEffect(location, moveEffect, moveEffectData);
 
@@ -934,10 +926,9 @@ public abstract class O2Spell {
      * @return the list of materials the projectile can pass through
      */
     public List<Material> getProjectilePassThroughMaterials() {
-        List<Material> passThrough = new ArrayList<>();
-        passThrough.addAll(projectilePassThrough);
-
-        return passThrough;
+        return new ArrayList<>()  {{
+            addAll(projectilePassThrough);
+        }};
     }
 
     /**
@@ -946,10 +937,9 @@ public abstract class O2Spell {
      * @return the list of blocked materials
      */
     public List<Material> getBlockedMaterials() {
-        List<Material> blocked = new ArrayList<>();
-        blocked.addAll(materialBlockedList);
-
-        return blocked;
+        return new ArrayList<>() {{
+            addAll(materialBlockedList);
+        }};
     }
 
     /**
@@ -959,10 +949,9 @@ public abstract class O2Spell {
      */
     @NotNull
     public List<Material> getAllowedMaterials() {
-        List<Material> allowed = new ArrayList<>();
-        allowed.addAll(materialAllowList);
-
-        return allowed;
+        return new ArrayList<>() {{
+            addAll(materialAllowList);
+        }};
     }
 
     public boolean isNoProjectile() {

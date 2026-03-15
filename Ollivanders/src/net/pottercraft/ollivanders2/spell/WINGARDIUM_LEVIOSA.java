@@ -11,7 +11,6 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.FallingBlock;
@@ -211,13 +210,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
                     Location toLoc = center.clone().add(loc);
                     BlockData blockData = blockDataMap.get(loc);
 
-                    World world = loc.getWorld();
-                    if (world == null) {
-                        kill();
-                        return;
-                    }
-
-                    FallingBlock fall = loc.getWorld().spawnFallingBlock(toLoc, blockData);
+                    FallingBlock fall = world.spawnFallingBlock(toLoc, blockData);
                     fall.setVelocity(moveVec);
                 }
                 kill();

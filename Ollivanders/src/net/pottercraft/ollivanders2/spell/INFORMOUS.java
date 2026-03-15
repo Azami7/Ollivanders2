@@ -12,7 +12,6 @@ import net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS;
 import net.pottercraft.ollivanders2.stationaryspell.HORCRUX;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -91,12 +90,6 @@ public final class INFORMOUS extends O2Spell {
 
                 if (playerLocation.getY() > 256) {
                     String weather;
-                    World world = playerLocation.getWorld();
-                    if (world == null) {
-                        common.printDebugMessage("INFORMOUS.doCheckEffect: world is null", null, null, true);
-                        kill();
-                        return;
-                    }
 
                     boolean thunder = world.isThundering();
 

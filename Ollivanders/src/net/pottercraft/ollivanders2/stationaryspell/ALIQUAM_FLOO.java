@@ -13,7 +13,6 @@ import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.stationaryspell.events.FlooNetworkEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -198,7 +197,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
      */
     @Override
     void setLocation(@NotNull Location location) {
-        this.location = location;
+        super.setLocation(location);
         fireType = location.getBlock().getType(); // get the block type in the location
     }
 
@@ -271,12 +270,13 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
             }
         }
         else {
+            /*
             World world = location.getWorld();
             if (world == null) {
                 kill();
                 return;
             }
-
+             */
             world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
         }
     }

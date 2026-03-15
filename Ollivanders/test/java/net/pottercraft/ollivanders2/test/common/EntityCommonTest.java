@@ -320,7 +320,7 @@ public class EntityCommonTest {
 
         assertSame(EntityCommon.getRandomHorseStyle(1), EntityCommon.getRandomHorseStyle(1));
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             Horse.Style style = EntityCommon.getRandomHorseStyle();
             mockServer.getScheduler().performTicks(3);
             horseStyles.add(style);

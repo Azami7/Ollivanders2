@@ -7,7 +7,6 @@ import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -105,7 +104,6 @@ public class AQUA_ERUCTO extends O2Spell {
                 if (canTarget(entity)) {
                     stopProjectile();
 
-                    World world = location.getWorld();
                     Block targetBlock;
 
                     if (entity instanceof LivingEntity)
@@ -118,8 +116,7 @@ public class AQUA_ERUCTO extends O2Spell {
                         targetBlock.setType(Material.WATER);
                     }
 
-                    if (world != null)
-                        world.playSound(location, Sound.ENTITY_GENERIC_SPLASH, 1, 0);
+                    world.playSound(location, Sound.ENTITY_GENERIC_SPLASH, 1, 0);
 
                     effectEntity(entity);
 

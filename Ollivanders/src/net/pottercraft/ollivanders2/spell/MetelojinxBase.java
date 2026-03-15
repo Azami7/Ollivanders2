@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,13 +36,6 @@ public abstract class MetelojinxBase extends O2Spell {
     @Override
     protected void doCheckEffect() {
         kill();
-
-        World world = location.getWorld();
-        if (world == null) {
-            common.printDebugMessage("MetelojinxSuper.doCheckEffect: world is null", null, null, true);
-            kill();
-            return;
-        }
 
         int duration = world.getWeatherDuration();
 

@@ -142,7 +142,7 @@ public class HORCRUX extends O2StationarySpell {
         radius = minRadius = maxRadius = minRadiusConfig;
         duration = 10;
 
-        worldName = location.getWorld().getName();
+        worldName = world.getName();
         horcruxItem = item;
         horcruxMaterial = item.getItemStack().getType();
 

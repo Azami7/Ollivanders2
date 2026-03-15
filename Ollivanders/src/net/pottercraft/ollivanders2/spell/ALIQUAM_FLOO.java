@@ -91,7 +91,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
         Block target = getTargetBlock();
 
         if (target != null && (target.getType() == Material.FIRE || target.getType() == Material.CAMPFIRE)) {
-            Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
+            Location statLocation = new Location(world, target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 
             // find the sign above the fire
             if (Ollivanders2Common.isWallSign(target.getRelative(BlockFace.UP))) {

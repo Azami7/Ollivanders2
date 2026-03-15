@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.common.EntityCommon;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Parrot;
@@ -91,13 +90,6 @@ public final class AVIS extends O2Spell {
         }
 
         if (birdsRemaining > 0) {
-            World world = location.getWorld();
-            if (world == null) {
-                common.printDebugMessage("AVIS.checkEffect: world is null", null, null, true);
-                kill();
-                return;
-            }
-
             Parrot bird = (Parrot) (world.spawnEntity(location, EntityType.PARROT));
             bird.setVariant(EntityCommon.getRandomParrotVariant());
 

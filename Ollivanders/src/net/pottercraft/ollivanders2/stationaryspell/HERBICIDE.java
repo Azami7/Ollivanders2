@@ -6,7 +6,6 @@ import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
@@ -262,12 +261,6 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
                     continue;
                 }
                 else if (blocksToItemReplacements.containsKey(blockType)) {
-                    World world = block.getLocation().getWorld();
-                    if (world == null) {
-                        common.printDebugMessage("HERBICIDE: null world", null, null, true);
-                        continue;
-                    }
-
                     Item item = world.dropItemNaturally(block.getLocation(), new ItemStack(blocksToItemReplacements.get(blockType)));
                     common.printDebugMessage("HERBICIDE: replacing " + blockType + " with " + item.getItemStack().getType(), null, null, false);
                     block.setType(Material.AIR);

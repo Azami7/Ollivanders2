@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.spell;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Particle;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -77,12 +76,6 @@ public final class LUMOS_MAXIMA extends AddPotionEffectInRadius {
      */
     @Override
     void doFlair() {
-        World world = caster.getLocation().getWorld();
-        if (world == null) {
-            common.printLogMessage("LUMOS_MAXIMA.doFlair(): null world", null, null, true);
-            return;
-        }
-
         world.spawnParticle(Particle.FLASH, caster.getLocation(), 1);
     }
 }

@@ -286,7 +286,7 @@ abstract public class ImmobilizePlayer extends O2Spell {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    Block block = location.getWorld().getBlockAt(x, y, z);
+                    Block block = world.getBlockAt(x, y, z);
 
                     if (!blocks.contains(block))
                         blocks.add(block);

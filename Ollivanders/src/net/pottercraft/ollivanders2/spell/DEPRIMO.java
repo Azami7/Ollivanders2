@@ -9,7 +9,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -113,13 +112,6 @@ public final class DEPRIMO extends O2Spell {
 
             Location blockLocation = block.getLocation();
             BlockData blockData = block.getBlockData();
-
-            World world = blockLocation.getWorld();
-            if (world == null) {
-                common.printDebugMessage("DEPRIMO.doCheckEffect: world is null", null, null, true);
-                kill();
-                return;
-            }
 
             block.setType(Material.AIR);
             world.spawnFallingBlock(blockLocation, blockData);

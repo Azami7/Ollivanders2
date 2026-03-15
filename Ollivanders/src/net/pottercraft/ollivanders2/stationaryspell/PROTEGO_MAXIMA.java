@@ -7,7 +7,6 @@ import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveE
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -164,7 +163,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
 
                     // do an explosion
                     if (!Ollivanders2.testMode)
-                        doExplosion(projectileLocation);
+                        world.createExplosion(projectileLocation, 0.0f, false, false);
                 }
                 else
                     continue;
@@ -229,21 +228,8 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
 
             // do an explosion
             if (!Ollivanders2.testMode)
-                doExplosion(projectileLocation);
+                world.createExplosion(projectileLocation, 0.0f, false, false);
         }
-    }
-
-    /**
-     * Do an explosion at the location that does not break blocks or start a fire
-     *
-     * @param explosionLocation the location to do the explosion
-     */
-    private void doExplosion(Location explosionLocation) {
-        World world = explosionLocation.getWorld();
-        if (world == null)
-            common.printDebugMessage("PROTEGO_MAXIMAA.doExplosion", null, null, false);
-        else
-            world.createExplosion(explosionLocation, 0.0f, false, false);
     }
 
     /**

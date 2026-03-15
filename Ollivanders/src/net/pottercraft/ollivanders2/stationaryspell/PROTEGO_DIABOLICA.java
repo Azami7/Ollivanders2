@@ -7,7 +7,6 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.damage.DamageSource;
@@ -167,32 +166,30 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
      */
     void createFireRing() {
         common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: creating fire ring", null, null, false);
-        World world = location.getWorld();
-        if (world != null) {
-            int baseY = location.getBlockY() - 1;
 
-            for (int angle = 0; angle < 360; angle++) {
-                double rad = Math.toRadians(angle);
-                int blockX = (int) Math.floor(location.getX() + radius * Math.cos(rad));
-                int blockZ = (int) Math.floor(location.getZ() + radius * Math.sin(rad));
+        int baseY = location.getBlockY() - 1;
 
-                Block baseBlock = world.getBlockAt(blockX, baseY, blockZ);
-                Block fireBlock = baseBlock.getRelative(BlockFace.UP);
+        for (int angle = 0; angle < 360; angle++) {
+            double rad = Math.toRadians(angle);
+            int blockX = (int) Math.floor(location.getX() + radius * Math.cos(rad));
+            int blockZ = (int) Math.floor(location.getZ() + radius * Math.sin(rad));
 
-                if (BlockCommon.isAirBlock(fireBlock) && !Ollivanders2Common.getUnbreakableMaterials().contains(baseBlock.getType())) {
-                    if (Ollivanders2API.getBlocks().addTemporarilyChangedBlock(baseBlock, this)) {
-                        baseBlock.setType(Material.SOUL_SAND);
-                    }
-                    if (Ollivanders2API.getBlocks().addTemporarilyChangedBlock(fireBlock, this)) {
-                        fireBlock.setType(Material.SOUL_FIRE);
-                    }
+            Block baseBlock = world.getBlockAt(blockX, baseY, blockZ);
+            Block fireBlock = baseBlock.getRelative(BlockFace.UP);
+
+            if (BlockCommon.isAirBlock(fireBlock) && !Ollivanders2Common.getUnbreakableMaterials().contains(baseBlock.getType())) {
+                if (Ollivanders2API.getBlocks().addTemporarilyChangedBlock(baseBlock, this)) {
+                    baseBlock.setType(Material.SOUL_SAND);
                 }
-                else
-                    common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: cannot create fire at " + fireBlock.getLocation().getX() + ", " + fireBlock.getLocation().getY() + ", " + fireBlock.getLocation().getZ(), null, null, false);
+                if (Ollivanders2API.getBlocks().addTemporarilyChangedBlock(fireBlock, this)) {
+                    fireBlock.setType(Material.SOUL_FIRE);
+                }
             }
-
-            createdFireRing = true;
+            else
+                common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: cannot create fire at " + fireBlock.getLocation().getX() + ", " + fireBlock.getLocation().getY() + ", " + fireBlock.getLocation().getZ(), null, null, false);
         }
+
+        createdFireRing = true;
     }
 
     /**

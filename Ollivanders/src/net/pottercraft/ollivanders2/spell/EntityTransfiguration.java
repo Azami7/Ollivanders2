@@ -279,17 +279,12 @@ public abstract class EntityTransfiguration extends Transfiguration {
             else
                 loc = transfiguredEntity.getLocation();
 
-            if (loc.getWorld() == null) {
-                common.printDebugMessage("location has a null world in " + spellType.toString(), null, null, true);
-                return;
-            }
-
             if (originalEntity.getType() == EntityType.ITEM) {
                 Item item = (Item) originalEntity;
-                loc.getWorld().dropItemNaturally(loc, item.getItemStack());
+                world.dropItemNaturally(loc, item.getItemStack());
             }
             else if (originalEntity.getType() == EntityType.FALLING_BLOCK)
-                loc.getWorld().spawnFallingBlock(loc, ((FallingBlock) originalEntity).getBlockData().clone());
+                world.spawnFallingBlock(loc, ((FallingBlock) originalEntity).getBlockData().clone());
             else
                 respawnEntity();
         }

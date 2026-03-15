@@ -110,10 +110,6 @@ public final class LIGATIS_COR extends O2Spell {
             return;
 
         Location dropLocation = caster.getLocation();
-        if (dropLocation.getWorld() == null) {
-            common.printDebugMessage("LIGATIS_COR.createAndDropWand: world is null", null, null, true);
-            return;
-        }
 
         int amount = baseWand.getItemStack().getAmount();
 
@@ -131,7 +127,7 @@ public final class LIGATIS_COR extends O2Spell {
             coreItem.remove();
 
         // drop the wand
-        dropLocation.getWorld().dropItemNaturally(dropLocation, wand);
+        world.dropItemNaturally(dropLocation, wand);
     }
 
     /**

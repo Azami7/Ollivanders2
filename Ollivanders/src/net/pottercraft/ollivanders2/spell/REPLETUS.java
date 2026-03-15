@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -100,9 +99,7 @@ public class REPLETUS extends O2Spell {
 
         if (filled != null) {
             caster.getInventory().setItemInOffHand(filled);
-            World world = location.getWorld();
-            if (world != null)
-                world.playSound(location, Sound.ITEM_BOTTLE_FILL, 1, 0);
+            world.playSound(location, Sound.ITEM_BOTTLE_FILL, 1, 0);
         }
 
         kill();

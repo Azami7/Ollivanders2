@@ -8,7 +8,6 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.wand.O2WandWoodType;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -95,10 +94,6 @@ public final class FRANGE_LIGNEA extends O2Spell {
                 return;
             }
 
-            World world = target.getLocation().getWorld();
-            if (world == null)
-                return;
-
             int amount = (int) (usesModifier * 0.1);
             if (amount > maxAmount)
                 amount = maxAmount;
@@ -118,7 +113,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
                 return;
             }
 
-            target.getLocation().getWorld().createExplosion(target.getLocation(), 0);
+            world.createExplosion(target.getLocation(), 0);
             caster.getWorld().dropItemNaturally(target.getLocation(), corelessWands);
 
             target.setType(Material.AIR);

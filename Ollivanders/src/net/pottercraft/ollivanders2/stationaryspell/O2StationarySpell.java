@@ -14,6 +14,7 @@ import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinate
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -114,6 +115,11 @@ public abstract class O2StationarySpell implements Serializable {
     Location location;
 
     /**
+     * The world the stationary spell is in
+     */
+    World world;
+
+    /**
      * The remaining duration of this stationary spell
      */
     int duration = 10;
@@ -167,6 +173,12 @@ public abstract class O2StationarySpell implements Serializable {
 
         playerUUID = pid;
         this.location = location;
+
+        world = location.getWorld();
+        if (world == null) {
+            common.printLogMessage("O2StationarySpell: null world", null, null, true);
+            kill();
+        }
     }
 
     /**
@@ -302,6 +314,12 @@ public abstract class O2StationarySpell implements Serializable {
      */
     void setLocation(@NotNull Location location) {
         this.location = location;
+
+        world = location.getWorld();
+        if (world == null) {
+            common.printLogMessage("O2StationarySpell.setLocation: null worlld", null, null, true);
+            kill();
+        }
     }
 
     /**

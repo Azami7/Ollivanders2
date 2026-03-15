@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -121,9 +120,7 @@ public abstract class Sparks extends O2Spell {
 
         // play the firework launch sound on the first tick, tick is incremented before doCheckEffect() is called so it starts at 1
         if (getProjectileAge() == 1) {
-            World world = location.getWorld();
-            if (world != null)
-                world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 0);
+            world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 0);
         }
 
         if (doDamage) { // look for an entity to damage if this spell does damage
