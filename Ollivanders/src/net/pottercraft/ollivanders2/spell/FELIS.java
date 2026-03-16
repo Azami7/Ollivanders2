@@ -6,6 +6,7 @@ import me.libraryaddict.disguise.disguisetypes.watchers.CatWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.EntityCommon;
+import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,14 +45,17 @@ public final class FELIS extends PlayerDisguise {
 
         targetType = EntityType.CAT;
         disguiseType = DisguiseType.getType(targetType);
-        disguise = new MobDisguise(disguiseType);
-        CatWatcher watcher = (CatWatcher) disguise.getWatcher();
-        watcher.setAdult();
-        watcher.setType(EntityCommon.getRandomCatType());
+        if (!Ollivanders2.testMode) {
+            disguise = new MobDisguise(disguiseType);
+            CatWatcher watcher = (CatWatcher) disguise.getWatcher();
+            watcher.setAdult();
+            watcher.setType(EntityCommon.getRandomCatType());
+            watcher.setCollarColor(O2Color.getRandomDyeableColor().getDyeColor());
 
-        int rand = Ollivanders2Common.random.nextInt() % 10;
-        if (rand == 0)
-            watcher.isTamed();
+            int rand = Ollivanders2Common.random.nextInt() % 10;
+            if (rand == 0)
+                watcher.isTamed();
+        }
 
         initSpell();
     }

@@ -9,6 +9,9 @@ import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -19,6 +22,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -26,6 +30,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -232,7 +237,7 @@ public abstract class O2Effect {
 
         duration = duration - i;
         // Auto-kill when duration expires (reaches or goes below zero)
-        if (duration < 0)
+        if (duration <= 0)
             kill();
     }
 
@@ -493,6 +498,39 @@ public abstract class O2Effect {
     }
 
     /**
+     * Handle effects when the player joins the server.
+     *
+     * <p>Called when a PlayerJoinEvent occurs and this effect is active.
+     * Subclasses can override to save effect state or trigger logout-related cleanup.</p>
+     *
+     * @param event the player join event
+     */
+    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+    }
+
+    /**
+     * Handle effects when an entity dies.
+     *
+     * <p>Called on EntityDeathEvent and this event is active. Subclasses should override if they care about
+     * this event type.</p>
+     *
+     * @param event the entity death event
+     */
+    void doOnEntityDeathEvent(@NotNull EntityDeathEvent event) {
+    }
+
+    /**
+     * Handle effects when an entity is damaged.
+     *
+     * <p>Called on EntityDamageEvent and this event is active. Subclasses should override if they care about
+     * this event type.</p>
+     *
+     * @param event the entity damage event
+     */
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
+    }
+
+    /**
      * Handle effects when an entity targets the affected player.
      *
      * <p>Called when an EntityTargetEvent occurs and this effect is active.
@@ -534,7 +572,8 @@ public abstract class O2Effect {
      *
      * @param event the player teleport event
      */
-    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {}
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
+    }
 
     /**
      * Handle effects when the player uses coordinate-based apparition.
@@ -545,7 +584,8 @@ public abstract class O2Effect {
      *
      * @param event the apparate by coordinates event
      */
-    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {}
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
+    }
 
     /**
      * Handle effects when the player uses name-based apparition.
@@ -556,5 +596,12 @@ public abstract class O2Effect {
      *
      * @param event the apparate by name event
      */
-    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {}
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
+    }
+
+    void doOnEntityDismountEvent(@NotNull EntityDismountEvent event) {
+    }
+
+    void doOnVehicleExitEvent(@NotNull VehicleExitEvent event) {
+    }
 }

@@ -56,56 +56,23 @@ public class FLYING extends O2Effect {
     }
 
     /**
-     * Enable flight while the effect is active and disable on final tick.
-     *
-     * <p>Called each game tick. This method:</p>
-     * <ol>
-     * <li>Ages the effect (decrements duration)</li>
-     * <li>If target player not found: kills the effect</li>
-     * <li>If duration > 1 (effect still active):
-     *   <ul>
-     *   <li>Enables flight (setAllowFlight(true))</li>
-     *   <li>Plays smoke effect each tick if doSmokeEffect is true</li>
-     *   </ul>
-     * </li>
-     * <li>If duration ≤ 1 (final tick):
-     *   <ul>
-     *   <li>Disables flight (setAllowFlight(false))</li>
-     *   <li>Effect expires naturally on next tick</li>
-     *   </ul>
-     * </li>
-     * </ol>
+     * Age the effect, enable flight, and optionally play smoke particles.
      */
     @Override
     public void checkEffect() {
         // age the effect
         age(1);
 
-        if (duration > 0) {
-            if (!target.getAllowFlight()) { // if player does not have allowFlight, enable it
-                common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
-                target.setAllowFlight(true);
-            }
-            if (doSmokeEffect)
-                target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
+        if (!target.getAllowFlight()) { // if player does not have allowFlight, enable it
+            common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
+            target.setAllowFlight(true);
         }
-        else { // effect has aged out, remove allowFlight and kill
-            common.printDebugMessage("Removing flight for " + target.getDisplayName(), null, null, false);
-            target.setAllowFlight(false);
-            kill();
-        }
+        if (doSmokeEffect)
+            target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
     }
 
     /**
-     * Revoke flight ability when the effect is removed (unless player is an admin).
-     *
-     * <p>Called when the flight effect expires or is manually killed. This method checks if the player has
-     * the "Ollivanders2.admin" permission:
-     * <ul>
-     * <li>Non-admin players: flight ability is revoked (setAllowFlight(false) and setFlying(false))</li>
-     * <li>Admin players: flight ability is preserved - admins can retain flight through spell/effect removal</li>
-     * </ul>
-     * <p>This allows server admins to maintain flight privileges when flight-granting spells expire.</p>
+     * Revoke flight ability when the effect is removed unless the player has the Ollivanders2.admin permission.
      */
     @Override
     public void doRemove() {

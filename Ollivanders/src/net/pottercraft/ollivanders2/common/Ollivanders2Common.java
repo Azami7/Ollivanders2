@@ -115,22 +115,28 @@ public class Ollivanders2Common {
      * installed on the server.
      */
     private static final List<O2SpellType> libsDisguisesSpells = new ArrayList<>() {{
+        add(O2SpellType.AGNIFORS);
         add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
         add(O2SpellType.AVIFORS);
+        add(O2SpellType.BOS);
+        add(O2SpellType.BOVIFORS);
+        add(O2SpellType.CANIFORS);
+        add(O2SpellType.CANIS);
         add(O2SpellType.DRACONIFORS);
         add(O2SpellType.DUCKLIFORS);
         add(O2SpellType.ENTOMORPHIS);
-        add(O2SpellType.EQUUSIFORS);
-        add(O2SpellType.PULLUS);
+        add(O2SpellType.EQUIFORS);
         add(O2SpellType.EQUUS);
+        add(O2SpellType.FELIFORS_MEDIUS);
         add(O2SpellType.FELIS);
         add(O2SpellType.LAMA);
-        add(O2SpellType.CANIS);
-        add(O2SpellType.SUS);
-        add(O2SpellType.URSUS);
-        add(O2SpellType.BOS);
-        add(O2SpellType.LAGOMORPHA);
+        add(O2SpellType.LAPIFORS_MEDIUS);
+        add(O2SpellType.PULLUS);
         add(O2SpellType.SNUFFLIFORS);
+        add(O2SpellType.SUIFORS);
+        add(O2SpellType.SUS);
+        add(O2SpellType.URSIFORS);
+        add(O2SpellType.URSUS);
         add(O2SpellType.VERA_VERTO);
     }};
 

@@ -2,20 +2,19 @@ package net.pottercraft.ollivanders2.spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Transfigures entity into a chicken.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Ducklifors">https://harrypotter.fandom.com/wiki/Ducklifors</a>
+ * Transfigures an entity into a horse.
  */
-public final class DUCKLIFORS extends FriendlyMobDisguise {
+public final class EQUIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -24,13 +23,13 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DUCKLIFORS(Ollivanders2 plugin) {
+    public EQUIFORS(Ollivanders2 plugin) {
         super(plugin);
 
-        spellType = O2SpellType.DUCKLIFORS;
+        spellType = O2SpellType.EQUIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        text = "The transfiguration spell Ducklifors will transfigure a small entity into a chicken.";
+        text = "Turns target entity in to a horse.";
     }
 
     /**
@@ -40,35 +39,28 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DUCKLIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public EQUIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
-        spellType = O2SpellType.DUCKLIFORS;
+        spellType = O2SpellType.EQUIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
         durationModifier = 1.0;
 
-        targetType = EntityType.CHICKEN;
+        targetType = EntityType.HORSE;
         disguiseType = DisguiseType.getType(targetType);
         if (!Ollivanders2.testMode) {
             disguise = new MobDisguise(disguiseType);
-            AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
+            HorseWatcher watcher = (HorseWatcher) disguise.getWatcher();
             watcher.setAdult();
+            watcher.setStyle(EntityCommon.getRandomHorseStyle());
+            watcher.setColor(EntityCommon.getRandomHorseColor());
         }
 
         initSpell();
 
         // this needs to be done at the end because it needs to consider the usesModifier
         populateEntityAllowedList();
-    }
-
-    /**
-     * Add all small friendly mobs only to this spell.
-     */
-    @Override
-    void populateEntityAllowedList() {
-        // add all small mobs as allowed targets by default
-        entityAllowedList.addAll(smallFriendlyMobs);
     }
 }

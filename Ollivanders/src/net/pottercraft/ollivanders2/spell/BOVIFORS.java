@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.CowWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -10,12 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Transfigures entity into a chicken.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Ducklifors">https://harrypotter.fandom.com/wiki/Ducklifors</a>
- */
-public final class DUCKLIFORS extends FriendlyMobDisguise {
+public class BOVIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -24,13 +19,16 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DUCKLIFORS(Ollivanders2 plugin) {
+    public BOVIFORS(Ollivanders2 plugin) {
         super(plugin);
 
-        spellType = O2SpellType.DUCKLIFORS;
+        spellType = O2SpellType.BOVIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        text = "The transfiguration spell Ducklifors will transfigure a small entity into a chicken.";
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
+
+        text = "Turns target entity in to a cow.";
     }
 
     /**
@@ -40,20 +38,20 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DUCKLIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public BOVIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
-        spellType = O2SpellType.DUCKLIFORS;
+        spellType = O2SpellType.BOVIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
         durationModifier = 1.0;
 
-        targetType = EntityType.CHICKEN;
+        targetType = EntityType.COW;
         disguiseType = DisguiseType.getType(targetType);
         if (!Ollivanders2.testMode) {
             disguise = new MobDisguise(disguiseType);
-            AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
+            CowWatcher watcher = (CowWatcher) disguise.getWatcher();
             watcher.setAdult();
         }
 
@@ -61,14 +59,5 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
 
         // this needs to be done at the end because it needs to consider the usesModifier
         populateEntityAllowedList();
-    }
-
-    /**
-     * Add all small friendly mobs only to this spell.
-     */
-    @Override
-    void populateEntityAllowedList() {
-        // add all small mobs as allowed targets by default
-        entityAllowedList.addAll(smallFriendlyMobs);
     }
 }

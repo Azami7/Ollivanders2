@@ -270,13 +270,6 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
             }
         }
         else {
-            /*
-            World world = location.getWorld();
-            if (world == null) {
-                kill();
-                return;
-            }
-             */
             world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
         }
     }

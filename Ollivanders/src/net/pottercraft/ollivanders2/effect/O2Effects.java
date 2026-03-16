@@ -15,6 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -25,6 +28,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -32,6 +36,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -175,6 +180,22 @@ public class O2Effects implements Listener {
         }
 
         /**
+         * Get a list of all the active spells for all players.
+         *
+         * @return the active spells for all players.
+         */
+        @NotNull
+        synchronized ArrayList<O2Effect> getAllActiveEffects() {
+            ArrayList<O2Effect> effects = new ArrayList<>();
+
+            for (Map<O2EffectType, O2Effect> playerEffects : activeEffects.values()) {
+                effects.addAll(playerEffects.values());
+            }
+
+            return effects;
+        }
+
+        /**
          * Get an effect object for a player.
          *
          * @param pid        the id of the player
@@ -251,7 +272,7 @@ public class O2Effects implements Listener {
         }
 
         /**
-         * Update the map of saved effects for this player.
+         * Update the map of active effects for this player.
          *
          * @param pid     the id of the player
          * @param effects the map of effects and durations
@@ -688,6 +709,35 @@ public class O2Effects implements Listener {
     }
 
     /**
+     * Distribute player join events to all active effects that care about a player joining.
+     *
+     * <p>When a player joins the server, this handler distributes the join event to all active
+     * effects.</p>
+     *
+     * @param event the player join event
+     */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnPlayerJoinEvent(event);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onEntityDeathEvent(@NotNull EntityDeathEvent event) {
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnEntityDeathEvent(event);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onEntityDamageEvent(@NotNull EntityDamageEvent event) {
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnEntityDamageEvent(event);
+        }
+    }
+
+    /**
      * Distribute projectile launch events to all active effects on all players.
      *
      * <p>When any projectile is launched in the world, this handler distributes the event to all
@@ -698,10 +748,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
-        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : activeEffects.values()) {
-                effect.doOnProjectileLaunchEvent(event);
-            }
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnProjectileLaunchEvent(event);
         }
     }
 
@@ -716,37 +764,67 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileHitEvent(@NotNull ProjectileHitEvent event) {
-        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : activeEffects.values()) {
-                effect.doOnProjectileHitEvent(event);
-            }
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnProjectileHitEvent(event);
         }
     }
 
+    /**
+     * Distribute player teleport events to all active effects on all players.
+     *
+     * @param event the player teleport event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
-        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : activeEffects.values()) {
-                effect.doOnPlayerTeleportEvent(event);
-            }
+        Player player = event.getPlayer();
+
+        Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+        for (O2Effect effect : activeEffects.values()) {
+            effect.doOnPlayerTeleportEvent(event);
         }
     }
 
+    /**
+     * Distribute apparate-by-coordinates events to all active effects on all players.
+     *
+     * @param event the apparate by coordinates event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
-        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : activeEffects.values()) {
-                effect.doOnOllivandersApparateByCoordinatesEvent(event);
-            }
+        Player player = event.getPlayer();
+
+        Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+        for (O2Effect effect : activeEffects.values()) {
+            effect.doOnOllivandersApparateByCoordinatesEvent(event);
+        }
+    }
+
+    /**
+     * Distribute apparate-by-name events to all active effects on all players.
+     *
+     * @param event the apparate by name event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
+        Player player = event.getPlayer();
+
+        Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+        for (O2Effect effect : activeEffects.values()) {
+            effect.doOnOllivandersApparateByNameEvent(event);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
-        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : activeEffects.values()) {
-                effect.doOnOllivandersApparateByNameEvent(event);
-            }
+    public void onEntityDismountEvent(@NotNull EntityDismountEvent event) {
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnEntityDismountEvent(event);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onVehicleExitEvent(@NotNull VehicleExitEvent event) {
+        for (O2Effect effect : effectsData.getAllActiveEffects()) {
+            effect.doOnVehicleExitEvent(event);
         }
     }
 
