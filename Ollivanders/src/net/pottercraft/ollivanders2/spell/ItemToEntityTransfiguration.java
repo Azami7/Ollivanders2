@@ -116,7 +116,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
      * @param entity the entity to check
      * @return true if it can be changed
      */
-    protected boolean canTransfigure(@NotNull Entity entity) {
+    public boolean canTransfigure(@NotNull Entity entity) {
         if (!super.canTransfigure(entity))
             return false;
 

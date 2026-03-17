@@ -38,14 +38,19 @@ import java.util.List;
  */
 public abstract class EntityTransfiguration extends Transfiguration {
     /**
-     * The type of entity this will transfigure.
+     * The type of entity this will transfigure an entity in to.
      */
-    EntityType targetType = EntityType.SHEEP;
+    EntityType targetType = null;
 
     /**
      * A list of Entity types that will not be affected by this spell.  Only used if the allow list is empty.
      */
     List<EntityType> entityBlockedList = new ArrayList<>();
+
+    /**
+     * A list of Entity types that will be affected by this spell.
+     */
+    List<EntityType> entityAllowedList = new ArrayList<>();
 
     /**
      * The original entity
@@ -56,11 +61,6 @@ public abstract class EntityTransfiguration extends Transfiguration {
      * The new entity post-transfiguration
      */
     Entity transfiguredEntity = null;
-
-    /**
-     * A list of Entity types that will be affected by this spell.
-     */
-    List<EntityType> entityAllowedList = new ArrayList<>();
 
     /**
      * The radius of the target point for the spell projectile.
@@ -93,7 +93,6 @@ public abstract class EntityTransfiguration extends Transfiguration {
         entityBlockedList.add(EntityType.AREA_EFFECT_CLOUD);
         entityBlockedList.add(EntityType.EXPERIENCE_ORB);
         entityBlockedList.add(EntityType.FALLING_BLOCK);
-        entityBlockedList.add(EntityType.EXPERIENCE_ORB);
         entityBlockedList.add(EntityType.EXPERIENCE_BOTTLE);
         entityBlockedList.add(EntityType.UNKNOWN);
 
@@ -110,18 +109,18 @@ public abstract class EntityTransfiguration extends Transfiguration {
      * <p>If the projectile has hit a block (stopped) but no entity was transfigured, the spell fails.
      * Once an entity is successfully transfigured, subsequent calls return immediately.</p>
      *
-     * <p>Validation checks include:
+     * <p>Validation checks include:</p>
      * <ul>
      * <li>Entity type must match the spell's target type (unless allow list is populated)</li>
      * <li>Entity cannot be on the blocked list</li>
      * <li>Entity cannot already be transfigured by another spell</li>
      * <li>Success rate check must pass (based on player skill)</li>
-     * </ul></p>
+     * </ul>
      */
     @Override
     void transfigure() {
         if (hasHitTarget() && !isTransfigured) {
-            // we've hit a block and the projectile is stopped but we didn't find anything to transfigure
+            // we've hit a block and the projectile is stopped, but we didn't find anything to transfigure
             common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
             sendFailureMessage();
 
@@ -137,15 +136,9 @@ public abstract class EntityTransfiguration extends Transfiguration {
             if (entity.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
-            if (isTransfigured) {
-                common.printDebugMessage(entity.getName() + " is already transfigured by this spell", null, null, false);
-                return;
-            }
-
-
             if (!canTransfigure(entity)) {
                 common.printDebugMessage("Cannot target entity " + entity.getName(), null, null, false);
-                return;
+                continue;
             }
 
             originalEntity = entity;
@@ -169,7 +162,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
      * @param entity the entity to check
      * @return true if the entity can be transfigured, false otherwise.
      */
-    protected boolean canTransfigure(@NotNull Entity entity) {
+    public boolean canTransfigure(@NotNull Entity entity) {
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
@@ -213,27 +206,25 @@ public abstract class EntityTransfiguration extends Transfiguration {
         // get entity type
         EntityType eType = entity.getType();
 
-        boolean check = true;
-
-        if (eType == targetType) // do not change if this entity is already the target type
+        if (targetType != null && eType == targetType) // do not change if this entity is already the target type
         {
             common.printDebugMessage("Target entity is same type as spell type.", null, null, false);
-            check = false;
+            return false;
         }
         else if (entityBlockedList.contains(eType)) // do not change if this entity is in the blocked list
         {
             common.printDebugMessage("EntityType is on the blocked list.", null, null, false);
-            check = false;
+            return false;
         }
         else if (!entityAllowedList.isEmpty()) // do not change if the allow list exists and this entity is not in it
         {
             if (!entityAllowedList.contains(eType)) {
                 common.printDebugMessage("EntityType is not on the allowed list.", null, null, false);
-                check = false;
+                return false;
             }
         }
 
-        return check;
+        return true;
     }
 
     /**
@@ -306,12 +297,11 @@ public abstract class EntityTransfiguration extends Transfiguration {
 
         // set values as close to the original as possible
         respawn.setCustomName(originalEntity.getCustomName());
-        respawn.setVelocity(transfiguredEntity.getVelocity());
+        respawn.setVelocity(transfiguredEntity.getVelocity()); // velocity of the transformed entity is maintained
         respawn.setGravity(originalEntity.hasGravity());
         respawn.setGlowing(originalEntity.isGlowing());
         respawn.setInvulnerable(originalEntity.isInvulnerable());
-        // set age to be the combined of both the original and the transfigured
-        respawn.setTicksLived(originalEntity.getTicksLived() + transfiguredEntity.getTicksLived());
+        respawn.setTicksLived(originalEntity.getTicksLived() + transfiguredEntity.getTicksLived()); // set age to be the combined of both the original and the transfigured
 
         // restore item meta if it is an item
         if (originalEntity instanceof Item && transfiguredEntity instanceof Item) {
@@ -372,5 +362,23 @@ public abstract class EntityTransfiguration extends Transfiguration {
      * Let child spells optionally customize the spawned entity. This must be overridden by the child classes.
      */
     void customizeEntity() {
+    }
+
+    /**
+     * Get the original entity before transfiguration.
+     *
+     * @return the original entity, or null if no entity has been transfigured
+     */
+    public Entity getOriginalEntity() {
+        return originalEntity;
+    }
+
+    /**
+     * Get the entity created by the transfiguration.
+     *
+     * @return the transfigured entity, or null if no entity has been transfigured
+     */
+    public Entity getTransfiguredEntity() {
+        return transfiguredEntity;
     }
 }

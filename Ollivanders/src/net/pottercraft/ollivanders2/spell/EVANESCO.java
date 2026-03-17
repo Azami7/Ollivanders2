@@ -3,9 +3,8 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,13 +12,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Vanishes items, boats, and minecarts.
+ * Vanishes non-living entities.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Spell">https://harrypotter.fandom.com/wiki/Vanishing_Spell</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Spell">https://harrypotter.fandom.com/wiki/Vanishing_Spell</a>
  */
-public final class EVANESCO extends EntityTransfiguration {
-    // todo rework to more align with https://harrypotter.fandom.com/wiki/Vanishing_Spell
-
+public class EVANESCO extends EntityTransfiguration {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
@@ -36,7 +34,7 @@ public final class EVANESCO extends EntityTransfiguration {
             add("The contents of Harry’s potion vanished; he was left standing foolishly beside an empty cauldron.");
         }};
 
-        text = "Evanesco will vanish items, boats, and minecarts.";
+        text = "Evanesco will temporarily vanish any non-living entity.";
     }
 
     /**
@@ -57,11 +55,7 @@ public final class EVANESCO extends EntityTransfiguration {
             worldGuardFlags.add(Flags.BUILD);
         }
 
-        entityAllowedList.add(EntityType.ITEM);
-        entityAllowedList.addAll(EntityCommon.getMinecarts());
-        entityAllowedList.addAll(EntityCommon.getBoats());
-
-        durationModifier = 4.0;
+        durationModifier = 4;
 
         initSpell();
     }
@@ -75,12 +69,23 @@ public final class EVANESCO extends EntityTransfiguration {
 
         if (Ollivanders2.useYears) {
             if (this.spellType.getLevel().ordinal() > casterO2P.getYear().getHighestLevelForYear().ordinal())
-                successMultiplier = 2f;
+                successMultiplier = 0.5f;
             else
-                successMultiplier = 0.25f;
+                successMultiplier = 2f;
         }
 
-        successRate = (int) ((usesModifier / 4) * successMultiplier);
+        successRate = (int) ((usesModifier / 2) * successMultiplier);
+    }
+
+    /**
+     * Reject living entities and delegate remaining checks to the parent.
+     */
+    @Override
+    boolean targetTypeCheck(@NotNull Entity entity) {
+        if (entity instanceof LivingEntity)
+            return false;
+
+        return super.targetTypeCheck(entity);
     }
 
     /**

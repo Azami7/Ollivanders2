@@ -166,7 +166,7 @@ public abstract class O2SpellTestSuper {
         caster.setLocation(fromLocation);
 
         if (!fromLocation.equals(targetLocation)) {
-            TestCommon.setPlayerSpellExperience(testPlugin, caster, getSpellType(), (int)Math.floor(experience));
+            TestCommon.setPlayerSpellExperience(testPlugin, caster, spellType, (int)Math.floor(experience));
 
             caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
         }

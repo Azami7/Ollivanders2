@@ -320,6 +320,10 @@ public enum O2SpellType {
      */
     EVANESCO(EVANESCO.class, MagicLevel.OWL),
     /**
+     * {@link EVANESCO_MAXIMA}
+     */
+    EVANESCO_MAXIMA(EVANESCO_MAXIMA.class, MagicLevel.NEWT),
+    /**
      * {@link EXPELLIARMUS}
      */
     EXPELLIARMUS(EXPELLIARMUS.class, MagicLevel.BEGINNER),

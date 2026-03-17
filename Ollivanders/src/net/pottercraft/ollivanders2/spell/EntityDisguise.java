@@ -78,7 +78,7 @@ public abstract class EntityDisguise extends EntityTransfiguration {
      * @return true if the entity can be transfigured, false otherwise
      */
     @Override
-    protected boolean canTransfigure(@NotNull Entity entity) {
+    public boolean canTransfigure(@NotNull Entity entity) {
         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(spellType)) {
             common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
             return false;

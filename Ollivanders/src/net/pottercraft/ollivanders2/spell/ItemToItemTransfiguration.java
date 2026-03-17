@@ -148,7 +148,7 @@ public abstract class ItemToItemTransfiguration extends EntityTransfiguration {
      * @return true if it can be changed
      */
     @Override
-    protected boolean canTransfigure(@NotNull Entity entity) {
+    public boolean canTransfigure(@NotNull Entity entity) {
         boolean canTransfigure = super.canTransfigure(entity);
 
         // if all prev checks passed, now verify this item is not enchanted
