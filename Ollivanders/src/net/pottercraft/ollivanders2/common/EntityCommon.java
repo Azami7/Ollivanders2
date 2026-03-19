@@ -381,48 +381,9 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
-        // Modulo 11 because there are 11 cat types available
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 11;
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Cat.Type.values().length;
 
-        Cat.Type type;
-
-        switch (rand) {
-            case 0:
-                type = Cat.Type.ALL_BLACK;
-                break;
-            case 1:
-                type = Cat.Type.BLACK;
-                break;
-            case 2:
-                type = Cat.Type.BRITISH_SHORTHAIR;
-                break;
-            case 3:
-                type = Cat.Type.CALICO;
-                break;
-            case 4:
-                type = Cat.Type.JELLIE;
-                break;
-            case 5:
-                type = Cat.Type.PERSIAN;
-                break;
-            case 6:
-                type = Cat.Type.RAGDOLL;
-                break;
-            case 7:
-                type = Cat.Type.RED;
-                break;
-            case 8:
-                type = Cat.Type.SIAMESE;
-                break;
-            case 9:
-                type = Cat.Type.TABBY;
-                break;
-            default:
-                type = Cat.Type.WHITE;
-                break;
-        }
-
-        return type;
+        return Cat.Type.values()[rand];
     }
 
     /**
@@ -544,34 +505,9 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
-        // Modulo 7 because there are 7 different horse colors
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 7;
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Horse.Color.values().length;
 
-        switch (rand) {
-            case 0:
-                color = Horse.Color.BLACK;
-                break;
-            case 1:
-                color = Horse.Color.BROWN;
-                break;
-            case 2:
-                color = Horse.Color.CHESTNUT;
-                break;
-            case 3:
-                color = Horse.Color.CREAMY;
-                break;
-            case 4:
-                color = Horse.Color.DARK_BROWN;
-                break;
-            case 5:
-                color = Horse.Color.GRAY;
-                break;
-            default:
-                color = Horse.Color.WHITE;
-                break;
-        }
-
-        return color;
+        return Horse.Color.values()[rand];
     }
 
     /**
@@ -599,24 +535,9 @@ public class EntityCommon {
             seed = 1;
 
         // Modulo 4 because there are 4 different llama colors
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 4;
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Llama.Color.values().length;
 
-        switch (rand) {
-            case 0:
-                color = Llama.Color.BROWN;
-                break;
-            case 1:
-                color = Llama.Color.CREAMY;
-                break;
-            case 2:
-                color = Llama.Color.GRAY;
-                break;
-            default:
-                color = Llama.Color.WHITE;
-                break;
-        }
-
-        return color;
+        return Llama.Color.values()[rand];
     }
 
     /**
@@ -637,33 +558,13 @@ public class EntityCommon {
      */
     @NotNull
     static public Parrot.Variant getRandomParrotVariant(int seed) {
-        Parrot.Variant variant;
-
         seed = Math.abs(seed);
         if (seed == 0)
             seed = 1;
 
-        // Modulo 5 because there are 5 parrot color variants
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 5;
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Parrot.Variant.values().length;
 
-        switch (rand) {
-            case 0:
-                variant = Parrot.Variant.CYAN;
-                break;
-            case 1:
-                variant = Parrot.Variant.GRAY;
-                break;
-            case 2:
-                variant = Parrot.Variant.BLUE;
-                break;
-            case 3:
-                variant = Parrot.Variant.GREEN;
-                break;
-            default:
-                variant = Parrot.Variant.RED;
-        }
-
-        return variant;
+        return Parrot.Variant.values()[rand];
     }
 
     /**

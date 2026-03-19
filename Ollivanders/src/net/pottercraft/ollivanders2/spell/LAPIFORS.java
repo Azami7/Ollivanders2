@@ -10,9 +10,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Turn an entity in to a rabbit.
+ * Transfigures any dropped item into a rabbit.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
+ * <p>Unlike {@link SNUFFLIFORS}, which only targets books, Lapifors can transfigure any dropped item.
+ * At higher skill levels ({@code usesModifier > 100}), the transfiguration becomes permanent and the
+ * original item is consumed.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
  */
 public class LAPIFORS extends ItemToEntityTransfiguration {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
@@ -33,7 +38,7 @@ public class LAPIFORS extends ItemToEntityTransfiguration {
             add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
         }};
 
-        text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
+        text = "The transfiguration spell Lapifors will transfigure an item into a rabbit.";
     }
 
     /**

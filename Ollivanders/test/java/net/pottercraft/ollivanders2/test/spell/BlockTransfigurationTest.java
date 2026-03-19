@@ -104,7 +104,6 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
     /**
      * Tests that blocked materials cannot be transfigured.
-     * Tests that blocked materials cannot be transfigured.
      *
      * <p>Verifies the spell is killed when the target block is on the blocked list
      * and no transfiguration occurs.</p>

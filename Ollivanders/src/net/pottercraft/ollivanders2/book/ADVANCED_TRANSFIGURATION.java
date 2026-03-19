@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.PULLUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.FELIS}<br>
  * {@link net.pottercraft.ollivanders2.spell.CANIS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EVANESCO_MAXIMA}<br>
  * {@link net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.BOS}<br>
  * {@link net.pottercraft.ollivanders2.spell.EQUUS}<br>
@@ -41,6 +42,7 @@ public class ADVANCED_TRANSFIGURATION extends O2Book {
         spells.add(O2SpellType.PULLUS);
         spells.add(O2SpellType.FELIS);
         spells.add(O2SpellType.CANIS);
+        spells.add(O2SpellType.EVANESCO_MAXIMA);
         // todo frog
         // todo rabbit
         // todo sheep

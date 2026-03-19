@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.test.effect;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.HIGHER_SKILL;
+import net.pottercraft.ollivanders2.effect.INVISIBILITY;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
@@ -139,6 +140,7 @@ public class O2EffectsTest {
         testAgeEffect();
         testAgeEffectByPercent();
         testUpkeep();
+        testGetAllActiveEffects();
         testRemoveAllEffects();
     }
 
@@ -340,6 +342,42 @@ public class O2EffectsTest {
 
         assertNull(Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
                 "Killed effect should be removed by upkeep");
+    }
+
+    /**
+     * Test that getAllActiveEffects returns effects across all players.
+     *
+     * <p>getAllActiveEffects() is used by onPlayerJoinEvent to distribute the join event to all
+     * active effects on all players. This test verifies that behavior by adding INVISIBILITY effects
+     * to two different players, then checking that a newly joining player cannot see either of them.</p>
+     */
+    private void testGetAllActiveEffects() {
+        PlayerMock player1 = mockServer.addPlayer();
+        PlayerMock player2 = mockServer.addPlayer();
+
+        // add INVISIBILITY to both players
+        O2Effect invis1 = new INVISIBILITY(testPlugin, 1000, false, player1.getUniqueId());
+        O2Effect invis2 = new INVISIBILITY(testPlugin, 1000, false, player2.getUniqueId());
+        Ollivanders2API.getPlayers().playerEffects.addEffect(invis1);
+        Ollivanders2API.getPlayers().playerEffects.addEffect(invis2);
+
+        // advance ticks so checkEffect() runs and sets invisible = true
+        mockServer.getScheduler().performTicks(20);
+
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(player1.getUniqueId(), O2EffectType.INVISIBILITY),
+                "Player 1 should have INVISIBILITY");
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(player2.getUniqueId(), O2EffectType.INVISIBILITY),
+                "Player 2 should have INVISIBILITY");
+
+        // new player joins - onPlayerJoinEvent iterates getAllActiveEffects()
+        // and each INVISIBILITY effect should hide its target from the joining player
+        PlayerMock joiner = mockServer.addPlayer();
+        mockServer.getScheduler().performTicks(5);
+
+        assertFalse(joiner.canSee(player1),
+                "Joining player should not see invisible player 1 (getAllActiveEffects should include player 1's effect)");
+        assertFalse(joiner.canSee(player2),
+                "Joining player should not see invisible player 2 (getAllActiveEffects should include player 2's effect)");
     }
 
     /**

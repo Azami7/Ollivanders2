@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.SCARABAEUS_FIBULUM}<br>
  * {@link net.pottercraft.ollivanders2.spell.RANACULUS_AMPHORAM}<br>
  * {@link net.pottercraft.ollivanders2.spell.VERA_VERTO}<br>
- * {@link net.pottercraft.ollivanders2.spell.LAGOMORPHA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAPIFORS_MEDIUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.REPARIFARGE}<br>
  * {@link net.pottercraft.ollivanders2.spell.MULTICORFORS}<br>
  * {@link net.pottercraft.ollivanders2.spell.SNUFFLIFORS}<br>
@@ -43,7 +43,7 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
 
         // year 2
         spells.add(O2SpellType.VERA_VERTO);
-        spells.add(O2SpellType.LAGOMORPHA);
+        spells.add(O2SpellType.LAPIFORS_MEDIUS);
         spells.add(O2SpellType.REPARIFARGE);
         spells.add(O2SpellType.MULTICORFORS);
         spells.add(O2SpellType.SNUFFLIFORS);

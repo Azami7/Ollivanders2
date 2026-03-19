@@ -21,7 +21,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Transform items to entities. This spell always consumes the item (ie. it doesn't come back on revert)
+ * Abstract base class for item-to-entity transfiguration spells.
+ *
+ * <p>Transforms dropped items into living entities. Unlike other entity transfigurations, item
+ * transfigurations always consume the original item — it is not restored when the spell reverts.
+ * Subclasses define which item types can be transfigured via {@link #transfigurationMap}.</p>
+ *
+ * <p>Registers as a Bukkit {@link Listener} to handle death events for the transfigured entity.</p>
+ *
+ * @author Azami7
+ * @see EntityTransfiguration for base entity transfiguration mechanics
  */
 public abstract class ItemToEntityTransfiguration extends EntityTransfiguration implements Listener {
     /**
@@ -37,7 +46,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     /**
      * Can this spell target enchanted items
      */
-    boolean canTransfigureEnchantedItems = false;
+    boolean transfigureEnchantedItems = false;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -63,12 +72,14 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
         entityAllowedList.add(EntityType.ITEM);
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
+        if (Ollivanders2.worldGuardEnabled) {
+            worldGuardFlags.add(Flags.ITEM_PICKUP);
             worldGuardFlags.add(Flags.MOB_SPAWNING);
+        }
     }
 
     /**
-     * Transfigures item into EntityType.
+     * Transfigures item into EntityType. Assumes {@link #canTransfigure(Entity)} has already verified this is an Item.
      *
      * @param entity the item to transfigure
      * @return the transfigured entity if successful, null otherwise
@@ -76,11 +87,6 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     @Override
     @Nullable
     protected Entity transfigureEntity(@NotNull Entity entity) {
-        if (!(entity instanceof Item)) {
-            common.printDebugMessage(spellType.toString() + ": entity is not type Item", null, null, false);
-            return null;
-        }
-
         Item item = (Item) entity;
 
         if (!transfigurationMap.isEmpty() && transfigurationMap.containsKey(item.getItemStack().getType()))
@@ -116,7 +122,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
      * @param entity the entity to check
      * @return true if it can be changed
      */
-    protected boolean canTransfigure(@NotNull Entity entity) {
+    public boolean canTransfigure(@NotNull Entity entity) {
         if (!super.canTransfigure(entity))
             return false;
 
@@ -131,7 +137,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
 
         // if all prev checks passed, now verify this item is not enchanted
         if (Ollivanders2API.getItems().enchantedItems.isEnchanted((Item) entity)) {
-            if (!canTransfigureEnchantedItems)
+            if (!transfigureEnchantedItems)
                 return false;
             else {
                 Enchantment enchantment = Ollivanders2API.getItems().enchantedItems.getEnchantment(((Item) entity).getItemStack());
@@ -157,5 +163,15 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
         if (entity.getUniqueId().equals(transfiguredEntity.getUniqueId()))
             // the entity was killed, kill this spell
             kill();
+    }
+
+    public Map<Material, EntityType> getTransfigurationMap() {
+        return new HashMap<Material, EntityType>() {{
+            putAll(transfigurationMap);
+        }};
+    }
+
+    public boolean doesTransfigureEnchantedItems() {
+        return transfigureEnchantedItems;
     }
 }

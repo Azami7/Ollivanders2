@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
 import java.util.UUID;
@@ -169,12 +170,17 @@ abstract public class EffectTestSuper {
      */
     @Test
     void effectTest() {
+        PlayerMock target = mockServer.addPlayer();
+        target.setLocation(origin);
+
         // create an effect that lasts 10 ticks
-        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
+        O2Effect effect = createEffect(target, 10, false);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
+        PlayerMock target2 = mockServer.addPlayer();
+        target2.setLocation(origin);
         // create an effect with is permanent set true
-        effect = createEffect(mockServer.addPlayer(), 5, true);
+        effect = createEffect(target2, 5, true);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
         durationBoundsTest();
@@ -202,11 +208,16 @@ abstract public class EffectTestSuper {
      * clamped to the maximum duration. This ensures effects never have invalid duration values.</p>
      */
     void durationBoundsTest() {
-        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
+        PlayerMock target = mockServer.addPlayer();
+        target.setLocation(origin);
+
+        O2Effect effect = createEffect(target, 10, false);
         assertEquals(effect.getMinDuration(), effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
 
+        PlayerMock target2 = mockServer.addPlayer();
+        target2.setLocation(origin);
         // max duration is 1 hour, at 20 ticks per second, or 72000 ticks
-        effect = createEffect(mockServer.addPlayer(), 72100, false);
+        effect = createEffect(target2, 72100, false);
         assertEquals(effect.getMaxDuration(), effect.getRemainingDuration(), "Effect duration not set to maximum duration when duration greater than maxDuration in constructor");
     }
 
@@ -218,16 +229,19 @@ abstract public class EffectTestSuper {
      * specified amount, and duration going below zero automatically kills the effect.</p>
      */
     void ageAndKillTest() {
-        O2Effect effect = createEffect(mockServer.addPlayer(), 100, false);
+        PlayerMock target = mockServer.addPlayer();
+        target.setLocation(origin);
+        O2Effect effect = createEffect(target, 100, false);
         int duration = effect.getMinDuration();
 
         // kill() kills the effect
         effect.kill();
         assertTrue(effect.isKilled(), "Effect not killed after effect.kill();");
+        mockServer.getScheduler().performTicks(20);
 
         // age decrements duration as expected when the effect is not permanent
         if (!effect.isPermanent()) {
-            effect = createEffect(mockServer.addPlayer(), duration, false);
+            effect = createEffect(target, duration, false);
             effect.age(1);
             assertEquals(duration - 1, effect.getRemainingDuration(), "Age did not properly decrement effect duration");
 
@@ -266,7 +280,9 @@ abstract public class EffectTestSuper {
      * toggled between true and false states.</p>
      */
     void isPermanentTest() {
-        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
+        PlayerMock target = mockServer.addPlayer();
+        target.setLocation(origin);
+        O2Effect effect = createEffect(target, 10, false);
 
         effect.setPermanent(true);
         assertTrue(effect.isPermanent(), "Effect not permanent after effect.setPermanent(true);");
@@ -306,7 +322,10 @@ abstract public class EffectTestSuper {
      * Test that aging correctly happens
      */
     void checkEventAging() {
-        O2Effect effect = createEffect(mockServer.addPlayer(), 100, false);
+        PlayerMock target = mockServer.addPlayer();
+        target.setLocation(origin);
+
+        O2Effect effect = createEffect(target, 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         // advance the game ticks so that immediate effects which are then killed are completed

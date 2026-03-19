@@ -30,7 +30,7 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
         spellType = O2SpellType.DUCKLIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        text = "The transfiguration spell Ducklifors will transfigure an entity into a chicken.";
+        text = "The transfiguration spell Ducklifors will transfigure a small entity into a chicken.";
     }
 
     /**
@@ -61,5 +61,14 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
 
         // this needs to be done at the end because it needs to consider the usesModifier
         populateEntityAllowedList();
+    }
+
+    /**
+     * Add all small friendly mobs only to this spell.
+     */
+    @Override
+    void populateEntityAllowedList() {
+        // add all small mobs as allowed targets by default
+        entityAllowedList.addAll(smallFriendlyMobs);
     }
 }

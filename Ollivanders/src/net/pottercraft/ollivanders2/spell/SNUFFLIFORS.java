@@ -5,22 +5,22 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
 /**
- * The Snufflifors Spell (Snufflifors) is a spell used to transfigure books into mice.
- * <p>
- * Baby foxes are used as the MC approximation of mice (since rabbits, which are probably closer, have their own
- * spell already - lapifors).
+ * Transfigures books into baby foxes (mice approximation).
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Snufflifors_Spell">https://harrypotter.fandom.com/wiki/Snufflifors_Spell</a>
+ * <p>Baby foxes are used as the Minecraft approximation of mice since rabbits already have their own
+ * spell ({@link LAPIFORS}). At higher skill levels ({@code usesModifier > 100}), the transfiguration
+ * becomes permanent and the original item is consumed.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Snufflifors_Spell">https://harrypotter.fandom.com/wiki/Snufflifors_Spell</a>
  */
 public class SNUFFLIFORS extends ItemToEntityTransfiguration
 {
@@ -58,7 +58,7 @@ public class SNUFFLIFORS extends ItemToEntityTransfiguration
     {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
+        spellType = O2SpellType.SNUFFLIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
         consumeOriginal = false;
@@ -70,12 +70,11 @@ public class SNUFFLIFORS extends ItemToEntityTransfiguration
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.MOB_SPAWNING);
 
-        // materials this transfiguration works on
-        materialAllowList.add(Material.BOOK);
-        materialAllowList.add(Material.WRITTEN_BOOK);
-        materialAllowList.add(Material.WRITABLE_BOOK);
-        materialAllowList.add(Material.ENCHANTED_BOOK);
-        materialAllowList.add(Material.KNOWLEDGE_BOOK);
+        transfigurationMap.put(Material.BOOK, EntityType.FOX);
+        transfigurationMap.put(Material.WRITTEN_BOOK, EntityType.FOX);
+        transfigurationMap.put(Material.WRITABLE_BOOK, EntityType.FOX);
+        transfigurationMap.put(Material.ENCHANTED_BOOK, EntityType.FOX);
+        transfigurationMap.put(Material.KNOWLEDGE_BOOK, EntityType.FOX);
 
         // the target entity type
         targetType = EntityType.FOX;
@@ -108,17 +107,5 @@ public class SNUFFLIFORS extends ItemToEntityTransfiguration
             ((Ageable) transfiguredEntity).setBaby();
         else
             common.printDebugMessage("transfigured entity is not ageable in SNUFFLIFORS.customizeEntity()", null, null, false);
-    }
-
-    /**
-     * Get the block at the current projectile location. Normally block transfiguration projectiles continue until they hit a solif block but
-     * in this case we want to transfigure a non-solid (Item) block.
-     *
-     * @return the block at the current projectile location
-     */
-    @Override
-    public @Nullable Block getTargetBlock()
-    {
-        return location.getBlock();
     }
 }

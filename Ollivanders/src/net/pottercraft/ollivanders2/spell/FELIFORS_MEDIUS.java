@@ -2,19 +2,17 @@ package net.pottercraft.ollivanders2.spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.CatWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.EntityCommon;
+import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Transfigures an entity into a horse.
- */
-public final class EQUUSIFORS extends FriendlyMobDisguise {
+public class FELIFORS_MEDIUS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -23,13 +21,16 @@ public final class EQUUSIFORS extends FriendlyMobDisguise {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EQUUSIFORS(Ollivanders2 plugin) {
+    public FELIFORS_MEDIUS(Ollivanders2 plugin) {
         super(plugin);
 
-        spellType = O2SpellType.EQUUSIFORS;
+        spellType = O2SpellType.FELIFORS_MEDIUS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        text = "Turns target entity in to a horse.";
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
+
+        text = "Turns target entity in to a cat.";
     }
 
     /**
@@ -39,22 +40,24 @@ public final class EQUUSIFORS extends FriendlyMobDisguise {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EQUUSIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public FELIFORS_MEDIUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
-        spellType = O2SpellType.EQUUSIFORS;
+        spellType = O2SpellType.FELIFORS_MEDIUS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
         durationModifier = 1.0;
 
-        targetType = EntityType.HORSE;
+        targetType = EntityType.CAT;
         disguiseType = DisguiseType.getType(targetType);
-        disguise = new MobDisguise(disguiseType);
-        HorseWatcher watcher = (HorseWatcher) disguise.getWatcher();
-        watcher.setAdult();
-        watcher.setStyle(EntityCommon.getRandomHorseStyle());
-        watcher.setColor(EntityCommon.getRandomHorseColor());
+        if (!Ollivanders2.testMode) {
+            disguise = new MobDisguise(disguiseType);
+            CatWatcher watcher = (CatWatcher) disguise.getWatcher();
+            watcher.setAdult();
+            watcher.setType(EntityCommon.getRandomCatType());
+            watcher.setCollarColor(O2Color.getRandomDyeableColor().getDyeColor());
+        }
 
         initSpell();
 

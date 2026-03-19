@@ -20,6 +20,14 @@ public enum O2SpellType {
      */
     ACCIO(ACCIO.class, MagicLevel.OWL),
     /**
+     * {@link AGNIFORS}
+     */
+    AGNIFORS(AGNIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link AGNIFORS_MAXIMA}
+     */
+    AGNIFORS_MAXIMA(AGNIFORS_MAXIMA.class, MagicLevel.NEWT),
+    /**
      * {@link AGUAMENTI}
      */
     AGUAMENTI(AGUAMENTI.class, MagicLevel.NEWT),
@@ -120,6 +128,14 @@ public enum O2SpellType {
      */
     BOTHYNUS_TRIA(BOTHYNUS_TRIA.class, MagicLevel.OWL),
     /**
+     * {@link BOVIFORS}
+     */
+    BOVIFORS(BOVIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link BOVIFORS_MAXIMA}
+     */
+    BOVIFORS_MAXIMA(BOVIFORS_MAXIMA.class, MagicLevel.NEWT),
+    /**
      * {@link BRACKIUM_EMENDO}
      */
     BRACKIUM_EMENDO(BRACKIUM_EMENDO.class, MagicLevel.OWL),
@@ -127,6 +143,14 @@ public enum O2SpellType {
      * {@link CALAMUS}
      */
     CALAMUS(CALAMUS.class, MagicLevel.BEGINNER),
+    /**
+     * {@link CANIFORS}
+     */
+    CANIFORS(CANIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link CANIFORS_MAXIMA}
+     */
+    CANIFORS_MAXIMA(CANIFORS_MAXIMA.class, MagicLevel.NEWT),
     /**
      * {@link CANIS}
      */
@@ -252,6 +276,10 @@ public enum O2SpellType {
      */
     DUCKLIFORS(DUCKLIFORS.class, MagicLevel.OWL),
     /**
+     * {@link DUCKLIFORS_MAXIMA}
+     */
+    DUCKLIFORS_MAXIMA(DUCKLIFORS_MAXIMA.class, MagicLevel.NEWT),
+    /**
      * {@link DURO}
      */
     DURO(DURO.class, MagicLevel.OWL),
@@ -280,13 +308,21 @@ public enum O2SpellType {
      */
     EQUUS(EQUUS.class, MagicLevel.NEWT),
     /**
-     * {@link EQUUSIFORS}
+     * {@link EQUIFORS}
      */
-    EQUUSIFORS(EQUUSIFORS.class, MagicLevel.OWL),
+    EQUIFORS(EQUIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link EQUIFORS_MAXIMA}
+     */
+    EQUIFORS_MAXIMA(EQUIFORS_MAXIMA.class, MagicLevel.OWL),
     /**
      * {@link EVANESCO}
      */
     EVANESCO(EVANESCO.class, MagicLevel.OWL),
+    /**
+     * {@link EVANESCO_MAXIMA}
+     */
+    EVANESCO_MAXIMA(EVANESCO_MAXIMA.class, MagicLevel.NEWT),
     /**
      * {@link EXPELLIARMUS}
      */
@@ -295,6 +331,15 @@ public enum O2SpellType {
      * {@link FATUUS_AURUM}
      */
     FATUUS_AURUM(FATUUS_AURUM.class, MagicLevel.OWL),
+    //FELIFORS(FELIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link FELIFORS_MAXIMA}
+     */
+    FELIFORS_MAXIMA(FELIFORS_MAXIMA.class, MagicLevel.NEWT),
+    /**
+     * {@link FELIFORS_MEDIUS}
+     */
+    FELIFORS_MEDIUS(FELIFORS_MEDIUS.class, MagicLevel.OWL),
     /**
      * {@link FELIS}
      */
@@ -401,10 +446,6 @@ public enum O2SpellType {
      */
     LACARNUM_INFLAMARI(LACARNUM_INFLAMARI.class, MagicLevel.OWL),
     /**
-     * {@link LAGOMORPHA}
-     */
-    LAGOMORPHA(LAGOMORPHA.class, MagicLevel.OWL),
-    /**
      * {@link LAMA}
      */
     LAMA(LAMA.class, MagicLevel.NEWT),
@@ -412,6 +453,15 @@ public enum O2SpellType {
      * {@link LAPIFORS}
      */
     LAPIFORS(net.pottercraft.ollivanders2.spell.LAPIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link LAPIFORS_MAXIMA}
+     */
+    LAPIFORS_MAXIMA(LAPIFORS_MAXIMA.class, MagicLevel.NEWT),
+    /**
+     * {@link LAPIFORS_MEDIUS}
+     */
+    LAPIFORS_MEDIUS(LAPIFORS_MEDIUS.class, MagicLevel.OWL),
+    /**
     /**
      * {@link LEGILIMENS}
      */
@@ -689,6 +739,14 @@ public enum O2SpellType {
      */
     STUPEFY(STUPEFY.class, MagicLevel.OWL),
     /**
+     * {@link SUIFORS}
+     */
+    SUIFORS(SUIFORS.class, MagicLevel.NEWT),
+    /**
+     * {@link SUIFORS_MAXIMA}
+     */
+    SUIFORS_MAXIMA(SUIFORS_MAXIMA.class, MagicLevel.NEWT),
+    /**
      * {@link SUS}
      */
     SUS(SUS.class, MagicLevel.NEWT),
@@ -704,6 +762,14 @@ public enum O2SpellType {
      * {@link TITILLANDO}
      */
     TITILLANDO(TITILLANDO.class, MagicLevel.OWL),
+    /**
+     * {@link URSIFORS}
+     */
+    URSIFORS(URSIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link URSIFORS_MAXIMA}
+     */
+    URSIFORS_MAXIMA(URSIFORS_MAXIMA.class, MagicLevel.NEWT),
     /**
      * {@link URSUS}
      */

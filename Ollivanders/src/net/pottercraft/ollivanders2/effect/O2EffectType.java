@@ -30,6 +30,10 @@ public enum O2EffectType {
      */
     AGGRESSION(AGGRESSION.class, MagicLevel.OWL, 100, 100),
     /**
+     * {@link AGNIFORS_MAXIMA}
+     */
+    AGNIFORS_MAXIMA(CANIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    /**
      * {@link ANIMAGUS_EFFECT}
      */
     ANIMAGUS_EFFECT(ANIMAGUS_EFFECT.class, MagicLevel.EXPERT, 100, 100),
@@ -58,6 +62,10 @@ public enum O2EffectType {
      */
     BLINDNESS(BLINDNESS.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
+     * {@link BOVIFORS_MAXIMA}
+     */
+    BOVIFORS_MAXIMA(BOVIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    /**
      * {@link BROOM_FLYING}
      */
     BROOM_FLYING(BROOM_FLYING.class, MagicLevel.EXPERT, 100, 100),
@@ -65,6 +73,10 @@ public enum O2EffectType {
      * {@link BURNING}
      */
     BURNING(BURNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
+     * {@link CANIFORS_MAXIMA}
+     */
+    CANIFORS_MAXIMA(CANIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link CONFUSION}
      */
@@ -74,9 +86,21 @@ public enum O2EffectType {
      */
     DANCING_FEET(DANCING_FEET.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
+     * {@link DUCKLIFORS_MAXIMA}
+     */
+    DUCKLIFORS_MAXIMA(DUCKLIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    /**
+     * {@link EQUIFORS_MAXIMA}
+     */
+    EQUIFORS_MAXIMA(EQUIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    /**
      * {@link FAST_LEARNING}
      */
     FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
+     * {@link FELIFORS_MAXIMA}
+     */
+    FELIFORS_MAXIMA(FELIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link FIRE_RESISTANCE}
      */
@@ -133,6 +157,14 @@ public enum O2EffectType {
      * {@link IMPROVED_BOOK_LEARNING}
      */
     IMPROVED_BOOK_LEARNING(IMPROVED_BOOK_LEARNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
+     * {@link INVISIBILITY}
+     */
+    INVISIBILITY(INVISIBILITY.class, MagicLevel.EXPERT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    /**
+     * {@link LAPIFORS_MAXIMA}
+     */
+    LAPIFORS_MAXIMA(LAPIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link LAUGHING}
      */
@@ -218,6 +250,10 @@ public enum O2EffectType {
      */
     STRENGTH(STRENGTH.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
+     * {@link SUIFORS_MAXIMA}
+     */
+    SUIFORS_MAXIMA(SUIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
+    /**
      * {@link SUSPENSION}
      */
     SUSPENSION(SUSPENSION.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
@@ -237,6 +273,10 @@ public enum O2EffectType {
      * {@link UNLUCK_ANTIDOTE_LESSER}
      */
     UNLUCK_ANTIDOTE_LESSER(UNLUCK_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER, 100, 100),
+    /**
+     * {@link URSIFORS_MAXIMA}
+     */
+    URSIFORS_MAXIMA(URSIFORS_MAXIMA.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link WATER_BREATHING}
      */

@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.book;
 
+import net.pottercraft.ollivanders2.spell.AGNIFORS;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -9,13 +10,20 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.spell.DURO}<br>
- * {@link net.pottercraft.ollivanders2.spell.LAGOMORPHA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAPIFORS}<br>
  * {@link net.pottercraft.ollivanders2.spell.AVIFORS}<br>
  * {@link net.pottercraft.ollivanders2.spell.EVANESCO}<br>
  * {@link net.pottercraft.ollivanders2.spell.LAPIFORS}<br>
  * {@link net.pottercraft.ollivanders2.spell.COLOVARIA}<br>
  * {@link net.pottercraft.ollivanders2.spell.DUCKLIFORS}<br>
- * {@link net.pottercraft.ollivanders2.spell.LAPIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAPIFORS_MEDIUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CANIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FELIFORS_MEDIUS}<br>
+ * {@link AGNIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOVIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.SUIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EQUIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.URSIFORS}<br>
  * {@link net.pottercraft.ollivanders2.spell.PIERTOTUM_LOCOMOTOR}<br>
  * {@link net.pottercraft.ollivanders2.spell.DELETRIUS}
  * </p>
@@ -37,7 +45,7 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
         // 3rd year
         spells.add(O2SpellType.DURO);
         // todo version of duro that "hardens" tools
-        spells.add(O2SpellType.LAGOMORPHA);
+        spells.add(O2SpellType.LAPIFORS);
         // todo teapot to tortoise
         // todo felifors (cats in to cauldrons)
         // todo owl in to opera glasses - https://harrypotter.fandom.com/wiki/Owl_to_Opera_Glasses
@@ -48,10 +56,17 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
         spells.add(O2SpellType.LAPIFORS);
         spells.add(O2SpellType.COLOVARIA);
         spells.add(O2SpellType.DUCKLIFORS);
-        spells.add(O2SpellType.EQUUSIFORS);
+        spells.add(O2SpellType.LAPIFORS_MEDIUS);
+        spells.add(O2SpellType.CANIFORS);
+        spells.add(O2SpellType.FELIFORS_MEDIUS);
+        spells.add(O2SpellType.AGNIFORS);
         // todo Orchideous - https://github.com/Azami7/Ollivanders2/issues/56
 
         // 5th year
+        spells.add(O2SpellType.SUIFORS);
+        spells.add(O2SpellType.BOVIFORS);
+        spells.add(O2SpellType.EQUIFORS);
+        spells.add(O2SpellType.URSIFORS);
         spells.add(O2SpellType.PIERTOTUM_LOCOMOTOR);
         // todo inanimatus conjurus - https://harrypotter.fandom.com/wiki/Inanimatus_Conjurus_Spell
         // todo gobstone in to skunk - https://harrypotter.fandom.com/wiki/Gobstone_to_Skunk
