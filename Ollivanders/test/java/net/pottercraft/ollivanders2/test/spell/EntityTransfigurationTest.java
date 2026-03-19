@@ -6,9 +6,11 @@ import net.pottercraft.ollivanders2.spell.EntityTransfiguration;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
@@ -59,11 +61,42 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     abstract EntityType getSameEntityType();
 
     /**
+     * For entities that are items, a valid item material that can be targeted by this spell.
+     *
+     * @return a targetable item material
+     */
+    @NotNull
+    Material getValidMaterialType() {
+        return Material.WOODEN_AXE;
+    }
+
+    /**
+     * For entities that are items, a invalid item material that cannot be targeted by this spell.
+     *
+     * @return a non-targetable item material, or null if all materials can be targeted
+     */
+    @Nullable
+    Material getInvalidMaterialType() {
+        return null;
+    }
+
+    /**
      * Not applicable for entity transfiguration spells.
      */
     @Override
     @Test
     void spellConstructionTest() {
+    }
+
+    Entity spawnEntityAtLocation(@NotNull Location location, @NotNull EntityType entityType, @Nullable Material itemType) {
+        if (entityType == EntityType.ITEM) {
+            if (itemType != null)
+                return location.getWorld().dropItem(location, new ItemStack(itemType, 1));
+            else
+                return location.getWorld().dropItem(location, new ItemStack(getValidMaterialType(), 1));
+        }
+        else
+            return location.getWorld().spawnEntity(location, entityType);
     }
 
     /**
@@ -78,7 +111,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         assertInstanceOf(EntityTransfiguration.class, spell);
@@ -110,7 +143,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 0);
 
@@ -137,7 +170,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        Entity entity = testWorld.spawnEntity(targetLocation, getValidEntityType());
+        Entity entity = spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         // 0 experience fails success check
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 0);
@@ -150,14 +183,14 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
 
         // invalid entity cannot be targeted
         if (getInvalidEntityType() != null) {
-            Entity invalidEntity = testWorld.spawnEntity(targetLocation, getInvalidEntityType());
+            Entity invalidEntity = spawnEntityAtLocation(targetLocation, getInvalidEntityType(), getInvalidMaterialType());
             assertFalse(entityTransfiguration.canTransfigure(invalidEntity), "canTransfigure() returned true for invalid entity type");
             invalidEntity.remove();
         }
 
         // same entity type cannot be targeted
         if (getSameEntityType() != null) {
-            Entity sameEntity = testWorld.spawnEntity(targetLocation, getSameEntityType());
+            Entity sameEntity = spawnEntityAtLocation(targetLocation, getSameEntityType(), getValidMaterialType());
             assertFalse(entityTransfiguration.canTransfigure(sameEntity), "canTransfigure() returned true for same entity type");
             sameEntity.remove();
         }
@@ -171,7 +204,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        Entity entity = testWorld.spawnEntity(targetLocation, getValidEntityType());
+        Entity entity = spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         // already transfigured entity cannot be targeted
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
@@ -200,7 +233,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
 
@@ -233,7 +266,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
 
@@ -261,7 +294,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         mockServer.getScheduler().performTicks(20);
@@ -292,7 +325,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
 
         if (getInvalidEntityType() != null) {
-            Entity invalidEntity = testWorld.spawnEntity(targetLocation, getInvalidEntityType());
+            spawnEntityAtLocation(targetLocation, getInvalidEntityType(), getInvalidMaterialType());
             mockServer.getScheduler().performTicks(20);
 
             assertTrue(entityTransfiguration.isKilled());
@@ -303,7 +336,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
             TestCommon.clearMessageQueue(caster);
         }
 
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
         entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         mockServer.getScheduler().performTicks(20);
 
@@ -325,14 +358,43 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
-        testWorld.spawnEntity(targetLocation, getValidEntityType());
+        spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
-        mockServer.getScheduler().performTicks(20);
-        assertTrue(entityTransfiguration.isTransfigured());
-        entityTransfiguration.kill();
 
-        Collection<Entity> entities = EntityCommon.getEntitiesInRadius(targetLocation, 1);
-        assertFalse(entities.isEmpty(), "entity not found when spell exited");
+        if (!entityTransfiguration.isPermanent()) {
+            mockServer.getScheduler().performTicks(20);
+            assertTrue(entityTransfiguration.isTransfigured());
+            entityTransfiguration.kill();
+
+            assertTrue(entityTransfiguration.getTransfiguredEntity().isDead(), "transfigured entity not removed");
+
+            if (!entityTransfiguration.isConsumeOriginal()) {
+                Collection<Entity> entities = EntityCommon.getEntitiesInRadius(targetLocation, 1);
+                assertFalse(entities.isEmpty(), "entity not found when spell exited");
+            }
+        }
+    }
+
+    @Test
+    void inventoryHolderRevertTest() {
+        World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
+        Location location = getNextLocation(testWorld);
+        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
+        PlayerMock caster = mockServer.addPlayer();
+
+        TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
+        spawnEntityAtLocation(targetLocation, EntityType.BAMBOO_CHEST_RAFT, null);
+
+        EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
+
+        if (!entityTransfiguration.isPermanent()) {
+            mockServer.getScheduler().performTicks(20);
+            assertTrue(entityTransfiguration.isTransfigured());
+            entityTransfiguration.kill();
+
+            Collection<Entity> entities = EntityCommon.getEntitiesInRadius(targetLocation, 1);
+            assertFalse(entities.isEmpty(), "entity not found when spell exited");
+        }
     }
 }

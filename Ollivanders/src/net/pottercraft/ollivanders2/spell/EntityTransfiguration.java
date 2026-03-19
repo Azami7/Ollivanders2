@@ -25,10 +25,10 @@ import java.util.List;
 /**
  * Abstract base class for entity transfiguration spells.
  *
- * <p>Manages the transfiguration of living entities (mobs, animals) into other entity types.
- * Provides core transfiguration logic including entity targeting, type validation, and reversion.
- * Entity transfigurations are always temporary (non-permanent) and will be reverted when the
- * spell duration expires or the spell is explicitly reverted.</p>
+ * <p>Manages the transfiguration of entities into other entity types. Provides core transfiguration
+ * logic including entity targeting, type validation, and reversion. Entity transfigurations default
+ * to temporary and will be reverted when the spell duration expires or the spell is explicitly
+ * reverted, but subclasses may set them to permanent.</p>
  *
  * <p>Subclasses must implement {@link #transfigureEntity(Entity)} to define the actual transformation logic.</p>
  *
@@ -38,7 +38,7 @@ import java.util.List;
  */
 public abstract class EntityTransfiguration extends Transfiguration {
     /**
-     * The type of entity this will transfigure an entity in to.
+     * The type of entity this will transfigure an entity into.
      */
     EntityType targetType = null;
 
@@ -257,7 +257,6 @@ public abstract class EntityTransfiguration extends Transfiguration {
 
             transfiguredEntity.remove();
         }
-        isTransfigured = false;
 
         if (originalEntity == null)
             return;
@@ -380,5 +379,14 @@ public abstract class EntityTransfiguration extends Transfiguration {
      */
     public Entity getTransfiguredEntity() {
         return transfiguredEntity;
+    }
+
+    /**
+     * Get the target entity type for this transfiguration spell.
+     *
+     * @return the target entity type, or null if not set
+     */
+    public EntityType getTargetType() {
+        return targetType;
     }
 }

@@ -19,17 +19,23 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
- * Transfigures a rotten flesh into inferi
+ * Transfigures rotten flesh into an Inferius (zombie).
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Inferius">https://harrypotter.fandom.com/wiki/Inferius</a>
+ * <p>The Inferius will not attack its creator and will defend them against attackers. Each player
+ * can control a limited number of Inferi based on their skill level, up to a maximum of
+ * {@value #maxInferi}.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Inferius">https://harrypotter.fandom.com/wiki/Inferius</a>
  */
 public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
     /**
      * Keep track of the number of inferi a player has created
      */
-    final static HashMap<Player, Integer> inferiCount = new HashMap<>();
+    final static HashMap<UUID, Integer> inferiCount = new HashMap<>();
 
     /**
      * The maximum number of inferi any player can create so this doesn't get out of control
@@ -51,7 +57,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
             add("They are corpses, dead bodies that have been bewitched to do a Dark wizard's bidding. Inferi have not been seen for a long time, however, not since Voldemort was last powerful... He killed enough people to make an army of them, of course.");
         }};
 
-        text = "Mortuos Suscitate will transfigure a piece of rotten flesh into an Inferius. The Inferius will not attack it's owner.";
+        text = "Mortuos Suscitate will transfigure a piece of rotten flesh into an Inferius. The Inferius will not attack its owner.";
     }
 
     /**
@@ -84,19 +90,38 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
      */
     @Override
     void doInitSpell() {
-        // can the player create more inferi?
-        int playerMax = (int) (usesModifier / 10);
-        if (playerMax > maxInferi)
-            playerMax = maxInferi;
-        else if (playerMax < 1)
-            playerMax = 1;
+        if (usesModifier > 3) { // first 3 casts will just fail because too inexperienced
+            // can the player create more inferi?
+            int playerMax = (int) Math.floor(usesModifier / 10);
+            if (playerMax > maxInferi)
+                playerMax = maxInferi;
+            else if (playerMax < 1)
+                playerMax = 1;
 
-        if (inferiCount.containsKey(caster)) {
-            int curInferi = inferiCount.get(caster);
-            if (curInferi >= playerMax) {
-                // if the number they currently have created exceeds their max based on skill, set success to 0
-                successRate = 0;
+            if (inferiCount.containsKey(caster.getUniqueId())) {
+                Integer curInferi = inferiCount.get(caster.getUniqueId());
+                if (curInferi != null && curInferi >= playerMax) {
+                    // if the number they currently have created exceeds their max based on skill, set success to 0
+                    successRate = 0;
+                }
             }
+        }
+        else
+            successRate = 0;
+    }
+
+    /**
+     * Increment the inferi count for the caster after a successful transfiguration.
+     */
+    @Override
+    void customizeEntity() {
+        Integer count = inferiCount.get(caster.getUniqueId());
+
+        if (count == null) {
+            inferiCount.put(caster.getUniqueId(), 1);
+        }
+        else {
+            inferiCount.put(caster.getUniqueId(), count + 1);
         }
     }
 
@@ -106,16 +131,19 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
     @Override
     void doRevert() {
         if (isTransfigured) {
-            int curInferi = inferiCount.get(caster) - 1;
-            if (curInferi <= 0)
-                inferiCount.remove(caster);
-            else
-                inferiCount.put(caster, curInferi);
+            Integer currentInferiCount = inferiCount.get(caster.getUniqueId());
+
+            if (currentInferiCount == null || currentInferiCount <= 1) {
+                inferiCount.remove(caster.getUniqueId());
+            }
+            else {
+                inferiCount.put(caster.getUniqueId(), currentInferiCount - 1);
+            }
         }
     }
 
     /**
-     * Prevent the golem from harming its creator and have it attack anyone who does
+     * Prevent the inferi from harming its creator and have it attack anyone who does
      *
      * @param event the entity damage event
      */
