@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.common.EntityCommon;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.EntityTransfiguration;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -78,6 +79,13 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     @Nullable
     Material getInvalidMaterialType() {
         return null;
+    }
+
+    /**
+     * Child test classes should override if the test can target item entities.
+     */
+    boolean transfiguresItems() {
+        return false;
     }
 
     /**
@@ -196,6 +204,10 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         }
     }
 
+    /**
+     * Test canTransfigure for already transfigured entities. Split out from main canTransfigure test because some child
+     * classes will need to override this test.
+     */
     @Test
     void canTransfigureAlreadyTransfiguredTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
@@ -217,6 +229,35 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         mockServer.getScheduler().performTicks(20);
         assertFalse(entityTransfiguration2.isTransfigured(), "target was transfigured when invalid");
         assertTrue(entityTransfiguration2.isKilled(), "spell not killed when hitting invalid target");
+    }
+
+    /**
+     * Test that enchanted items are handled correctly based on the spell's {@code transfigureEnchantedItems} setting.
+     */
+    @Test
+    void enchantedItemCanTransfigureTest() {
+        if (transfiguresItems()) {
+            World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
+            Location location = getNextLocation(testWorld);
+            Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
+            PlayerMock caster = mockServer.addPlayer();
+
+            TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5);
+            ItemStack itemStack = O2ItemType.BROOMSTICK.getItem(1);
+            assertNotNull(itemStack);
+            testWorld.dropItem(targetLocation, itemStack);
+
+            EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
+            mockServer.getScheduler().performTicks(20);
+
+            if (entityTransfiguration.doesTransfigureEnchantedItems()) {
+                assertTrue(entityTransfiguration.isTransfigured(), "Enchanted item was not transfigured");
+            }
+            else {
+                assertFalse(entityTransfiguration.isTransfigured(), "Enchanted item was transfigured");
+                assertTrue(entityTransfiguration.isKilled(), "spell not killed when invalid entity targeted");
+            }
+        }
     }
 
     /**

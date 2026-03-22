@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.common.EntityCommon;
-import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.ItemToEntityTransfiguration;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -26,7 +25,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -73,6 +71,11 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
         return null;
     }
 
+    @Override
+    boolean transfiguresItems() {
+        return true;
+    }
+
     /**
      * Test that a valid item is transfigured into the expected entity type.
      */
@@ -107,33 +110,6 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
             expectedType = itemToEntityTransfiguration.getTargetType();
 
         assertEquals(expectedType, itemToEntityTransfiguration.getTransfiguredEntity().getType(), "Item was not transfigured to expected entity type");
-    }
-
-    /**
-     * Test that enchanted items are handled correctly based on the spell's {@code transfigureEnchantedItems} setting.
-     */
-    @Test
-    void enchantedItemCanTransfigureTest() {
-        World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
-        Location location = getNextLocation(testWorld);
-        Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
-        PlayerMock caster = mockServer.addPlayer();
-
-        TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5);
-        ItemStack itemStack = O2ItemType.BROOMSTICK.getItem(1);
-        assertNotNull(itemStack);
-        testWorld.dropItem(targetLocation, itemStack);
-
-        ItemToEntityTransfiguration itemToEntityTransfiguration = (ItemToEntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
-        mockServer.getScheduler().performTicks(20);
-
-        if (itemToEntityTransfiguration.doesTransfigureEnchantedItems()) {
-            assertTrue(itemToEntityTransfiguration.isTransfigured(), "Enchanted item was not transfigured");
-        }
-        else {
-            assertFalse(itemToEntityTransfiguration.isTransfigured(), "Enchanted item was transfigured");
-            assertTrue(itemToEntityTransfiguration.isKilled(), "spell not killed when invalid entity targeted");
-        }
     }
 
     /**

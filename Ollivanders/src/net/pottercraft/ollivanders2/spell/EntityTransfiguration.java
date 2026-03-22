@@ -68,6 +68,11 @@ public abstract class EntityTransfiguration extends Transfiguration {
     double radius = 1.5;
 
     /**
+     * Can this spell target enchanted items
+     */
+    boolean transfigureEnchantedItems = false;
+
+    /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
@@ -174,6 +179,17 @@ public abstract class EntityTransfiguration extends Transfiguration {
         if (!targetTypeCheck(entity))
             return false;
 
+        // is this an enchanted item?
+        if (isEnchantedItem(entity)) {
+            if (transfigureEnchantedItems) { // this spell can transfigure enchanted items if the enchantment's level is <= to this spells level
+                Enchantment enchantment = Ollivanders2API.getItems().enchantedItems.getEnchantment(((Item) entity).getItemStack());
+                if (enchantment != null && enchantment.getType().getLevel().ordinal() > this.spellType.getLevel().ordinal())
+                    return false;
+            }
+            else
+                return false;
+        }
+
         // is this entity already transfigured?
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof Transfiguration) {
@@ -185,6 +201,15 @@ public abstract class EntityTransfiguration extends Transfiguration {
         }
 
         return true;
+    }
+
+    boolean isEnchantedItem(@NotNull Entity entity) {
+        // make sure it is an item
+        if (!(entity instanceof Item))
+            return false;
+
+        // if all prev checks passed, now verify this item is not enchanted
+        return (Ollivanders2API.getItems().enchantedItems.isEnchanted((Item) entity));
     }
 
     /**
@@ -388,5 +413,9 @@ public abstract class EntityTransfiguration extends Transfiguration {
      */
     public EntityType getTargetType() {
         return targetType;
+    }
+
+    public boolean doesTransfigureEnchantedItems() {
+        return transfigureEnchantedItems;
     }
 }
