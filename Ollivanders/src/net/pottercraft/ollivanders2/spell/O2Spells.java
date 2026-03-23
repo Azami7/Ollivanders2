@@ -175,29 +175,6 @@ public class O2Spells {
     }
 
     /**
-     * Get an O2Spell object from its type.
-     *
-     * @param spellType the type of spell to get
-     * @return the O2Spell object, if it could be created, or null otherwise
-     */
-    @Nullable
-    private O2Spell getSpellFromType(@NotNull O2SpellType spellType) {
-        O2Spell spell;
-
-        Class<?> spellClass = spellType.getClassName();
-
-        try {
-            spell = (O2Spell) spellClass.getConstructor().newInstance();
-        }
-        catch (Exception exception) {
-            common.printDebugMessage("Exception trying to create new instance of " + spellType, exception, null, true);
-            return null;
-        }
-
-        return spell;
-    }
-
-    /**
      * Get a spell type by name.
      *
      * @param name the name of the spell or potion

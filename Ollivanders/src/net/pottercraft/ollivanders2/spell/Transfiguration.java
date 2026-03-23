@@ -235,7 +235,6 @@ public abstract class Transfiguration extends O2Spell {
             sendFailureMessage();
 
             kill();
-            return;
         }
     }
 
