@@ -96,6 +96,14 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     void spellConstructionTest() {
     }
 
+    /**
+     * Spawn a specified entity type at a specified location.
+     *
+     * @param location the spawn location
+     * @param entityType the entity type
+     * @param itemType if an item, the material type
+     * @return the spawned entity
+     */
     Entity spawnEntityAtLocation(@NotNull Location location, @NotNull EntityType entityType, @Nullable Material itemType) {
         if (entityType == EntityType.ITEM) {
             if (itemType != null)

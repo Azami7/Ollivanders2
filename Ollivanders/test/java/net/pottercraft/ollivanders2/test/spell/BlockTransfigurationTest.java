@@ -98,7 +98,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
         mockServer.getScheduler().performTicks(20);
 
         assertTrue(blockTransfiguration.hasHitTarget(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.getLocation().getBlock().getType());
-        assertFalse(blockTransfiguration.isBlockTransfigured(target), "invalid block was transfigured");
+        assertFalse(blockTransfiguration.isTransfigured(target), "invalid block was transfigured");
         assertEquals(invalidType, target.getType(), "material for invalid block was changed");
     }
 
@@ -123,7 +123,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         mockServer.getScheduler().performTicks(20);
         assertTrue(blockTransfiguration.isKilled());
-        assertFalse(blockTransfiguration.isBlockTransfigured(target), "target transfigured when it is on the blocked list");
+        assertFalse(blockTransfiguration.isTransfigured(target), "target transfigured when it is on the blocked list");
     }
 
     /**
@@ -146,12 +146,12 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         if (blockTransfiguration.getSuccessRate() < 100) {
             mockServer.getScheduler().performTicks(20);
-            assertFalse(blockTransfiguration.isBlockTransfigured(target), "transfiguration succeeded when skill is 0 and success rate < 100%");
+            assertFalse(blockTransfiguration.isTransfigured(target), "transfiguration succeeded when skill is 0 and success rate < 100%");
 
             blockTransfiguration.kill();
             blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
             mockServer.getScheduler().performTicks(20);
-            assertTrue(blockTransfiguration.isBlockTransfigured(target), "transfiguration failed when skill is mastery and success rate < 100%");
+            assertTrue(blockTransfiguration.isTransfigured(target), "transfiguration failed when skill is mastery and success rate < 100%");
         }
     }
 

@@ -124,15 +124,6 @@ public abstract class EntityTransfiguration extends Transfiguration {
      */
     @Override
     void transfigure() {
-        if (hasHitTarget() && !isTransfigured) {
-            // we've hit a block and the projectile is stopped, but we didn't find anything to transfigure
-            common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
-            sendFailureMessage();
-
-            kill();
-            return;
-        }
-
         if (isTransfigured)
             // we've already transfigured something
             return;
@@ -191,16 +182,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
         }
 
         // is this entity already transfigured?
-        for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
-            if (spell instanceof Transfiguration) {
-                if (((Transfiguration) spell).isEntityTransfigured(entity)) {
-                    common.printDebugMessage(entity.getName() + " is already transfigured", null, null, false);
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return super.canTransfigure(entity);
     }
 
     boolean isEnchantedItem(@NotNull Entity entity) {
@@ -361,7 +343,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
      * @return true if transfigured, false otherwise
      */
     @Override
-    public boolean isBlockTransfigured(@NotNull Block block) {
+    public boolean isTransfigured(@NotNull Block block) {
         return false;
     }
 
@@ -372,7 +354,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
      * @return true if transfigured, false otherwise
      */
     @Override
-    public boolean isEntityTransfigured(@NotNull Entity entity) {
+    public boolean isTransfigured(@NotNull Entity entity) {
         if (permanent)
             return false;
 

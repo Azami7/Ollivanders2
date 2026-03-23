@@ -94,7 +94,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
         Map<Material, EntityType> transMap = blockToEntityTransfiguration.getEntityTransfigurationMap();
         assertFalse(transMap.isEmpty(), "transfiguration map is empty");
 
-        assertFalse(blockToEntityTransfiguration.isEntityTransfigured(caster), "isEntityTransfigured(caster) returned true");
+        assertFalse(blockToEntityTransfiguration.isTransfigured(caster), "isEntityTransfigured(caster) returned true");
 
         Material material = getValidTargetType();
         target.setType(material);
@@ -108,10 +108,10 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
         LivingEntity entity = EntityCommon.getLivingEntityAtLocation(target.getLocation());
         assertNotNull(entity, "entity was not spawned");
         assertEquals(expectedType, entity.getType(), "entity was not expected type");
-        assertTrue(blockToEntityTransfiguration.isEntityTransfigured(entity), "isEntityTransfigured(entity) returned false");
+        assertTrue(blockToEntityTransfiguration.isTransfigured(entity), "isEntityTransfigured(entity) returned false");
 
         // and just to complete isEntityTransfigured()
-        assertFalse(blockToEntityTransfiguration.isEntityTransfigured(caster));
+        assertFalse(blockToEntityTransfiguration.isTransfigured(caster));
     }
 
     /**
@@ -135,7 +135,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
         mockServer.getScheduler().performTicks(20);
 
         assertTrue(blockToEntityTransfiguration.hasHitTarget());
-        assertFalse(blockToEntityTransfiguration.isBlockTransfigured(target), "block was transfigured when it is not a transfigurable block");
+        assertFalse(blockToEntityTransfiguration.isTransfigured(target), "block was transfigured when it is not a transfigurable block");
         assertEquals(originalMaterial, target.getType(), "block type changed when it is not a transfigurable block");
     }
 
