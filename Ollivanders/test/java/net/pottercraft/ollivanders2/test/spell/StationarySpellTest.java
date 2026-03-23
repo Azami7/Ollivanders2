@@ -42,14 +42,6 @@ abstract public class StationarySpellTest extends O2SpellTestSuper {
     abstract O2StationarySpellType getStationarySpellType();
 
     /**
-     * Spell construction test (overridden with empty implementation).
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Tests the core effects of stationary spell creation and configuration.
      *
      * <p>Verifies that:

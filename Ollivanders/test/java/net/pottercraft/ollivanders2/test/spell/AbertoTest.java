@@ -41,13 +41,6 @@ public class AbertoTest extends O2SpellTestSuper {
     O2SpellType getSpellType() {
         return O2SpellType.ABERTO;
     }
-
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // aberto has no spell-specific settings
-    }
-
     /**
      * Test ABERTO spell behavior for door opening and locking protection.
      *

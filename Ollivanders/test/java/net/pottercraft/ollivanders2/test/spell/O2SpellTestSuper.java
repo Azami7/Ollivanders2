@@ -184,7 +184,7 @@ public abstract class O2SpellTestSuper {
      * target material allow and block lists, world guard flags, projectile radius, and any spell-specific settings
      */
     @Test
-    abstract void spellConstructionTest();
+    void spellConstructionTest() {}
 
     /**
      * Test the specific spell functionality

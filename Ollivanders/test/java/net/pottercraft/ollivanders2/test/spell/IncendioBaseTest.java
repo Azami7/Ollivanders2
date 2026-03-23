@@ -44,17 +44,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class IncendioBaseTest extends O2SpellTestSuper {
     /**
-     * Tests spell construction and configuration.
-     *
-     * <p>Default implementation is empty. Subclasses may override to validate spell-specific
-     * setup such as strafe settings, radius values, and duration modifiers.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Tests basic fire spell effect on a burnable block.
      *
      * <p>Verifies that:

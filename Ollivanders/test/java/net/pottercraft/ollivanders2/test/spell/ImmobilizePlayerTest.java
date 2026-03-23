@@ -41,15 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     /**
-     * Overridden to do nothing. Immobilize spells have no construction requirements beyond
-     * those covered by inherited base class tests.
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Test that the immobilize spell correctly targets and applies effects to nearby players.
      *
      * <p>Verifies that the spell detects a nearby player target and applies the appropriate immobilization

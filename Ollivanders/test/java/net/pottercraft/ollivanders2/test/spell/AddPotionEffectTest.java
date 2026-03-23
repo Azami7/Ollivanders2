@@ -25,15 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract class AddPotionEffectTest extends O2SpellTestSuper {
     /**
-     * Spell construction test (empty for potion effect spells).
-     *
-     * <p>Potion effect spells do not require construction validation.</p>
-     */
-    @Override
-    void spellConstructionTest() {
-    }
-
-    /**
      * Test that the spell applies potion effects to the correct target(s).
      *
      * <p>Verifies that when a spell is cast toward a nearby player, the appropriate potion

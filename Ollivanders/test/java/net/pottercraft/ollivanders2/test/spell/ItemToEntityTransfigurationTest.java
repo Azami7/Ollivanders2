@@ -71,6 +71,11 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
         return null;
     }
 
+    /**
+     * Returns true since these spells only target items
+     *
+     * @return true
+     */
     @Override
     boolean transfiguresItems() {
         return true;

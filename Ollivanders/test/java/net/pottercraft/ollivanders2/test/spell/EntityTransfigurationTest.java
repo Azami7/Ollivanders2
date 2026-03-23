@@ -89,14 +89,6 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Not applicable for entity transfiguration spells.
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Spawn a specified entity type at a specified location.
      *
      * @param location the spawn location

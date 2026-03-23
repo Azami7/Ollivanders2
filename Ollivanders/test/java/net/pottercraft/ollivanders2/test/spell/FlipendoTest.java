@@ -51,6 +51,9 @@ public class FlipendoTest extends KnockbackTest {
         return EntityType.EGG;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override @Test
     void spellConstructionTest() {
         World testWorld = mockServer.addSimpleWorld("world");

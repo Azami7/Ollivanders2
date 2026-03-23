@@ -37,11 +37,6 @@ public class AlohomoraTest extends O2SpellTestSuper {
         return O2SpellType.ALOHOMORA;
     }
 
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
     /**
      * Test ALOHOMORA spell behavior for COLLOPORTUS removal.
      *

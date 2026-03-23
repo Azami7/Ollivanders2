@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for the DURO spell (hardening charm).
@@ -66,17 +65,5 @@ public class DuroTest extends BlockTransfigurationTest {
     @NotNull
     Material getInvalidTargetType() {
         return Ollivanders2Common.getUnbreakableMaterials().getFirst();
-    }
-
-    /**
-     * Overrides spellConstructionTest with no additional implementation.
-     *
-     * <p>DURO uses the default construction behavior provided by the parent test class.
-     * No spell-specific construction tests are needed beyond the inherited test coverage.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-
     }
 }

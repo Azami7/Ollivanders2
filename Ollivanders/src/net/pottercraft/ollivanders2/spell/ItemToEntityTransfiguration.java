@@ -151,7 +151,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     public Map<Material, EntityType> getTransfigurationMap() {
-        return new HashMap<Material, EntityType>() {{
+        return new HashMap<>() {{
             putAll(transfigurationMap);
         }};
     }

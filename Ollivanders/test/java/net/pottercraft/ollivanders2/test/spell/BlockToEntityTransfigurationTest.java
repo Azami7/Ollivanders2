@@ -52,14 +52,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper {
     /**
-     * Overridden to do nothing. Block-to-entity transfiguration spells have no construction
-     * requirements beyond those covered by inherited base class tests.
-     */
-    @Override @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Get a valid target material that this spell can transfigure.
      *
      * @return a block material that the spell can transfigure

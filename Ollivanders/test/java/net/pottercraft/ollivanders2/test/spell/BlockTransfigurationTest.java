@@ -64,14 +64,6 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     abstract Material getInvalidTargetType();
 
     /**
-     * Should not be needed for most block transfiguration spells, specific spells should override as needed
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Tests spell behavior when targeting invalid (blocked) materials.
      *
      * <p>Verifies that the spell hits the target but fails to transfigure blocks

@@ -54,17 +54,6 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test spell construction and initial configuration.
-     *
-     * <p>ARRESTO_MOMENTUM has no spell-specific construction requirements beyond those tested
-     * in the base class.</p>
-     */
-    @Override @Test
-    void spellConstructionTest() {
-        // arresto momentum has no spell-specific settings
-    }
-
-    /**
      * Test that the spell targets and slows items.
      *
      * <p>Verifies that when no valid living entity is nearby, the spell falls back to targeting

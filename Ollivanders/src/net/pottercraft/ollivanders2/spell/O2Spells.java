@@ -351,10 +351,7 @@ public class O2Spells {
                 return zone.allowedSpells.contains(spellType);
         }
 
-        if (isExplicitlyDisallowed(location, spellType))
-            return false;
-
-        return true;
+        return !(isExplicitlyDisallowed(location, spellType));
     }
 
     /**

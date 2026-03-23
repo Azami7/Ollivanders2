@@ -54,11 +54,6 @@ abstract public class ItemToItemTransfigurationTest extends O2SpellTestSuper {
      */
     abstract Material getInvalidItemType();
 
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
     /**
      * Test the spell effect with both invalid and valid item types.
      *

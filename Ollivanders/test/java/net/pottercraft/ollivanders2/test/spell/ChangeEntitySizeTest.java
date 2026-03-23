@@ -28,12 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 abstract public class ChangeEntitySizeTest extends O2SpellTestSuper {
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // no special set up code
-    }
-
     /**
      * Tests that doCheckEffect() changes the age state of a peaceful Ageable entity.
      *

@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -101,7 +102,7 @@ public class O2SpellsTest {
      * Test that getAllSpellTypes returns a populated list of loaded spell types.
      */
     private void testGetAllSpellTypes() {
-        List<O2SpellType> allSpells = Ollivanders2API.getSpells().getAllSpellTypes();
+        List<O2SpellType> allSpells = O2Spells.getAllSpellTypes();
 
         assertNotNull(allSpells, "getAllSpellTypes() should not return null");
         assertFalse(allSpells.isEmpty(), "getAllSpellTypes() should not be empty");
