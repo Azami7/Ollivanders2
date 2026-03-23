@@ -8,10 +8,10 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * match to needle
+ * Match to needle transfiguration spell. Turns sticks into arrows.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Match_to_needle_spell">https://harrypotter.fandom.com/wiki/Match_to_needle_spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Match_to_needle_spell">https://harrypotter.fandom.com/wiki/Match_to_needle_spell</a>
  */
 public final class CALAMUS extends ItemToItemTransfiguration {
     /**
@@ -43,7 +43,6 @@ public final class CALAMUS extends ItemToItemTransfiguration {
         transfigurationMap.put(Material.STICK, Material.ARROW);
         successMessage = "You changed a stick in to an arrow.";
         failureMessage = "Nothing happens.";
-        permanent = true;
 
         initSpell();
 

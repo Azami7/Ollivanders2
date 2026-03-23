@@ -66,11 +66,6 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     @Nullable
     abstract Material getInvalidItemType();
 
-    @Override
-    void spellConstructionTest() {
-        // no special set up code
-    }
-
     /**
      * Create a valid item stack that this enchantment spell can target.
      *

@@ -84,18 +84,6 @@ public class AguamentiTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Overrides spellConstructionTest with no additional implementation.
-     *
-     * <p>AGUAMENTI uses the default construction behavior provided by the parent test class.
-     * No spell-specific construction tests are needed beyond the inherited test coverage.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-
-    }
-
-    /**
      * Tests AGUAMENTI's special targeting and water placement behavior.
      *
      * <p>AGUAMENTI places water adjacent to solid surfaces using its special getTargetBlock()

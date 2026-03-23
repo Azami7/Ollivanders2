@@ -340,7 +340,7 @@ public abstract class BlockTransfiguration extends Transfiguration {
      * @return true if this spell is affecting this block, false otherwise
      */
     @Override
-    public boolean isBlockTransfigured(@NotNull Block block) {
+    public boolean isTransfigured(@NotNull Block block) {
         if (permanent)
             // if this spell is permanent, it is no longer considered as "affecting" the block, the block *is* the new type
             // this condition should never happen because permanent spells should be killed but just in case one is hanging around
@@ -359,7 +359,7 @@ public abstract class BlockTransfiguration extends Transfiguration {
      * @return false, as block transfiguration spells do not affect entities
      */
     @Override
-    public boolean isEntityTransfigured(@NotNull Entity entity) {
+    public boolean isTransfigured(@NotNull Entity entity) {
         return false;
     }
 

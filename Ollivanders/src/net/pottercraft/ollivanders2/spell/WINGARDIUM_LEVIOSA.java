@@ -1,72 +1,45 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.block.BlockCommon;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Moves a group of blocks.
+ * Levitation Charm. Levitates a nearby item and lets the caster move it through the air while sneaking.
+ *
+ * <p>The spell projectile travels outward searching for a dropped item. When an item is found and
+ * the caster is sneaking, the item's gravity is disabled so it can float to follow the caster's gaze
+ * direction. When the caster stops sneaking, gravity is restored and the spell ends.</p>
+ *
+ * <p>If the projectile finds an item but the caster is not sneaking, the spell fails.</p>
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Levitation_Charm">https://harrypotter.fandom.com/wiki/Levitation_Charm</a>
  */
 public final class WINGARDIUM_LEVIOSA extends O2Spell {
     /**
-     * The map of block data for the selected blocks
+     * Whether the spell has acquired an item and is actively moving it.
      */
-    Map<Location, BlockData> blockDataMap = new HashMap<>();
+    boolean moving = false;
 
     /**
-     * A list of the selected blocks
+     * How long the caster can levitate the item, based on their skill
      */
-    List<Block> blockList = new ArrayList<>();
+    int moveTicks = 0;
 
     /**
-     * The location of the selected blocks
+     * The item being levitated.
      */
-    List<Location> locList = new ArrayList<>();
-
-    /**
-     * Are we actively moving blocks?
-     */
-    boolean moving = true;
-
-    /**
-     * How far we move the blocks (I think...)
-     */
-    double length = 0;
-
-    /**
-     * The maximum radius of blocks that can be selected
-     */
-    int maxRadius = 5;
-
-    /**
-     * The radius of blocks selected
-     */
-    int radius = 1;
-
-    /**
-     * If the blocks should be converted to fallingBlocks after the end of the spell.
-     */
-    boolean dropBlocks = true;
+    Item target = null;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -85,7 +58,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
             add("The Levitation Charm is one of the first spells learnt by any young witch or wizard.  With the charm a witch or wizard can make things fly with the flick of a wand.");
         }};
 
-        text = "Levitates and lets you move blocks while crouching.";
+        text = "Levitates items and allows you to move them while crouching.";
     }
 
     /**
@@ -101,16 +74,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
         spellType = O2SpellType.WINGARDIUM_LEVIOSA;
         branch = O2MagicBranch.CHARMS;
 
-        materialBlockedList.add(Material.LAVA);
-        materialBlockedList.add(Material.SAND);
-        materialBlockedList.add(Material.GRAVEL);
-
-        // make sure none of these are on the pass-through list
-        projectilePassThrough.removeAll(materialBlockedList);
-
         // world guard flags
         if (Ollivanders2.worldGuardEnabled) {
-            worldGuardFlags.add(Flags.BUILD);
             worldGuardFlags.add(Flags.ITEM_PICKUP);
             worldGuardFlags.add(Flags.ITEM_DROP);
         }
@@ -119,124 +84,89 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
     }
 
     /**
-     * Set the radius based on the caster's skill
-     */
-    @Override
-    void doInitSpell() {
-        radius = (int) usesModifier / 20;
-        if (radius > maxRadius)
-            radius = maxRadius;
-        else if (radius < 1)
-            radius = 1;
-    }
-
-    /**
-     * Select and move a group of blocks
-     */
-    @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
-        if (moving) {
-            move();
-
-            Material type = location.getBlock().getType();
-            if (type != Material.AIR && type != Material.WATER && type != Material.LAVA) {
-                moving = false;
-
-                ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-                for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-                    if (stat instanceof COLLOPORTUS) {
-                        collos.add((COLLOPORTUS) stat);
-                    }
-                }
-
-                for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
-                    boolean insideCollo = false;
-                    for (COLLOPORTUS collo : collos) {
-                        if (collo.isLocationInside(block.getLocation())) {
-                            insideCollo = true;
-                        }
-                    }
-
-                    if (!insideCollo) {
-                        type = block.getType();
-                        if (!materialBlockedList.contains(type) && type.isSolid()) {
-                            Location loc = centerOfBlock(block).subtract(location);
-                            blockDataMap.put(loc, block.getBlockData());
-                            locList.add(loc);
-                            blockList.add(block);
-                        }
-                    }
-                }
-                length = caster.getEyeLocation().distance(location);
-            }
-        }
-        else {
-            if (caster.isSneaking()) {
-                List<Location> locList2 = new ArrayList<>(locList);
-                for (Block block : blockList) {
-                    if (block.getType() == Material.AIR) {
-                        locList2.remove(locList.get(blockList.indexOf(block)));
-                    }
-                }
-                locList = locList2;
-                for (Block block : blockList) {
-                    block.setType(Material.AIR);
-                }
-                blockList.clear();
-                for (Location loc : locList) {
-                    Vector direction = caster.getEyeLocation().getDirection().multiply(length);
-                    Location center = caster.getEyeLocation().add(direction);
-                    location = center;
-                    Location toLoc = center.clone().add(loc);
-                    if (toLoc.getBlock().getType() == Material.AIR) {
-                        toLoc.getBlock().setType(blockDataMap.get(loc).getMaterial());
-                        blockList.add(toLoc.getBlock());
-                    }
-                }
-            }
-            else if (dropBlocks) {
-                for (Block block : blockList) {
-                    block.setType(Material.AIR);
-                }
-                Vector direction = caster.getEyeLocation().getDirection().multiply(length);
-                Location center = caster.getEyeLocation().add(direction);
-                Vector moveVec = center.toVector().subtract(location.toVector());
-                for (Location loc : locList) {
-                    Location toLoc = center.clone().add(loc);
-                    BlockData blockData = blockDataMap.get(loc);
-
-                    FallingBlock fall = world.spawnFallingBlock(toLoc, blockData);
-                    fall.setVelocity(moveVec);
-                }
-                kill();
-            }
-            else {
-                kill();
-            }
-        }
-    }
-
-    /**
-     * Returns the location at the center of the block, instead of the corner.
+     * Search for a nearby item to levitate, or move the currently levitated item.
      *
-     * @param block - Block to get the center location of.
-     * @return Location at the center of the block.
+     * <p>Two phases:</p>
+     *
+     * <ul>
+     * <li><strong>Targeting:</strong> While the projectile is in flight, searches for nearby items.
+     *     If an item is found and the caster is sneaking, disables its gravity and begins levitation.
+     *     If the caster is not sneaking, the spell fails. If no item is found and the projectile has
+     *     stopped, the spell is killed.</li>
+     * <li><strong>Moving:</strong> Each tick while the caster is sneaking, sets the item's velocity
+     *     toward the point along the caster's gaze at the item's current distance, creating smooth
+     *     flight. When the caster stops sneaking, restores gravity and kills the spell.</li>
+     * </ul>
      */
-    @NotNull
-    private Location centerOfBlock(@NotNull Block block) {
-        Location newLoc = block.getLocation().clone();
-        newLoc.setX(newLoc.getX() + 0.5);
-        newLoc.setY(newLoc.getY() + 0.5);
-        newLoc.setZ(newLoc.getZ() + 0.5);
-        return newLoc;
-    }
-
     @Override
     protected void doCheckEffect() {
+        if (moving) { // we have targeted an item to move
+            if (caster.isSneaking()) {
+                // calculate the point along the caster's gaze at the item's current distance
+                Location eyeLoc = caster.getEyeLocation();
+                double distance = eyeLoc.distance(target.getLocation());
+                Location gazeLoc = eyeLoc.add(eyeLoc.getDirection().multiply(distance));
+
+                // set velocity toward the gaze point, scaled for smooth movement
+                Vector velocity = gazeLoc.toVector().subtract(target.getLocation().toVector()).multiply(0.3);
+                target.setVelocity(velocity);
+                moveTicks = moveTicks - 1;
+
+                if (moveTicks <= 0) // caster cannot hold the item up any longer
+                    kill();
+            }
+            else { // caster stopped sneaking, end spell
+                kill();
+            }
+        }
+        else { // we have not yet targeted an item to move
+            List<Item> nearbyItems = getNearbyItems(defaultRadius);
+
+            if (nearbyItems.isEmpty()) {
+                if (hasHitTarget()) // we failed to find a target and the projectile has stopped
+                    kill();
+            }
+            else {
+                target = nearbyItems.getFirst();
+
+                if (caster.isSneaking()) {
+                    moving = true;
+                    target.setGravity(false); // turn off gravity so this item no longer falls
+                    moveTicks = calculateMoveTicks();
+                }
+                else {
+                    sendFailureMessage();
+                    kill();
+                }
+            }
+        }
+    }
+
+    /**
+     * Calculate the number of ticks the player can levitate the item for based on their skill level
+     *
+     * @return the number of ticks the item can levitate
+     */
+    public int calculateMoveTicks() {
+        return (int)((usesModifier / 10) * Ollivanders2Common.ticksPerSecond);
+    }
+
+    /**
+     * Turn back on gravity for the target item
+     */
+    @Override
+    protected void revert() {
+        moving = false;
+
+        if (target != null)
+            target.setGravity(true);
+    }
+
+    public int getMoveTicks() {
+        return moveTicks;
+    }
+
+    public boolean isMoving() {
+        return moving;
     }
 }

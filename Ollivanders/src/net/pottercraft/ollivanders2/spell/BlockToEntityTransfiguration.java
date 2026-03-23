@@ -137,7 +137,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * @return true if transfigured, false otherwise
      */
     @Override
-    public boolean isEntityTransfigured(@NotNull Entity entity) {
+    public boolean isTransfigured(@NotNull Entity entity) {
         if (permanent)
             return false;
 
@@ -154,7 +154,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * @return false - since the block is now an entity, it isn't considered a block anymore
      */
     @Override
-    public boolean isBlockTransfigured(@NotNull Block block) {
+    public boolean isTransfigured(@NotNull Block block) {
         return false;
     }
 

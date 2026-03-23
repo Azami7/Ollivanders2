@@ -24,16 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class BombaraBaseTest extends O2SpellTestSuper {
     /**
-     * {@inheritDoc}
-     *
-     * <p>No specific construction tests needed for Bombarda spells.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Must meet both the blast resistance and hardness requirements, cannot be unbreakable, should not be a door since
      * that is explicitly tested.
      *

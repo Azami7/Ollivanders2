@@ -40,12 +40,6 @@ public class AmatoAnimoAnimatoAnimagusTest extends O2SpellTestSuper {
         return O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
     /**
      * Verifies the animagus incantation and transformation behavior.
      *

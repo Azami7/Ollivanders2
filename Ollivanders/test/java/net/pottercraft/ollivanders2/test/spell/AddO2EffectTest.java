@@ -37,10 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 abstract public class AddO2EffectTest extends O2SpellTestSuper {
-    @Override
-    void spellConstructionTest() {
-    }
-
     /**
      * Whether this spell applies a Bukkit potion effect rather than a custom O2Effect.
      *
