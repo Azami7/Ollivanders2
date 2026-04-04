@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * be transfigured.</p>
  *
  * @author Azami7
- * @see LIGATIS_COR for the complementary wand-to-log spell
+ * @see LIGATIS_COR for the complementary core-binding spell
  */
 public final class FRANGE_LIGNEA extends O2Spell {
     /**
@@ -77,10 +77,9 @@ public final class FRANGE_LIGNEA extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
-            return;
-
-        kill();
+        // projectile has stopped, kill the spell
+        if (hasHitTarget())
+            kill();
 
         Block target = getTargetBlock();
         if (target == null)
@@ -89,16 +88,12 @@ public final class FRANGE_LIGNEA extends O2Spell {
         Material blockType = target.getType();
 
         if (Ollivanders2Common.isNaturalLog(blockType)) {
-            if (O2WandWoodType.isWandWood(blockType)) {
-                caster.sendMessage(Ollivanders2.chatColor + "The targeted log is not suitable for wand making.");
+            if (!O2WandWoodType.isWandWood(blockType)) {
+                failureMessage = "The targeted log is not suitable for wand making.";
+
+                sendFailureMessage();
                 return;
             }
-
-            int amount = (int) (usesModifier * 0.1);
-            if (amount > maxAmount)
-                amount = maxAmount;
-            else if (amount < 1)
-                amount = 1;
 
             // make a stack of coreless wands
             O2WandWoodType woodType = O2WandWoodType.getWandWoodTypeByMaterial(blockType);
@@ -107,16 +102,37 @@ public final class FRANGE_LIGNEA extends O2Spell {
                 return;
             }
 
+            // determine the amount of coreless wands based on caster's skill
+            int amount = (int) Math.floor(usesModifier / 10);
+            if (amount > maxAmount)
+                amount = maxAmount;
+            else if (amount < 1)
+                amount = 1;
+
             ItemStack corelessWands = Ollivanders2API.getItems().getWands().createCorelessWand(woodType, amount);
+
             if (corelessWands == null) {
                 common.printDebugMessage("Frange Lignea: failed to create coreless wands", null, null, true);
                 return;
             }
 
-            world.createExplosion(target.getLocation(), 0);
-            caster.getWorld().dropItemNaturally(target.getLocation(), corelessWands);
-
+            if (!Ollivanders2.testMode)
+                world.createExplosion(location, 0);
             target.setType(Material.AIR);
+            world.dropItemNaturally(location, corelessWands);
         }
+        else {
+            common.printDebugMessage(blockType + " is not a natural log type", null, null, false);
+            sendFailureMessage();
+        }
+    }
+
+    /**
+     * Get the maximum number of coreless wands that can be created by the spell.
+     *
+     * @return the maximum number of coreless wands to create.
+     */
+    public int getMaxAmount() {
+        return maxAmount;
     }
 }

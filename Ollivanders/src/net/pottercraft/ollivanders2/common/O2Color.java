@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 public enum O2Color {
     /**
      * aqua - Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE
+     *
      */
     AQUA(Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE),
     /**
@@ -383,15 +384,11 @@ public enum O2Color {
         // determine if a material is colorable
         String materialName = material.toString();
 
-        if (materialName.endsWith("_WOOL") || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
+        return (materialName.endsWith("_WOOL") || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
                 || materialName.endsWith("_CONCRETE_POWDER") || materialName.endsWith("_SHULKER_BOX")
                 || materialName.endsWith("_STAINED_GLASS") || materialName.endsWith("_STAINED_GLASS_PANE")
                 || materialName.endsWith("_BED") || materialName.endsWith("_CANDLE")
-                || materialName.endsWith("_BANNER")) {
-            return true;
-        }
-
-        return false;
+                || materialName.endsWith("_BANNER"));
     }
 
     /**

@@ -16,10 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * If a coreless wand is near enough a core material, makes a wand of the wand wood type and core type. Itemstack amount
- * is 1 regardless of how many items were in either starting stack.
- * <p>
- * {@link FRANGE_LIGNEA}
+ * Spell that binds a core material to a coreless wand to create a finished wand.
+ *
+ * <p>When cast near a coreless wand and a core material item, the spell combines them into a complete wand.
+ * One coreless wand and one core material are consumed per cast.</p>
+ *
+ * @author Azami7
+ * @see FRANGE_LIGNEA for the complementary log-to-coreless-wand spell
  */
 public final class LIGATIS_COR extends O2Spell {
     /**
@@ -64,60 +67,73 @@ public final class LIGATIS_COR extends O2Spell {
     @Override
     protected void doCheckEffect() {
         // projectile has stopped, kill the spell
-        if (hasHitTarget()) {
-            caster.sendMessage(Ollivanders2.chatColor + "Spell failed to find a coreless wand.");
+        if (hasHitTarget())
             kill();
+
+        Item corelessWand = null;
+
+        for (Item item : getNearbyItems(1.5)) {
+            if (Ollivanders2API.getItems().getWands().isCorelessWand(item.getItemStack())) {
+                corelessWand = item;
+                break;
+            }
+        }
+
+        if (corelessWand == null) {
+            if (isKilled()) // we never found a coreless wand
+                sendFailureMessage();
             return;
         }
 
-        // is there a wand nearby?
-        Item baseWand = EntityCommon.getNearbyO2ItemByType(location, O2ItemType.WAND, 1.5);
-        if (baseWand == null)
-            return;
-
-        // is this wand already complete?
-        if (Ollivanders2API.getItems().getWands().isWand(baseWand.getItemStack()))
-            return;
-
+        // we've found a coreless wand candidate to target, kill the spell
         kill();
-        createAndDropWand(baseWand);
+
+        // attempt to create the wand and drop it in world
+        createAndDropWand(corelessWand);
     }
 
     /**
-     * Create the wand from the material and core.
+     * Find a nearby core material, create a finished wand, decrement both item stacks, and drop the wand item in
+     * to the world.
      *
-     * @param baseWand a coreless wand
+     * @param corelessWand a coreless wand item entity
      */
-    private void createAndDropWand(@NotNull Item baseWand) {
+    private void createAndDropWand(@NotNull Item corelessWand) {
         ItemStack wand;
 
         // is there a core item type nearby?
-        Item coreItem = getNearbyWandCore(baseWand.getLocation());
-        if (coreItem == null)
+        Item coreItem = getNearbyWandCore(corelessWand.getLocation());
+        if (coreItem == null) {
+            sendFailureMessage(); // we only send here because this is the only player-caused failure, all others should not happen, they would be code bugs
             return;
+        }
 
         O2ItemType coreItemType = Ollivanders2API.getItems().getItemTypeByItem(coreItem);
-        if (coreItemType == null)
+        if (coreItemType == null) {
+            common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to find core O2Item", null, null, true);
             return;
+        }
 
         O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByItemType(coreItemType);
-        if (coreType == null)
+        if (coreType == null) {
+            common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to get O2WandCore by type", null, null, true);
             return;
+        }
 
-        wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(baseWand.getItemStack(), coreType, 1);
+        wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(corelessWand.getItemStack(), coreType, 1);
 
-        if (wand == null)
+        if (wand == null) {
+            common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to make wand", null, null, true);
             return;
+        }
 
-        Location dropLocation = caster.getLocation();
-
-        int amount = baseWand.getItemStack().getAmount();
+        int amount = corelessWand.getItemStack().getAmount();
 
         // decrement the baseWand amount
         if (amount > 1)
-            baseWand.getItemStack().setAmount(amount - 1);
+            corelessWand.getItemStack().setAmount(amount - 1);
         else
-            baseWand.remove();
+            corelessWand.remove();
 
         // decrement the core material
         amount = coreItem.getItemStack().getAmount();
@@ -127,7 +143,7 @@ public final class LIGATIS_COR extends O2Spell {
             coreItem.remove();
 
         // drop the wand
-        world.dropItemNaturally(dropLocation, wand);
+        world.dropItemNaturally(location, wand);
     }
 
     /**
