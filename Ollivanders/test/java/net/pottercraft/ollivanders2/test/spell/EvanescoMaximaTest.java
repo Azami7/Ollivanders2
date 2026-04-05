@@ -64,6 +64,11 @@ public class EvanescoMaximaTest extends EntityTransfigurationTest {
         return null;
     }
 
+    @Override
+    boolean transfiguresItems() {
+        return true;
+    }
+
     /**
      * Test that EVANESCO_MAXIMA permanently removes the entity with no entities remaining at the target.
      */

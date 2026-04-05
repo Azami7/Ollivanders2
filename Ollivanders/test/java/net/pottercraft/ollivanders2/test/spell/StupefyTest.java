@@ -40,7 +40,7 @@ public class StupefyTest extends AddPotionEffectTest {
      *
      * <p>Verifies that the Blindness and Slowness amplifiers scale correctly through three tiers:
      * Blindness I / Slowness I (amplifier 0) at low skill levels, Blindness II / Slowness II
-     * (amplifier 1) at mid skill levels, and Blindness III / Slowness III (amplifier 2) at
+     * (amplifier 1) at mid-skill levels, and Blindness III / Slowness III (amplifier 2) at
      * high skill levels.</p>
      */
     @Override

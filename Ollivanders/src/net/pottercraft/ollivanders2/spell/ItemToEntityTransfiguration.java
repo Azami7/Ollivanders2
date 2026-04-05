@@ -3,8 +3,6 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.item.enchantment.Enchantment;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -42,11 +40,6 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
      * Optional custom name for the transfigured entity
      */
     String entityCustomName = null;
-
-    /**
-     * Can this spell target enchanted items
-     */
-    boolean transfigureEnchantedItems = false;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -107,17 +100,20 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     /**
-     * Determine if this entity be transfigured by this spell.
-     * <p>
-     * Entity can transfigure if:<br>
-     * 1. (super) success check passes<br>
-     * 2. (super) It is not in the blocked list<br>
-     * 3. (super) It is in the allowed list, if the allowed list exists<br>
-     * 4. (super) The entity is not already the target type<br>
-     * 5. (super) There are no WorldGuard permissions preventing the caster from altering this entity type<br>
-     * 6. The entity is an Item<br>
-     * 7. The item type is in the transfiguration map, if it is populated<br>
-     * 8. The item is not enchanted -or- the magic level of the enchantment is lower than this spell's magic level<br>
+     * Determine if this entity can be transfigured by this spell.
+     *
+     * <p>Entity can be transfigured if:</p>
+     *
+     * <ol>
+     * <li>(super) Success check passes</li>
+     * <li>(super) It is not in the blocked list</li>
+     * <li>(super) It is in the allowed list, if the allowed list exists</li>
+     * <li>(super) The entity is not already the target type</li>
+     * <li>(super) The item is not enchanted, or the enchantment level is lower than this spell's level</li>
+     * <li>(super) The entity is not already transfigured by another spell</li>
+     * <li>The entity is an Item</li>
+     * <li>The item type is in the transfiguration map, if it is populated</li>
+     * </ol>
      *
      * @param entity the entity to check
      * @return true if it can be changed
@@ -130,23 +126,12 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
         if (!(entity instanceof Item))
             return false;
 
-        // make sure it is a type we can transfigure
-        Material itemType = ((Item) entity).getItemStack().getType();
-        if (!transfigurationMap.isEmpty() && !transfigurationMap.containsKey(itemType))
-            return false;
-
-        // if all prev checks passed, now verify this item is not enchanted
-        if (Ollivanders2API.getItems().enchantedItems.isEnchanted((Item) entity)) {
-            if (!transfigureEnchantedItems)
-                return false;
-            else {
-                Enchantment enchantment = Ollivanders2API.getItems().enchantedItems.getEnchantment(((Item) entity).getItemStack());
-                if (enchantment != null && enchantment.getType().getLevel().ordinal() > this.spellType.getLevel().ordinal())
-                    return false;
-            }
+        if (transfigurationMap.isEmpty())
+            return true;
+        else {
+            Material itemType = ((Item) entity).getItemStack().getType();
+            return transfigurationMap.containsKey(itemType);
         }
-
-        return true;
     }
 
     /**
@@ -166,12 +151,8 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     public Map<Material, EntityType> getTransfigurationMap() {
-        return new HashMap<Material, EntityType>() {{
+        return new HashMap<>() {{
             putAll(transfigurationMap);
         }};
-    }
-
-    public boolean doesTransfigureEnchantedItems() {
-        return transfigureEnchantedItems;
     }
 }

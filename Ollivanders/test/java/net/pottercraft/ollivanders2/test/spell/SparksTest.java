@@ -32,11 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 abstract public class SparksTest extends O2SpellTestSuper {
-    @Override
-    void spellConstructionTest() {
-        // no special set up code
-    }
-
     /**
      * Tests core Sparks spell functionality.
      *

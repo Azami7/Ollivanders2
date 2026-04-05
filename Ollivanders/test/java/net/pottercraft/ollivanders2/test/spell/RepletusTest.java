@@ -40,15 +40,6 @@ public class RepletusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell construction. No special construction code needed for REPLETUS.
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // no special set up needed
-    }
-
-    /**
      * Tests bucket refilling.
      *
      * <p>Verifies that:</p>

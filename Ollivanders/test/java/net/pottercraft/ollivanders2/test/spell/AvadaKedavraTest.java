@@ -25,16 +25,6 @@ public class AvadaKedavraTest extends O2SpellTestSuper {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * <p>No specific construction tests needed for this spell.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
-    /**
      * Tests damage scaling and target death mechanics.
      *
      * <p>Verifies that:</p>

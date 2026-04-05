@@ -145,7 +145,7 @@ public final class REPARIFARGE extends O2Spell {
      */
     public boolean reparifargeEntity(@NotNull Entity target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
-            if (spell instanceof Transfiguration && ((Transfiguration) spell).isEntityTransfigured(target)) {
+            if (spell instanceof Transfiguration && ((Transfiguration) spell).isTransfigured(target)) {
                 if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
                     spell.kill();
 
@@ -172,7 +172,7 @@ public final class REPARIFARGE extends O2Spell {
      */
     public boolean reparifargeBlock(@NotNull Block target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
-            if (spell instanceof Transfiguration && ((Transfiguration) spell).isBlockTransfigured(target)) {
+            if (spell instanceof Transfiguration && ((Transfiguration) spell).isTransfigured(target)) {
                 if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
                     spell.kill();
 

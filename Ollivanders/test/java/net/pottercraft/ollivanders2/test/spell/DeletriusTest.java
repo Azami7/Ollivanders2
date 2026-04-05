@@ -30,12 +30,6 @@ public class DeletriusTest extends O2SpellTestSuper {
         return O2SpellType.DELETRIUS;
     }
 
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // deletrius has no special set up actions
-    }
-
     /**
      * Tests that doCheckEffect() removes an AreaEffectCloud within range and kills the spell.
      *

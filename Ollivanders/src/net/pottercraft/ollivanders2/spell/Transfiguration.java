@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -227,6 +228,14 @@ public abstract class Transfiguration extends O2Spell {
             if (getAge() >= effectDuration)
                 kill();
         }
+
+        if (hasHitTarget() && !isTransfigured) {
+            // we've hit a block and the projectile is stopped, but we didn't find anything to transfigure
+            common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
+            sendFailureMessage();
+
+            kill();
+        }
     }
 
     /**
@@ -251,6 +260,26 @@ public abstract class Transfiguration extends O2Spell {
     }
 
     /**
+     * Check to see if this entity is already a temporary transfiguration. We do not need the same function for block because BlockCommon
+     * already tracks changed blocks.
+     *
+     * @param entity the entity to check
+     * @return false if the entity is the target of an active, non-permanent transfiguration
+     */
+    boolean canTransfigure(Entity entity) {
+        for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
+            if (spell instanceof Transfiguration) {
+                if (((Transfiguration) spell).isTransfigured(entity) && !((Transfiguration) spell).isPermanent()) {
+                    common.printDebugMessage(entity.getName() + " is already transfigured", null, null, false);
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Determines if a specific entity is currently affected by this transfiguration spell.
      *
      * <p>Used to track which entities have been transfigured by this spell instance.
@@ -260,7 +289,7 @@ public abstract class Transfiguration extends O2Spell {
      * @param entity the entity to check
      * @return true if the entity is transfigured by this spell, false otherwise
      */
-    public abstract boolean isEntityTransfigured(@NotNull Entity entity);
+    public abstract boolean isTransfigured(@NotNull Entity entity);
 
     /**
      * Determines if a specific block is currently affected by this transfiguration spell.
@@ -272,7 +301,7 @@ public abstract class Transfiguration extends O2Spell {
      * @param block the block to check
      * @return true if the block is transfigured by this spell, false otherwise
      */
-    public abstract boolean isBlockTransfigured(@NotNull Block block);
+    public abstract boolean isTransfigured(@NotNull Block block);
 
     /**
      * Performs the actual transfiguration on the target.
@@ -302,4 +331,5 @@ public abstract class Transfiguration extends O2Spell {
      * original state.</p>
      */
     protected abstract void revert();
+
 }

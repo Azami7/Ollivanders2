@@ -51,6 +51,9 @@ public class CarpeRetractumTest extends KnockbackTest {
         return EntityType.MINECART;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override @Test
     void spellConstructionTest() {
         World testWorld = mockServer.addSimpleWorld("world");

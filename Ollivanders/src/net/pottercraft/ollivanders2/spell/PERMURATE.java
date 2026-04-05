@@ -2,23 +2,31 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.EntityCommon;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
+import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * Switching Spell
+ * Switching Spell. Swaps the material types of two nearby item entities.
+ *
+ * <p>Finds the first targetable item near the spell projectile, then searches within
+ * {@link #switchRadius} for a second item of a different material type. If both items
+ * are found, their material types are swapped for up to {@link #calculateNumberOfItems()}
+ * items in each stack. If either item cannot be found or both are the same type, the spell fails.</p>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Switching_Spell">https://harrypotter.fandom.com/wiki/Switching_Spell</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Switching_Spell">https://harrypotter.fandom.com/wiki/Switching_Spell</a>
  */
 public class PERMURATE extends ItemToItemTransfiguration {
+    /**
+     * The radius to search for a second item to swap with the first.
+     */
+    double switchRadius = 4;
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -51,8 +59,6 @@ public class PERMURATE extends ItemToItemTransfiguration {
         spellType = O2SpellType.PERMURATE;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        permanent = true;
-
         initSpell();
 
         if (successRate < 10)
@@ -60,67 +66,91 @@ public class PERMURATE extends ItemToItemTransfiguration {
     }
 
     /**
-     * Look for items that can be swapped
+     * Look for two items that can be swapped.
+     *
+     * <p>Finds the first targetable item, stops the projectile, then searches for a second
+     * item within {@link #switchRadius} that is a different material type. If both are found,
+     * swaps their material types via {@link #swapItemStacks(Item, Item)}.</p>
      */
     @Override
-    void transfigure() {
-        if (isTransfigured)
-            // we've already transfigured something
+    protected void transfigure() {
+        if (isTransfigured) // we've already transfigured something
             return;
 
-        Item itemOne = null;
-        // find an item close to the spell projectile path
-        for (Entity entity : getNearbyEntities(defaultRadius)) {
-            if ((entity instanceof Item) && canTransfigure(entity)) {
-                itemOne = (Item) entity;
-
-                common.printDebugMessage("permurate: targeting " + itemOne.getName(), null, null, false);
-                break;
-            }
-        }
-        if (itemOne == null)
+        // get the first item
+        Item itemOne = getTargetableItem(defaultRadius, null);
+        if (itemOne == null) // keep searching on the next tick
             return;
 
         // stop the spell from continuing since we targeted an item
-        kill();
+        stopProjectile();
 
-        // now find a second item near the first to swap with
-        Item itemTwo = null;
-        for (Entity entity : EntityCommon.getEntitiesInRadius(itemOne.getLocation(), 4)) {
-            if (entity.getUniqueId().equals(itemOne.getUniqueId()))
-                continue;
-
-            if ((entity instanceof Item) && canTransfigure(entity)) {
-                itemTwo = (Item) entity;
-
-                common.printDebugMessage("permurate: second target " + itemOne.getName(), null, null, false);
-                break;
-            }
-        }
-        if (itemTwo == null)
+        // now find a second item within the switch radius to swap with
+        Item itemTwo = getTargetableItem(switchRadius, itemOne.getUniqueId());
+        if (itemTwo == null) { // spell failed because we targeted item one
             return;
+        }
 
-        Material itemOneMaterial = itemOne.getItemStack().getType();
-        Material itemTwoMaterial = itemTwo.getItemStack().getType();
+        if (itemOne.getItemStack().getType() == itemTwo.getItemStack().getType()) {
+            return; // spell failed because two items are the same type
+        }
 
-        // save the original types so we can revert if something goes wrong
-        changedItems.put(itemOne, itemOneMaterial);
-        changedItems.put(itemTwo, itemTwoMaterial);
+        swapItemStacks(itemOne, itemTwo);
 
-        // make item one the item two type
-        changeItem(itemOne, itemTwoMaterial);
+        isTransfigured = true;
+    }
 
-        if (isTransfigured)
-            // make item two the item one type
-            changeItem(itemTwo, itemOneMaterial);
+    /**
+     * Swap the material types of two item stacks.
+     *
+     * <p>Creates new item stacks with swapped material types, preserving item meta from the originals.
+     * The number of items swapped is limited by {@link #calculateNumberOfItems()} and capped to the
+     * smaller of the two stacks. Original items are removed if fully consumed, or reduced in amount
+     * if partially consumed.</p>
+     *
+     * @param itemOne the first item to swap
+     * @param itemTwo the second item to swap
+     */
+    void swapItemStacks(Item itemOne, Item itemTwo) {
+        ItemStack itemOneStack = itemOne.getItemStack();
+        int itemOneAmount = itemOneStack.getAmount();
+        ItemStack itemTwoStack = itemTwo.getItemStack();
+        int itemTwoAmount = itemTwoStack.getAmount();
+
+        // determine how many items in the stack will change
+        int transAmount = calculateNumberOfItems();
+        if (transAmount > itemOneAmount)
+            transAmount = itemOneAmount;
+        if (transAmount > itemTwoAmount)
+            transAmount = itemTwoAmount;
+
+        // create new stacks with the material type swapped, item meta the same
+        ItemStack transOneStack = new ItemStack(itemTwoStack.getType(), transAmount);
+        transOneStack.setItemMeta(itemOneStack.getItemMeta());
+
+        ItemStack transTwoStack = new ItemStack(itemOneStack.getType(), transAmount);
+        transTwoStack.setItemMeta(itemTwoStack.getItemMeta());
+
+        Location item1Loc = itemOne.getLocation();
+        Location item2Loc = itemTwo.getLocation();
+
+        // update the original stacks
+        if (transAmount >= itemOneAmount)
+            itemOne.remove();
         else {
-            return;
+            itemOneStack.setAmount(itemOneAmount - transAmount);
+            itemOne.setItemStack(itemOneStack);
         }
 
-        if (!isTransfigured) {
-            // change back itemOne
-            permanent = false;
-            revert();
+        if (transAmount >= itemTwoAmount)
+            itemTwo.remove();
+        else {
+            itemTwoStack.setAmount(itemTwoAmount - transAmount);
+            itemTwo.setItemStack(itemTwoStack);
         }
+
+        // drop the transfigured stacks
+        world.dropItem(item1Loc, transOneStack);
+        world.dropItem(item2Loc, transTwoStack);
     }
 }

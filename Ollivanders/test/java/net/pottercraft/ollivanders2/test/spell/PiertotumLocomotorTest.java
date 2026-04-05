@@ -141,7 +141,7 @@ public class PiertotumLocomotorTest extends BlockToEntityTransfigurationTest {
         // when spell is permanent, isEntityTransfigured() returns false because they are permanently changed
         LivingEntity golem = EntityCommon.getLivingEntityAtLocation(target.getLocation());
         assertNotNull(golem);
-        assertFalse(piertotumLocomotor.isEntityTransfigured(golem), "isEntityTransfigured(golem) returned true when it is permanent");
+        assertFalse(piertotumLocomotor.isTransfigured(golem), "isEntityTransfigured(golem) returned true when it is permanent");
         piertotumLocomotor.kill();
     }
 

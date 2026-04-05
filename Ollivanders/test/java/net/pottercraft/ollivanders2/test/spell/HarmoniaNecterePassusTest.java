@@ -40,19 +40,6 @@ public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test spell-specific configuration and initialization.
-     *
-     * <p>Verifies spell-specific settings such as pass-through blocks, move effects,
-     * target material restrictions, and world guard flags. This spell sets WorldGuard
-     * BUILD flag but cannot be tested without a WorldGuard mock.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // harmonia only sets world guard flags, which we do not have tests for because we do not have a WorldGuard mock
-    }
-
-    /**
      * Test vanishing cabinet creation and failure conditions.
      *
      * <p>Verifies that:

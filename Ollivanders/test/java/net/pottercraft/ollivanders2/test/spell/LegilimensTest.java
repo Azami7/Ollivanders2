@@ -53,11 +53,6 @@ public class LegilimensTest extends O2SpellTestSuper {
         return O2SpellType.LEGILIMENS;
     }
 
-    @Override @Test
-    void spellConstructionTest() {
-        // legilimens has no spell-specific settings
-    }
-
     /**
      * Test LEGILIMENS spell behavior across all scenarios.
      *

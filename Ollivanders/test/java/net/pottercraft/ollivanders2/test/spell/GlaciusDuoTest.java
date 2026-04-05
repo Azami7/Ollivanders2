@@ -68,18 +68,6 @@ public class GlaciusDuoTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Overrides spellConstructionTest with no additional implementation.
-     *
-     * <p>GLACIUS_DUO uses the default construction behavior provided by the parent test class.
-     * No spell-specific construction tests are needed beyond the inherited test coverage.</p>
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-
-    }
-
-    /**
      * Overrides sameMaterialTest because it is not applicable to GLACIUS_DUO.
      *
      * <p>GLACIUS_DUO converts ice to packed ice, water to ice, and lava to obsidian. Since

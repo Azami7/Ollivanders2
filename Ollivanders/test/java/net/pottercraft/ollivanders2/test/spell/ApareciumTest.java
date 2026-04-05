@@ -41,12 +41,6 @@ public class ApareciumTest extends O2SpellTestSuper {
         return O2SpellType.APARECIUM;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
     /**
      * Verifies that APARECIUM correctly reveals a CELATUM-concealed book.
      *

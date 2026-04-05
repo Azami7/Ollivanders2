@@ -39,15 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class AquaEructoBaseTest extends O2SpellTestSuper {
     /**
-     * Tests spell construction. No special construction code needed for AQUA_ERUCTO variants.
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // no special construction code
-    }
-
-    /**
      * Creates an entity that is NOT a valid target for the spell.
      *
      * @param location the location to spawn the entity at

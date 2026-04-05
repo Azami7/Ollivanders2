@@ -36,16 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class PyrotechniaTest extends O2SpellTestSuper {
     /**
-     * Overridden to do nothing. Pyrotechnia spell construction is tested as part of
-     * {@link #doCheckEffectTest()} since fireworks are spawned during effect checking.
-     */
-    @Override
-    @Test
-    void spellConstructionTest() {
-        // tested in doCheckEffectTest()
-    }
-
-    /**
      * Test that the spell correctly spawns all configured fireworks with proper properties.
      *
      * <p>Verifies:
