@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Unit tests for O2Color enum.
  *
- * Tests the various color conversion methods and utilities provided by the O2Color enum,
+ * <p>Tests the various color conversion methods and utilities provided by the O2Color enum,
  * including Bukkit color, chat color, dye color conversions, material color operations,
- * and random color generation.
+ * and random color generation.</p>
  */
 public class O2ColorTest {
 
@@ -200,49 +200,12 @@ public class O2ColorTest {
     }
 
     /**
-     * Test that isColorable() correctly identifies wool materials as colorable.
+     * Test that isColorable() correctly identifies banner materials as colorable.
      */
     @Test
-    void isColorableWoolTest() {
-        assertTrue(O2Color.isColorable(Material.RED_WOOL));
-        assertTrue(O2Color.isColorable(Material.BLUE_WOOL));
-        assertTrue(O2Color.isColorable(Material.WHITE_WOOL));
-    }
-
-    /**
-     * Test that isColorable() correctly identifies carpet materials as colorable.
-     */
-    @Test
-    void isColorableCarpetTest() {
-        assertTrue(O2Color.isColorable(Material.RED_CARPET));
-        assertTrue(O2Color.isColorable(Material.GREEN_CARPET));
-    }
-
-    /**
-     * Test that isColorable() correctly identifies concrete and concrete powder materials as colorable.
-     */
-    @Test
-    void isColorableConcreteTest() {
-        assertTrue(O2Color.isColorable(Material.BLUE_CONCRETE));
-        assertTrue(O2Color.isColorable(Material.YELLOW_CONCRETE_POWDER));
-    }
-
-    /**
-     * Test that isColorable() correctly identifies shulker box materials as colorable.
-     */
-    @Test
-    void isColorableShulkerBoxTest() {
-        assertTrue(O2Color.isColorable(Material.RED_SHULKER_BOX));
-        assertTrue(O2Color.isColorable(Material.BLUE_SHULKER_BOX));
-    }
-
-    /**
-     * Test that isColorable() correctly identifies stained glass and stained glass pane materials as colorable.
-     */
-    @Test
-    void isColorableGlassTest() {
-        assertTrue(O2Color.isColorable(Material.RED_STAINED_GLASS));
-        assertTrue(O2Color.isColorable(Material.BLUE_STAINED_GLASS_PANE));
+    void isColorableBannerTest() {
+        assertTrue(O2Color.isColorable(Material.RED_BANNER));
+        assertTrue(O2Color.isColorable(Material.WHITE_BANNER));
     }
 
     /**
@@ -255,21 +218,82 @@ public class O2ColorTest {
     }
 
     /**
+     * Test that isColorable() correctly identifies bundle materials as colorable.
+     */
+    @Test
+    void isColorableBundleTest() {
+        assertTrue(O2Color.isColorable(Material.YELLOW_BUNDLE));
+        assertTrue(O2Color.isColorable(Material.BLUE_BUNDLE));
+        assertTrue(O2Color.isColorable(Material.BUNDLE));
+    }
+
+    /**
      * Test that isColorable() correctly identifies candle materials as colorable.
      */
     @Test
     void isColorableCandleTest() {
         assertTrue(O2Color.isColorable(Material.RED_CANDLE));
-        assertTrue(O2Color.isColorable(Material.BLUE_CANDLE));
+        assertTrue(O2Color.isColorable(Material.PURPLE_CANDLE));
+        assertTrue(O2Color.isColorable(Material.CANDLE));
     }
 
     /**
-     * Test that isColorable() correctly identifies banner materials as colorable.
+     * Test that isColorable() correctly identifies carpet materials as colorable.
      */
     @Test
-    void isColorableBannerTest() {
-        assertTrue(O2Color.isColorable(Material.RED_BANNER));
-        assertTrue(O2Color.isColorable(Material.WHITE_BANNER));
+    void isColorableCarpetTest() {
+        assertTrue(O2Color.isColorable(Material.RED_CARPET));
+        assertTrue(O2Color.isColorable(Material.GREEN_CARPET));
+    }
+
+    /**
+     * Test that isColorable() correctly identifies candle cake materials as colorable.
+     */
+    @Test
+    void isColorableCandleCakeTest() {
+        assertTrue(O2Color.isColorable(Material.ORANGE_CANDLE_CAKE));
+        assertTrue(O2Color.isColorable(Material.PURPLE_CANDLE_CAKE));
+        assertTrue(O2Color.isColorable(Material.CANDLE_CAKE));
+    }
+
+    /**
+     * Test that isColorable() correctly identifies concrete and concrete powder materials as colorable.
+     */
+    @Test
+    void isColorableConcreteTest() {
+        assertTrue(O2Color.isColorable(Material.BLUE_CONCRETE));
+        assertTrue(O2Color.isColorable(Material.CYAN_CONCRETE));
+        assertTrue(O2Color.isColorable(Material.YELLOW_CONCRETE_POWDER));
+        assertTrue(O2Color.isColorable(Material.BLACK_CONCRETE_POWDER));
+    }
+
+    /**
+     * Test that isColorable() correctly identifies stained glass and stained glass pane materials as colorable.
+     */
+    @Test
+    void isColorableGlassTest() {
+        assertTrue(O2Color.isColorable(Material.RED_STAINED_GLASS));
+        assertTrue(O2Color.isColorable(Material.MAGENTA_STAINED_GLASS_PANE));
+        assertTrue(O2Color.isColorable(Material.GLASS));
+    }
+
+    /**
+     * Test that isColorable() correctly identifies shulker box materials as colorable.
+     */
+    @Test
+    void isColorableShulkerBoxTest() {
+        assertTrue(O2Color.isColorable(Material.RED_SHULKER_BOX));
+        assertTrue(O2Color.isColorable(Material.YELLOW_SHULKER_BOX));
+    }
+
+    /**
+     * Test that isColorable() correctly identifies wool materials as colorable.
+     */
+    @Test
+    void isColorableWoolTest() {
+        assertTrue(O2Color.isColorable(Material.RED_WOOL));
+        assertTrue(O2Color.isColorable(Material.BLUE_WOOL));
+        assertTrue(O2Color.isColorable(Material.WHITE_WOOL));
     }
 
     /**
@@ -279,7 +303,6 @@ public class O2ColorTest {
     void isColorableNonColorableTest() {
         assertFalse(O2Color.isColorable(Material.STONE));
         assertFalse(O2Color.isColorable(Material.DIRT));
-        assertFalse(O2Color.isColorable(Material.GLASS));
         assertFalse(O2Color.isColorable(Material.DIAMOND));
         assertFalse(O2Color.isColorable(Material.IRON_INGOT));
     }
@@ -315,6 +338,60 @@ public class O2ColorTest {
         Material redConcrete = Material.RED_CONCRETE;
         Material blueConcrete = O2Color.changeColor(redConcrete, O2Color.BLUE);
         assertEquals(Material.BLUE_CONCRETE, blueConcrete);
+    }
+
+    /**
+     * Test that changeColor() correctly changes colorless glass to stained glass.
+     */
+    @Test
+    void changeColorGlassTest() {
+        Material redGlass = O2Color.changeColor(Material.GLASS, O2Color.RED);
+        assertEquals(Material.RED_STAINED_GLASS, redGlass);
+    }
+
+    /**
+     * Test that changeColor() correctly changes colorless glass pane to stained glass pane.
+     */
+    @Test
+    void changeColorGlassPaneTest() {
+        Material blueGlassPane = O2Color.changeColor(Material.GLASS_PANE, O2Color.BLUE);
+        assertEquals(Material.BLUE_STAINED_GLASS_PANE, blueGlassPane);
+    }
+
+    /**
+     * Test that changeColor() correctly changes colorless terracotta to colored terracotta.
+     */
+    @Test
+    void changeColorTerracottaTest() {
+        Material yellowTerracotta = O2Color.changeColor(Material.TERRACOTTA, O2Color.YELLOW);
+        assertEquals(Material.YELLOW_TERRACOTTA, yellowTerracotta);
+    }
+
+    /**
+     * Test that changeColor() correctly changes colorless bundle to colored bundle.
+     */
+    @Test
+    void changeColorBundleTest() {
+        Material greenBundle = O2Color.changeColor(Material.BUNDLE, O2Color.GREEN);
+        assertEquals(Material.GREEN_BUNDLE, greenBundle);
+    }
+
+    /**
+     * Test that changeColor() correctly changes colorless candle to colored candle.
+     */
+    @Test
+    void changeColorCandleTest() {
+        Material purpleCandle = O2Color.changeColor(Material.CANDLE, O2Color.PURPLE);
+        assertEquals(Material.PURPLE_CANDLE, purpleCandle);
+    }
+
+    /**
+     * Test that changeColor() correctly changes colorless shulker box to colored shulker box.
+     */
+    @Test
+    void changeColorShulkerBoxTest() {
+        Material redShulkerBox = O2Color.changeColor(Material.SHULKER_BOX, O2Color.RED);
+        assertEquals(Material.RED_SHULKER_BOX, redShulkerBox);
     }
 
     /**

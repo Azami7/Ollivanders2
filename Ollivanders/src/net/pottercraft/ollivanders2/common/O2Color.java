@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 public enum O2Color {
     /**
      * aqua - Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE
+     *
      */
     AQUA(Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE),
     /**
@@ -383,15 +384,15 @@ public enum O2Color {
         // determine if a material is colorable
         String materialName = material.toString();
 
-        if (materialName.endsWith("_WOOL") || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
-                || materialName.endsWith("_CONCRETE_POWDER") || materialName.endsWith("_SHULKER_BOX")
-                || materialName.endsWith("_STAINED_GLASS") || materialName.endsWith("_STAINED_GLASS_PANE")
-                || materialName.endsWith("_BED") || materialName.endsWith("_CANDLE")
-                || materialName.endsWith("_BANNER")) {
-            return true;
-        }
-
-        return false;
+        return (materialName.endsWith("_BANNER") || materialName.endsWith("_BED") || materialName.endsWith("_BUNDLE")
+                || materialName.equals("BUNDLE") || materialName.endsWith("_CANDLE") || materialName.equals("CANDLE")
+                || materialName.endsWith("_CANDLE_CAKE") || materialName.equals("CANDLE_CAKE")
+                || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
+                || materialName.endsWith("_CONCRETE_POWDER") || materialName.equals("GLASS")
+                || materialName.equals("GLASS_PANE") || materialName.endsWith("_SHULKER_BOX")
+                || materialName.equals("SHULKER_BOX") || materialName.endsWith("_STAINED_GLASS")
+                || materialName.endsWith("_STAINED_GLASS_PANE") || materialName.endsWith("_TERRACOTTA")
+                || materialName.equals("TERRACOTTA") || materialName.endsWith("_WOOL"));
     }
 
     /**
@@ -414,15 +415,29 @@ public enum O2Color {
         if (!isColorable(material))
             return material;
 
-        // get the base material where name pattern is COLOR_MATERIAL, ex. WHITE_WOOL
-        // Use split with limit of 2 to only split at the FIRST underscore. This handles materials like
-        // STAINED_GLASS_PANE correctly: splits into ["WHITE", "STAINED_GLASS_PANE"], not ["WHITE", "STAINED", "GLASS_PANE"]
-        String[] materialNameParts = materialName.split("_", 2);
-        if (materialNameParts.length != 2)
-            return material;
+        // colorless materials that contain underscores need special handling before the split,
+        // otherwise GLASS_PANE splits into ["GLASS", "PANE"] instead of mapping to STAINED_GLASS_PANE
+        String materialBase;
+        if (materialName.equals("GLASS"))
+            materialBase = "STAINED_GLASS";
+        else if (materialName.equals("GLASS_PANE"))
+            materialBase = "STAINED_GLASS_PANE";
+        else if (materialName.equals("SHULKER_BOX") || materialName.equals("CANDLE_CAKE"))
+            materialBase = materialName;
+        else if (materialName.contains("_")) {
+            // get the base material where name pattern is COLOR_MATERIAL, ex. WHITE_WOOL
+            // Use split with limit of 2 to only split at the FIRST underscore. This handles materials like
+            // STAINED_GLASS_PANE correctly: splits into ["WHITE", "STAINED_GLASS_PANE"], not ["WHITE", "STAINED", "GLASS_PANE"]
+            String[] materialNameParts = materialName.split("_", 2);
+            if (materialNameParts.length != 2)
+                return material;
 
-        // get the new material color
-        String materialBase = materialNameParts[1];
+            materialBase = materialNameParts[1];
+        }
+        else {
+            materialBase = materialName;
+        }
+
         Material newMaterialColor = color.getColoredMaterial(materialBase);
 
         // return back the original if we failed to get this color for the material

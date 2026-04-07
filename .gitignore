@@ -3,6 +3,8 @@ Ollivanders/Ollivanders.iml
 out
 *.iml
 lib
+mempalace.yaml
+entities.json
 
 # Ignore third-party dependency plugins (paid/licensed plugins)
 dependency-plugins
@@ -12,3 +14,4 @@ dependency-plugins
 
 # Ignore Gradle build output directory
 build
+/entities.json

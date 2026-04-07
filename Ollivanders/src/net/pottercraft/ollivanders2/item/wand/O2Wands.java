@@ -355,6 +355,25 @@ public class O2Wands {
     }
 
     /**
+     * Is this itemstack a coreless wand?
+     *
+     * @param itemStack the itemstack to check
+     * @return true if it is a coreless wand, false otherwise
+     */
+    public boolean isCorelessWand(@NotNull ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null)
+            return false;
+
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        if (!container.has(wandWoodKey)) {
+            return false;
+        }
+
+        return !container.has(wandCoreKey);
+    }
+
+    /**
      * Give a player a random wand.
      *
      * @param player the player to give the wand to

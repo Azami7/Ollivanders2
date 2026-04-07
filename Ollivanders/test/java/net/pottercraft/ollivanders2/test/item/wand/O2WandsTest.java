@@ -446,6 +446,34 @@ public class O2WandsTest {
     }
 
     /**
+     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#isCorelessWand(ItemStack)}.
+     * <p>
+     * Verifies that coreless wand detection requires wood NBT but no core NBT.
+     * </p>
+     * <ul>
+     *   <li>Coreless wand (wood NBT, no core NBT): Returns true</li>
+     *   <li>Complete wand (wood + core NBT): Returns false</li>
+     *   <li>Non-wand item (no NBT): Returns false</li>
+     * </ul>
+     */
+    @Test
+    void isCorelessWandTest() {
+        // coreless wand should return true
+        ItemStack corelessWand = Ollivanders2API.getItems().getWands().createCorelessWand(O2WandWoodType.OAK, 1);
+        assertNotNull(corelessWand);
+        assertTrue(Ollivanders2API.getItems().getWands().isCorelessWand(corelessWand), "isCorelessWand() returned false for a coreless wand");
+
+        // complete wand should return false
+        ItemStack wand = Ollivanders2API.getItems().getWands().makeWand(O2WandWoodType.OAK.getLabel(), O2WandCoreType.UNICORN_HAIR.getLabel(), 1);
+        assertNotNull(wand);
+        assertFalse(Ollivanders2API.getItems().getWands().isCorelessWand(wand), "isCorelessWand() returned true for a complete wand");
+
+        // non-wand item should return false
+        ItemStack apple = new ItemStack(Material.APPLE, 1);
+        assertFalse(Ollivanders2API.getItems().getWands().isCorelessWand(apple), "isCorelessWand() returned true for Material.APPLE");
+    }
+
+    /**
      * Reset test state after each test method.
      * <p>
      * Ensures the debug flag is disabled after each test to prevent debug output from affecting

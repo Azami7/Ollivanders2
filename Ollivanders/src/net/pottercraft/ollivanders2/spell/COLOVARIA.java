@@ -10,11 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Changes color of sheep and colorable blocks to a random variant
+ * Colour Change Charm that recolors a sheep or colorable block to a random color.
+ *
+ * <p>Unlike the specific-color variants (e.g., {@link COLOVARIA_VERMICULO}), this spell selects a random
+ * dyeable color each time it is cast.</p>
  *
  * @author lownes
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Colour_Change_Charm">https://harrypotter.fandom.com/wiki/Colour_Change_Charm</a>
+ * @see ChangeColorable
+ * @see <a href="https://harrypotter.fandom.com/wiki/Colour_Change_Charm">Harry Potter Wiki - Colour Change Charm</a>
  */
 public final class COLOVARIA extends ChangeColorable {
     /**

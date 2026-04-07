@@ -8,9 +8,10 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Target sheep or colored block turns yellow.
+ * Colour Change Charm variant that turns the target yellow.
  *
  * @author Azami7
+ * @see ChangeColorable
  */
 public final class COLOVARIA_FLAVO extends ChangeColorable {
     /**
