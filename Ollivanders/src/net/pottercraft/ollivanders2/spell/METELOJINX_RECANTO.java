@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Ends a storm for a variable duration.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto">https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto">Harry Potter Wiki - Meteolojinx Recanto</a>
  */
 public final class METELOJINX_RECANTO extends MetelojinxBase {
     /**

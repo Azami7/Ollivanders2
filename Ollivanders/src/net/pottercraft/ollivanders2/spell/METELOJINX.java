@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Creates a storm of a variable duration.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Metelojinx">https://harrypotter.fandom.com/wiki/Metelojinx</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Metelojinx">Harry Potter Wiki - Metelojinx</a>
  */
 public final class METELOJINX extends MetelojinxBase {
     /**
