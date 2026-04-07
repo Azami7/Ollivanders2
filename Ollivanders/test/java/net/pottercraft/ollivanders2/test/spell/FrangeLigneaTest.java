@@ -38,11 +38,6 @@ public class FrangeLigneaTest extends O2SpellTestSuper {
         return O2SpellType.FRANGE_LIGNEA;
     }
 
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
     /**
      * Verifies the spell handles different block types correctly and produces coreless wands from valid targets.
      * <ul>

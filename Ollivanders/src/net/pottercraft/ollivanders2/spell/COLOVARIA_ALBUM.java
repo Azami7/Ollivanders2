@@ -8,10 +8,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Target sheep or colored block turns white.
+ * Colour Change Charm variant that turns the target white.
  *
  * @author Azami7
  * @since 2.2.8
+ * @see ChangeColorable
  */
 public final class COLOVARIA_ALBUM extends ChangeColorable {
     /**

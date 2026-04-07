@@ -41,6 +41,7 @@ public class AbertoTest extends O2SpellTestSuper {
     O2SpellType getSpellType() {
         return O2SpellType.ABERTO;
     }
+
     /**
      * Test ABERTO spell behavior for door opening and locking protection.
      *

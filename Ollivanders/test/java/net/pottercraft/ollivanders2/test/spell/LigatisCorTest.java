@@ -39,11 +39,6 @@ public class LigatisCorTest extends O2SpellTestSuper {
         return O2SpellType.LIGATIS_COR;
     }
 
-    @Override
-    @Test
-    void spellConstructionTest() {
-    }
-
     /**
      * Test {@link LIGATIS_COR}.
      *

@@ -14,9 +14,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Change a sheep or a colorable block to a specific color.
+ * Abstract base class for colour change spells that recolor sheep or colorable blocks.
+ *
+ * <p>When the projectile encounters a living entity, the spell checks for sheep and recolors the first
+ * one found. If no entities are nearby and the projectile hits a colorable block, the block's color is
+ * changed instead. Non-colorable targets produce a failure message.</p>
+ *
+ * <p>Subclasses set {@link #color} to determine the target color. See {@link O2Color#isColorable(Material)}
+ * for the list of supported block types.</p>
+ *
+ * @author Azami7
+ * @see O2Color#changeColor(Material, O2Color)
+ * @see <a href="https://harrypotter.fandom.com/wiki/Colour_Change_Charm">Harry Potter Wiki - Colour Change Charm</a>
  */
 public abstract class ChangeColorable extends O2Spell {
+    /**
+     * The color to apply to the target entity or block. Defaults to {@link O2Color#WHITE}.
+     */
     O2Color color = O2Color.WHITE;
 
     /**
@@ -44,32 +58,35 @@ public abstract class ChangeColorable extends O2Spell {
     }
 
     /**
-     * Look for colorable entities or blocks, if one is found, change its color
+     * Check for a nearby sheep to recolor, or recolor the target block if no entities are found.
      */
     @Override
     protected void doCheckEffect() {
         // first try to recolor any sheep in range
         List<LivingEntity> entities = getNearbyLivingEntities(defaultRadius);
 
-        if (entities.isEmpty()) {
+        if (!entities.isEmpty()) {
+            boolean changed = false;
             for (LivingEntity livingEntity : entities) {
                 if (livingEntity instanceof Sheep) {
                     Sheep sheep = (Sheep) livingEntity;
                     sheep.setColor(color.getDyeColor());
 
-                    kill();
-                    return;
+                    changed = true;
+                    break;
                 }
             }
+            kill();
 
-            return;
+            if (!changed)
+                sendFailureMessage();
         }
+        else if (hasHitTarget()) {
+            kill();
 
-        if (hasHitTarget()) {
             Block target = getTargetBlock();
             if (target == null) {
-                common.printDebugMessage("ColoroSuper.doCheckEffect: target block is null", null, null, true);
-                kill();
+                common.printDebugMessage("ChangeColorable.doCheckEffect: target block is null", null, null, true);
                 return;
             }
 
@@ -77,8 +94,17 @@ public abstract class ChangeColorable extends O2Spell {
                 Material newColor = O2Color.changeColor(target.getType(), color);
                 target.setType(newColor);
             }
-
-            kill();
+            else
+                sendFailureMessage();
         }
+    }
+
+    /**
+     * Get the color this spell applies to its target.
+     *
+     * @return the target {@link O2Color}
+     */
+    public O2Color getColor() {
+        return color;
     }
 }
