@@ -96,6 +96,6 @@ public class AbertoTest extends O2SpellTestSuper {
     @Override
     @Test
     void revertTest() {
-        // aberto has no revert actions
+        // no revert actions
     }
 }

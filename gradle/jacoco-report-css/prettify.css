@@ -1,0 +1,13 @@
+/* Pretty printing styles. Used with prettify.js. Dark theme — VSCode Dark+ inspired. */
+
+.str { color: #ce9178; }
+.kwd { color: #569cd6; font-weight:bold; }
+.com { color: #6a9955; font-style:italic; }
+.typ { color: #4ec9b0; }
+.lit { color: #b5cea8; }
+.pun { color: #d4d4d4; }
+.pln { color: #d4d4d4; }
+.tag { color: #569cd6; }
+.atn { color: #9cdcfe; }
+.atv { color: #ce9178; }
+.dec { color: #569cd6; }
