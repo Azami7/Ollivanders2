@@ -99,7 +99,7 @@ public final class REPARIFARGE extends O2Spell {
      */
     @Override
     public void doCheckEffect() {
-        if (hasHitTarget()) {
+        if (hasHitBlock()) {
             if (getTargetBlock() == null) {
                 common.printDebugMessage("Target block null in " + spellType.toString(), null, null, false);
                 return;

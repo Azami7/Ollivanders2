@@ -88,10 +88,10 @@ abstract public class AquaEructoBaseTest extends O2SpellTestSuper {
 
         AQUA_ERUCTO aquaEructo = (AQUA_ERUCTO) castSpell(caster, location, entity.getLocation());
         mockServer.getScheduler().performTicks(2);
-        assertFalse(aquaEructo.hasHitTarget(), "hit target too soon, potentially targeted the caster");
+        assertFalse(aquaEructo.hasHitBlock(), "hit target too soon, potentially targeted the caster");
 
         mockServer.getScheduler().performTicks(20);
-        assertTrue(aquaEructo.hasHitTarget(), "projectile not stopped when entity on fire found");
+        assertTrue(aquaEructo.hasHitBlock(), "projectile not stopped when entity on fire found");
         assertTrue(aquaEructo.isExtinguished(), "target not extinguished");
         checkEffect(entity);
     }
@@ -126,7 +126,7 @@ abstract public class AquaEructoBaseTest extends O2SpellTestSuper {
 
         AQUA_ERUCTO aquaEructo = (AQUA_ERUCTO) castSpell(caster, location, entity.getLocation());
         mockServer.getScheduler().performTicks(20);
-        assertTrue(aquaEructo.hasHitTarget());
+        assertTrue(aquaEructo.hasHitBlock());
         assertTrue(aquaEructo.isExtinguished(), "target not extinguished");
 
         Block waterBlock;
@@ -166,7 +166,7 @@ abstract public class AquaEructoBaseTest extends O2SpellTestSuper {
 
         assertFalse(aquaEructo.isExtinguished(), "target extinguished when they were not on fire");
         assertTrue(Ollivanders2API.getBlocks().getBlocksChangedBySpell(aquaEructo).isEmpty(), "water block effect turned on when target was not on fire");
-        assertTrue(aquaEructo.hasHitTarget());
+        assertTrue(aquaEructo.hasHitBlock());
         assertTrue(aquaEructo.isKilled(), "spell not killed when failed to find a target");
     }
 
@@ -193,7 +193,7 @@ abstract public class AquaEructoBaseTest extends O2SpellTestSuper {
         AQUA_ERUCTO aquaEructo = (AQUA_ERUCTO) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(aquaEructo.hasHitTarget());
+        assertTrue(aquaEructo.hasHitBlock());
         assertTrue(caster.getFireTicks() > 0, "caster no longer on fire");
         assertFalse(aquaEructo.isExtinguished(), "spell targeted caster");
     }

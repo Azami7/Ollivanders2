@@ -157,7 +157,7 @@ public abstract class O2Spell {
     /**
      * Whether the projectile has hit a target
      */
-    private boolean hitTarget = false;
+    private boolean hasHitBlock = false;
 
     /**
      * Does this spell do a spell projectile or not. Generally spells will send a projectile but any spell that targets
@@ -397,7 +397,7 @@ public abstract class O2Spell {
      */
     public void move() {
         // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
-        if (isKilled() || hasHitTarget())
+        if (isKilled() || hasHitBlock())
             return;
 
         // if this spell should not do a projectile, stop the projectile and return from move
@@ -456,7 +456,7 @@ public abstract class O2Spell {
      */
     private void checkTargetBlock() {
         // if this is somehow called before we've hit a target, do nothing
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         Block target = location.getBlock();
@@ -688,7 +688,7 @@ public abstract class O2Spell {
      */
     @Nullable
     public Block getTargetBlock() {
-        if (hitTarget)
+        if (hasHitBlock)
             return location.getBlock();
         else
             return null;
@@ -737,24 +737,24 @@ public abstract class O2Spell {
     }
 
     /**
-     * Stops the spell projectile from moving further and marks it as having hit a target.
+     * Stops the spell projectile from moving further and marks it as having hit a non pass-through block.
      *
-     * <p>Sets {@link #hitTarget} to true only if the projectile has not already exceeded max distance.
+     * <p>Sets {@link #hasHitBlock} to true only if the projectile has not already exceeded max distance.
      * This prevents marking as "hit target" when the spell is killed due to reaching max distance.</p>
      */
     void stopProjectile() {
         if (!isAtMaxDistance()) {
-            hitTarget = true;
+            hasHitBlock = true;
         }
     }
 
     /**
-     * Whether this spell has hit a target
+     * Whether this spell has hit a non pass-though block and the projectile is stopped
      *
-     * @return true if the spell has hit a target, false otherwise
+     * @return true if the spell has hit a non pass-though block and the projectile is stopped, false otherwise
      */
-    public boolean hasHitTarget() {
-        return hitTarget;
+    public boolean hasHitBlock() {
+        return hasHitBlock;
     }
 
     /**

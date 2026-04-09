@@ -81,7 +81,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell {
     @Override
     protected void doCheckEffect() {
         // if the spell has hit a solid block, the projectile is dead and won't go further so kill the spell
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         Entity target = null;

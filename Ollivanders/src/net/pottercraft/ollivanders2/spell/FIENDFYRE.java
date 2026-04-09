@@ -102,7 +102,7 @@ public final class FIENDFYRE extends O2Spell
         }
 
         // spawn magmacubes, blazes, and ghasts
-        if (!isKilled() && hasHitTarget())
+        if (!isKilled() && hasHitBlock())
         {
             location.subtract(vector);
             spawnCreatures();

@@ -67,7 +67,7 @@ public final class LIGATIS_COR extends O2Spell {
     @Override
     protected void doCheckEffect() {
         // projectile has stopped, kill the spell
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         Item corelessWand = null;

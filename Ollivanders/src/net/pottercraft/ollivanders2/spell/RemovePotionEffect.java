@@ -64,7 +64,7 @@ public abstract class RemovePotionEffect extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         affectRadius(defaultRadius, false);

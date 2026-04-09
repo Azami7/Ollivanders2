@@ -118,7 +118,7 @@ public final class BRACKIUM_EMENDO extends O2Spell {
         }
 
         // projectile has stopped, kill the spell
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
     }
 }

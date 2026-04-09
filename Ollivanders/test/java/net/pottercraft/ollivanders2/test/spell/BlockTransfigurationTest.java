@@ -89,7 +89,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(blockTransfiguration.hasHitTarget(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.getLocation().getBlock().getType());
+        assertTrue(blockTransfiguration.hasHitBlock(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.getLocation().getBlock().getType());
         assertFalse(blockTransfiguration.isTransfigured(target), "invalid block was transfigured");
         assertEquals(invalidType, target.getType(), "material for invalid block was changed");
     }
@@ -230,7 +230,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         if (!blockTransfiguration.isPermanent()) {
             mockServer.getScheduler().performTicks(20);
-            assertTrue(blockTransfiguration.hasHitTarget());
+            assertTrue(blockTransfiguration.hasHitBlock());
             assertTrue(blockTransfiguration.isTransfigured(), "block was not transfigured");
             assertFalse(blockTransfiguration.isKilled(), "transfiguration killed unexpectedly");
 
@@ -321,7 +321,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
         assertTrue(blockTransfiguration.getEffectRadius() <= blockTransfiguration.getMaxRadius(), "radius not <= maxRadius");
 
         if (blockTransfiguration.getMaxRadius() > 1) {
-            assertTrue(blockTransfiguration.hasHitTarget());
+            assertTrue(blockTransfiguration.hasHitBlock());
 
             assertNotEquals(getValidTargetType(), testWorld.getBlockAt(targetLocation).getType(), "block at target location not changed");
 

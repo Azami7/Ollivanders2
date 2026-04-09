@@ -85,7 +85,7 @@ public class CarceremAquaticumTest extends ImmobilizePlayerTest {
         CARCEREM_AQUATICUM carceremAquaticum = (CARCEREM_AQUATICUM) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(carceremAquaticum.hasHitTarget());
+        assertTrue(carceremAquaticum.hasHitBlock());
         assertTrue(target.hasPotionEffect(PotionEffectType.WATER_BREATHING), "target does not have water breathing");
     }
 }

@@ -115,7 +115,7 @@ public abstract class Sparks extends O2Spell {
      */
     @Override
     public void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         // play the firework launch sound on the first tick, tick is incremented before doCheckEffect() is called so it starts at 1

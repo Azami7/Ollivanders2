@@ -95,7 +95,7 @@ public class ColloportusTest extends StationarySpellTest {
 
         colloportus = (COLLOPORTUS) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(colloportus.hasHitTarget());
+        assertTrue(colloportus.hasHitBlock());
         assertTrue(colloportus.isKilled());
 
         blockData = testWorld.getBlockAt(targetLocation).getBlockData();

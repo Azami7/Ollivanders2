@@ -103,7 +103,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
 
         mockServer.getScheduler().performTicks(20);
         Block target = aguamenti.getTargetBlock();
-        assertTrue(aguamenti.hasHitTarget());
+        assertTrue(aguamenti.hasHitBlock());
         assertFalse(aguamenti.isKilled());
         assertNotNull(target, "target block is null");
         assertEquals(Material.WATER, target.getType(), "block not changed to expected type");

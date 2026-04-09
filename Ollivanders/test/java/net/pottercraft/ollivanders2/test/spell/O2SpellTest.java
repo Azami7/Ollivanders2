@@ -230,14 +230,14 @@ public class O2SpellTest {
             melofors.checkEffect();
         }
         assertTrue(melofors.isKilled(), "melofors did not age out");
-        assertFalse(melofors.hasHitTarget(), "melofors set has hit target when spell aged out");
+        assertFalse(melofors.hasHitBlock(), "melofors set has hit target when spell aged out");
 
         // hitting a target stops the projectile
         melofors = new MELOFORS(testPlugin, caster, O2PlayerCommon.rightWand);
         testWorld.getBlockAt(targetLocation).setType(Material.DIRT);
         Ollivanders2API.getSpells().addSpell(caster, melofors);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(melofors.hasHitTarget(), "melofors did not hit target");
+        assertTrue(melofors.hasHitBlock(), "melofors did not hit target");
         assertTrue(melofors.isKilled(), "melofors projectile not killed when target hit");
     }
 
@@ -408,7 +408,7 @@ public class O2SpellTest {
         accio.move();
         assertTrue(accio.isAtMaxDistance());
         assertTrue(accio.isKilled(), "Accio not killed when hitting max projectile distance.");
-        assertFalse(accio.hasHitTarget(), "Accio has hit target set when projectile hit max distance");
+        assertFalse(accio.hasHitBlock(), "Accio has hit target set when projectile hit max distance");
 
         // a move event is fire when projectiles move
         assertThat(mockServer.getPluginManager(), hasFiredEventInstance(OllivandersSpellProjectileMoveEvent.class));

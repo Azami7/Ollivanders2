@@ -96,7 +96,7 @@ public class AQUA_ERUCTO extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget()) {
+        if (!hasHitBlock()) {
             for (Entity entity : getNearbyEntities(1.5)) {
                 if (entity.getUniqueId().equals(caster.getUniqueId())) // don't target the caster
                     continue;

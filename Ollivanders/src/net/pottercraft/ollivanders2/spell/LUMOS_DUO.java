@@ -129,7 +129,7 @@ public final class LUMOS_DUO extends O2Spell {
         if (getAge() < 2)
             return;
 
-        if (!hasHitTarget()) {
+        if (!hasHitBlock()) {
             if (lineLength < maxLineLength) {
                 Block currentBlock = location.getBlock();
 

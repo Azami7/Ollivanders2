@@ -70,7 +70,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
     @Override
     protected void doCheckEffect() {
         // if we hit a target but didn't find an item, then end this spell
-        if (hasHitTarget()) {
+        if (hasHitBlock()) {
             kill();
             return;
         }

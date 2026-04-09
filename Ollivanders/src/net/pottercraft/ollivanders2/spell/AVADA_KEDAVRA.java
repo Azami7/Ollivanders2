@@ -70,7 +70,7 @@ public final class AVADA_KEDAVRA extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         List<Damageable> entities = getNearbyDamageableEntities(defaultRadius);

@@ -84,7 +84,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell {
     @Override
     protected void doCheckEffect() {
         // projectile has stopped, kill the spell
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         O2StationarySpell targetSpell = null;

@@ -364,7 +364,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
         IncendioBase incendioBase = (IncendioBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(incendioBase.hasHitTarget());
+        assertTrue(incendioBase.hasHitBlock());
         assertEquals(Material.FIRE, above.getType());
         assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(above), "above block not added to temporarily changed block tracking");
         assertFalse(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target), "target block was added to temporarily changed block tracking");

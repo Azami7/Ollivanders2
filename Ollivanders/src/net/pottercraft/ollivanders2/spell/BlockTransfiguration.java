@@ -172,7 +172,7 @@ public abstract class BlockTransfiguration extends Transfiguration {
      * <p>If no blocks are successfully transfigured, the spell fails and is killed.</p>
      */
     protected void transfigure() {
-        if (isTransfigured || isKilled() || !hasHitTarget() || getTargetBlock() == null)
+        if (isTransfigured || isKilled() || !hasHitBlock() || getTargetBlock() == null)
             return;
 
         // set the spell affect radius

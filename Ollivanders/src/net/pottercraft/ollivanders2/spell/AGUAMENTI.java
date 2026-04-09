@@ -196,7 +196,7 @@ public final class AGUAMENTI extends BlockTransfiguration {
     @Override
     @Nullable
     public Block getTargetBlock() {
-        if (hasHitTarget()) {
+        if (hasHitBlock()) {
             // we want to target block before this block
             return location.clone().subtract(super.vector).getBlock();
         }

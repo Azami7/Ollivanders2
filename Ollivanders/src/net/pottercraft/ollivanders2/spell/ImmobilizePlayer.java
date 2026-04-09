@@ -121,7 +121,7 @@ abstract public class ImmobilizePlayer extends O2Spell {
     @Override
     protected void doCheckEffect() {
         // projectile has stopped, kill the spell
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {

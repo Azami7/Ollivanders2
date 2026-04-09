@@ -151,7 +151,7 @@ public abstract class ItemEnchant extends O2Spell {
             return;
         }
 
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         List<Item> items = getNearbyItems(defaultRadius);

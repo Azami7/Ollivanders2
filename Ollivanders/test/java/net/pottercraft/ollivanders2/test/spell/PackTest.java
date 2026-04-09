@@ -72,7 +72,7 @@ public class PackTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5);
         targetLocation.getBlock().setType(Material.OAK_DOOR);
 
-        PACK pack = (PACK)castSpell(caster, location, targetLocation);
+        PACK pack = (PACK) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
         assertTrue(pack.isKilled(), "spell not killed when hit non pass through block");
 
@@ -80,10 +80,10 @@ public class PackTest extends O2SpellTestSuper {
         chestBlock.setType(Material.CHEST);
 
         // spell only targets blocks that are chest materials
-        Chest chest = (Chest)chestBlock.getState();
+        Chest chest = (Chest) chestBlock.getState();
         assertTrue(chest.getInventory().isEmpty());
-        pack = (PACK)castSpell(caster, location, targetLocation);
-        chest = (Chest)chestBlock.getState(); // get the state fresh every time since mockbukkit likes to cache it
+        pack = (PACK) castSpell(caster, location, targetLocation);
+        chest = (Chest) chestBlock.getState(); // get the state fresh every time since mockbukkit likes to cache it
         mockServer.getScheduler().performTicks(20);
         assertTrue(pack.isKilled(), "spell not killed when it hit a chest block");
         assertTrue(chest.getInventory().isEmpty());
@@ -94,7 +94,7 @@ public class PackTest extends O2SpellTestSuper {
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
         assertEquals(Material.OAK_PLANKS, nearbyBlock.getType(), "nearby block type changed unexpectedly");
-        chest = (Chest)chestBlock.getState();
+        chest = (Chest) chestBlock.getState();
         assertTrue(chest.getInventory().isEmpty());
 
         // entities that are not items are not affected
@@ -102,14 +102,14 @@ public class PackTest extends O2SpellTestSuper {
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
         assertFalse(nearbyEntity.isDead(), "nearby entity removed unexpectedly");
-        chest = (Chest)chestBlock.getState();
+        chest = (Chest) chestBlock.getState();
         assertTrue(chest.getBlockInventory().isEmpty());
 
         // add 1 item
         Item nearbyItem = testWorld.dropItem(chestBlock.getRelative(BlockFace.SOUTH).getLocation(), new ItemStack(Material.COMPASS, 1));
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        chest = (Chest)chestBlock.getState();
+        chest = (Chest) chestBlock.getState();
         assertFalse(chest.getBlockInventory().isEmpty(), "Chest is empty when pack should have added 1 item");
         assertEquals(1, getChestItemCount(chest), "unexpected count of items in chest");
         assertTrue(nearbyItem.isDead(), "nearby item not removed when added to chest");
@@ -120,7 +120,7 @@ public class PackTest extends O2SpellTestSuper {
         Item nearbyItem2 = testWorld.dropItem(chestBlock.getRelative(BlockFace.NORTH).getLocation(), new ItemStack(Material.BOWL, 1));
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        chest = (Chest)chestBlock.getState();
+        chest = (Chest) chestBlock.getState();
         assertFalse(chest.getBlockInventory().isEmpty());
         assertEquals(2, getChestItemCount(chest), "unexpected count of items in chest");
         assertTrue(nearbyItem.isDead(), "nearby item not removed when added to chest");
@@ -130,7 +130,7 @@ public class PackTest extends O2SpellTestSuper {
         nearbyItem = testWorld.dropItem(chestBlock.getRelative(BlockFace.SOUTH).getLocation(), new ItemStack(Material.BOOK, 1));
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        chest = (Chest)chestBlock.getState();
+        chest = (Chest) chestBlock.getState();
         assertFalse(chest.getBlockInventory().isEmpty());
         assertEquals(3, getChestItemCount(chest), "unexpected count of items in chest");
         assertTrue(nearbyItem.isDead(), "nearby item not removed when added to chest");
@@ -140,7 +140,7 @@ public class PackTest extends O2SpellTestSuper {
         nearbyItem = testWorld.dropItem(chestBlock.getRelative(BlockFace.SOUTH).getLocation(), new ItemStack(Material.OXEYE_DAISY, maxChestCapacity));
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        chest = (Chest)chestBlock.getState();
+        chest = (Chest) chestBlock.getState();
         assertFalse(chest.getBlockInventory().isEmpty());
         assertFalse(nearbyItem.isDead(), "item removed when there should be overflow inventory");
         // remainder will be 1728 - 3 stacks of 64 because there are 3 item slots in use in the chest already = 192
@@ -184,7 +184,7 @@ public class PackTest extends O2SpellTestSuper {
         runContainerPackTest(
                 "PackShulkerBox",
                 Material.SHULKER_BOX,
-                (block, caster) -> ((ShulkerBox)block.getState()).getInventory(),
+                (block, caster) -> ((ShulkerBox) block.getState()).getInventory(),
                 "shulker box"
         );
     }
@@ -202,18 +202,13 @@ public class PackTest extends O2SpellTestSuper {
      *
      * <p>The container inventory is cleared between phases.
      *
-     * @param worldName          name passed to {@link org.mockbukkit.mockbukkit.ServerMock#addSimpleWorld(String)}
-     * @param containerMaterial  the container block type to spawn at the target location
-     * @param inventoryAccessor  function returning the container's inventory given the block and caster;
-     *                           called fresh on every access to avoid stale MockBukkit state
-     * @param containerLabel     human-readable container name used in assertion failure messages
+     * @param worldName         name passed to {@link org.mockbukkit.mockbukkit.ServerMock#addSimpleWorld(String)}
+     * @param containerMaterial the container block type to spawn at the target location
+     * @param inventoryAccessor function returning the container's inventory given the block and caster;
+     *                          called fresh on every access to avoid stale MockBukkit state
+     * @param containerLabel    human-readable container name used in assertion failure messages
      */
-    private void runContainerPackTest(
-            String worldName,
-            Material containerMaterial,
-            BiFunction<Block, PlayerMock, Inventory> inventoryAccessor,
-            String containerLabel
-    ) {
+    private void runContainerPackTest(String worldName, Material containerMaterial, BiFunction<Block, PlayerMock, Inventory> inventoryAccessor, String containerLabel) {
         World testWorld = mockServer.addSimpleWorld(worldName);
         Location location = getNextLocation(testWorld);
         Location targetLocation = new Location(testWorld, location.getX() + 3, location.getY(), location.getZ());

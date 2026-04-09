@@ -94,7 +94,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
         assertNotNull(expectedType);
 
         mockServer.getScheduler().performTicks(20);
-        assertTrue(blockToEntityTransfiguration.hasHitTarget(), "spell did not hit the target");
+        assertTrue(blockToEntityTransfiguration.hasHitBlock(), "spell did not hit the target");
         assertEquals(Material.AIR, target.getType(), "target block not changed to air");
 
         LivingEntity entity = EntityCommon.getLivingEntityAtLocation(target.getLocation());
@@ -126,7 +126,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
         BlockToEntityTransfiguration blockToEntityTransfiguration = (BlockToEntityTransfiguration) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(blockToEntityTransfiguration.hasHitTarget());
+        assertTrue(blockToEntityTransfiguration.hasHitBlock());
         assertFalse(blockToEntityTransfiguration.isTransfigured(target), "block was transfigured when it is not a transfigurable block");
         assertEquals(originalMaterial, target.getType(), "block type changed when it is not a transfigurable block");
     }
@@ -165,7 +165,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
         BlockToEntityTransfiguration blockToEntityTransfiguration = (BlockToEntityTransfiguration) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(blockToEntityTransfiguration.hasHitTarget());
+        assertTrue(blockToEntityTransfiguration.hasHitBlock());
         LivingEntity entity = EntityCommon.getLivingEntityAtLocation(target.getLocation());
         assertNotNull(entity);
 

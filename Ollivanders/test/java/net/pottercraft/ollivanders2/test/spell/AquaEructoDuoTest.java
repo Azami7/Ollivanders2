@@ -113,7 +113,7 @@ public class AquaEructoDuoTest extends AquaEructoBaseTest {
         AQUA_ERUCTO aquaEructo = (AQUA_ERUCTO) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(aquaEructo.hasHitTarget());
+        assertTrue(aquaEructo.hasHitBlock());
         AttributeInstance healthAttribute = caster.getAttribute(Attribute.MAX_HEALTH);
         assertNotNull(healthAttribute);
         assertEquals(healthAttribute.getValue(), caster.getHealth(), "caster was damaged");

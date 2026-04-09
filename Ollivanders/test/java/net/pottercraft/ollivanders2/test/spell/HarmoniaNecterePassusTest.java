@@ -70,7 +70,7 @@ public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
         // cast the spell
         HARMONIA_NECTERE_PASSUS harmonia = (HARMONIA_NECTERE_PASSUS) castSpell(caster, castLocation, location1);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(harmonia.hasHitTarget(), "harmonia did not hit target");
+        assertTrue(harmonia.hasHitBlock(), "harmonia did not hit target");
 
         // verify the stationary spells were successfully cast
         assertTrue(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location1, O2StationarySpellType.HARMONIA_NECTERE_PASSUS), "harmonia spell killed");
@@ -79,7 +79,7 @@ public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
         // spell fails if there is already a harmonia stationary spell
         harmonia = (HARMONIA_NECTERE_PASSUS) castSpell(caster, castLocation, location1);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(harmonia.hasHitTarget());
+        assertTrue(harmonia.hasHitBlock());
         assertEquals(1, Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location1).size(), "harmonia created a stationary spell when there was already a spell present");
 
         // clean spells for next tests
@@ -92,21 +92,21 @@ public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
         location1.getBlock().setType(Material.DANDELION);
         harmonia = (HARMONIA_NECTERE_PASSUS) castSpell(caster, castLocation, location1);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(harmonia.hasHitTarget());
+        assertTrue(harmonia.hasHitBlock());
         assertFalse(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location1, O2StationarySpellType.HARMONIA_NECTERE_PASSUS), "harmonia stationary spell was created when there was no sign");
 
         // spell fails if there is a sign, but it does not have the to location
         location1.getBlock().setType(Material.ACACIA_SIGN);
         harmonia = (HARMONIA_NECTERE_PASSUS) castSpell(caster, castLocation, location1);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(harmonia.hasHitTarget());
+        assertTrue(harmonia.hasHitBlock());
         assertFalse(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location1, O2StationarySpellType.HARMONIA_NECTERE_PASSUS), "harmonia stationary spell was created when the sign had no text");
 
         // spell fails in the to and from location are the same
         net.pottercraft.ollivanders2.test.stationaryspell.HarmoniaNecterePassusTest.createCabinet(location1, location1);
         harmonia = (HARMONIA_NECTERE_PASSUS) castSpell(caster, castLocation, location1);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(harmonia.hasHitTarget());
+        assertTrue(harmonia.hasHitBlock());
         assertFalse(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location1, O2StationarySpellType.HARMONIA_NECTERE_PASSUS), "harmonia stationary spell was created when to and from locations were the same");
     }
 

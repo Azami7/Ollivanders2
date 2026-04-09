@@ -105,7 +105,7 @@ public class AquaEructoTest extends AquaEructoBaseTest {
 
         AQUA_ERUCTO aquaEructo = (AQUA_ERUCTO) castSpell(caster, location, item.getLocation());
         mockServer.getScheduler().performTicks(20);
-        assertTrue(aquaEructo.hasHitTarget());
+        assertTrue(aquaEructo.hasHitBlock());
         assertTrue(aquaEructo.isExtinguished(), "target not extinguished");
     }
 }

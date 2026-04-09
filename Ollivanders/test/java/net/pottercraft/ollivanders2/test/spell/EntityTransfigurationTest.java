@@ -127,7 +127,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
 
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(entityTransfiguration.hasHitTarget(), "hitTarget not set when spell hit valid target");
+        assertTrue(entityTransfiguration.hasHitBlock(), "hitTarget not set when spell hit valid target");
         assertTrue(entityTransfiguration.isTransfigured(), "target was not transfigured");
     }
 
@@ -221,7 +221,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         // already transfigured entity cannot be targeted
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(entityTransfiguration.hasHitTarget(), "spell did not hit target");
+        assertTrue(entityTransfiguration.hasHitBlock(), "spell did not hit target");
         assertTrue(entityTransfiguration.isTransfigured(), "target was not transfigured");
 
         EntityTransfiguration entityTransfiguration2 = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
@@ -280,7 +280,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
 
         if (!entityTransfiguration.isPermanent()) {
             mockServer.getScheduler().performTicks(20);
-            assertTrue(entityTransfiguration.hasHitTarget());
+            assertTrue(entityTransfiguration.hasHitBlock());
             assertTrue(entityTransfiguration.isTransfigured(), "entity was not transfigured");
             assertFalse(entityTransfiguration.isKilled(), "transfiguration killed unexpectedly");
 

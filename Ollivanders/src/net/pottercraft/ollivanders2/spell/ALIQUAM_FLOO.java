@@ -85,7 +85,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         Block target = getTargetBlock();
