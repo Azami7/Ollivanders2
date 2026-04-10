@@ -96,6 +96,33 @@ This sacrifices coverage of the wrapped line in exchange for letting the rest of
 ### Bukkit events must be fired manually
 MockBukkit does not synthesize Bukkit events the way real Paper does — gameplay actions in a test won't automatically generate the corresponding event. To exercise an event handler, construct the event yourself, call `mockServer.getPluginManager().callEvent(event)`, then `performTicks(...)` afterward to give the handler time to run.
 
+### Observing instant or transient effects via event listeners
+Some Bukkit effects are instant — they fire once on application and are never stored in the player's active effects list. `PotionEffectType.INSTANT_HEALTH` is the canonical example: `player.hasPotionEffect(INSTANT_HEALTH)` returns `false` even immediately after `addPotionEffect(...)`, because the effect is consumed on application. MockBukkit also doesn't simulate the gameplay side-effects of effects (e.g., health changes from healing, damage from harming), so you can't observe the result either.
+
+To verify that an instant or transient effect was actually applied, register a temporary `EntityPotionEffectEvent` listener before casting the spell:
+
+```java
+AtomicBoolean effectApplied = new AtomicBoolean(false);
+mockServer.getPluginManager().registerEvents(new Listener() {
+    @EventHandler
+    public void onEffect(EntityPotionEffectEvent event) {
+        if (event.getEntity().equals(target)
+                && event.getNewEffect() != null
+                && event.getNewEffect().getType().equals(PotionEffectType.INSTANT_HEALTH)) {
+            effectApplied.set(true);
+        }
+    }
+}, testPlugin);
+
+castSpell(caster, location, targetLocation);
+mockServer.getScheduler().performTicks(20);
+assertTrue(effectApplied.get(), "INSTANT_HEALTH was not applied to target");
+```
+
+This works because MockBukkit fires `EntityPotionEffectEvent` when `addPotionEffect` is called, even for instant effects. The listener catches the event in-flight before MockBukkit discards the effect. Use `AtomicBoolean` (not a plain boolean) because the listener runs in the event dispatch context.
+
+This same pattern works for any effect or event that is difficult to observe after the fact — register a listener, let the spell run, then assert against the captured state.
+
 ### Snapshot vs live state in MockBukkit
 MockBukkit's `BlockState` snapshots can diverge from production Paper semantics for some `Container` types (notably `Chest`). When a test reads inventory state that the production code has just written, prefer re-fetching the state via `block.getState()` immediately before the assertion rather than reusing a stale snapshot reference. If a test still fails despite a fresh snapshot, suspect a MockBukkit-vs-Paper API divergence and check the API references below.
 
