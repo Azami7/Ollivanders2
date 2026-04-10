@@ -76,7 +76,7 @@ public final class SCUTO_CONTERAM extends O2Spell {
         }
 
         // kill the spell if the projectile has stopped or when we have hit the max number of targets
-        if (hasHitTarget() || targetsRemaining <= 0)
+        if (hasHitBlock() || targetsRemaining <= 0)
             kill();
     }
 }

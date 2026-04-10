@@ -74,7 +74,7 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
         ARRESTO_MOMENTUM arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertTrue(item.getVelocity().getY() < yVelocity, "item velocity did not decrease, y-velocity was " + yVelocity + ", now " + item.getVelocity().getY());
     }
 
@@ -107,7 +107,7 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
         mockServer.getScheduler().performTicks(20);
 
         // spell should fail because the caster year is not >= 5th
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(5, target.getVelocity().getY(), "target velocity decreased, y-velocity was " + yVelocity + ", now " + target.getVelocity().getY());
 
         o2p.setYear(Year.YEAR_5);
@@ -115,7 +115,7 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
         mockServer.getScheduler().performTicks(20);
 
         // spell should pass because the caster year is 5th
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertTrue(target.getVelocity().getY() < yVelocity, "target velocity did not decrease, y-velocity was " + yVelocity + ", now " + target.getVelocity().getY());
     }
 
@@ -144,7 +144,7 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
         ARRESTO_MOMENTUM arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(5, ironGolem.getVelocity().getY(), "Iron golem velocity changed");
     }
 
@@ -169,31 +169,31 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
 
         ARRESTO_MOMENTUM arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 10);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(6, item.getVelocity().getY(), "Velocity not changed to expected value for 10 experience");
 
         item.setVelocity(new Vector(0, yVelocity, 0));
         arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 30);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(5, item.getVelocity().getY(), "Velocity not changed to expected value for 30 experience");
 
         item.setVelocity(new Vector(0, yVelocity, 0));
         arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 60);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(4, item.getVelocity().getY(), "Velocity not changed to expected value for 60 experience");
 
         item.setVelocity(new Vector(0, yVelocity, 0));
         arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 80);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(3, item.getVelocity().getY(), "Velocity not changed to expected value for 80 experience");
 
         item.setVelocity(new Vector(0, yVelocity, 0));
         arrestoMomentum = (ARRESTO_MOMENTUM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 101);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(arrestoMomentum.hasHitTarget());
+        assertTrue(arrestoMomentum.hasHitBlock());
         assertEquals(2, item.getVelocity().getY(), "Velocity not changed to expected value for 101 experience");
     }
 

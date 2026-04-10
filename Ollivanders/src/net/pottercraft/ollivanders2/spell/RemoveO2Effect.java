@@ -77,7 +77,7 @@ abstract public class RemoveO2Effect extends O2Spell {
     protected void doCheckEffect() {
         affectRadius(defaultRadius, false);
 
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
     }
 

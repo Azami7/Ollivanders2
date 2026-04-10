@@ -81,7 +81,7 @@ public final class INFORMOUS extends O2Spell {
             gaveInfo = true;
         }
 
-        if (!gaveInfo && hasHitTarget()) {
+        if (!gaveInfo && hasHitBlock()) {
             // check for stationary spells near the projectile hit location. We use our own search radius
             // rather than the stationary spell's radius because some spells (e.g., vanishing cabinets) have
             // a radius too small for a projectile to land inside from outside the structure.
@@ -115,7 +115,7 @@ public final class INFORMOUS extends O2Spell {
             }
         }
 
-        if (gaveInfo || hasHitTarget()) // stop the spell if we hit a target or gave info about an entity
+        if (gaveInfo || hasHitBlock()) // stop the spell if we hit a target or gave info about an entity
             kill();
     }
 

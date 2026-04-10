@@ -86,7 +86,7 @@ public final class DISSENDIUM extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         // continue until the spell opens a trapdoor, hits another block type and is killed, or projectile expires

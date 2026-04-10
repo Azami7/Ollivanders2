@@ -74,7 +74,7 @@ public final class ALOHOMORA extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         // check all the stationary spells in the location of the projectile for a Colloportus

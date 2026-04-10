@@ -229,7 +229,7 @@ public abstract class Transfiguration extends O2Spell {
                 kill();
         }
 
-        if (hasHitTarget() && !isTransfigured) {
+        if (hasHitBlock() && !isTransfigured) {
             // we've hit a block and the projectile is stopped, but we didn't find anything to transfigure
             common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
             sendFailureMessage();

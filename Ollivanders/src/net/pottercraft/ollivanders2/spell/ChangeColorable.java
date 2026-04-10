@@ -81,7 +81,7 @@ public abstract class ChangeColorable extends O2Spell {
             if (!changed)
                 sendFailureMessage();
         }
-        else if (hasHitTarget()) {
+        else if (hasHitBlock()) {
             kill();
 
             Block target = getTargetBlock();

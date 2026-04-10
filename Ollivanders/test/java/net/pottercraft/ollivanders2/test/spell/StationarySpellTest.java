@@ -80,7 +80,7 @@ abstract public class StationarySpellTest extends O2SpellTestSuper {
         // spell is killed after hitting target if it is not noProjectile
         mockServer.getScheduler().performTicks(20);
         if (!stationarySpell.isNoProjectile()) {
-            assertTrue(stationarySpell.hasHitTarget());
+            assertTrue(stationarySpell.hasHitBlock());
             assertTrue(stationarySpell.isKilled(), "Spell not killed after hitting target");
         }
 

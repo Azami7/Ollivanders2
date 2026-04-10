@@ -104,7 +104,7 @@ public final class DEFODIO extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         // use cooldown to slow defodio to 4 blocks per second

@@ -100,7 +100,7 @@ public final class OPPUGNO extends O2Spell {
         }
 
         if (target != null) {
-            if (hasHitTarget())
+            if (hasHitBlock())
                 kill();
 
             // get an entity to attack the target

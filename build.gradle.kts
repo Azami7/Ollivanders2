@@ -75,10 +75,28 @@ tasks.withType<JavaCompile> {
 tasks.test {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
-    // Make sure MockBukkit is completely cleaned up
-    finalizedBy("cleanTestPluginsDir")
+    // Make sure MockBukkit is completely cleaned up, and overlay dark CSS on the HTML report
+    finalizedBy("cleanTestPluginsDir", "applyDarkTestReportCss")
 }
 
 tasks.register<Delete>("cleanTestPluginsDir") {
     delete("plugins")
+}
+
+tasks.register<Copy>("applyDarkTestReportCss") {
+    from("gradle/test-report-css")
+    into(layout.buildDirectory.dir("reports/tests/test/css"))
+    // Gradle regenerates the default CSS on every test run, so always re-apply
+    outputs.upToDateWhen { false }
+}
+
+tasks.jacocoTestReport {
+    finalizedBy("applyDarkJacocoReportCss")
+}
+
+tasks.register<Copy>("applyDarkJacocoReportCss") {
+    from("gradle/jacoco-report-css")
+    into(layout.buildDirectory.dir("reports/jacoco/test/html/jacoco-resources"))
+    // JaCoCo regenerates its CSS on every report run, so always re-apply
+    outputs.upToDateWhen { false }
 }

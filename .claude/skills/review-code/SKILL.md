@@ -86,6 +86,12 @@ When reviewing source code, also find and review the corresponding test class(es
 - Verify different world coordinates are used across tests when block/entity persistence could cause interference
 - Check for use of unimplemented MockBukkit methods (e.g., `EntityMock.isUnderWater()`)
 
+## API references
+
+When you need to verify Spigot or MockBukkit API behavior (method signatures, return types, class hierarchies, snapshot vs. live semantics, etc.), consult the official javadocs via WebFetch rather than guessing:
+- Spigot: https://hub.spigotmc.org/javadocs/spigot/index.html
+- MockBukkit (v1.21): https://javadoc.io/static/org.mockbukkit.mockbukkit/mockbukkit-v1.21/4.98.0/index.html
+
 ## Output format
 
 For each issue found, report:

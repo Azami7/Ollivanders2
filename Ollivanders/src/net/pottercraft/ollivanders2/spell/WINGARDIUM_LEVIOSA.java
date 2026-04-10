@@ -123,7 +123,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
             List<Item> nearbyItems = getNearbyItems(defaultRadius);
 
             if (nearbyItems.isEmpty()) {
-                if (hasHitTarget()) // we failed to find a target and the projectile has stopped
+                if (hasHitBlock()) // we failed to find a target and the projectile has stopped
                     kill();
             }
             else {

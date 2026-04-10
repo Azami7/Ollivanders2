@@ -75,7 +75,7 @@ public final class HORREAT_PROTEGAT extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         List<O2StationarySpell> shieldSpells = new ArrayList<>();

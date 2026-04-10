@@ -100,7 +100,7 @@ public abstract class Knockback extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget() || targetsSelf) // projectile is stopped so we'll check this location then exit the spell
+        if (hasHitBlock() || targetsSelf) // projectile is stopped so we'll check this location then exit the spell
             kill();
 
         //

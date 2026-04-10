@@ -74,7 +74,7 @@ public final class DIFFINDO extends O2Spell {
         splitBackpack();
 
         // next check for log
-        if (hasHitTarget() && !isKilled()) {
+        if (hasHitBlock() && !isKilled()) {
             splitLogs();
             kill();
         }

@@ -1,0 +1,84 @@
+
+#summary {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+#summary table {
+    border-collapse: collapse;
+}
+
+#summary td {
+    vertical-align: top;
+}
+
+.breadcrumbs, .breadcrumbs a {
+    color: #9a9a9a;
+}
+
+.infoBox {
+    width: 110px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.infoBox p {
+    margin: 0;
+}
+
+.counter, .percent {
+    font-size: 120%;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#duration {
+    width: 125px;
+}
+
+#successRate, .summaryGroup {
+    border: solid 2px #444;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#successRate {
+    width: 140px;
+    margin-left: 35px;
+}
+
+#successRate .percent {
+    font-size: 180%;
+}
+
+.success, .success a {
+    color: #6abf69;
+}
+
+div.success, #successRate.success {
+    background-color: #1f3a1f;
+    border-color: #2e7d32;
+}
+
+.failures, .failures a {
+    color: #ff6b6b;
+}
+
+.skipped, .skipped a {
+    color: #e0c068;
+}
+
+div.failures, #successRate.failures {
+    background-color: #3a1f1f;
+    border-color: #b60808;
+}
+
+ul.linkList {
+    padding-left: 0;
+}
+
+ul.linkList li {
+    list-style: none;
+    margin-bottom: 5px;
+}

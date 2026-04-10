@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
-import net.pottercraft.ollivanders2.*;
+import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -8,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * This spell places a flower on the target player's head.
+ * Places a flower ({@link org.bukkit.Material#DANDELION}) on the target player's head.
  *
  * @author lownes
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Herbifors">https://harrypotter.fandom.com/wiki/Herbifors</a>
+ * @see Galeati
+ * @see <a href="https://harrypotter.fandom.com/wiki/Herbifors">Herbifors Spell</a>
  */
 public final class HERBIFORS extends Galeati {
     /**
@@ -47,7 +48,7 @@ public final class HERBIFORS extends Galeati {
         spellType = O2SpellType.HERBIFORS;
         branch = O2MagicBranch.CHARMS;
 
-        materialType = Material.DANDELION;
+        helmetType = Material.DANDELION;
 
         initSpell();
     }

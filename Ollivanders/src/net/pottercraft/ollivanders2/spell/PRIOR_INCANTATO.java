@@ -64,7 +64,7 @@ public class PRIOR_INCANTATO extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {

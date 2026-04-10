@@ -94,7 +94,7 @@ public final class PARTIS_TEMPORUS extends O2Spell {
             }
         }
 
-        if (hasHitTarget()) {
+        if (hasHitBlock()) {
             duration = duration - 1;
 
             if (duration <= 0)

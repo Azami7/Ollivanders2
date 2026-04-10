@@ -112,7 +112,7 @@ public class EvanescoMaximaTest extends EntityTransfigurationTest {
         // already transfigured entity cannot be targeted
         EVANESCO evanesco = (EVANESCO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2, O2SpellType.EVANESCO);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(evanesco.hasHitTarget(), "spell did not hit target");
+        assertTrue(evanesco.hasHitBlock(), "spell did not hit target");
         assertTrue(evanesco.isTransfigured(), "target was not transfigured");
 
         EVANESCO_MAXIMA evanescoMaxima = (EVANESCO_MAXIMA) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
@@ -138,7 +138,7 @@ public class EvanescoMaximaTest extends EntityTransfigurationTest {
 
         EVANESCO_MAXIMA evanescoMaxima = (EVANESCO_MAXIMA) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(evanescoMaxima.hasHitTarget());
+        assertTrue(evanescoMaxima.hasHitBlock());
         assertTrue(evanescoMaxima.isTransfigured());
 
         // target entity was removed

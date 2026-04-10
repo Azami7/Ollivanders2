@@ -62,7 +62,7 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
         ImmobilizePlayer immobilize = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(immobilize.hasHitTarget(), "did not hit target player");
+        assertTrue(immobilize.hasHitBlock(), "did not hit target player");
         if (immobilize.isFullImmobilize())
             assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.FULL_IMMOBILIZE), "target does not have the full immobilize effect");
         else
@@ -90,7 +90,7 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
         ImmobilizePlayer immobilize = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(immobilize.hasHitTarget());
+        assertTrue(immobilize.hasHitBlock());
         assertTrue(immobilize.getEffectDuration() <= immobilize.getMaxEffectDuration(), "effect duration is > max duration");
         assertTrue(immobilize.getEffectDuration() >= immobilize.getMinEffectDuration(), "effect duration is < min duration");
     }
@@ -169,7 +169,7 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
 
         ImmobilizePlayer immobilizePlayer = (ImmobilizePlayer) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(immobilizePlayer.hasHitTarget());
+        assertTrue(immobilizePlayer.hasHitBlock());
 
         if (immobilizePlayer.doesImprison()) {
             Material prisonMaterial = immobilizePlayer.getImprisonMaterial();

@@ -1,11 +1,13 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
@@ -13,28 +15,38 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Reparifarge spell - an untransfiguration counter-spell.
- *
- * <p>Reparifarge reverses active transfigurations cast by other spells, returning transfigured blocks
- * and entities back to their original state. This spell is primarily useful for countering incomplete
- * or unwanted transfigurations. It does not work on permanent transfigurations or Animagus transformations.</p>
- *
- * <p><strong>Success Mechanics:</strong> The spell has a variable success rate based on the caster's
- * skill level with Reparifarge (number of uses). The success rate ranges from {@link #minSuccessRate}%
- * to {@link #maxSuccessRate}%. Block transfigurations can always be reverted with a successful cast,
- * but entity transfigurations can only be reverted if the source transfiguration spell has an equal or
- * lower level than Reparifarge.</p>
- *
- * <p><strong>Target Detection:</strong> The spell projectile searches for both blocks and entities
- * at the impact location. Ender Dragon parts are automatically converted to their parent dragon entity
- * for targeting consistency.</p>
+ * Untransfiguration counter-spell that reverses active transfigurations on blocks and entities.
+ * <p>
+ * Reparifarge can target both block transfigurations (via block-hit) and entity transfigurations
+ * (via entity scanning along the projectile path). A transfiguration can be reverted if the source
+ * spell's {@link net.pottercraft.ollivanders2.common.MagicLevel} is at most one level above
+ * Reparifarge's own level. If the level check passes, the revert is subject to a random success
+ * check that scales from {@link #minSuccessRate}% to {@link #maxSuccessRate}% based on caster
+ * experience.
+ * </p>
+ * <p>
+ * Water is removed from the projectile pass-through list so the spell can stop on water blocks
+ * created by transfigurations like {@link TERGEO} → {@link AGUAMENTI}.
+ * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Reparifarge">Reparifarge on Harry Potter Wiki</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Reparifarge">Reparifarge</a>
  */
 public final class REPARIFARGE extends O2Spell {
-    static final int maxSuccessRate = 100;
-    static final int minSuccessRate = 10;
+    /**
+     * Upper bound for the success rate percentage (100 = always succeeds at mastery).
+     */
+    public static final int maxSuccessRate = 100;
+
+    /**
+     * Lower bound for the success rate percentage (10 = 10% chance even at minimum skill).
+     */
+    public static final int minSuccessRate = 10;
+
+    /**
+     * The current success rate for this cast, clamped to [{@link #minSuccessRate}, {@link #maxSuccessRate}].
+     * Set in {@link #doInitSpell()} based on caster experience.
+     */
     int successRate = minSuccessRate;
 
     /**
@@ -69,8 +81,9 @@ public final class REPARIFARGE extends O2Spell {
         spellType = O2SpellType.REPARIFARGE;
         branch = O2MagicBranch.TRANSFIGURATION;
 
+        projectilePassThrough.remove(Material.WATER);
+
         successMessage = "Successfully untransfigured your target.";
-        failureMessage = "Nothing seems to happen";
 
         initSpell();
     }
@@ -88,26 +101,24 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Executes the Reparifarge spell effect.
-     *
-     * <p>When the projectile hits a target block, attempts to revert any active transfiguration on that block.
-     * When the projectile is in flight near entities, searches nearby entities and attempts to revert
-     * transfigurations on the first valid target found. Ender Dragon parts are automatically converted to
-     * their parent dragon entity before checking for transfigurations.</p>
-     *
-     * <p>Sends success or failure message to the caster and terminates the spell after attempting reversion.</p>
+     * Attempt to revert a transfiguration on the target block or a nearby entity.
+     * <p>
+     * When the projectile hits a block, the block is checked for an active transfiguration via
+     * {@link #reparifargeBlock(Block)}. When the projectile is in flight, nearby entities are
+     * scanned via {@link #reparifargeEntity(Entity)} (caster excluded, {@link EnderDragonPart}
+     * resolved to parent). In both cases, a success or failure message is sent to the caster
+     * and the spell is killed after the first attempt.
+     * </p>
      */
     @Override
     public void doCheckEffect() {
-        if (hasHitTarget()) {
-            if (getTargetBlock() == null) {
+        if (hasHitBlock()) {
+            if (getTargetBlock() == null)
                 common.printDebugMessage("Target block null in " + spellType.toString(), null, null, false);
-                return;
-            }
-            if (reparifargeBlock(getTargetBlock()))
-                caster.sendMessage(Ollivanders2.chatColor + successMessage);
+            else if (reparifargeBlock(getTargetBlock()))
+                sendSuccessMessage();
             else
-                caster.sendMessage(Ollivanders2.chatColor + failureMessage);
+                sendFailureMessage();
 
             kill();
         }
@@ -121,7 +132,7 @@ public final class REPARIFARGE extends O2Spell {
                     entity = ((EnderDragonPart) entity).getParent();
 
                 if (reparifargeEntity(entity)) {
-                    caster.sendMessage(Ollivanders2.chatColor + successMessage);
+                    sendSuccessMessage();
                     kill();
                     return;
                 }
@@ -132,21 +143,13 @@ public final class REPARIFARGE extends O2Spell {
     /**
      * Attempts to revert any active entity transfiguration affecting the target entity.
      *
-     * <p>Searches for active transfiguration spells that have transfigured the target entity.
-     * If a matching transfiguration is found, checks if Reparifarge's level is equal to or greater than
-     * the source transfiguration spell's level. If so, performs a success check and kills the source spell
-     * if successful, reverting the transfiguration.</p>
-     *
-     * <p>Returns true if a transfiguration was found (regardless of whether it was reverted), false otherwise.
-     * This distinguishes between "no transfiguration found" and "transfiguration found but revert failed".</p>
-     *
      * @param target the target entity to check for transfiguration
      * @return true if any transfiguration was found affecting this entity, false otherwise
      */
     public boolean reparifargeEntity(@NotNull Entity target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof Transfiguration && ((Transfiguration) spell).isTransfigured(target)) {
-                if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
+                if ((spell.getLevel().ordinal() <= this.spellType.getLevel().ordinal() + 1) && checkSuccess())
                     spell.kill();
 
                 return true;
@@ -159,21 +162,13 @@ public final class REPARIFARGE extends O2Spell {
     /**
      * Attempts to revert any active block transfiguration affecting the target block.
      *
-     * <p>Searches for active transfiguration spells that have transfigured the target block.
-     * If a matching transfiguration is found, performs a success check and kills the source spell
-     * if successful, reverting the transfiguration. Unlike entity transfigurations, block transfigurations
-     * have no level requirement - they can always be reverted if the success check passes.</p>
-     *
-     * <p>Returns true if a transfiguration was found (regardless of whether it was reverted), false otherwise.
-     * This distinguishes between "no transfiguration found" and "transfiguration found but revert failed".</p>
-     *
      * @param target the target block to check for transfiguration
      * @return true if any transfiguration was found affecting this block, false otherwise
      */
     public boolean reparifargeBlock(@NotNull Block target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof Transfiguration && ((Transfiguration) spell).isTransfigured(target)) {
-                if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
+                if ((spell.getLevel().ordinal() <= this.spellType.getLevel().ordinal() + 1) && checkSuccess())
                     spell.kill();
 
                 return true;
@@ -189,8 +184,18 @@ public final class REPARIFARGE extends O2Spell {
      * @return true if succeeded, false otherwise
      */
     boolean checkSuccess() {
-        int success = Math.abs(Ollivanders2Common.random.nextInt()) % 100;
+        int success = Math.abs(Ollivanders2Common.random.nextInt(100));
 
         return (success < successRate);
+    }
+
+    /**
+     * Get the success rate for this cast, as a percentage clamped to
+     * [{@link #minSuccessRate}, {@link #maxSuccessRate}].
+     *
+     * @return the success rate percentage (10–100)
+     */
+    public int getSuccessRate() {
+        return successRate;
     }
 }

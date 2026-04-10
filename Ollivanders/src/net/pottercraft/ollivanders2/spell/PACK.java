@@ -4,7 +4,9 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -18,9 +20,16 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Pack is the incantation of a spell used to make items pack themselves into a trunk.
+ * Packing Charm — when cast at a chest, ender chest, or shulker box, sucks any nearby items into it.
+ * <p>
+ * The radius of items collected scales with caster experience (see {@link #doInitSpell()}). Items that
+ * fit are added to the target container's inventory and removed from the world; items that overflow
+ * have their stack reduced to the leftover amount and remain dropped in the world. For ender chest
+ * targets, items are routed into the caster's personal ender chest inventory rather than into the
+ * targeted block.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Pack_Charm">https://harrypotter.fandom.com/wiki/Pack_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Pack_Charm">Pack Charm</a>
  */
 public final class PACK extends O2Spell {
     /**
@@ -47,7 +56,7 @@ public final class PACK extends O2Spell {
             add("The Packing Charm");
         }};
 
-        text = "When cast at an ender chest or shulker box, it will suck any items nearby into it.";
+        text = "When cast at a chest or shulker box, it will suck any items nearby into it.";
     }
 
     /**
@@ -67,33 +76,20 @@ public final class PACK extends O2Spell {
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.CHEST_ACCESS);
 
-        // only allow targeting ender chests and shulker boxes - aka "magic" chests
+        // only allow targeting chests and shulker boxes
+        materialAllowList.add(Material.CHEST);
+        materialAllowList.add(Material.TRAPPED_CHEST);
         materialAllowList.add(Material.ENDER_CHEST);
-        materialAllowList.add(Material.WHITE_SHULKER_BOX);
-        materialAllowList.add(Material.BLACK_SHULKER_BOX);
-        materialAllowList.add(Material.BLUE_SHULKER_BOX);
-        materialAllowList.add(Material.SHULKER_BOX);
-        materialAllowList.add(Material.BROWN_SHULKER_BOX);
-        materialAllowList.add(Material.CYAN_SHULKER_BOX);
-        materialAllowList.add(Material.GRAY_SHULKER_BOX);
-        materialAllowList.add(Material.GREEN_SHULKER_BOX);
-        materialAllowList.add(Material.LIGHT_BLUE_SHULKER_BOX);
-        materialAllowList.add(Material.LIGHT_GRAY_SHULKER_BOX);
-        materialAllowList.add(Material.LIME_SHULKER_BOX);
-        materialAllowList.add(Material.MAGENTA_SHULKER_BOX);
-        materialAllowList.add(Material.ORANGE_SHULKER_BOX);
-        materialAllowList.add(Material.PINK_SHULKER_BOX);
-        materialAllowList.add(Material.PURPLE_SHULKER_BOX);
-        materialAllowList.add(Material.RED_SHULKER_BOX);
-        materialAllowList.add(Material.YELLOW_SHULKER_BOX);
+        materialAllowList.addAll(Tag.SHULKER_BOXES.getValues());
 
-        materialBlockedList.removeAll(materialAllowList); // remove these unbreakables for this spell only
+        // chests and shulker boxes are normally on the projectile blocked-target list — allow them for this spell
+        materialBlockedList.removeAll(materialAllowList);
 
         initSpell();
     }
 
     /**
-     * Set the radius based on the caster's skill
+     * Set the radius based on the caster's skill, clamped to the {@link #minRadius}–{@link #maxRadius} range.
      */
     @Override
     void doInitSpell() {
@@ -106,11 +102,24 @@ public final class PACK extends O2Spell {
     }
 
     /**
-     * Find a nearby shulker box or ender chest and put any nearby items in to it
+     * On projectile impact with a valid container, scoop nearby items into that container.
+     * <p>
+     * Iterates over all item entities within {@link #radius} of the projectile's impact point and adds
+     * each to the target container's inventory. The destination depends on the target block type:
+     * </p>
+     * <ul>
+     * <li>{@code ENDER_CHEST} — items go into the caster's personal ender chest inventory, not the block.</li>
+     * <li>Any shulker box variant — items go into that shulker box's block inventory.</li>
+     * <li>{@code CHEST} / {@code TRAPPED_CHEST} — items go into that chest's block inventory.</li>
+     * </ul>
+     * <p>
+     * Items that fit completely are removed from the world. Items that don't fully fit have their stack
+     * size reduced to the leftover amount and remain dropped in the world.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         kill();
@@ -119,19 +128,34 @@ public final class PACK extends O2Spell {
         // get nearby items
         List<Item> nearbyItems = EntityCommon.getItemsInRadius(location, radius);
 
+        Block targetBlock = getTargetBlock();
+        if (targetBlock == null) {
+            common.printDebugMessage("PACK.doCheckEffect: target block is null", null, null, false);
+            return;
+        }
+
         for (Item item : nearbyItems) {
-            common.printDebugMessage("Adding " + item.getName() + " to chest", null, null, false);
+            common.printDebugMessage("Adding " + item.getItemStack().getType().name() + " to chest", null, null, false);
 
             HashMap<Integer, ItemStack> overflow;
 
-            Block targetBlock = getTargetBlock();
-
-            if (targetBlock != null && targetBlock.getType() == Material.ENDER_CHEST)
+            if (targetBlock.getType() == Material.ENDER_CHEST)
                 overflow = caster.getEnderChest().addItem(item.getItemStack());
-            else if (targetBlock != null && targetBlock.getState() instanceof ShulkerBox)
-                overflow = ((ShulkerBox) targetBlock.getState()).getInventory().addItem(item.getItemStack());
+            else if (targetBlock.getState() instanceof ShulkerBox state)
+                overflow = state.getInventory().addItem(item.getItemStack());
+            else if (targetBlock.getState() instanceof Chest chestState) { // it's a normal chest
+                // MockBukkit's Chest.getInventory() returns a fresh snapshot inventory on each
+                // getState() call, so spell-side writes don't surface to test-side reads.
+                // getBlockInventory() returns the persistent backing snapshot, which both sides
+                // share. In real Paper, getInventory() is the live tile-entity inventory and is
+                // the correct call.
+                if (Ollivanders2.testMode)
+                    overflow = chestState.getBlockInventory().addItem(item.getItemStack());
+                else
+                    overflow = chestState.getInventory().addItem(item.getItemStack());
+            }
             else {
-                common.printDebugMessage("Target chest is not an ender chest or shulker box", null, null, true);
+                common.printDebugMessage("PACK.doCheckEffect: block is not a chest or shulker box - material allowList flaw", null, null, true);
                 return;
             }
 
@@ -139,13 +163,7 @@ public final class PACK extends O2Spell {
             if (overflow.isEmpty())
                 item.remove();
             else {
-                // how many did it stash
-                for (ItemStack itemStack : overflow.values()) {
-                    if (itemStack.getType() == item.getItemStack().getType()) {
-                        int diff = item.getItemStack().getAmount() - itemStack.getAmount();
-                        item.getItemStack().setAmount(diff);
-                    }
-                }
+                item.setItemStack(overflow.values().iterator().next());
             }
         }
     }

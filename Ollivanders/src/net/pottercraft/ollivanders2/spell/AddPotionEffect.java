@@ -128,7 +128,7 @@ public abstract class AddPotionEffect extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget() || noProjectile)
+        if (hasHitBlock() || noProjectile)
             kill();
 
         affectRadius();

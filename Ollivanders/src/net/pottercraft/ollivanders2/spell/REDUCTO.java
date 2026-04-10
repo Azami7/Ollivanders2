@@ -90,7 +90,7 @@ public final class REDUCTO extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         Location backLoc = location.clone().subtract(vector);

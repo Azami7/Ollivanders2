@@ -796,6 +796,9 @@ public class Ollivanders2CommonTest {
         Ollivanders2Common.initMaterials();
 
         for (Material material : Material.values()) {
+            // skip legacy materials — Ollivanders2 does not support LEGACY_* entries
+            if (material.toString().startsWith("LEGACY_"))
+                continue;
             if (material.toString().endsWith("_CHEST") || material.toString().endsWith("_SHULKER_BOX")) {
                 assertTrue(Ollivanders2Common.isChest(material), "Missing chest material " + material);
             }

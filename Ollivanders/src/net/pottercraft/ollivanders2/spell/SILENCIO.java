@@ -84,7 +84,7 @@ public final class SILENCIO extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {

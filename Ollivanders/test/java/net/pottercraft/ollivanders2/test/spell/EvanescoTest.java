@@ -78,7 +78,7 @@ public class EvanescoTest extends EntityTransfigurationTest {
 
         EVANESCO evanesco = (EVANESCO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(evanesco.hasHitTarget());
+        assertTrue(evanesco.hasHitBlock());
         assertTrue(evanesco.isTransfigured());
 
         // target entity was removed

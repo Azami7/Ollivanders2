@@ -10,13 +10,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Encases target's head in a melon
+ * Encases the target player's head in a randomly selected melon or pumpkin block.
  *
  * @author lownes
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx">https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx</a>
+ * @see Galeati
+ * @see <a href="https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx">Pumpkin-Head Jinx</a>
  */
 public final class MELOFORS extends Galeati {
+    /**
+     * The pool of melon/pumpkin materials that the spell randomly selects from when cast.
+     */
     static Material[] melons = {
             Material.MELON,
             Material.JACK_O_LANTERN,
@@ -55,7 +59,7 @@ public final class MELOFORS extends Galeati {
         spellType = O2SpellType.MELOFORS;
         branch = O2MagicBranch.CHARMS;
 
-        materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
+        helmetType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
 
         initSpell();
     }

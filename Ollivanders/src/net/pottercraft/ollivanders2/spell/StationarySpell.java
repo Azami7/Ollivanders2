@@ -132,7 +132,7 @@ public abstract class StationarySpell extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!noProjectile && !hasHitTarget()) // if we have not hit a target, continue
+        if (!noProjectile && !hasHitBlock()) // if we have not hit a target, continue
             return;
 
         setDuration();

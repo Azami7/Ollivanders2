@@ -108,7 +108,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         kill();

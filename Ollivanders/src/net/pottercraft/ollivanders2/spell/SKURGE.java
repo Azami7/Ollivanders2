@@ -83,7 +83,7 @@ public class SKURGE extends O2Spell {
 
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {

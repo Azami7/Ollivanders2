@@ -157,12 +157,12 @@ public abstract class IncendioBase extends O2Spell {
      * the calculated burn duration. If so, the spell is killed, allowing the {@link #revert()} method to
      * clean up any temporarily changed blocks.</p>
      *
-     * <p>The spell requires a valid target block ({@link #hasHitTarget()}) to function. If the projectile
+     * <p>The spell requires a valid target block ({@link #hasHitBlock()}) to function. If the projectile
      * has not hit a target or the target block is null, the spell is killed immediately.</p>
      */
     @Override
     protected void doCheckEffect() {
-        if (!hasHitTarget())
+        if (!hasHitBlock())
             return;
 
         if (burning) {

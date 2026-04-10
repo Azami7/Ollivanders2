@@ -93,7 +93,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
             finiteIncantatemItems();
 
         // projectile has stopped, kill the spell
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
     }
 

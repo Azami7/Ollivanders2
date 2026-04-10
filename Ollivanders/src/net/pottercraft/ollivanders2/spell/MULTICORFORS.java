@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.common.O2Color;
 import org.bukkit.Color;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,12 +12,27 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
- * If an entity has leather armor on, then this changes its color.
+ * Multicorfors changes the color of leather armor worn by a nearby entity.
+ * <p>
+ * Unlike block-targeting spells, Multicorfors scans for living entities along the projectile's
+ * path each tick. The first non-caster entity with leather armor gets all its leather pieces
+ * recolored to the same random dyeable color (via {@link O2Color#getRandomDyeableColor()}).
+ * If the projectile reaches a non-caster entity that has no leather armor, or no equipment at
+ * all, the spell is killed and a failure message is sent to the caster.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Multicorfors_Spell">https://harrypotter.fandom.com/wiki/Multicorfors_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Multicorfors_Spell">Multicorfors Spell</a>
  */
 public final class MULTICORFORS extends O2Spell {
+    /**
+     * The color applied to the target's leather armor on the most recent successful cast.
+     * Defaults to {@link Color#WHITE} before any armor is colored.
+     */
+    private Color color = Color.WHITE;
+
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
@@ -49,39 +65,77 @@ public final class MULTICORFORS extends O2Spell {
     }
 
     /**
-     * Look for entities with armor we can change the color of and change it.
+     * Scan for nearby living entities and recolor the first one's leather armor.
+     * <p>
+     * Each tick, the method scans within {@link #defaultRadius} of the projectile for living
+     * entities. The caster is always skipped. When a non-caster entity is found, the spell is
+     * killed and the entity's armor is inspected:
+     * </p>
+     * <ul>
+     * <li>If any piece is leather armor, all leather pieces are recolored to the same random
+     *     dyeable color, the modified armor array is written back via
+     *     {@link org.bukkit.inventory.EntityEquipment#setArmorContents(ItemStack[])}, and the
+     *     loop breaks (single-target).</li>
+     * <li>If no leather armor is found on any non-caster entity in the scan, a failure message
+     *     is sent to the caster.</li>
+     * </ul>
+     * <p>
+     * If the projectile hits a block before finding an entity, the spell is killed and returns
+     * silently (no failure message).
+     * </p>
      */
+    @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
-        for (LivingEntity live : getNearbyLivingEntities(defaultRadius)) {
-            if (live.getUniqueId().equals(caster.getUniqueId()))
+        List<LivingEntity> nearbyLivingEntities = getNearbyLivingEntities(defaultRadius);
+
+        if (nearbyLivingEntities.isEmpty())
+            return;
+
+        boolean colored = false;
+        for (LivingEntity livingEntity : nearbyLivingEntities) {
+            if (livingEntity.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
-            EntityEquipment equipment = live.getEquipment();
-            if (equipment == null) {
-                // they have no equipment
-                kill();
-                return;
-            }
+            kill();
 
-            for (ItemStack armor : equipment.getArmorContents()) {
-                if (armor.getItemMeta() instanceof LeatherArmorMeta) {
-                    LeatherArmorMeta meta = (LeatherArmorMeta) armor.getItemMeta();
-                    Color curColor = meta.getColor();
-                    int modifier = (int) (Math.random() * usesModifier * 40);
-                    modifier = modifier - modifier / 2;
-                    int blue = (curColor.getBlue() + modifier) % 256;
-                    int green = (curColor.getGreen() + modifier) % 256;
-                    int red = (curColor.getRed() + modifier) % 256;
-                    Color newColor = Color.fromRGB(red, green, blue);
-                    meta.setColor(newColor);
-                    armor.setItemMeta(meta);
+            EntityEquipment equipment = livingEntity.getEquipment();
+            if (equipment == null)
+                continue;
 
-                    kill();
+            color = O2Color.getRandomDyeableColor().getBukkitColor();
+
+            // getArmorContents() returns a copy — modify in place then write back
+            ItemStack[] armorContents = equipment.getArmorContents();
+
+            for (ItemStack armor : armorContents) {
+                if (armor != null && armor.getItemMeta() instanceof LeatherArmorMeta leatherArmorMeta) {
+                    leatherArmorMeta.setColor(color);
+                    armor.setItemMeta(leatherArmorMeta);
+
+                    colored = true;
                 }
             }
+
+            if (colored) {
+                equipment.setArmorContents(armorContents);
+                break;
+            }
         }
+
+        if (!colored && isKilled())
+            sendFailureMessage();
+    }
+
+    /**
+     * Get the color applied to the target's leather armor on the most recent successful cast.
+     * Returns {@link Color#WHITE} if the spell has not yet colored any armor.
+     *
+     * @return the color applied, or WHITE if no armor was colored
+     */
+    public Color getColor() {
+       return color;
     }
 }

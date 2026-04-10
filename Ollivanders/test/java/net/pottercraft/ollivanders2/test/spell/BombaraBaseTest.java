@@ -76,7 +76,7 @@ abstract public class BombaraBaseTest extends O2SpellTestSuper {
         block.setType(getValidMaterial());
         BombardaBase bombarda = (BombardaBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(bombarda.hasHitTarget(), "spell did not hit target");
+        assertTrue(bombarda.hasHitBlock(), "spell did not hit target");
         assertEquals(Material.AIR, block.getType(), "block was not broken");
 
         // test unbreakable
@@ -84,7 +84,7 @@ abstract public class BombaraBaseTest extends O2SpellTestSuper {
         block.setType(unbreakable);
         bombarda = (BombardaBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(bombarda.hasHitTarget());
+        assertTrue(bombarda.hasHitBlock());
         assertEquals(unbreakable, block.getType(), "unbreakable material broken");
 
         // test doors
@@ -92,7 +92,7 @@ abstract public class BombaraBaseTest extends O2SpellTestSuper {
         block.setType(door);
         bombarda = (BombardaBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(bombarda.hasHitTarget());
+        assertTrue(bombarda.hasHitBlock());
         if (bombarda.doesBreakDoors()) {
             assertEquals(Material.AIR, block.getType(), "spell did not break door");
         }
@@ -105,7 +105,7 @@ abstract public class BombaraBaseTest extends O2SpellTestSuper {
         block.setType(blastResistant);
         bombarda = (BombardaBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(bombarda.hasHitTarget());
+        assertTrue(bombarda.hasHitBlock());
         assertEquals(blastResistant, block.getType(), "block with higher blast resistance broken");
 
         // test hardness
@@ -113,7 +113,7 @@ abstract public class BombaraBaseTest extends O2SpellTestSuper {
         block.setType(hard);
         bombarda = (BombardaBase) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(bombarda.hasHitTarget());
+        assertTrue(bombarda.hasHitBlock());
         assertEquals(hard, block.getType(), "block with higher hardness was broken");
 
         // test radius
@@ -126,7 +126,7 @@ abstract public class BombaraBaseTest extends O2SpellTestSuper {
         outside.setType(getValidMaterial());
         bombarda = (BombardaBase) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(bombarda.hasHitTarget());
+        assertTrue(bombarda.hasHitBlock());
         assertEquals(Material.AIR, block.getType(), "block not broken");
         assertEquals(Material.AIR, east.getType(), "east block not broken");
         assertEquals(Material.AIR, west.getType(), "west block not broken");

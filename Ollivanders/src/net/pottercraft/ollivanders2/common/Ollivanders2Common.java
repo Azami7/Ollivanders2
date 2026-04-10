@@ -20,6 +20,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -239,34 +240,31 @@ public class Ollivanders2Common {
         if (chestBlocks.isEmpty()) {
             chestBlocks.add(Material.CHEST); // special case, we don't want to use the regex "CHEST" in case some future block could match that but not be a chest (like "richest")
             chestBlocks.addAll(getAllMaterialsThatEndWith("_CHEST"));
-            chestBlocks.addAll(getAllMaterialsThatEndWith("_SHULKER_BOX"));
+            chestBlocks.addAll(Tag.SHULKER_BOXES.getValues());
         }
 
         if (wallSigns.isEmpty()) {
-            wallSigns.addAll(getAllMaterialsThatEndWith("_WALL_SIGN"));
+            wallSigns.addAll(Tag.WALL_SIGNS.getValues());
         }
 
         if (hangingSigns.isEmpty()) {
-            hangingSigns.addAll(getAllMaterialsThatEndWith("_HANGING_SIGN"));
+            hangingSigns.addAll(Tag.ALL_HANGING_SIGNS.getValues());
         }
 
         if (standingSigns.isEmpty()) {
-            for (Material sign : getAllMaterialsThatEndWith("_SIGN")) {
-                if (!wallSigns.contains(sign) && !hangingSigns.contains(sign))
-                    standingSigns.add(sign);
-            }
+            standingSigns.addAll(Tag.STANDING_SIGNS.getValues());
         }
 
         if (trapdoors.isEmpty()) {
-            trapdoors.addAll(getAllMaterialsThatEndWith("_TRAPDOOR"));
+            trapdoors.addAll(Tag.TRAPDOORS.getValues());
         }
 
         if (gates.isEmpty()) {
-            gates.addAll(getAllMaterialsThatEndWith("_FENCE_GATE"));
+            gates.addAll(Tag.FENCE_GATES.getValues());
         }
 
         if (doors.isEmpty()) {
-            doors.addAll(getAllMaterialsThatEndWith("_DOOR"));
+            doors.addAll(Tag.DOORS.getValues());
         }
 
         if (naturalLogs.isEmpty()) {

@@ -120,7 +120,7 @@ public class ApareciumTest extends O2SpellTestSuper {
 
         APARECIUM aparecium = (APARECIUM) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(aparecium.hasHitTarget());
+        assertTrue(aparecium.hasHitBlock());
         assertFalse(writtenBook.isDead()); // if aparecium tried to remove an enchantment, it would have removed the original book and dropped a new one
 
         // test on enchanted item that is not a book
@@ -129,7 +129,7 @@ public class ApareciumTest extends O2SpellTestSuper {
         Item broomstick = testWorld.dropItem(targetLocation, broomstickStack);
         aparecium = (APARECIUM) castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(aparecium.hasHitTarget());
+        assertTrue(aparecium.hasHitBlock());
         assertFalse(broomstick.isDead(), "aparecium removed enchanted item that is not a book"); // if aparecium tried to remove an enchantment, it would have removed the original book and dropped a new one
         assertTrue(Ollivanders2API.getItems().enchantedItems.isEnchanted(broomstick), "aparecium removed enchantment from item that is not a book");
     }

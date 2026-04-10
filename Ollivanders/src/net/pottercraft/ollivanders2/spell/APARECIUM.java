@@ -72,7 +72,7 @@ public final class APARECIUM extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget()) {
+        if (hasHitBlock()) {
             kill();
             return;
         }

@@ -98,8 +98,7 @@ public class Cuboid {
 
         if ((x1 > x2 && x <= x1 && x >= x2) || (x1 < x2 && x >= x1 && x <= x2)) {
             if ((y1 > y2 && y <= y1 && y >= y2) || (y1 < y2 && y >= y1 && y <= y2)) {
-                // NOTE: The second condition uses 'x >= z1' which appears to be a bug - should be 'z >= z1'
-                if ((z1 > z2 && z <= z1 && z >= z2) || (z1 < z2 && x >= z1 && z <= z2)) {
+                if ((z1 > z2 && z <= z1 && z >= z2) || (z1 < z2 && z >= z1 && z <= z2)) {
                     return true;
                 }
                 else {

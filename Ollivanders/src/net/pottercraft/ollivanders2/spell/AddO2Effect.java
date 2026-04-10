@@ -125,7 +125,7 @@ public abstract class AddO2Effect extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (hasHitTarget())
+        if (hasHitBlock())
             kill();
 
         int targets = 0;

@@ -113,7 +113,7 @@ public abstract class BombardaBase extends O2Spell {
      * <p>Only breaks blocks that pass the {@code canBreak()} validation.</p>
      */
     protected void doCheckEffect() {
-        if (hasHitTarget()) {
+        if (hasHitBlock()) {
             calculateEffectRadius();
 
             // play explosion particle and sound
