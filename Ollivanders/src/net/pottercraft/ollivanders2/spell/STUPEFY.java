@@ -65,8 +65,8 @@ public final class STUPEFY extends AddPotionEffect {
         minDurationInSeconds = minDurationInSecondsConfig;
         maxDurationInSeconds = maxDurationInSecondsConfig;
 
-        effectTypes.add(PotionEffectType.BLINDNESS);
-        effectTypes.add(PotionEffectType.SLOWNESS);
+        potionEffectTypes.add(PotionEffectType.BLINDNESS);
+        potionEffectTypes.add(PotionEffectType.SLOWNESS);
 
         initSpell();
     }

@@ -63,7 +63,7 @@ public final class EPISKEY extends AddPotionEffect {
         maxDurationInSeconds = maxDurationInSecondsConfig;
         durationModifier = 0.5; // 50%
 
-        effectTypes.add(PotionEffectType.REGENERATION);
+        potionEffectTypes.add(PotionEffectType.REGENERATION);
 
         initSpell();
     }

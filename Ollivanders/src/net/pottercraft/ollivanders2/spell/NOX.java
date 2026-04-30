@@ -10,11 +10,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Cancels the effect of the LUMOS spell or removes the effect of a Night Vision potion.
+ * The Wand-Extinguishing Charm — cancels the effect of {@link LUMOS} or removes a Night Vision potion effect.
+ *
+ * <p>NOX removes Night Vision from the caster and all nearby entities within a radius that scales
+ * with the caster's experience. The radius uses the same bounds as {@link LUMOS} so that a NOX cast
+ * at the same skill level can fully counter a LUMOS. Success is guaranteed regardless of experience
+ * level ({@code successModifier = 0.01f}).</p>
  *
  * @author Azami7
- * @version Ollivanders2
- * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm">https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm</a>
+ * @see LUMOS
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Extinguishing_Charm">Harry Potter Wiki - Wand-Extinguishing Charm</a>
  */
 public final class NOX extends RemovePotionEffectInRadius {
     /**
@@ -51,19 +56,23 @@ public final class NOX extends RemovePotionEffectInRadius {
         targetSelf = true;
 
         potionEffectTypes.add(PotionEffectType.NIGHT_VISION);
+        successModifier = 0.01f; // this will make casting NOX 100% successful
 
         initSpell();
-        successModifier = 0.01f; // this will make casting NOX 100% successful
     }
 
+    /**
+     * Calculate the effect radius based on the caster's experience with this spell.
+     *
+     * <p>Uses the same minimum and maximum radius as {@link LUMOS} so that NOX can fully
+     * counter a LUMOS cast at the same skill level.</p>
+     */
     @Override
     void doInitSpell() {
-        // use the same min and max radius and Lumos
-
-        radius = ((int) usesModifier) / 10;
-        if (radius < LUMOS.minEffectRadiusConfig)
-            radius = LUMOS.minEffectRadiusConfig;
-        else if (radius > LUMOS.maxEffectRadiusConfig)
-            radius = LUMOS.maxEffectRadiusConfig;
+        effectRadius = usesModifier / 10;
+        if (effectRadius < LUMOS.minEffectRadiusConfig)
+            effectRadius = LUMOS.minEffectRadiusConfig;
+        else if (effectRadius > LUMOS.maxEffectRadiusConfig)
+            effectRadius = LUMOS.maxEffectRadiusConfig;
     }
 }

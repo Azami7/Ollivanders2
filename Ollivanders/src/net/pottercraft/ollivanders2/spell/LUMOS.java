@@ -19,8 +19,8 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm">Wand-Lighting Charm</a>
  */
 public class LUMOS extends AddPotionEffectInRadius {
-    final static int minEffectRadiusConfig = 5;
-    final static int maxEffectRadiusConfig = 20;
+    public final static int minEffectRadiusConfig = 5;
+    public final static int maxEffectRadiusConfig = 20;
     private final static int minDurationInSecondsConfig = 30;
 
     /**
@@ -62,7 +62,7 @@ public class LUMOS extends AddPotionEffectInRadius {
         spellType = O2SpellType.LUMOS;
         branch = O2MagicBranch.CHARMS;
 
-        effectTypes.add(PotionEffectType.NIGHT_VISION);
+        potionEffectTypes.add(PotionEffectType.NIGHT_VISION);
         amplifier = 0; // Night Vision I
 
         minDurationInSeconds = minDurationInSecondsConfig;

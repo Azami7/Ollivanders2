@@ -52,6 +52,7 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
     public LivingEntityToItemTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
+        branch = O2MagicBranch.TRANSFIGURATION;
         permanent = true;
         targetType = EntityType.ITEM;
 
@@ -83,17 +84,13 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
             return null;
         }
 
-        // spawn the new entity
-        Entity newEntity = entity.getWorld().spawnEntity(entity.getLocation(), targetType);
-        if (!(newEntity instanceof Item)) {
-            newEntity.remove();
-        }
-        ((Item) newEntity).setItemStack(new ItemStack(targetMaterial));
+        // spawn the new item entity
+        Item item = entity.getWorld().dropItem(entity.getLocation(), new ItemStack(targetMaterial));
 
         // remove the original entity
         entity.remove();
 
-        return newEntity;
+        return item;
     }
 
     /**
@@ -127,5 +124,9 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
         }
 
         return true;
+    }
+
+    public Material getTargetMaterial() {
+        return targetMaterial;
     }
 }

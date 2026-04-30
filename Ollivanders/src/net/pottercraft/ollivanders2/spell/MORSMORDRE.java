@@ -89,7 +89,7 @@ public final class MORSMORDRE extends AddPotionEffectInRadius {
         maxDurationInSeconds = 600; // 10 mins
         targetSelf = false;
 
-        effectTypes.add(PotionEffectType.BAD_OMEN);
+        potionEffectTypes.add(PotionEffectType.BAD_OMEN);
 
         initSpell();
     }

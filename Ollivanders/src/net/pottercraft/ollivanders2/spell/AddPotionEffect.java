@@ -95,7 +95,7 @@ public abstract class AddPotionEffect extends O2Spell {
     /**
      * The potion effect. Set to luck by default.
      */
-    List<PotionEffectType> effectTypes = new ArrayList<>();
+    List<PotionEffectType> potionEffectTypes = new ArrayList<>();
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -204,7 +204,7 @@ public abstract class AddPotionEffect extends O2Spell {
 
         calculateAmplifier();
 
-        for (PotionEffectType effectType : effectTypes) {
+        for (PotionEffectType effectType : potionEffectTypes) {
             org.bukkit.potion.PotionEffect effect = new org.bukkit.potion.PotionEffect(effectType, durationInTicks, amplifier);
             target.addPotionEffect(effect);
 
@@ -249,11 +249,10 @@ public abstract class AddPotionEffect extends O2Spell {
      * @return a list of the potion effect types
      */
     @NotNull
-    public List<PotionEffectType> getEffectTypes() {
-        ArrayList<PotionEffectType> types = new ArrayList<>();
-        types.addAll(effectTypes);
-
-        return types;
+    public List<PotionEffectType> getPotionEffectTypes() {
+        return new ArrayList<>() {{
+            addAll(potionEffectTypes);
+        }};
     }
 
     public int getMinDurationInSeconds() {
