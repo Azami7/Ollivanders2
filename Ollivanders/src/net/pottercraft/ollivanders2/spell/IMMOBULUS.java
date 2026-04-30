@@ -66,8 +66,8 @@ public final class IMMOBULUS extends AddPotionEffect {
         maxDurationInSeconds = maxDurationInSecondsConfig;
         durationModifier = 0.5; // 50%
 
-        effectTypes.add(PotionEffectType.SLOWNESS);
-        effectTypes.add(PotionEffectType.SLOW_FALLING);
+        potionEffectTypes.add(PotionEffectType.SLOWNESS);
+        potionEffectTypes.add(PotionEffectType.SLOW_FALLING);
 
         initSpell();
     }

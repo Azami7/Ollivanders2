@@ -63,7 +63,7 @@ public final class OBSCURO extends AddPotionEffect {
         durationModifier = 1.0;
         affectSingleTarget = false;
 
-        effectTypes.add(PotionEffectType.BLINDNESS);
+        potionEffectTypes.add(PotionEffectType.BLINDNESS);
 
         initSpell();
     }

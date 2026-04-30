@@ -153,17 +153,18 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 5); // create a base that is just past the target so that we know the projectile will eventually stop
         spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
+        effectSuccessRateTestZeroExp(caster, location, targetLocation);
+
+        EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
+        mockServer.getScheduler().performTicks(20);
+        assertTrue(entityTransfiguration.isTransfigured(), "transfiguration failed when skill is mastery and success rate < 100%");
+    }
+
+    void effectSuccessRateTestZeroExp(PlayerMock caster, Location location, Location targetLocation) {
         EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 0);
-
-        if (entityTransfiguration.getSuccessRate() < 100) {
-            mockServer.getScheduler().performTicks(20);
-            assertFalse(entityTransfiguration.isTransfigured(), "transfiguration succeeded when skill is 0 and success rate < 100%");
-
-            entityTransfiguration.kill();
-            entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
-            mockServer.getScheduler().performTicks(20);
-            assertTrue(entityTransfiguration.isTransfigured(), "transfiguration failed when skill is mastery and success rate < 100%");
-        }
+        mockServer.getScheduler().performTicks(20);
+        assertFalse(entityTransfiguration.isTransfigured(), "transfiguration succeeded when skill is 0 and success rate < 100%");
+        entityTransfiguration.kill();
     }
 
     /**
@@ -181,12 +182,10 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         Entity entity = spawnEntityAtLocation(targetLocation, getValidEntityType(), getValidMaterialType());
 
         // 0 experience fails success check
-        EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 0);
-        assertFalse(entityTransfiguration.canTransfigure(entity), "canTransfigure() returned true for 0 experience");
-        entityTransfiguration.kill();
+        canTransfigureTestZeroExp(caster, location, targetLocation, entity);
 
         // mastery level experience passes success check
-        entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
+        EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         assertTrue(entityTransfiguration.canTransfigure(entity), "canTransfigure() returned false for double mastery level experience");
 
         // invalid entity cannot be targeted
@@ -202,6 +201,13 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
             assertFalse(entityTransfiguration.canTransfigure(sameEntity), "canTransfigure() returned true for same entity type");
             sameEntity.remove();
         }
+    }
+
+    void canTransfigureTestZeroExp(PlayerMock caster, Location location, Location targetLocation, Entity target) {
+        // 0 experience fails success check
+        EntityTransfiguration entityTransfiguration = (EntityTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 0);
+        assertFalse(entityTransfiguration.canTransfigure(target), "canTransfigure() returned true for 0 experience");
+        entityTransfiguration.kill();
     }
 
     /**

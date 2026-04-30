@@ -149,3 +149,4 @@ For MockBukkit-specific behavior, the published javadocs are at:
 6. Write the test, grouping state-dependent scenarios into single methods.
 7. Run only the affected test class first (`./gradlew test --tests <FQCN>`) to get fast feedback.
 8. Run the full test suite once everything passes locally.
+9. `git add` any newly created files so they're staged and visible in `git status` — new test files are easy to forget because they're untracked, and a missing file won't show up in a diff review.

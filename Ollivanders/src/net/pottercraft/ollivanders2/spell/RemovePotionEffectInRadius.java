@@ -5,14 +5,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Remove a potion effect for all entities in a radius of the caster
+ * Base class for instant-radius potion effect removal spells.
+ *
+ * <p>These spells remove potion effects from all targets within a radius of the caster without
+ * using a projectile. The spell fires immediately with a visual flair and affects multiple
+ * targets based on the configured radius.</p>
+ *
+ * @see AddPotionEffectInRadius
  */
 public class RemovePotionEffectInRadius extends RemovePotionEffect {
-    /**
-     * Radius of the spell from the caster.
-     */
-    int radius = 5;
-
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -23,7 +24,10 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect {
     }
 
     /**
-     * Constructor.
+     * Constructor for casting the spell.
+     *
+     * <p>Configures the spell as an instant radius effect with no projectile and visual flair.
+     * All eligible targets within the configured radius are affected.</p>
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -31,20 +35,10 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect {
      */
     public RemovePotionEffectInRadius(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
-    }
 
-    /**
-     * Remove the potion effect from the caster.
-     */
-    @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
-        affectRadius(radius, true);
-
-        kill();
+        doFlair = true;
+        noProjectile = true;
+        effectRadius = 5;
+        affectsMultiple = true;
     }
 }

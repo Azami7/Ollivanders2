@@ -56,7 +56,7 @@ public final class LUMOS_MAXIMA extends AddPotionEffectInRadius {
         spellType = O2SpellType.LUMOS_MAXIMA;
         branch = O2MagicBranch.CHARMS;
 
-        effectTypes.add(PotionEffectType.BLINDNESS);
+        potionEffectTypes.add(PotionEffectType.BLINDNESS);
         amplifier = 1;
 
         minDurationInSeconds = minDurationInSecondsConfig;

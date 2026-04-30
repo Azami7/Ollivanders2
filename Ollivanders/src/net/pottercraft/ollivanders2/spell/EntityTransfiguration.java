@@ -355,9 +355,6 @@ public abstract class EntityTransfiguration extends Transfiguration {
      */
     @Override
     public boolean isTransfigured(@NotNull Entity entity) {
-        if (permanent)
-            return false;
-
         if (transfiguredEntity == null)
             return false;
 

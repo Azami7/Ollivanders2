@@ -66,7 +66,7 @@ public final class IMPEDIMENTA extends AddPotionEffect {
         maxDurationInSeconds = maxDurationInSecondsConfig;
         durationModifier = 0.5; // 50%
 
-        effectTypes.add(PotionEffectType.SLOWNESS);
+        potionEffectTypes.add(PotionEffectType.SLOWNESS);
 
         initSpell();
     }

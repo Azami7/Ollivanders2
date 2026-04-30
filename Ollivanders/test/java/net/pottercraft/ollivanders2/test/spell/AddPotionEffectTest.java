@@ -42,7 +42,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
         player.setLocation(targetLocation);
 
         AddPotionEffect addPotionEffect = (AddPotionEffect) castSpell(caster, location, targetLocation);
-        List<PotionEffectType> effectTypes = addPotionEffect.getEffectTypes();
+        List<PotionEffectType> effectTypes = addPotionEffect.getPotionEffectTypes();
         assertFalse(effectTypes.isEmpty(), "effect types list empty");
 
         mockServer.getScheduler().performTicks(20);
@@ -77,7 +77,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
             mockServer.getScheduler().performTicks(2);
             assertTrue(addPotionEffect.isKilled());
 
-            for (PotionEffectType potionEffectType : addPotionEffect.getEffectTypes()) {
+            for (PotionEffectType potionEffectType : addPotionEffect.getPotionEffectTypes()) {
                 if (addPotionEffect.targetsSelf())
                     assertTrue(caster.hasPotionEffect(potionEffectType), "caster does not have effect");
                 assertFalse(player.hasPotionEffect(potionEffectType), "player outside radius has effect");
@@ -197,7 +197,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
 
             mockServer.getScheduler().performTicks(5);
 
-            for (PotionEffectType potionEffectType : addPotionEffect.getEffectTypes()) {
+            for (PotionEffectType potionEffectType : addPotionEffect.getPotionEffectTypes()) {
                 if (addPotionEffect.targetsSelf()) {
                     assertTrue(caster.hasPotionEffect(potionEffectType), "caster does not have effect");
                     assertFalse(player.hasPotionEffect(potionEffectType), "player has effect when caster already targeted");
