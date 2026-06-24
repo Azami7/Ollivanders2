@@ -7,7 +7,6 @@ import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;

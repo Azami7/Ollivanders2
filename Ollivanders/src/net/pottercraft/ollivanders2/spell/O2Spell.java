@@ -360,6 +360,9 @@ public abstract class O2Spell {
      * Only override this method if you need to customize the spell's entire tick behavior.</p>
      */
     public void checkEffect() {
+        if (isKilled())
+            return;
+
         // check whether this spell can exist
         if (!isSpellAllowed()) {
             kill();

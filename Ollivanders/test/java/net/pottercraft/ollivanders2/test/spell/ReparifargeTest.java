@@ -108,7 +108,7 @@ public class ReparifargeTest extends O2SpellTestSuper {
         // can revert an entity transfiguration up to 1 level higher
         targetBlock.setType(Material.AIR);
         Item droppedItem = testWorld.dropItem(targetLocation, new ItemStack(Material.IRON_HOE));
-        LAPIFORS lapifors = (LAPIFORS) castSpell(caster, location, droppedItem.getLocation(), O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel, O2SpellType.LAPIFORS);
+        LAPIFORS lapifors = (LAPIFORS) castSpell(caster, location, droppedItem.getLocation(), O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2, O2SpellType.LAPIFORS);
         mockServer.getScheduler().performTicks(5);
         assertTrue(lapifors.isTransfigured());
         reparifarge = (REPARIFARGE) castSpell(caster, location, lapifors.getLocation(), O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
@@ -121,7 +121,7 @@ public class ReparifargeTest extends O2SpellTestSuper {
 
         // cannot revert an entity transfiguration 2 or more levels higher
         droppedItem = testWorld.dropItem(targetLocation, new ItemStack(Material.ROTTEN_FLESH));
-        MORTUOS_SUSCITATE mortuosSuscitate = (MORTUOS_SUSCITATE) castSpell(caster, location, droppedItem.getLocation(), O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel, O2SpellType.MORTUOS_SUSCITATE);
+        MORTUOS_SUSCITATE mortuosSuscitate = (MORTUOS_SUSCITATE) castSpell(caster, location, droppedItem.getLocation(), O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2, O2SpellType.MORTUOS_SUSCITATE);
         mockServer.getScheduler().performTicks(5);
         assertTrue(mortuosSuscitate.isTransfigured());
         reparifarge = (REPARIFARGE) castSpell(caster, location, mortuosSuscitate.getLocation(), O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
