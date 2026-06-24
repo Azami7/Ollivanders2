@@ -17,12 +17,24 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Creates a horcrux stationary spell object where it collides with a block.
- * Also damages the player and increases their souls count.
+ * Splits the caster's soul into a horcrux, letting them later resurrect with their magical
+ * experience intact at a permanent cost.
+ * <p>
+ * When the projectile reaches a usable item, the caster spends one collected soul and has their
+ * maximum health permanently halved, and a {@link HORCRUX} stationary spell is anchored to that
+ * item. A caster may own only one horcrux at a time, must have at least one collected soul, and
+ * must have enough health left to survive the halving. Horcruxes can only be destroyed with
+ * Fiendfyre.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Horcrux-making_spell">Harry Potter Wiki - Horcrux-making Spell</a>
  */
 public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
+    /**
+     * The caster's maximum health after the horcrux is created (current maximum halved). Computed in
+     * {@link #canCreateHorcrux()} and applied in {@link #doCheckEffect()}.
+     */
     private double futureHealth = 0.0;
 
     /**
@@ -65,7 +77,13 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
     }
 
     /**
-     * Look for an item to make in to a horcrux in the spell projectile's path.
+     * Look for a usable item in the projectile's path and turn it into a horcrux.
+     * <p>
+     * Skips wands and enchanted items. On the first usable item, and only if
+     * {@link #canCreateHorcrux()} passes, the caster spends a soul, has their maximum health halved,
+     * and a {@link HORCRUX} stationary spell is anchored to the item. The spell ends after handling
+     * one item, or when the projectile hits a block without finding one.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {
@@ -111,7 +129,15 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
     }
 
     /**
-     * Can this player create a horcrux?
+     * Check whether the caster currently meets every requirement to create a horcrux.
+     * <p>
+     * Requires at least one collected soul, no horcrux already owned by the caster, and enough
+     * maximum health to survive halving it. On failure the caster is messaged the reason; on success
+     * the post-halving health is recorded in {@link #futureHealth} for {@link #doCheckEffect()} to
+     * apply.
+     * </p>
+     *
+     * @return true if the caster can create a horcrux, false otherwise
      */
     boolean canCreateHorcrux() {
         // does the caster have souls that can be used

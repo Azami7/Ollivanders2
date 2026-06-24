@@ -25,7 +25,7 @@ public class LOQUELA_INEPTIAS extends AddO2Effect {
     public LOQUELA_INEPTIAS(Ollivanders2 plugin) {
         super(plugin);
 
-        branch = O2MagicBranch.DARK_ARTS;
+        branch = O2MagicBranch.CURSE;
         spellType = O2SpellType.LOQUELA_INEPTIAS;
 
         flavorText = new ArrayList<>() {{
@@ -46,7 +46,7 @@ public class LOQUELA_INEPTIAS extends AddO2Effect {
     public LOQUELA_INEPTIAS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        branch = O2MagicBranch.DARK_ARTS;
+        branch = O2MagicBranch.CURSE;
         spellType = O2SpellType.LOQUELA_INEPTIAS;
 
         effectsToAdd.add(O2EffectType.BABBLING);

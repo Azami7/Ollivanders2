@@ -69,11 +69,16 @@ public class LAPIFORS extends ItemToEntityTransfiguration {
      */
     @Override
     void doInitSpell() {
-        successRate = (int) (usesModifier / 2);
+        if (Ollivanders2.testMode && usesModifier == O2Spell.spellMasteryLevel)
+            successRate = 100;
 
-        if (usesModifier > 100) {
-            consumeOriginal = true;
-            permanent = true;
+        else {
+            successRate = (int) (usesModifier / 2);
+
+            if (usesModifier > 100) {
+                consumeOriginal = true;
+                permanent = true;
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
         super(plugin);
 
         spellType = O2SpellType.PETRIFICUS_TOTALUS;
-        branch = O2MagicBranch.CHARMS;
+        branch = O2MagicBranch.CURSE;
 
         flavorText = new ArrayList<>() {{
             add("The Full Body-Bind Curse");
@@ -59,7 +59,7 @@ public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PETRIFICUS_TOTALUS;
-        branch = O2MagicBranch.CHARMS;
+        branch = O2MagicBranch.CURSE;
 
         fullImmobilize = true;
 

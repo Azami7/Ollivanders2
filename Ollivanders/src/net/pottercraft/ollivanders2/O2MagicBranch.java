@@ -1,7 +1,7 @@
 package net.pottercraft.ollivanders2;
 
 /**
- * Branches of magic
+ * Branches and sub-branches of magic
  */
 public enum O2MagicBranch {
     /**
@@ -17,11 +17,15 @@ public enum O2MagicBranch {
      */
     CHARMS,
     /**
+     * curse - sub-branch of dark magic
+     */
+    CURSE,
+    /**
      * defense against the dark arts
      */
     DEFENSE_AGAINST_THE_DARK_ARTS,
     /**
-     * dark arts - jinxes, hexes, and curses
+     * dark arts
      */
     DARK_ARTS,
     /**
@@ -36,6 +40,14 @@ public enum O2MagicBranch {
      * herbology
      */
     HERBOLOGY,
+    /**
+     * hex - sub-branch of dark magic
+     */
+    HEX,
+    /**
+     * jinx - sub-branch of dark magic
+     */
+    JINX,
     /**
      * potions
      */

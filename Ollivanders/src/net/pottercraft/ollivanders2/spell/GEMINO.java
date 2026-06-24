@@ -41,7 +41,7 @@ public final class GEMINO extends ItemEnchant {
         super(plugin);
 
         spellType = O2SpellType.GEMINO;
-        branch = O2MagicBranch.DARK_ARTS;
+        branch = O2MagicBranch.CURSE;
 
         flavorText = new ArrayList<>() {{
             add("Hermione screamed in pain, and Harry turned his wand on her in time to see a jewelled goblet tumbling from her grip. But as it fell, it split, became a shower of goblets, so that a second later, with a great clatter, the floor was covered in identical cups rolling in every direction, the original impossible to discern amongst them.");
@@ -65,7 +65,7 @@ public final class GEMINO extends ItemEnchant {
     public GEMINO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.GEMINO;
-        branch = O2MagicBranch.DARK_ARTS;
+        branch = O2MagicBranch.CURSE;
         enchantmentType = ItemEnchantmentType.GEMINO;
 
         // magnitude = (int) ((usesModifier / 10) * strength)

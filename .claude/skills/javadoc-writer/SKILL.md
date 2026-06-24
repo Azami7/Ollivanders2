@@ -48,6 +48,17 @@ When invoked:
 - No spaces around `=` in href attributes
 - Use descriptive labels, not full URLs
 
+### Visibility-Aware Cross-References
+
+Only `{@link}` to members the reader of the documented element can actually see. The visibility check is *from the documented element's perspective*:
+
+- **Other class — `private` or package-private members**: never reference. Even if the IDE resolves them today, they are implementation details that can be renamed or removed without notice. Use prose ("the spell's internal projectile state") or reference the enclosing class instead.
+- **Other class — `protected` members**: only reference if the documented element is in a subclass that inherits the member.
+- **Same class — any visibility**: fine to reference, including `private` fields and methods.
+- **Public API**: always fine.
+
+When in doubt, name the public type and describe the behavior in prose rather than reaching into another class's internals. Cross-references that point at non-public members are a maintenance hazard: they break silently when the referenced member is renamed, and they encourage readers to depend on private contracts.
+
 ## When Editing Files
 
 1. Add or improve javadoc comments
