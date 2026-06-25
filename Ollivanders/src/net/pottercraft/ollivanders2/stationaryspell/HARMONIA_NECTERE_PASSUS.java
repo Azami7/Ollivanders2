@@ -199,21 +199,23 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      * Checks the structural integrity of a vanishing cabinet.
      *
      * <p>Verifies the cabinet has the correct structure: a 3x3 space with solid walls on all sides,
-     * space for a player, and a solid top. The feet position must be air or a sign (for labeling).</p>
+     * space for a player, a solid top, and either air inside or a sign + air inside.</p>
      *
-     * @param feet the block at the player's feet position in the cabinet
+     * @param signBlock the block at the player's foot position in the cabinet
      * @return true if the cabinet structure is valid, false if not
      */
-    private boolean cabinetCheck(@NotNull Block feet) {
-        // feet block can either be air or a sign block
-        if (feet.getType() != Material.AIR && !Ollivanders2Common.isSign(feet))
+    private boolean cabinetCheck(@NotNull Block signBlock) {
+        // sign above foot block can either be air or a sign block
+        if (signBlock.getType() != Material.AIR && !Ollivanders2Common.isSign(signBlock)) {
+            common.printDebugMessage("Harmonia stationary: signBlock is not air or a sign. Block type is " + signBlock.getType(), null, null, false);
             return false;
+        }
 
-        return (feet.getRelative(1, 0, 0).getType() != Material.AIR && feet.getRelative(1, 1, 0).getType() != Material.AIR
-                && feet.getRelative(-1, 0, 0).getType() != Material.AIR && feet.getRelative(-1, 1, 0).getType() != Material.AIR
-                && feet.getRelative(0, 0, 1).getType() != Material.AIR && feet.getRelative(0, 1, 1).getType() != Material.AIR
-                && feet.getRelative(0, 0, -1).getType() != Material.AIR && feet.getRelative(0, 1, -1).getType() != Material.AIR
-                && feet.getRelative(0, 1, 0).getType() == Material.AIR && feet.getRelative(0, 2, 0).getType() != Material.AIR);
+        return (signBlock.getRelative(1, 0, 0).getType() != Material.AIR && signBlock.getRelative(1, 1, 0).getType() != Material.AIR
+                && signBlock.getRelative(-1, 0, 0).getType() != Material.AIR && signBlock.getRelative(-1, 1, 0).getType() != Material.AIR
+                && signBlock.getRelative(0, 0, 1).getType() != Material.AIR && signBlock.getRelative(0, 1, 1).getType() != Material.AIR
+                && signBlock.getRelative(0, 0, -1).getType() != Material.AIR && signBlock.getRelative(0, 1, -1).getType() != Material.AIR
+                && signBlock.getRelative(0, 1, 0).getType() == Material.AIR && signBlock.getRelative(0, 2, 0).getType() != Material.AIR);
     }
 
     /**
