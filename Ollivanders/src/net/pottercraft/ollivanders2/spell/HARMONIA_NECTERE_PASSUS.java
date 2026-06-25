@@ -2,11 +2,11 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.*;
+import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -98,7 +98,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
      * <p>Validation checks:
      * <ul>
      * <li>Target block is a sign ({@link #getTargetBlock()})</li>
-     * <li>Sign contains valid destination coordinates via {@link #getSignLocation(Block)}</li>
+     * <li>Sign contains valid destination coordinates via {@link #getTwinLocation(Block)}</li>
      * <li>From and to locations are different (cannot create self-referential cabinet)</li>
      * <li>No stationary vanishing cabinet already exists at either location</li>
      * </ul>
@@ -113,32 +113,48 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
 
         kill();
 
-        Block signBlock = getTargetBlock();
-        if (signBlock == null) {
-            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: from block is null", null, null, true);
-            failureMessage = "Nothing seems to happen";
-            sendFailureMessage();
-            return;
+        // find a sign block within radius of the hit point - sometimes the spell hits the door because exact aiming is
+        // tricky so this makes it more robust
+        Block signBlock = null;
+
+        for (Block block : BlockCommon.getBlocksInRadius(getLocation(), defaultRadius)) {
+            if (Ollivanders2Common.isSign(block.getType())) {
+                signBlock = block;
+            }
         }
 
-        Material blockType = signBlock.getType();
-        if (!Ollivanders2Common.isSign(blockType)) {
-            common.printDebugMessage("Block is not a sign", null, null, false);
+        if (signBlock == null) {
+            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: sign block not found", null, null, true);
             failureMessage = "Nothing seems to happen";
             sendFailureMessage();
             return;
         }
 
         // determine the location of the other vanishing cabinet
-        Location toLoc = getSignLocation(signBlock);
-        if (toLoc == null) {
-            common.printDebugMessage("Unable to get toLoc from sign.", null, null, false);
-            failureMessage = "Sign does not have the location of the twin cabinet";
+        Location twinLocation = getTwinLocation(signBlock);
+        if (twinLocation == null) {
+            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: Unable to get twinLocation from sign.", null, null, false);
+            failureMessage = "The twin location on the sign is malformed.";
             sendFailureMessage();
             return;
         }
 
-        Location fromLoc = signBlock.getLocation(); // this is slightly different from the location of the projectile (in fractions)
+        // now actually find a sign near that location
+        Location toLoc = null;
+        for (Block twin : BlockCommon.getBlocksInRadius(twinLocation, defaultRadius)) {
+            if (Ollivanders2Common.isSign(twin)) {
+                toLoc = twin.getLocation();
+                break;
+            }
+        }
+        if (toLoc == null) {
+            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: sign not found at twin location.", null, null, false);
+            failureMessage = "A sign was not found at the twin location.";
+            sendFailureMessage();
+            return;
+        }
+
+        Location fromLoc = signBlock.getLocation(); // this can be different from the location of the projectile by up to half a block
         if (Ollivanders2Common.locationEquals(toLoc, fromLoc)) {
             common.printDebugMessage("Vanishing cabinet to and from locations are the same", null, null, false);
             failureMessage = "To and from locations on vanishing cabinet signs are the same.";
@@ -178,8 +194,8 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
      * coordinates, coordinates are not integers, or the world does not exist
      */
     @Nullable
-    private Location getSignLocation(Block block) {
-        Location location = null;
+    private Location getTwinLocation(Block block) {
+        Location twinLocation = null;
 
         Sign sign = (Sign) block.getState();
         String[] lines = sign.getSide(Side.FRONT).getLines();
@@ -203,9 +219,9 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
                 return null;
             }
 
-            location = new Location(world, x, y, z);
+            twinLocation = new Location(world, x, y, z);
         }
 
-        return location;
+        return twinLocation;
     }
 }
