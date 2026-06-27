@@ -16,13 +16,19 @@ import java.util.ArrayList;
  * Tom Riddle is the first wizard known to achieve unassisted flying and only one other wizard learned it from him,
  * Severus Snape. Unassisted flying is against magical law.
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Unsupported_flight">https://harrypotter.fandom.com/wiki/Unsupported_flight</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Unsupported_flight">Harry Potter Wiki - Unsupported flight</a>
  */
 public final class VENTO_FOLIO extends O2Spell {
     /**
      * The percent chance this spell will succeed each casting.
      */
     int successRate = 0;
+
+    /**
+     * The duration, in seconds, that the player will fly if successful
+     */
+    int durationInSeconds = 0;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -55,14 +61,33 @@ public final class VENTO_FOLIO extends O2Spell {
 
         branch = O2MagicBranch.DARK_ARTS;
         spellType = O2SpellType.VENTO_FOLIO;
+
+        noProjectile = true;
+
         initSpell();
     }
 
     /**
-     * Set the success rate based on the caster's skill.
+     * Set the per-cast success rate and flight duration based on the caster's skill.
+     * <p>
+     * Both values scale with {@code usesModifier}, so they are computed once per cast here rather
+     * than in the constructor. See {@link #calculateSuccessRate()} and {@link #calculateDuration()}.
+     * </p>
      */
     @Override
     void doInitSpell() {
+        calculateSuccessRate();
+        calculateDuration();
+    }
+
+    /**
+     * Set {@link #successRate} from the caster's skill.
+     * <p>
+     * The chance scales with {@code usesModifier}: a flat 100% at mastery ({@code >= 200}), half the
+     * modifier between 100 and 199, then fixed tiers of 25%, 10%, and a 5% floor for novices.
+     * </p>
+     */
+    void calculateSuccessRate() {
         // set success rate based on their experience
         if (usesModifier >= 200)
             successRate = 100;
@@ -77,30 +102,66 @@ public final class VENTO_FOLIO extends O2Spell {
     }
 
     /**
-     * Override checkEffect since this spell should not projectile. Add flying effect to caster.
+     * Set {@link #durationInSeconds}, the flight time granted on a successful cast, from the caster's skill.
+     * <p>
+     * Duration scales with {@code usesModifier}: half the modifier in seconds at high skill
+     * ({@code >= 100}, so at least 50 seconds), then fixed tiers of 30, 10, and 5 seconds. The value
+     * is converted to game ticks in {@link #doCheckEffect()} before the flight effect is applied.
+     * </p>
      */
-    @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
-        int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
-        int duration;
-
+    void calculateDuration() {
         if (usesModifier >= 100)
-            // > 30 seconds
-            duration = (int) usesModifier + 300;
+            // >= 50 seconds
+            durationInSeconds = (int)(usesModifier / 2);
         else if (usesModifier >= 50)
             // 30 seconds
-            duration = 300;
+            durationInSeconds = 30;
         else if (usesModifier >= 10)
             // 10 seconds
-            duration = 200;
+            durationInSeconds = 10;
         else // < 10
             // 5 seconds
-            duration = 100;
+            durationInSeconds = 5;
+    }
+
+    /**
+     * Get the chance, as a percent, that a cast at the caster's current skill succeeds.
+     * <p>
+     * Set by {@link #calculateSuccessRate()} during {@link #doInitSpell()}, so the value is only
+     * meaningful after the spell has been initialized for casting.
+     * </p>
+     *
+     * @return the success rate as a percent in the range 5 to 100
+     */
+    public int getSuccessRate() {
+        return successRate;
+    }
+
+    /**
+     * Get the flight duration, in seconds, granted by a successful cast at the caster's current skill.
+     * <p>
+     * Set by {@link #calculateDuration()} during {@link #doInitSpell()}, so the value is only
+     * meaningful after the spell has been initialized for casting.
+     * </p>
+     *
+     * @return the flight duration in seconds
+     */
+    public int getDurationInSeconds() {
+        return durationInSeconds;
+    }
+
+    /**
+     * Roll against the success rate and, on success, grant the caster unassisted flight.
+     * <p>
+     * This is a no-projectile spell, so this runs on the first tick. A random roll under
+     * {@link #successRate} adds a {@link FLYING} effect lasting {@link #durationInSeconds} (converted
+     * to game ticks). The spell is killed afterward so it affects the caster only once per cast.
+     * </p>
+     */
+    @Override
+    protected void doCheckEffect() {
+        int rand = Ollivanders2Common.random.nextInt(100);
+        int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
 
         if (rand < successRate) {
             FLYING effect = new FLYING(p, duration, false, caster.getUniqueId());
@@ -110,9 +171,5 @@ public final class VENTO_FOLIO extends O2Spell {
         }
 
         kill();
-    }
-
-    @Override
-    protected void doCheckEffect() {
     }
 }

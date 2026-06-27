@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.book;
 
+import net.pottercraft.ollivanders2.spell.CISTEM_APERIO;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.REPARO}<br>
  * {@link net.pottercraft.ollivanders2.spell.INCENDIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.SPONGIFY}<br>
- * {@link net.pottercraft.ollivanders2.spell.CISTERN_APERIO}<br>
+ * {@link CISTEM_APERIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.WINGARDIUM_LEVIOSA}
  * </p>
  *
@@ -40,7 +41,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_1 extends O2Book {
         spells.add(O2SpellType.REPARO);
         spells.add(O2SpellType.INCENDIO);
         spells.add(O2SpellType.SPONGIFY);
-        spells.add(O2SpellType.CISTERN_APERIO);
+        spells.add(O2SpellType.CISTEM_APERIO);
         spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
     }
 }

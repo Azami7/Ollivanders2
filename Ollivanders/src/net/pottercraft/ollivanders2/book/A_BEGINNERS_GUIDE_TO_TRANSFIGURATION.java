@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.REPARIFARGE}<br>
  * {@link net.pottercraft.ollivanders2.spell.MULTICORFORS}<br>
  * {@link net.pottercraft.ollivanders2.spell.SNUFFLIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FELIFORS}<br>
  * </p>
  *
  * @author Azami7
@@ -47,5 +48,6 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
         spells.add(O2SpellType.REPARIFARGE);
         spells.add(O2SpellType.MULTICORFORS);
         spells.add(O2SpellType.SNUFFLIFORS);
+        spells.add(O2SpellType.FELIFORS);
     }
 }

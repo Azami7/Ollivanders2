@@ -9,7 +9,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class IGNOSCO extends O2Spell
 {
-    // todo implement
+    // todo https://github.com/Azami7/Ollivanders2/issues/421
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
