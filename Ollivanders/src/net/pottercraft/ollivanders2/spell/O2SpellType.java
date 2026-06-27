@@ -180,9 +180,9 @@ public enum O2SpellType {
      */
     CHARTIA(CHARTIA.class, MagicLevel.NEWT),
     /**
-     * {@link CISTERN_APERIO}
+     * {@link CISTEM_APERIO}
      */
-    CISTERN_APERIO(CISTERN_APERIO.class, MagicLevel.BEGINNER),
+    CISTEM_APERIO(CISTEM_APERIO.class, MagicLevel.BEGINNER),
     /**
      * {@link COLLOPORTUS}
      */
@@ -331,7 +331,10 @@ public enum O2SpellType {
      * {@link FATUUS_AURUM}
      */
     FATUUS_AURUM(FATUUS_AURUM.class, MagicLevel.OWL),
-    //FELIFORS(FELIFORS.class, MagicLevel.OWL),
+    /**
+     * {@link FELIFORS}
+     */
+    FELIFORS(FELIFORS.class, MagicLevel.OWL),
     /**
      * {@link FELIFORS_MAXIMA}
      */

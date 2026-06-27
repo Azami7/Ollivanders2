@@ -14,15 +14,62 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Prior Incantato is a spell that forced a wand to show an "echo" of the most recent spell it had performed.
+ * Forces a target player's wand to reveal an "echo" of the most recent spell it cast.
+ * <p>
+ * Prior Incantato (the "Reverse Spell") is a charm cast as a projectile. When it reaches the first non-caster
+ * player within {@link O2Spell#defaultRadius} of where it stops, it attempts to force that player's wand to
+ * reveal its last-cast spell. Success is a percentage chance scaled by the caster's experience with this spell
+ * ({@code usesModifier}); on failure the caster is told the target's wand resisted.
+ * </p>
+ * <p>
+ * On success the prior spell is broadcast as a visible echo: the target, plus every other player within
+ * {@link #visibleRadius} blocks of the target, is messaged. If the target's wand has never cast a spell, only the
+ * caster is notified.
+ * </p>
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Reverse_Spell">http://harrypotter.wikia.com/wiki/Reverse_Spell</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Reverse_Spell">Harry Potter Wiki - Reverse Spell (Prior Incantato)</a>
  */
 public class PRIOR_INCANTATO extends O2Spell {
     /**
-     * The radius of players who will "see" the effect
+     * The radius, in blocks, around the target within which other players will "see" the echoed spell.
+     * <p>
+     * Used by {@link #doPriorIncantato(Player)} to determine which nearby players are messaged when the echo is
+     * revealed, in addition to the target.
+     * </p>
      */
     private static final int visibleRadius = 10;
+
+    /**
+     * Leading fragment of the echo message naming the revealed spell, e.g. "The shadowy echo of the spell Lumos".
+     */
+    public static final String echoMessagePrefix = "The shadowy echo of the spell ";
+
+    /**
+     * Trailing fragment of the echo message shown to the target, completing "...Lumos emits from your wand."
+     */
+    public static final String echoEmitsFromYourWand = " emits from your wand.";
+
+    /**
+     * Middle fragment of the echo message shown to witnesses, between the spell name and the target's name,
+     * completing "...Lumos emits from Harry's wand." together with {@link #wandPossessiveSuffix}.
+     */
+    public static final String echoEmitsFrom = " emits from ";
+
+    /**
+     * Possessive wand suffix appended after a player's name in the witness echo message ("Harry's wand.").
+     */
+    public static final String wandPossessiveSuffix = "'s wand.";
+
+    /**
+     * Message fragment, appended after the target's name, telling the caster the target's wand resisted the spell.
+     */
+    public static final String wandResistsMessage = "'s wand resists your spell.";
+
+    /**
+     * Message fragment, appended after the target's name, telling the caster the target's wand has cast no spell.
+     */
+    public static final String wandNoPriorSpellMessage = "'s wand has not cast a spell.";
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -53,14 +100,21 @@ public class PRIOR_INCANTATO extends O2Spell {
     public PRIOR_INCANTATO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.INFORMOUS;
+        spellType = O2SpellType.PRIOR_INCANTATO;
         branch = O2MagicBranch.CHARMS;
 
         initSpell();
     }
 
     /**
-     * Find a nearby player and attempt to force the shadow of the last spell from
+     * Attempt to force the echo of the last spell from the first nearby non-caster player.
+     * <p>
+     * Runs once per projectile tick. If the projectile has hit a block the spell is killed, but it still scans for
+     * a player near where it stopped so that slightly-off aim can still find a target. The first player within
+     * {@link O2Spell#defaultRadius} other than the caster is targeted: a percentage roll against the caster's
+     * {@code usesModifier} decides whether the echo is revealed via {@link #doPriorIncantato(Player)} or the
+     * target's wand resists. The spell is killed once it has acted on a target.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {
@@ -71,12 +125,12 @@ public class PRIOR_INCANTATO extends O2Spell {
             if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+            int rand = Ollivanders2Common.random.nextInt(100);
 
             if (usesModifier > rand)
-                doPriorIncantato((Player) target);
+                doPriorIncantato(target);
             else
-                caster.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand resists your spell.");
+                caster.sendMessage(Ollivanders2.chatColor + target.getName() + wandResistsMessage);
 
             kill();
             return;
@@ -84,21 +138,21 @@ public class PRIOR_INCANTATO extends O2Spell {
     }
 
     /**
-     * Show the prior incantation for the target's wand.
+     * Reveal the target wand's prior incantation to the target and nearby witnesses.
+     * <p>
+     * Looks up the target's last-cast spell via {@link O2Player#getPriorIncantatem()}. If the wand has never cast
+     * a spell, only the caster is notified. Otherwise the target and every other player within
+     * {@link #visibleRadius} blocks of the target are sent a message naming the echoed spell.
+     * </p>
      *
-     * @param target the target player
+     * @param target the player whose wand's prior incantation is revealed
      */
     private void doPriorIncantato(@NotNull Player target) {
         O2Player o2p = p.getO2Player(target);
-        if (o2p == null) {
-            common.printDebugMessage("Null o2player in PRIOR_INCANTATO.doPriorIncantato", null, null, true);
-            return;
-        }
-
         O2SpellType prior = o2p.getPriorIncantatem();
 
         if (prior == null) {
-            caster.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand has not cast a spell.");
+            caster.sendMessage(Ollivanders2.chatColor + target.getName() + wandNoPriorSpellMessage);
 
             return;
         }
@@ -110,9 +164,9 @@ public class PRIOR_INCANTATO extends O2Spell {
             if (!(entity instanceof Player) || entity.getUniqueId().equals(target.getUniqueId()))
                 continue;
 
-            entity.sendMessage(Ollivanders2.chatColor + "The shadowy echo of the spell " + prior.getSpellName() + " emits from " + target.getName() + "'s wand.");
+            entity.sendMessage(Ollivanders2.chatColor + echoMessagePrefix + prior.getSpellName() + echoEmitsFrom + target.getName() + wandPossessiveSuffix);
         }
 
-        target.sendMessage(Ollivanders2.chatColor + "The shadowy echo of the spell " + prior.getSpellName() + " emits from your wand.");
+        target.sendMessage(Ollivanders2.chatColor + echoMessagePrefix + prior.getSpellName() + echoEmitsFromYourWand);
     }
 }

@@ -13,9 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Causes a living entity to damage another living entity.
+ * Causes a nearby living entity to attack the entity targeted by the caster.
+ * <p>
+ * On reaching a target, OPPUGNO finds another living entity within {@link #radius} blocks to act as
+ * the attacker: the attacker is launched toward the target, set to actively target it if it is a
+ * {@link Monster}, and the target takes {@link #damage} damage attributed to the attacker.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Oppugno_Jinx">https://harrypotter.fandom.com/wiki/Oppugno_Jinx</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Oppugno_Jinx">Harry Potter Wiki - Oppugno Jinx</a>
  */
 public final class OPPUGNO extends O2Spell {
     /**
@@ -26,12 +32,17 @@ public final class OPPUGNO extends O2Spell {
     /**
      * The max damage this spell can do
      */
-    static double maxDamage = 6.0;
+    static final double maxDamage = 6.0;
 
     /**
      * The min damage this spell will do
      */
-    static double minDamage = 0.5;
+    static final double minDamage = 0.5;
+
+    /**
+     * The radius this spell will look for attackers
+     */
+    private final int radius = 10;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -79,13 +90,56 @@ public final class OPPUGNO extends O2Spell {
      */
     @Override
     void doInitSpell() {
-        damage = usesModifier / 20;
+        // make the damage based on caster skill
+        damage = usesModifier / 20; // at spellMastery (100), damage would be 5
         if (damage < minDamage)
             damage = minDamage;
         else if (damage > maxDamage)
             damage = maxDamage;
     }
 
+    /**
+     * Get the amount of damage this cast will do to the target.
+     * <p>
+     * Set by {@link #doInitSpell()} from the caster's skill and clamped to
+     * {@link #getMinDamage()}..{@link #getMaxDamage()}, so the value is only meaningful after the
+     * spell has been initialized for casting.
+     * </p>
+     *
+     * @return the damage this cast will deal
+     */
+    public double getDamage() {
+        return damage;
+    }
+
+    /**
+     * Get the minimum damage this spell will ever do, regardless of caster skill.
+     *
+     * @return the minimum damage
+     */
+    public double getMinDamage() {
+        return minDamage;
+    }
+
+    /**
+     * Get the maximum damage this spell can do, regardless of caster skill.
+     *
+     * @return the maximum damage
+     */
+    public double getMaxDamage() {
+        return maxDamage;
+    }
+
+    /**
+     * Find a target and an attacker near the projectile, then launch the attacker at the target and damage it.
+     * <p>
+     * The first living entity (other than the caster) within {@code defaultRadius} becomes the target,
+     * which also stops the projectile. A second living entity within {@link #radius} that is neither the
+     * caster nor the target becomes the attacker; if none exists, the spell is killed with no effect.
+     * The attacker is set to target the victim (if it is a {@link Monster}), launched toward it, and the
+     * target takes {@link #damage} damage credited to the attacker.
+     * </p>
+     */
     @Override
     protected void doCheckEffect() {
         // get the target to be attacked
@@ -97,6 +151,7 @@ public final class OPPUGNO extends O2Spell {
 
             target = livingEntity;
             stopProjectile();
+            break;
         }
 
         if (target != null) {
@@ -106,11 +161,12 @@ public final class OPPUGNO extends O2Spell {
             // get an entity to attack the target
             LivingEntity attacker = null;
 
-            for (LivingEntity livingEntity : getNearbyLivingEntities(10)) {
-                if (livingEntity.getUniqueId().equals(caster.getUniqueId()))
+            for (LivingEntity livingEntity : getNearbyLivingEntities(radius)) {
+                if (livingEntity.getUniqueId().equals(caster.getUniqueId()) || livingEntity.getUniqueId().equals(target.getUniqueId()))
                     continue;
 
                 attacker = livingEntity;
+                break;
             }
 
             if (attacker == null) {
@@ -124,7 +180,11 @@ public final class OPPUGNO extends O2Spell {
             Vector targetPos = target.getLocation().toVector();
             Vector attackerPos = attacker.getLocation().toVector();
             Vector velocity = targetPos.subtract(attackerPos);
-            attacker.setVelocity(velocity.normalize().multiply(2.0));
+
+            // only launch the attacker if it is not already exactly on the target; normalizing a
+            // zero-length vector yields NaN, which would produce an invalid velocity
+            if (velocity.lengthSquared() > 0)
+                attacker.setVelocity(velocity.normalize().multiply(2.0));
 
             target.damage(damage, attacker);
         }

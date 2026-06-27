@@ -14,12 +14,39 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Shrinks a stationary shield spell's radius. Only the player who created the stationarySpellObject can change it's size.
+ * Shrinks a stationary shield spell's radius. Only the player who created the shield spell can change its size.
  * <p>
- * Shield spell distinction is to prevent this changing things like floo network and vanishing cabinets.
+ * Restricting the effect to {@link ShieldSpell}s prevents it from changing other stationary spells such as the
+ * floo network and vanishing cabinets.
+ * </p>
+ * <p>
+ * This is also the base class for {@link CRESCERE_PROTEGAT}, which grows a shield's radius instead by setting
+ * {@link #shrink} to false.
+ * </p>
+ *
+ * @author Azami7
+ * @see ShieldSpell
  */
-public final class HORREAT_PROTEGAT extends O2Spell {
-    private int reduction;
+public class HORREAT_PROTEGAT extends O2Spell {
+    /**
+     * Minimum radius change applied per cast, regardless of caster skill.
+     */
+    private static final int minChange = 1;
+
+    /**
+     * Maximum radius change applied per cast, regardless of caster skill.
+     */
+    private static final int maxChange = 10;
+
+    /**
+     * The radius change amount for this cast, set from caster skill in {@link #doInitSpell()}.
+     */
+    private int sizeChange;
+
+    /**
+     * When set to true spell radius decreases, when set to false spell radius increases
+     */
+    boolean shrink = true;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -31,10 +58,6 @@ public final class HORREAT_PROTEGAT extends O2Spell {
 
         spellType = O2SpellType.HORREAT_PROTEGAT;
         branch = O2MagicBranch.CHARMS;
-
-        flavorText = new ArrayList<>() {{
-            add("The Spell-Reduction Charm");
-        }};
 
         text = "Horreat Protegat will shrink a stationary shield spell's radius. Only the creator of the stationary spell can affect it with this spell.";
     }
@@ -52,45 +75,81 @@ public final class HORREAT_PROTEGAT extends O2Spell {
         spellType = O2SpellType.HORREAT_PROTEGAT;
         branch = O2MagicBranch.CHARMS;
 
-        // pass-through materials
+        // stationary spell projectiles can stop at water
         projectilePassThrough.remove(Material.WATER);
-        projectilePassThrough.remove(Material.LAVA);
-        projectilePassThrough.add(Material.CAVE_AIR);
 
         initSpell();
     }
 
     /**
-     * Set reduction based on caster's skill
+     * Set the radius change amount based on the caster's skill, clamped to [{@link #minChange}, {@link #maxChange}].
      */
     @Override
     void doInitSpell() {
-        reduction = (int) usesModifier / 10;
-        if (reduction < 1)
-            reduction = 1;
+        sizeChange = (int) usesModifier / 10;
+
+        if (sizeChange < minChange)
+            sizeChange = minChange;
+        else if (sizeChange > maxChange)
+            sizeChange = maxChange;
     }
 
     /**
-     * Reduce the radius of any stationary shield spells within a radius of the target, if they were cast by this player
+     * On block impact, change the radius of every shield spell at the projectile's location that this caster created.
+     * <p>
+     * Each matching shield is shrunk or grown by {@link #sizeChange} depending on {@link #shrink}, then flaired.
+     * Does nothing until the projectile has hit a block.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {
         if (!hasHitBlock())
             return;
 
-        List<O2StationarySpell> shieldSpells = new ArrayList<>();
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.isLocationInside(location) && stationarySpell.getCasterID().equals(caster.getUniqueId())) {
-                shieldSpells.add(stationarySpell);
-                kill();
-            }
-        }
+        for (O2StationarySpell spell : getShieldSpells()) {
+            if (shrink)
+               spell.decreaseRadius(sizeChange);
+            else
+                spell.increaseRadius(sizeChange);
 
-        for (O2StationarySpell spell : shieldSpells) {
-            spell.decreaseRadius(reduction);
             spell.flair(10);
         }
 
         kill();
+    }
+
+    /**
+     * Get the radius change amount applied to each affected shield this cast.
+     * <p>
+     * Set by {@link #doInitSpell()} from the caster's skill, so the value is only meaningful after the
+     * spell has been initialized for casting. The change is a decrease when {@link #shrink} is true and
+     * an increase otherwise.
+     * </p>
+     *
+     * @return the radius change amount for this cast
+     */
+    public int getSizeChange() {
+        return sizeChange;
+    }
+
+    /**
+     * Get all active shield spells at the projectile's location that were cast by this spell's caster.
+     * <p>
+     * Only {@link ShieldSpell} stationary spells are returned, so other stationary spells (floo network,
+     * vanishing cabinets, etc.) are never affected.
+     * </p>
+     *
+     * @return the caster's shield spells at the projectile's location; empty if there are none
+     */
+    public List<O2StationarySpell> getShieldSpells() {
+        List<O2StationarySpell> shieldSpells = new ArrayList<>();
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+            if ((stationarySpell instanceof ShieldSpell)
+                    && stationarySpell.isLocationInside(location)
+                    && stationarySpell.getCasterID().equals(caster.getUniqueId())) {
+                shieldSpells.add(stationarySpell);
+            }
+        }
+        return shieldSpells;
     }
 }

@@ -148,7 +148,7 @@ public final class OBLIVIATE extends O2Spell {
     private boolean canContinue() {
         int chance = Ollivanders2Common.random.nextInt(100); // 0-99
 
-        if (chance <= 10 && !Ollivanders2.testMode) // 10% chance this fails no matter what skill level except in testmode where we need it to consistently succeed
+        if (chance < 10 && !Ollivanders2.testMode) // 10% chance this fails no matter what skill level except in testmode where we need it to consistently succeed
             return false;
 
         return (chance < (usesModifier / 2));
@@ -159,6 +159,8 @@ public final class OBLIVIATE extends O2Spell {
      * <p>
      * Computes a per-iteration reduction amount: 1 if {@code usesModifier < 1}, otherwise a
      * uniform random value in {@code [0, floor(usesModifier))}, capped at {@link #maxReduction}.
+     * Under {@link Ollivanders2#testMode} a cast at or above {@link O2Spell#spellMasteryLevel} instead
+     * forces the maximum reduction, so the random roll cannot come up 0 and tests are deterministic.
      * Then a 50/50 coin flip decides whether to attempt to forget a spell or a potion first; if
      * the chosen category is empty for this target, falls back to the other category so a single
      * iteration always reduces something when at least one of the two maps is non-empty.
@@ -170,7 +172,11 @@ public final class OBLIVIATE extends O2Spell {
         // determine how much the player forgets
         int reduction;
 
-        if (usesModifier < 1)
+        if (Ollivanders2.testMode && usesModifier >= O2Spell.spellMasteryLevel)
+            // at mastery under test the random roll can come up 0, leaving the target unchanged; force the maximum
+            // reduction so the outcome is deterministic and always greater than 0
+            reduction = maxReduction;
+        else if (usesModifier < 1)
             reduction = 1;
         else {
             reduction = Ollivanders2Common.random.nextInt((int)Math.floor(usesModifier));

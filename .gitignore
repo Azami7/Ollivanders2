@@ -5,6 +5,7 @@ out
 lib
 mempalace.yaml
 entities.json
+docs/superpowers
 
 # Ignore third-party dependency plugins (paid/licensed plugins)
 dependency-plugins

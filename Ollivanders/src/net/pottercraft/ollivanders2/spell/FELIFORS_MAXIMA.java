@@ -6,6 +6,22 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Jinx that transforms the target player into a cat.
+ * <p>
+ * This is the most powerful variant of the Felifors transfiguration line. It extends {@link AddO2Effect} to apply
+ * the {@link O2EffectType#FELIFORS_MAXIMA} effect to the target, which handles the cat transformation. The effect
+ * lasts at least 30 seconds, scaled by the caster's experience.
+ * </p>
+ * <p>
+ * Unlike {@link FELIFORS_MEDIUS}, which applies a reversible disguise to any entity, this variant targets players
+ * and works through the effect system. {@code targetSelf} is enabled so the jinx can resolve onto the casting
+ * player when no other target is in range.
+ * </p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Felifors_Spell">Harry Potter Wiki - Felifors Spell</a>
+ */
 public class FELIFORS_MAXIMA extends AddO2Effect {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.

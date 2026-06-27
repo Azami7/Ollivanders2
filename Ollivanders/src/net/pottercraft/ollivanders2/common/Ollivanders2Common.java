@@ -133,11 +133,11 @@ public class Ollivanders2Common {
         add(O2SpellType.LAMA);
         add(O2SpellType.LAPIFORS_MEDIUS);
         add(O2SpellType.PULLUS);
-        add(O2SpellType.SNUFFLIFORS);
         add(O2SpellType.SUIFORS);
         add(O2SpellType.SUS);
         add(O2SpellType.URSIFORS);
         add(O2SpellType.URSUS);
+
         add(O2SpellType.VERA_VERTO);
     }};
 

@@ -12,6 +12,23 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Transfigures a target entity into a cat for a limited duration.
+ * <p>
+ * This is the medium-strength variant of the Felifors transfiguration line. It extends {@link FriendlyMobDisguise}
+ * to temporarily disguise the target entity as an adult cat with a randomized cat type and dyed collar color. The
+ * disguise lasts between {@code minDuration} and {@code maxDuration} (15 seconds to 5 minutes), scaled by the
+ * caster's experience, after which the entity reverts to its original form.
+ * </p>
+ * <p>
+ * Unlike {@link FELIFORS_MAXIMA}, which applies a lasting effect to a player, this variant works on entities as a
+ * reversible disguise. The cat's visual details (type and collar color) are only generated outside of
+ * {@link Ollivanders2#testMode} since they depend on the disguise library.
+ * </p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Felifors_Spell">Harry Potter Wiki - Felifors Spell</a>
+ */
 public class FELIFORS_MEDIUS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;

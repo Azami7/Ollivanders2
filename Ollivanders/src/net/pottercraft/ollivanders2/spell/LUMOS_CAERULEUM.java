@@ -13,11 +13,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Captures magical blue flames in a glass bottle, creating a portable light source.
  * <p>
- * This spell transforms a glass bottle held in the player's off-hand into a soul fire lantern.
+ * Lumos Caeruleum is the Minecraft adaptation of the Bluebell Flames charm. When cast while the caster holds a
+ * glass bottle in their off-hand, it converts a single bottle into a {@link Material#SOUL_LANTERN soul lantern}
+ * renamed "Jar of Bluebell Flames" - a waterproof, portable light source. If the caster is holding a stack of
+ * bottles, only one is consumed and the remainder are dropped at the caster's location so they are not lost.
+ * </p>
+ * <p>
+ * This is a {@code noProjectile} charm: it acts immediately on the caster's inventory in {@link #doCheckEffect()}
+ * rather than firing a projectile, and does nothing if the off-hand is not holding a glass bottle.
+ * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Bluebell_Flames">https://harrypotter.fandom.com/wiki/Bluebell_Flames</a>
- * @since 2.21.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Bluebell_Flames">Harry Potter Wiki - Bluebell Flames</a>
  */
 public final class LUMOS_CAERULEUM extends O2Spell {
     /**
@@ -53,28 +60,36 @@ public final class LUMOS_CAERULEUM extends O2Spell {
         spellType = O2SpellType.LUMOS_CAERULEUM;
         branch = O2MagicBranch.CHARMS;
 
+        noProjectile = true;
+
         initSpell();
     }
-
+    
     /**
-     * Transform a glass bottle into a soul fire lantern
-     * Override checkEffect to prevent projectile creation
+     * Convert a glass bottle in the caster's off-hand into a "Jar of Bluebell Flames" soul lantern.
+     * <p>
+     * If the caster is holding a glass bottle in their off-hand, a single bottle is replaced with a renamed
+     * {@link Material#SOUL_LANTERN} and a success message is sent. When the off-hand holds more than one bottle,
+     * only one is consumed and the remaining bottles are dropped at the spell's location so they are not lost.
+     * If the off-hand is not holding a glass bottle, the spell does nothing. The spell is killed once the effect
+     * resolves, whether or not a bottle was converted.
+     * </p>
      */
     @Override
-    public void checkEffect() {
+    protected void doCheckEffect() {
         if (!isSpellAllowed()) {
             kill();
             return;
         }
-        
+
         ItemStack offHandItem = caster.getInventory().getItemInOffHand();
-        
+
         // Check if the player is holding a glass bottle in their off-hand
         if (offHandItem.getType() == Material.GLASS_BOTTLE) {
             // Create a soul fire lantern
             ItemStack lantern = new ItemStack(Material.SOUL_LANTERN, 1);
             ItemMeta meta = lantern.getItemMeta();
-            
+
             if (meta != null) {
                 meta.setDisplayName("§9Jar of Bluebell Flames");
                 meta.setLore(new ArrayList<>() {{
@@ -83,24 +98,22 @@ public final class LUMOS_CAERULEUM extends O2Spell {
                 }});
                 lantern.setItemMeta(meta);
             }
-            
+
+            if (offHandItem.getAmount() > 1) { // handle if the player was holding more than 1 bottle
+                int newAmount = offHandItem.getAmount() - 1;
+                offHandItem.setAmount(newAmount);
+                world.dropItemNaturally(location, offHandItem);
+            }
+
             // Replace the glass bottle with the lantern
             caster.getInventory().setItemInOffHand(lantern);
-            
+
             // Send success message
             caster.sendMessage(Ollivanders2.chatColor + "You capture bluebell flames in the bottle.");
         }
         // No failure message - spell simply does nothing if requirements aren't met
-        
+
         // Kill the spell immediately after effect
         kill();
-    }
-    
-    /**
-     * Nothing to do since we overrode checkEffect() itself
-     */
-    @Override
-    protected void doCheckEffect() {
-        // Not used since we override checkEffect
     }
 }
