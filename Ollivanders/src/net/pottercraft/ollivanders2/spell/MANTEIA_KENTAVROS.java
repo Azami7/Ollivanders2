@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -9,9 +8,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Centaur divination is the most accurate form of divination, but requires the most skill to learn.
+ * Centaur divination spell, the most accurate form of divination but the most difficult to learn.
+ * <p>
+ * Centaurs read the future in the movements of the celestial bodies over centuries of observation. This spell produces
+ * a {@link O2DivinationType#CENTAUR_DIVINATION} prophecy about its target and, when mastered, is the most accurate
+ * divination.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Divination?so=search#Centaur_divination">https://harrypotter.fandom.com/wiki/Divination?so=search#Centaur_divination</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Divination#Centaur_divination">Harry Potter Wiki - Centaur divination</a>
  */
 public class MANTEIA_KENTAVROS extends Divination {
     /**
@@ -24,7 +29,6 @@ public class MANTEIA_KENTAVROS extends Divination {
 
         spellType = O2SpellType.MANTEIA_KENTAVROS;
         divinationType = O2DivinationType.CENTAUR_DIVINATION;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("\"Trivial hurts, tiny human accidents, these are of no more significance than the scurryings of ants to the wide universe, and are unaffected by planetary movements.\" -Firenze");
@@ -45,9 +49,8 @@ public class MANTEIA_KENTAVROS extends Divination {
     public MANTEIA_KENTAVROS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.ASTROLOGIA;
-        divinationType = O2DivinationType.ASTROLOGY;
-        branch = O2MagicBranch.DIVINATION;
+        spellType = O2SpellType.MANTEIA_KENTAVROS;
+        divinationType = O2DivinationType.CENTAUR_DIVINATION;
 
         initSpell();
     }

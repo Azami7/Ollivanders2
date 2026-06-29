@@ -12,19 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Remove an O2Effect from a target player.
+ * Abstract base class for spells that remove a single {@link O2EffectType} from a target player.
+ * <p>
+ * When the projectile reaches a nearby player, the spell attempts to remove the first effect on its
+ * {@link #effectsAllowList} that the target currently has, subject to a skill-based success check
+ * ({@link #checkSuccess(O2EffectType)}). Effects on {@link #effectBlockedList} can never be removed, regardless of the
+ * allow list. Subclasses configure the allow list and {@link #successModifier} in their constructors.
+ * </p>
  */
 abstract public class RemoveO2Effect extends O2Spell {
-    /**
-     * The maximum number of targets for this spell
-     */
-    int maxTargets = 1;
-
-    /**
-     * Number of targets that can be affected
-     */
-    int targetsRemaining = 1;
-
     /**
      * The modifier for success rate on this spell
      */
@@ -71,7 +67,7 @@ abstract public class RemoveO2Effect extends O2Spell {
     }
 
     /**
-     * If a target player is within the radius of the projectile, add the potion effect to the player.
+     * If a target player is within the radius of the projectile, remove the effect from the player.
      */
     @Override
     protected void doCheckEffect() {
@@ -82,10 +78,10 @@ abstract public class RemoveO2Effect extends O2Spell {
     }
 
     /**
-     * Affect targets within the radius.
+     * Remove an effect from the first eligible target within the radius, then end the spell.
      *
-     * @param radius the radius of the spell
-     * @param flair  whether to show a visual flair
+     * @param radius the radius within which to search for a target
+     * @param flair  whether to show a visual flair at the projectile location
      */
     void affectRadius(double radius, boolean flair) {
         if (flair)
@@ -96,21 +92,20 @@ abstract public class RemoveO2Effect extends O2Spell {
                 continue;
 
             removeEffects(target);
-
-            targetsRemaining = targetsRemaining - 1;
-
-            // stop when the limit of targets is reached
-            if (targetsRemaining <= 0) {
-                kill();
-                return;
-            }
+            kill();
+            return;
         }
     }
 
     /**
-     * Remove 1 or more O2Effects from the target player
+     * Remove the first allowed effect the target currently has, if the success check passes.
+     * <p>
+     * Skips any effect on {@link #effectBlockedList} and any the target does not have. On the first allowed, present
+     * effect that {@link #checkSuccess(O2EffectType)} approves, the effect is removed and the method returns - at most
+     * one effect is removed per call.
+     * </p>
      *
-     * @param target the player to remove effects from
+     * @param target the player to remove an effect from
      */
     void removeEffects(@NotNull Player target) {
         for (O2EffectType effectType : effectsAllowList) {
@@ -121,13 +116,9 @@ abstract public class RemoveO2Effect extends O2Spell {
             if (!Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effectType))
                 continue;
 
-            if (checkSuccess(effectType))
+            if (checkSuccess(effectType)) {
                 Ollivanders2API.getPlayers().playerEffects.removeEffect(target.getUniqueId(), effectType);
-
-            targetsRemaining -= 1;
-            if (targetsRemaining <= 0) {
-                kill();
-                break;
+                return;
             }
         }
     }
@@ -149,5 +140,14 @@ abstract public class RemoveO2Effect extends O2Spell {
             successRate = 100;
 
         return Math.abs(Ollivanders2Common.random.nextInt() % 100) < successRate;
+    }
+
+    /**
+     * Get the effects this spell is able to remove.
+     *
+     * @return a copy of the allow list
+     */
+    public List<O2EffectType> getEffectsAllowList() {
+        return new ArrayList<>(effectsAllowList);
     }
 }

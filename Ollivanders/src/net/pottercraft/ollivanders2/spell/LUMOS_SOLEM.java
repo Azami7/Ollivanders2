@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Burns sun-sensitive entities with a radius.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell">https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell">https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell</a>
  */
 public final class LUMOS_SOLEM extends O2Spell {
     //todo make it work like the book - https://harrypotter.fandom.com/wiki/Sunlight_Charm

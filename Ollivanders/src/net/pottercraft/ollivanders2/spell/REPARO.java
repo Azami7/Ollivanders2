@@ -1,45 +1,24 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Repairs a damageable item you aim it at.
+ * Repairs a damageable item the caster aims at, the standard Mending Charm.
+ * <p>
+ * Restores durability to ordinary tools and equipment, scaled by the caster's skill and clamped to the repair bounds
+ * inherited from {@link ReparoBase}. For the stronger variant that mends diamond and netherite items, see
+ * {@link DIAMAS_REPARO}.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Mending_Charm">https://harrypotter.fandom.com/wiki/Mending_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Mending_Charm">Harry Potter Wiki - Mending Charm</a>
  */
-public class REPARO extends O2Spell {
-    /**
-     * The minimum this spell will repair
-     */
-    int minRepair = 30; // half the durability of a wooden sword
-
-    /**
-     * The maximum this spell will repair
-     */
-    int maxRepair = 251; // durability of an iron sword
-
-    /**
-     * The multiplier on usesModifier used to determine the level of repair
-     */
-    float repairMultiplier = 0.5f;
-
-    /**
-     * How much durability to repair
-     */
-    int repair;
-
+public final class REPARO extends ReparoBase {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
@@ -73,57 +52,6 @@ public class REPARO extends O2Spell {
         spellType = O2SpellType.REPARO;
         branch = O2MagicBranch.CHARMS;
 
-        // world guard flags
-        if (Ollivanders2.worldGuardEnabled) {
-            worldGuardFlags.add(Flags.ITEM_DROP);
-            worldGuardFlags.add(Flags.ITEM_PICKUP);
-        }
-
         initSpell();
-    }
-
-    /**
-     * Determine the amount to repair based on caster's skill.
-     */
-    @Override
-    void doInitSpell() {
-        repair = (int) (usesModifier / repairMultiplier);
-
-        if (repair < minRepair)
-            repair = minRepair;
-        else if (repair > maxRepair)
-            repair = maxRepair;
-    }
-
-    /**
-     * Find a damageable item and repair it.
-     */
-    @Override
-    protected void doCheckEffect() {
-        if (hasHitBlock())
-            kill();
-
-        List<Item> items = getNearbyItems(defaultRadius);
-
-        for (Item item : items) {
-            ItemStack stack = item.getItemStack();
-            ItemMeta itemMeta = stack.getItemMeta();
-
-            if (itemMeta instanceof Damageable) {
-                int damage = ((Damageable) itemMeta).getDamage();
-                damage = damage - repair;
-
-                ((Damageable) itemMeta).setDamage(damage);
-                stack.setItemMeta(itemMeta);
-
-                item.setItemStack(stack);
-                kill();
-
-                successMessage = item.getName() + " looks newer than before.";
-                sendSuccessMessage();
-
-                break;
-            }
-        }
     }
 }

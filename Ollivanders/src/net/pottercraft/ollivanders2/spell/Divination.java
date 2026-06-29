@@ -19,7 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Super class for all divination spells.
+ * Base class for all divination spells, which produce a prophecy about a target player rather than a projectile effect.
+ * <p>
+ * Divination spells do not travel or strike a target like other spells, so {@code noProjectile} is set and the spell
+ * resolves on the first tick in {@link #doCheckEffect()}: it enforces any required {@link #facingBlock} (such as a
+ * crystal ball) and {@link #itemHeld} (such as an egg), confirms the {@link #target} is online, then reflectively
+ * constructs the prophecy for the configured {@link O2DivinationType} and divines it. The held item is consumed when
+ * {@link #consumeHeld} is set.
+ * </p>
+ * <p>
+ * Concrete subclasses set their {@link #spellType} and {@link #divinationType} in both constructors and configure any
+ * facing-block or held-item requirements in the casting constructor. The magic branch is set to
+ * {@link O2MagicBranch#DIVINATION}, and the casting constructor sets {@code noProjectile}, here for all subclasses.
+ * </p>
+ *
+ * @author Azami7
  */
 public abstract class Divination extends O2Spell {
     /**
@@ -96,10 +110,17 @@ public abstract class Divination extends O2Spell {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.DIVINATION;
+
+        noProjectile = true;
     }
 
     /**
-     * Override setUsesModifier because this spell does not require holding a wand.
+     * Calculate the uses modifier for this divination spell.
+     * <p>
+     * Overrides the base behavior because divination does not require holding a wand, so the modifier is based purely
+     * on the caster's experience with this spell, doubled when the caster is under the
+     * {@link O2EffectType#HIGHER_SKILL} effect.
+     * </p>
      */
     @Override
     protected void setUsesModifier() {
@@ -119,19 +140,25 @@ public abstract class Divination extends O2Spell {
             target = t;
     }
 
+    /**
+     * Resolve the divination.
+     * <p>
+     * Because divination spells set {@code noProjectile}, the base {@link #checkEffect()} validates the spell is
+     * allowed and then calls this on the first tick. This enforces any {@link #facingBlock} and {@link #itemHeld}
+     * requirements, confirms the {@link #target} is online, then constructs and runs the prophecy for this spell's
+     * {@link #divinationType}. The held item is consumed when {@link #consumeHeld} is set. The spell is killed once
+     * resolved or whenever a requirement is not met.
+     * </p>
+     */
     @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
+    protected void doCheckEffect() {
+        kill();
 
-        // if this divination type requires the player be facing an block, like a crystal ball, check for the block
+        // if this divination type requires the player be facing a block, like a crystal ball, check for the block
         if (facingBlock != null) {
             Block facing = Ollivanders2Common.playerFacingBlockType(caster, facingBlock);
             if (facing == null) {
                 caster.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
-                kill();
                 return;
             }
         }
@@ -142,7 +169,7 @@ public abstract class Divination extends O2Spell {
 
             // if the item has a display name, it is a custom item
             ItemMeta meta = held.getItemMeta();
-            if (meta == null || !meta.getDisplayName().toLowerCase().equals(itemHeld.getName().toLowerCase())) {
+            if (meta == null || !meta.getDisplayName().equalsIgnoreCase(itemHeld.getName().toLowerCase())) {
                 wrongItemHeld();
                 return;
             }
@@ -151,7 +178,6 @@ public abstract class Divination extends O2Spell {
         // target must be logged in to make prophecy about them
         if (target == null || !target.isOnline()) {
             caster.sendMessage(Ollivanders2.chatColor + "Unable to find that player online.");
-            kill();
             return;
         }
 
@@ -166,30 +192,50 @@ public abstract class Divination extends O2Spell {
         }
         catch (Exception e) {
             common.printDebugMessage("Exception creating divination", e, null, true);
-            kill();
             return;
         }
 
         divination.divine();
 
-        // if requires consume item held, consume it
+        // if the spell requires consuming the item held, consume it
         if (itemHeld != null && consumeHeld) {
             int amount = caster.getInventory().getItemInMainHand().getAmount();
             caster.getInventory().getItemInMainHand().setAmount(amount - 1);
         }
-
-        kill();
     }
 
     /**
-     * When the player is holding the wrong item for this divinination
+     * Notify the caster that they are holding the wrong item for this divination, and kill the spell.
      */
     private void wrongItemHeld() {
         caster.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
         kill();
     }
 
-    @Override
-    protected void doCheckEffect() {
+    /**
+     * Get the block type the caster must be facing to perform this divination, if any.
+     *
+     * @return the required facing block type, or null if this divination has no facing requirement
+     */
+    public Material getFacingBlock() {
+        return facingBlock;
+    }
+
+    /**
+     * Get the item type the caster must be holding to perform this divination, if any.
+     *
+     * @return the required held item type, or null if this divination has no held-item requirement
+     */
+    public O2ItemType getItemHeld() {
+        return itemHeld;
+    }
+
+    /**
+     * Whether the held item is consumed when this divination is performed.
+     *
+     * @return true if the held item is consumed, false otherwise
+     */
+    public boolean isConsumeHeld() {
+        return consumeHeld;
     }
 }

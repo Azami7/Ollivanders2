@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Reduces the time duration of any levicorpus effects on the target.
+ * Counter-spell to the Levicorpus Jinx, removing its suspension effect from the target.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Liberacorpus">https://harrypotter.fandom.com/wiki/Liberacorpus</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Liberacorpus">Harry Potter Wiki - Liberacorpus</a>
  */
 public final class LIBERACORPUS extends RemoveO2Effect {
     /**
@@ -50,7 +50,6 @@ public final class LIBERACORPUS extends RemoveO2Effect {
 
         initSpell();
 
-        maxTargets = targetsRemaining = 1;
         successModifier = 1.0f;
     }
 

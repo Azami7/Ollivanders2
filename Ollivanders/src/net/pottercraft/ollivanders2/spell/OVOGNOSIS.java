@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,11 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Ovomancy is an ancient greek form of divination by interpreting the inside (yolk and whites) of an egg.
+ * Ovomancy divination spell, an ancient Greek art of interpreting the inside (yolk and whites) of an egg.
+ * <p>
+ * The caster must be facing a water-filled cauldron and holding an egg, which is consumed. This spell produces an
+ * {@link O2DivinationType#OVOMANCY} prophecy about its target.
+ * </p>
  *
  * @author Azami7
- * @see <a href = "http://harrypotter.wikia.com/wiki/Ovomancy">http://harrypotter.wikia.com/wiki/Ovomancy</a>
  * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Ovomancy">Harry Potter Wiki - Ovomancy</a>
  */
 public class OVOGNOSIS extends Divination {
     /**
@@ -28,11 +31,10 @@ public class OVOGNOSIS extends Divination {
 
         spellType = O2SpellType.OVOGNOSIS;
         divinationType = O2DivinationType.OVOMANCY;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("Egg divination was a common practice for ancient Greeks and Romans.");
-            add("A practice that dates back to Orpheus of Greeze allows the one to know the future though interpreting eggs.");
+            add("A practice that dates back to Orpheus of Greece allows the one to know the future though interpreting eggs.");
         }};
 
         text = "By studying the shape of the egg whites and yolks in water, the seer will have the future revealed to them.";
@@ -50,7 +52,6 @@ public class OVOGNOSIS extends Divination {
 
         spellType = O2SpellType.OVOGNOSIS;
         divinationType = O2DivinationType.OVOMANCY;
-        branch = O2MagicBranch.DIVINATION;
 
         facingBlock = Material.WATER_CAULDRON;
         facingBlockString = "a water-filled cauldron";

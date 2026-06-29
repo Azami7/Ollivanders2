@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,11 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Tasseomancy is the art of reading tea leaves to predict events in the future.
+ * Tasseomancy divination spell, reading tea leaves to predict future events.
+ * <p>
+ * The caster must be facing a cauldron and holding tea leaves, which are consumed. This spell produces a
+ * {@link O2DivinationType#TASSEOMANCY} prophecy about its target.
+ * </p>
  *
- * @see <a href="http://harrypotter.wikia.com/wiki/Tessomancy">http://harrypotter.wikia.com/wiki/Tessomancy</a>
  * @author Azami7
  * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Tessomancy">Harry Potter Wiki - Tessomancy</a>
  */
 public final class BAO_ZHONG_CHA extends Divination {
     /**
@@ -28,7 +31,6 @@ public final class BAO_ZHONG_CHA extends Divination {
 
         spellType = O2SpellType.BAO_ZHONG_CHA;
         divinationType = O2DivinationType.TASSEOMANCY;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("\"Now, I want you all to divide into pairs. Collect a teacup from the shelf, come to me, and I will fill it. Then sit down and drink; drink until only the dregs remain. Swirl these around the cup three times with the left hand, then turn the cup upside-down on its saucer; wait for the last of the tea to drain away, then give your cup to your partner to read.\" -Sybill Trelawney");
@@ -50,7 +52,6 @@ public final class BAO_ZHONG_CHA extends Divination {
         super(plugin, player, rightWand);
         spellType = O2SpellType.BAO_ZHONG_CHA;
         divinationType = O2DivinationType.TASSEOMANCY;
-        branch = O2MagicBranch.DIVINATION;
 
         facingBlock = Material.CAULDRON;
         facingBlockString = "a cauldron";

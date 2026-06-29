@@ -10,12 +10,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Reveal an unfulfilled prophecy about a player.
+ * Reveal an unfulfilled prophecy made about a nearby target player.
+ * <p>
+ * Finds the first nearby player other than the caster and, on a skill-based success roll, broadcasts any unfulfilled
+ * prophecy about them to everyone within {@link #messageRadius}. If the roll fails or the target has no prophecy, only
+ * the caster is told that nothing was discovered.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Prophecy">https://harrypotter.fandom.com/wiki/Prophecy</a>
- * {@link net.pottercraft.ollivanders2.divination.O2Prophecy}
+ * @see <a href="https://harrypotter.fandom.com/wiki/Prophecy">Harry Potter Wiki - Prophecy</a>
+ * @see net.pottercraft.ollivanders2.divination.O2Prophecy
  */
 public class PROPHETEIA extends O2Spell {
+    /**
+     * The radius within which a revealed prophecy is broadcast.
+     */
     private final static int messageRadius = 10;
 
     /**
@@ -63,9 +71,9 @@ public class PROPHETEIA extends O2Spell {
             if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+            int rand = Ollivanders2Common.random.nextInt(100);
 
-            if (usesModifier > rand) {
+            if (usesModifier > rand || Ollivanders2.testMode) {
                 String prophecy = Ollivanders2API.getProphecies().getProphecy(target.getUniqueId());
 
                 if (prophecy != null) {

@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -9,11 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Astrology - http://harrypotter.wikia.com/wiki/Astrology - is the system of using the relative positions of celestial bodies (including the sun, moon, and planets) to
- * try to predict future events or gain insight into personality, relationships, and health.
+ * Astrology divination spell, divining the future from the relative positions of celestial bodies.
+ * <p>
+ * Astrology uses the positions of the sun, moon, and planets to predict future events or gain insight into a target's
+ * personality, relationships, and health. This spell produces an {@link O2DivinationType#ASTROLOGY} prophecy about its
+ * target.
+ * </p>
  *
  * @author Azami7
  * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Astrology">Harry Potter Wiki - Astrology</a>
  */
 public final class ASTROLOGIA extends Divination {
     /**
@@ -26,11 +30,10 @@ public final class ASTROLOGIA extends Divination {
 
         spellType = O2SpellType.ASTROLOGIA;
         divinationType = O2DivinationType.ASTROLOGY;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("\"Professor Trelawney did astrology with us! Mars causes accidents and burns and things like that, and when it makes an angle to Saturn, like now, that means people need to be extra careful when handling hot things.\" -Parvati Patil");
-            add("\"My dears, it is time for use to consider the stars.\" -Sybill Trelawny");
+            add("\"My dears, it is time for use to consider the stars.\" -Sybill Trelawney");
             add("\"The movements of the planets and the mysterious portents they reveal only to those who understand the steps of the celestial dance. Human destiny may be deciphered by the planetary rays, which intermingle...\" -Sybill Trelawny");
         }};
 
@@ -48,7 +51,6 @@ public final class ASTROLOGIA extends Divination {
         super(plugin, player, rightWand);
         spellType = O2SpellType.ASTROLOGIA;
         divinationType = O2DivinationType.ASTROLOGY;
-        branch = O2MagicBranch.DIVINATION;
 
         initSpell();
     }

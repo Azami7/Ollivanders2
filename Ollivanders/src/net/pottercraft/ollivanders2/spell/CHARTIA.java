@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Cartomancy is the art of reading cards to gain insight into future events.
+ * Playing-card cartomancy divination spell, reading playing cards to gain insight into future events.
+ * <p>
+ * The caster must be holding playing cards. This spell produces a {@link O2DivinationType#CARTOMANCY} prophecy about
+ * its target. For the tarot variant, see {@link CARTOMANCIE}.
+ * </p>
  *
  * @author Azami7
- * @see <a href = "http://harrypotter.wikia.com/wiki/Cartomancy">http://harrypotter.wikia.com/wiki/Cartomancy</a>
  * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Cartomancy">Harry Potter Wiki - Cartomancy</a>
  */
 public final class CHARTIA extends Divination {
     /**
@@ -27,7 +30,6 @@ public final class CHARTIA extends Divination {
 
         spellType = O2SpellType.CHARTIA;
         divinationType = O2DivinationType.CARTOMANCY;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("\"‘Two of spades: conflict,’ she murmured, as she passed the place where Harry crouched, hidden. ‘Seven of spades: an ill omen. Ten of spades: violence. Knave of spades: a dark young man, possibly troubled, one who dislikes the questioner –‘\"");
@@ -48,7 +50,6 @@ public final class CHARTIA extends Divination {
         super(plugin, player, rightWand);
         spellType = O2SpellType.CHARTIA;
         divinationType = O2DivinationType.CARTOMANCY;
-        branch = O2MagicBranch.DIVINATION;
 
         itemHeld = O2ItemType.PLAYING_CARDS;
         itemHeldString = "playing cards";
