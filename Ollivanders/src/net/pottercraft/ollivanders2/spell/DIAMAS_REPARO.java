@@ -1,17 +1,20 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A stronger version of Reparo for mending diamond and netherite items.
+ * A stronger version of {@link REPARO} for mending diamond and netherite items.
+ * <p>
+ * Overrides the inherited repair bounds and multiplier from {@link ReparoBase} so it can restore the much larger
+ * durability of high-tier tools, repairing more per cast and up to a higher maximum than the base Mending Charm.
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Mending_Charm">https://harrypotter.fandom.com/wiki/Mending_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Mending_Charm">Harry Potter Wiki - Mending Charm</a>
  */
-public final class DIAMAS_REPARO extends REPARO {
+public final class DIAMAS_REPARO extends ReparoBase {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -37,14 +40,8 @@ public final class DIAMAS_REPARO extends REPARO {
     public DIAMAS_REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.REPARO;
+        spellType = O2SpellType.DIAMAS_REPARO;
         branch = O2MagicBranch.CHARMS;
-
-        // world guard flags
-        if (Ollivanders2.worldGuardEnabled) {
-            worldGuardFlags.add(Flags.ITEM_DROP);
-            worldGuardFlags.add(Flags.ITEM_PICKUP);
-        }
 
         minRepair = 132; // the max durability for a stone sword
         maxRepair = 2032; // the max durability for a netherite sword

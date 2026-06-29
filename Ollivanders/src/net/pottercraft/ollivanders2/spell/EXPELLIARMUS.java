@@ -12,19 +12,29 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Disarms an entity of it's held item, flinging the item in the direction of the caster with force determined by the spell level.
+ * Disarms an entity of its held item, flinging the item away from the caster with force determined by the spell level.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Disarming_Charm">https://harrypotter.fandom.com/wiki/Disarming_Charm</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Disarming_Charm">Harry Potter Wiki - Disarming Charm</a>
  */
 public final class EXPELLIARMUS extends O2Spell {
+    /**
+     * Minimum launch speed of the expelled item, regardless of caster skill.
+     */
     private final double minVelocity = 0.25;
+
+    /**
+     * Maximum launch speed of the expelled item, regardless of caster skill.
+     */
     private final double maxVelocity = 3;
 
     /**
-     * The velocity the expelled item will fly out of the target's hand
+     * The speed at which the expelled item flies out of the target's hand, set from caster skill in
+     * {@link #doInitSpell()} and clamped to [{@link #minVelocity}, {@link #maxVelocity}].
      */
     private double velocity = 0.25;
 
@@ -69,7 +79,7 @@ public final class EXPELLIARMUS extends O2Spell {
     }
 
     /**
-     * Determine the velocity based on the caster's skill
+     * Set the item launch speed based on the caster's skill, clamped to [{@link #minVelocity}, {@link #maxVelocity}].
      */
     @Override
     void doInitSpell() {
@@ -81,13 +91,49 @@ public final class EXPELLIARMUS extends O2Spell {
     }
 
     /**
-     * Look for entities in the projectile location and disarm them if they are holding something
+     * Get the speed at which a successful cast flings the disarmed item.
+     * <p>
+     * Set by {@link #doInitSpell()} from the caster's skill, so the value is only meaningful after the
+     * spell has been initialized for casting.
+     * </p>
+     *
+     * @return the item launch speed for this cast
+     */
+    public double getLaunchVelocity() {
+        return velocity;
+    }
+
+    /**
+     * Get the minimum item launch speed, regardless of caster skill.
+     *
+     * @return the minimum launch speed
+     */
+    public double getMinVelocity() {
+        return minVelocity;
+    }
+
+    /**
+     * Get the maximum item launch speed, regardless of caster skill.
+     *
+     * @return the maximum launch speed
+     */
+    public double getMaxVelocity() {
+        return maxVelocity;
+    }
+
+    /**
+     * Disarm the first non-caster living entity at the projectile's location that is holding an item.
+     * <p>
+     * Checks the entity's main hand, falling back to the off-hand. The held item is removed from that hand
+     * and dropped at the entity's eye location, then flung away from the caster at {@link #velocity}. The
+     * spell is killed once an entity is disarmed, or once the projectile hits a block without finding one.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {
         List<LivingEntity> livingEntities = getNearbyLivingEntities(1.5);
 
-        if (livingEntities.size() > 0) {
+        if (!livingEntities.isEmpty()) {
             for (LivingEntity entity : livingEntities) {
                 if (entity.getUniqueId().equals(caster.getUniqueId()))
                     continue;
@@ -96,8 +142,7 @@ public final class EXPELLIARMUS extends O2Spell {
                 EntityEquipment entityEquipment = entity.getEquipment();
                 if (entityEquipment == null) {
                     // they do not have any equipment
-                    kill();
-                    return;
+                    continue;
                 }
 
                 ItemStack held = entityEquipment.getItemInMainHand();
@@ -125,7 +170,12 @@ public final class EXPELLIARMUS extends O2Spell {
 
                 // drop the item the player held
                 Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);
-                item.setVelocity(caster.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(velocity));
+
+                // fling the item away from the target, out of the disarmed entity's hand; skip the launch
+                // if the caster is exactly on the item, since normalizing a zero-length vector yields NaN
+                Vector direction = item.getLocation().toVector().subtract(caster.getEyeLocation().toVector());
+                if (direction.lengthSquared() > 0)
+                    item.setVelocity(direction.normalize().multiply(velocity));
 
                 kill();
                 return;

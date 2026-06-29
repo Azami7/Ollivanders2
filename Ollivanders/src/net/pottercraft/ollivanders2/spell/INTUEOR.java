@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,10 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Crystal-gazing was the art of looking into a crystal ball in order to try to gain insight into the future events.
+ * Crystal-gazing divination spell, reading visions seen within a crystal ball to predict the future.
+ * <p>
+ * The caster must be facing a crystal ball (a glass block). This spell produces a
+ * {@link O2DivinationType#CRYSTAL_BALL} prophecy about its target.
+ * </p>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Crystal-gazing">https://harrypotter.fandom.com/wiki/Crystal-gazing</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Crystal-gazing">Harry Potter Wiki - Crystal-gazing</a>
  */
 public class INTUEOR extends Divination {
     /**
@@ -26,7 +29,6 @@ public class INTUEOR extends Divination {
 
         spellType = O2SpellType.INTUEOR;
         divinationType = O2DivinationType.CRYSTAL_BALL;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("\"‘I have been crystal-gazing, Headmaster,’ said Professor Trelawney, in her mistiest, most faraway voice, ‘and to my astonishment, I saw myself abandoning my solitary luncheon and coming to join you. Who am I to refuse the prompting of fate?'\"");
@@ -51,7 +53,6 @@ public class INTUEOR extends Divination {
 
         spellType = O2SpellType.INTUEOR;
         divinationType = O2DivinationType.CRYSTAL_BALL;
-        branch = O2MagicBranch.DIVINATION;
 
         facingBlock = Material.GLASS;
         facingBlockString = "a crystal ball";

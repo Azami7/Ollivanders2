@@ -4,33 +4,20 @@ import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.effect.MUTED_SPEECH;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Silences a player for a duration depending on the spell's level. The target player can only use nonverbal spells.
+ * Silences a target player so they can only cast nonverbal spells.
+ * <p>
+ * Applies the {@link O2EffectType#MUTED_SPEECH} effect to the first nearby player the projectile reaches, for a
+ * duration that scales with the caster's skill (clamped to the bounds configured on {@link AddO2Effect}).
+ * </p>
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Silencing_Charm">https://harrypotter.fandom.com/wiki/Silencing_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Silencing_Charm">Harry Potter Wiki - Silencing Charm</a>
  */
-public final class SILENCIO extends O2Spell {
-    /**
-     * The minimum time the target will be silenced for
-     */
-    private static final int minDuration = 5 * Ollivanders2Common.ticksPerSecond; // 5 seconds
-
-    /**
-     * The maximum time the target will be silenced for
-     */
-    private static final int maxDuration = 2 * Ollivanders2Common.ticksPerMinute; // 2 minutes
-
-    /**
-     * The duration the target will be silenced for
-     */
-    private int duration;
-
+public final class SILENCIO extends AddO2Effect {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
@@ -62,40 +49,11 @@ public final class SILENCIO extends O2Spell {
 
         spellType = O2SpellType.SILENCIO;
         branch = O2MagicBranch.CHARMS;
-        duration = minDuration;
+
+        effectsToAdd.add(O2EffectType.MUTED_SPEECH);
+        minDurationInSeconds = 15;
+        strengthModifier = 1;
 
         initSpell();
     }
-
-    /**
-     * Set the duration based on the caster's skill.
-     */
-    @Override
-    void doInitSpell() {
-        duration = (int) usesModifier * Ollivanders2Common.ticksPerSecond;
-        if (duration < minDuration)
-            duration = minDuration;
-        else if (duration > maxDuration)
-            duration = maxDuration;
-    }
-
-    /**
-     * Find a target player and mute their typing
-     */
-    @Override
-    protected void doCheckEffect() {
-        if (hasHitBlock())
-            kill();
-
-        for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId().equals(caster.getUniqueId()))
-                continue;
-
-            MUTED_SPEECH effect = new MUTED_SPEECH(p, duration, false, target.getUniqueId());
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-
-            kill();
-            return;
-        }
-    }
-}
+ }

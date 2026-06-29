@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Cartomancy is the art of reading cards to gain insight into future events.
+ * Tarot cartomancy divination spell, reading tarot cards to gain insight into future events.
+ * <p>
+ * The caster must be holding tarot cards. This spell produces a {@link O2DivinationType#CARTOMANCY_TAROT} prophecy
+ * about its target. For the playing-card variant, see {@link CHARTIA}.
+ * </p>
  *
  * @author Azami7
- * @see <a href = "http://harrypotter.wikia.com/wiki/Cartomancy">http://harrypotter.wikia.com/wiki/Cartomancy</a>
  * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Cartomancy">Harry Potter Wiki - Cartomancy</a>
  */
 public final class CARTOMANCIE extends Divination {
     /**
@@ -27,7 +30,6 @@ public final class CARTOMANCIE extends Divination {
 
         spellType = O2SpellType.CARTOMANCIE;
         divinationType = O2DivinationType.CARTOMANCY_TAROT;
-        branch = O2MagicBranch.DIVINATION;
 
         flavorText = new ArrayList<>() {{
             add("\"If Dumbledore chooses to ignore the warnings the cards show - again and again, no matter how I lay them out – the lightning-struck tower. Calamity. Disaster. Coming nearer all the time.’\" -Sybill Trelawney");
@@ -47,7 +49,6 @@ public final class CARTOMANCIE extends Divination {
         super(plugin, player, rightWand);
         spellType = O2SpellType.CARTOMANCIE;
         divinationType = O2DivinationType.CARTOMANCY_TAROT;
-        branch = O2MagicBranch.DIVINATION;
 
         itemHeld = O2ItemType.TAROT_CARDS;
         itemHeldString = "tarot cards";

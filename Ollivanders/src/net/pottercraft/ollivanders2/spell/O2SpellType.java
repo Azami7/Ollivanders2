@@ -593,10 +593,7 @@ public enum O2SpellType {
      * {@link PACK}
      */
     PACK(PACK.class, MagicLevel.BEGINNER),
-    /**
-     * {@link PARTIS_TEMPORUS}
-     */
-    PARTIS_TEMPORUS(PARTIS_TEMPORUS.class, MagicLevel.NEWT),
+    //PARTIS_TEMPORUS(PARTIS_TEMPORUS.class, MagicLevel.NEWT),
     /**
      * {@link PERICULUM}
      */

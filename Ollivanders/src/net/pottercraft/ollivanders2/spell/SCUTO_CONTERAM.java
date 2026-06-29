@@ -10,10 +10,16 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Kills some shield spells.
+ * Shield penetration charm that destroys nearby shield stationary spells.
+ * <p>
+ * When the projectile reaches a location containing stationary spells, it destroys any {@link ShieldSpell} there whose
+ * magic level is at or below this spell's level, then resolves. Stronger shields are left intact, and non-shield
+ * stationary spells (floo networks, vanishing cabinets, etc.) cannot be destroyed at all. The number of stationary
+ * spells a single cast will target is determined by the caster's skill (see {@link #doInitSpell()}).
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Shield_penetration_spell">https://harrypotter.fandom.com/wiki/Shield_penetration_spell</a>
- * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
+ * @see <a href="https://harrypotter.fandom.com/wiki/Shield_penetration_spell">Harry Potter Wiki - Shield penetration spell</a>
+ * @see ShieldSpell
  */
 public final class SCUTO_CONTERAM extends O2Spell {
     /**
@@ -51,7 +57,11 @@ public final class SCUTO_CONTERAM extends O2Spell {
     }
 
     /**
-     * Set the number of spells that can be killed based on the caster's skill.
+     * Set the number of stationary spells this cast will target, based on the caster's skill.
+     * <p>
+     * The number of targets scales with the caster's {@code usesModifier} and is floored at one, so even an unskilled
+     * caster can target a single shield.
+     * </p>
      */
     @Override
     void doInitSpell() {
@@ -61,22 +71,37 @@ public final class SCUTO_CONTERAM extends O2Spell {
     }
 
     /**
-     * Look for shield spells and kill them. This cannot kill spells like floo network, vanishing cabinets, etc..
+     * Destroy eligible shield spells at the projectile's location, then resolve.
+     * <p>
+     * Each stationary spell at the current location consumes one of the cast's remaining targets, whether or not it is
+     * destroyed: a {@link ShieldSpell} at or below this spell's magic level is destroyed, while stronger shields and
+     * non-shield stationary spells (floo networks, vanishing cabinets, etc.) are left intact. The spell resolves at the
+     * first location where it contacts a stationary spell, so it does not continue on the next tick once it has acted.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {
+        if (hasHitBlock())
+            kill();
+
         for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             if (stationarySpell instanceof ShieldSpell && (stationarySpell.getSpellType().getLevel().ordinal() <= spellType.getLevel().ordinal()))
                 stationarySpell.kill();
 
             targetsRemaining = targetsRemaining - 1;
+            kill(); // so the spell does not repeat next tick
 
             if (targetsRemaining <= 0)
                 break;
         }
+    }
 
-        // kill the spell if the projectile has stopped or when we have hit the max number of targets
-        if (hasHitBlock() || targetsRemaining <= 0)
-            kill();
+    /**
+     * Get the number of stationary spells this cast can still target.
+     *
+     * @return the remaining target count
+     */
+    public int getTargetsRemaining() {
+        return targetsRemaining;
     }
 }
