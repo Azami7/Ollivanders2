@@ -6,11 +6,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The strongest red sparks spell
+ * The strongest green sparks spell
  *
  * @see VERDIMILLIOUS
- * @author Azami1
- * @since 2.21
+ * @author Azami7
  */
 public final class VERDIMILLIOUS_TRIA extends VERDIMILLIOUS_DUO {
     /**
@@ -36,8 +35,8 @@ public final class VERDIMILLIOUS_TRIA extends VERDIMILLIOUS_DUO {
     public VERDIMILLIOUS_TRIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.VERMILLIOUS_DUO;
-        moveEffectData = Material.RED_STAINED_GLASS;
+        spellType = O2SpellType.VERDIMILLIOUS_TRIA;
+        moveEffectData = Material.GREEN_STAINED_GLASS;
         damageModifier = 0.25;
         radius = 4;
 

@@ -146,7 +146,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
         Entity target = event.getEntity();
         EntityDamageEvent.DamageCause cause = event.getCause();
 
-        if (!EntityCommon.isAttackDamageCause(cause))
+        if (!EntityCommon.isDamageCausedByAttack(cause))
             return;
 
         if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(caster.getUniqueId()))

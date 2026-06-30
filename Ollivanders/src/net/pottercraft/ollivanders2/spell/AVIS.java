@@ -13,8 +13,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Bird-Conjuring Charm - https://harrypotter.fandom.com/wiki/Bird-Conjuring_Charm - conjures a flock of birds from the
- * tip of the wand.
+ * The Bird-Conjuring Charm, which conjures a flock of birds from the tip of the wand.
+ * <p>
+ * This is a non-projectile spell: one bird is spawned at the caster's location on each tick until the number of birds
+ * (determined by the caster's skill in {@link #doInitSpell()}) is exhausted, producing a stream of birds.
+ * </p>
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Bird-Conjuring_Charm">Harry Potter Wiki - Bird-Conjuring Charm</a>
  */
 public final class AVIS extends O2Spell {
     /**
@@ -63,6 +68,8 @@ public final class AVIS extends O2Spell {
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.MOB_SPAWNING);
 
+        noProjectile = true;
+
         initSpell();
     }
 
@@ -71,7 +78,7 @@ public final class AVIS extends O2Spell {
      */
     @Override
     void doInitSpell() {
-        birdsRemaining = (int) usesModifier / 4;
+        birdsRemaining = (int)(usesModifier / 10); // at 50 experience this will be 5 birds
 
         if (birdsRemaining > maxBirds)
             birdsRemaining = maxBirds;
@@ -80,15 +87,10 @@ public final class AVIS extends O2Spell {
     }
 
     /**
-     * Shoot a stream of birds from the caster's wand
+     * Spawn one bird at the caster's location each tick until the bird count is exhausted, then end the spell.
      */
     @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
+    protected void doCheckEffect() {
         if (birdsRemaining > 0) {
             Parrot bird = (Parrot) (world.spawnEntity(location, EntityType.PARROT));
             bird.setVariant(EntityCommon.getRandomParrotVariant());
@@ -100,9 +102,20 @@ public final class AVIS extends O2Spell {
     }
 
     /**
-     * Nothing to do since we overrode checkEffect() itself
+     * Get the number of birds still to be spawned by this cast.
+     *
+     * @return the remaining bird count
      */
-    @Override
-    protected void doCheckEffect() {
+    public int getBirdsRemaining() {
+        return birdsRemaining;
+    }
+
+    /**
+     * Get the maximum number of birds this spell can spawn.
+     *
+     * @return the maximum bird count
+     */
+    public int getMaxBirds() {
+        return maxBirds;
     }
 }

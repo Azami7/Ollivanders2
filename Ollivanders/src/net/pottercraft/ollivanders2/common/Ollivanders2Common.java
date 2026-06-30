@@ -236,7 +236,7 @@ public class Ollivanders2Common {
      * Initialize all the materials lists based on the loaded MC materials. This was done statically but moved to dynamic
      * to work with varying MC versions with different block types.
      */
-    public static void initMaterials() {
+    public static void initMaterialLists() {
         if (chestBlocks.isEmpty()) {
             chestBlocks.add(Material.CHEST); // special case, we don't want to use the regex "CHEST" in case some future block could match that but not be a chest (like "richest")
             chestBlocks.addAll(getAllMaterialsThatEndWith("_CHEST"));

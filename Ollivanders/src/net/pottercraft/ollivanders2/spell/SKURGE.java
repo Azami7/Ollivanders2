@@ -12,21 +12,25 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Skurge can be used to clean up the sticky green ectoplasm created by passing ghosts - for minecraft it cleans up
- * slime.
+ * Skurge is a scouring charm used to clean up the sticky green ectoplasm left behind by passing ghosts.
+ * <p>
+ * Minecraft has no ectoplasm, so this implementation clears slime blocks instead. When the spell projectile
+ * strikes a block, every slime block within {@link #radius} of the impact point is turned to air. The radius
+ * scales with the caster's experience and is capped at {@link #maxRadius}.
+ * </p>
  *
  * @author Azami7
- * @since 2.21
- * @see <a href="https://harrypotter.fandom.com/wiki/Skurge_Charm">https://harrypotter.fandom.com/wiki/Skurge_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Skurge_Charm">Harry Potter Wiki - Skurge Charm</a>
  */
 public class SKURGE extends O2Spell {
     /**
-     * The radius of effect for this spell
+     * The radius, in blocks, within which slime blocks are cleared. Set from the caster's experience in
+     * {@link #doInitSpell()} and clamped to the range 1 to {@link #maxRadius}.
      */
     int radius = 1;
 
     /**
-     * The max radius for this spell
+     * The maximum radius this spell can reach, regardless of the caster's experience.
      */
     final int maxRadius = 20;
 
@@ -50,7 +54,8 @@ public class SKURGE extends O2Spell {
     }
 
     /**
-     * Constructor.
+     * Casting constructor. Sets the spell type and branch, registers the WorldGuard BUILD flag so the spell
+     * is blocked in regions where the caster cannot build, and initializes the projectile.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -69,7 +74,12 @@ public class SKURGE extends O2Spell {
     }
 
     /**
-     * Set the radius of effect for this spell.
+     * Set the radius of effect from the caster's experience.
+     * <p>
+     * The radius grows by one block for every 10 points of {@code usesModifier}, then is clamped to the
+     * range 1 to {@link #maxRadius} so that inexperienced casters still clear at least the impact block and
+     * experienced casters do not clear an unbounded area.
+     * </p>
      */
     @Override
     void doInitSpell() {
@@ -81,17 +91,42 @@ public class SKURGE extends O2Spell {
             radius = maxRadius;
     }
 
+    /**
+     * Clear slime blocks once the projectile has hit a block.
+     * <p>
+     * Waits until the projectile strikes a block, then turns every slime block within {@link #radius} of the
+     * impact point to air and ends the spell. While the projectile is still in flight this does nothing,
+     * allowing it to continue traveling.
+     * </p>
+     */
     @Override
     protected void doCheckEffect() {
         if (!hasHitBlock())
             return;
 
-        for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
-            if (block.getType() == Material.SLIME_BLOCK) {
-                block.setType(Material.AIR);
-            }
+        for (Block block : BlockCommon.getBlocksInRadiusByType(location, radius, Material.SLIME_BLOCK)) {
+            block.setType(Material.AIR);
         }
 
         kill();
+    }
+
+    /**
+     * Get the radius, in blocks, this cast clears slime blocks within. Set by {@link #doInitSpell()} from the
+     * caster's experience and clamped to the range 1 to {@link #maxRadius}.
+     *
+     * @return the affected radius
+     */
+    public int getRadius() {
+        return radius;
+    }
+
+    /**
+     * Get the maximum radius this spell can clear, regardless of the caster's experience.
+     *
+     * @return the maximum radius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
     }
 }

@@ -14,11 +14,15 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Lengthens the duration of shield spells.
+ * Lengthens the duration of the caster's shield spells at their location.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Fianto_Duri">https://harrypotter.fandom.com/wiki/Fianto_Duri</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Fianto_Duri">Harry Potter Wiki - Fianto Duri</a>
  */
 public final class FIANTO_DURI extends O2Spell {
+    /**
+     * The maximum duration increase this spell can apply (1 day).
+     */
     private static final int maxIncrease = Ollivanders2Common.ticksPerHour * 24; // 1 day
 
     /**
@@ -40,7 +44,7 @@ public final class FIANTO_DURI extends O2Spell {
             add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
         }};
 
-        text = "Fianto Duri increases the duration of your shield spells at the this location.";
+        text = "Fianto Duri increases the duration of your shield spells at this location.";
     }
 
     /**
@@ -56,11 +60,15 @@ public final class FIANTO_DURI extends O2Spell {
         spellType = O2SpellType.FIANTO_DURI;
         branch = O2MagicBranch.CHARMS;
 
-        initSpell();
-
+        noProjectile = true;
         failureMessage = "Unable to find any shield spells cast by you in this location.";
+
+        initSpell();
     }
 
+    /**
+     * Set the duration increase based on the caster's skill, capped at {@link #maxIncrease}.
+     */
     @Override
     void doInitSpell() {
         increase = (int) usesModifier * Ollivanders2Common.ticksPerMinute * 2;
@@ -70,21 +78,25 @@ public final class FIANTO_DURI extends O2Spell {
     }
 
     /**
-     * Look for any shield spells at the caster location and increase their duration
+     * Increase the duration of the caster's own shield spells at this location.
+     * <p>
+     * Finds every {@link ShieldSpell} at the spell's location that was cast by this caster and extends each by
+     * {@link #increase} ticks. If no eligible shield is found, the failure message is sent. The spell resolves on the
+     * first tick because it is non-projectile.
+     * </p>
      */
     @Override
-    public void checkEffect() {
+    protected void doCheckEffect() {
         List<O2StationarySpell> shieldSpells = new ArrayList<>();
 
         for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
-            // if the stationary spell type is not in the blocked list for this spell
-            // was cast by the caster of this spell
+            // only shield spells cast by this caster are extended
             if ((stationarySpell instanceof ShieldSpell) && stationarySpell.getCasterID().equals(caster.getUniqueId()))
                 shieldSpells.add(stationarySpell);
         }
 
         // if we found a target stationary spells, increase their durations
-        if (shieldSpells.size() < 1) {
+        if (shieldSpells.isEmpty()) {
             sendFailureMessage();
             kill();
             return;
@@ -96,9 +108,5 @@ public final class FIANTO_DURI extends O2Spell {
         }
 
         kill();
-    }
-
-    @Override
-    protected void doCheckEffect() {
     }
 }

@@ -12,8 +12,7 @@ import java.util.ArrayList;
  * Spell which points you in the direction of north.
  *
  * @author autumnwoz
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Four-Point_Spell">https://harrypotter.fandom.com/wiki/Four-Point_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Four-Point_Spell">Harry Potter Wiki - Four-Point Spell</a>
  */
 public class POINT_ME extends O2Spell {
     /**
@@ -48,24 +47,20 @@ public class POINT_ME extends O2Spell {
         spellType = O2SpellType.POINT_ME;
         branch = O2MagicBranch.CHARMS;
 
+        noProjectile = true;
+
         initSpell();
     }
 
-    @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
-        Location l = caster.getLocation().clone();
-        l.setYaw(180);
-        caster.teleport(l);
-
-        kill();
-    }
-
+    /**
+     * Rotate the caster to face north, then end the spell.
+     */
     @Override
     protected void doCheckEffect() {
+        Location rotatedLocation = caster.getLocation();
+        rotatedLocation.setYaw(180); // in Bukkit, yaw 180 faces north
+        caster.teleport(rotatedLocation);
+
+        kill();
     }
 }

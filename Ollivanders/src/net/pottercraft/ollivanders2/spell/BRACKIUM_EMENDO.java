@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,17 +15,12 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Healing spell that can be used to mend broken bones. Can also be used to remove bones and can be used defensively
- * against skeletons and withers.
+ * Healing spell that can be used to mend broken bones. Can also be used defensively against skeletons, damaging them.
  *
- * @author lownes
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Brackium_Emendo">https://harrypotter.fandom.com/wiki/Brackium_Emendo</a>
  */
 public final class BRACKIUM_EMENDO extends O2Spell {
-    private final int maxDuration = 300;
-    private final int minDuration = 10;
-
     private final double maxDamage = 10;
     private final double minDamage = 0.25;
 
@@ -46,7 +41,7 @@ public final class BRACKIUM_EMENDO extends O2Spell {
             add("As Harry got to his feet, he felt strangely lopsided. Taking a deep breath he looked down at his right side. What he saw nearly made him pass out again. Poking out of the end of his robes was what looked like a thick, fleshcoloured rubber glove. He tried to move his fingers. Nothing happened. Lockhart hadn't mended Harry's bones. He had removed them.");
         }};
 
-        text = "A healing spell when used on a player. When used on a skeleton or wither, it damages them.";
+        text = "A healing spell when used on a player. When used on a skeleton, it damages them.";
     }
 
     /**
@@ -73,20 +68,18 @@ public final class BRACKIUM_EMENDO extends O2Spell {
     protected void doCheckEffect() {
         List<LivingEntity> entities = getNearbyLivingEntities(1.5);
 
-        if (entities.size() > 0) {
+        if (!entities.isEmpty()) {
             for (LivingEntity entity : entities) {
                 if (entity.getUniqueId().equals(caster.getUniqueId()))
                     continue;
 
                 EntityType type = entity.getType();
-                if (type == EntityType.SKELETON || type == EntityType.WITHER_SKULL || type == EntityType.WITHER) {
+                if (EntityCommon.isSkeleton(type)) {
                     double damage = usesModifier * 0.2;
-                    if (damage < minDamage) {
+                    if (damage < minDamage)
                         damage = minDamage;
-                    }
-                    else if (damage > maxDamage) {
+                    else if (damage > maxDamage)
                         damage = maxDamage;
-                    }
 
                     entity.damage(damage, caster);
 
@@ -94,20 +87,10 @@ public final class BRACKIUM_EMENDO extends O2Spell {
                     break;
                 }
                 else if (type == EntityType.PLAYER) {
-                    int duration = (int) usesModifier;
-                    if (duration < minDuration) {
-                        duration = minDuration;
-                    }
-                    else if (duration > maxDuration) {
-                        duration = maxDuration;
-                    }
-
-                    int durationInTicks = duration * Ollivanders2Common.ticksPerSecond;
-
-                    PotionEffect effect = new PotionEffect(PotionEffectType.INSTANT_HEALTH, durationInTicks, 1);
+                    PotionEffect effect = new PotionEffect(PotionEffectType.INSTANT_HEALTH, 10, 1);
                     entity.addPotionEffect(effect);
 
-                    common.printDebugMessage("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.", null, null, false);
+                    common.printDebugMessage("Adding instant health effect to " + entity.getName(), null, null, false);
 
                     kill();
                     break;
@@ -120,5 +103,23 @@ public final class BRACKIUM_EMENDO extends O2Spell {
         // projectile has stopped, kill the spell
         if (hasHitBlock())
             kill();
+    }
+
+    /**
+     * Get the minimum damage this spell deals to a skeleton, regardless of how low the caster's skill is.
+     *
+     * @return the minimum damage
+     */
+    public double getMinDamage() {
+        return minDamage;
+    }
+
+    /**
+     * Get the maximum damage this spell deals to a skeleton, regardless of how high the caster's skill is.
+     *
+     * @return the maximum damage
+     */
+    public double getMaxDamage() {
+        return maxDamage;
     }
 }
