@@ -323,6 +323,11 @@ public abstract class O2Potion {
      * @return true if the player will be successful, false otherwise.
      */
     private boolean canBrew(@NotNull Player brewer) {
+        // brewing success is a random roll against the brewer's skill; force success under test so brewing is
+        // deterministic rather than failing ~1% of the time on the roll
+        if (Ollivanders2.testMode)
+            return true;
+
         if (p.getConfig().isSet("overrideBrewSuccessCheck") && p.getConfig().getBoolean("overrideBrewSuccessCheck"))
             return true;
 

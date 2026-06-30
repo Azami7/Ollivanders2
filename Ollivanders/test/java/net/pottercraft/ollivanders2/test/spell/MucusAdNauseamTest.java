@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Azami7
  */
-public class MucusAdNauseumTest extends AddO2EffectTest {
+public class MucusAdNauseamTest extends AddO2EffectTest {
     @Override
     @NotNull
     O2SpellType getSpellType() {

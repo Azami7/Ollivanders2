@@ -267,7 +267,7 @@ public class O2SpellTest {
         assertTrue(pyrosvestiras.isKilled(), "pyrovestiras not killed when it hit not allowed block type");
 
         // test blocked list, spell is killed if it hits a blocked type
-        testWorld.getBlockAt(targetLocation).setType(Material.WATER);
+        testWorld.getBlockAt(targetLocation).setType(Material.LAVA);
         testWorld.getBlockAt(targetLocation).getRelative(BlockFace.DOWN).setType(Material.DIRT); // give the water something to sit on
         DEPRIMO deprimo = new DEPRIMO(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, deprimo);
@@ -498,7 +498,7 @@ public class O2SpellTest {
         PlayerMock caster = mockServer.addPlayer();
         caster.setLocation(TestCommon.faceTarget(castLocation, targetLocation));
 
-        Item item = testWorld.dropItem(targetLocation, new ItemStack(Material.APPLE, 1));
+        testWorld.dropItem(targetLocation, new ItemStack(Material.APPLE, 1));
 
         APARECIUM aparecium = new APARECIUM(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, aparecium);
@@ -550,7 +550,7 @@ public class O2SpellTest {
         entity.remove();
 
         // do not detect a non-living entity
-        entity = testWorld.spawnEntity(targetLocation, EntityType.MINECART);
+        testWorld.spawnEntity(targetLocation, EntityType.MINECART);
         brackiumEmendo = new BRACKIUM_EMENDO(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, brackiumEmendo);
         mockServer.getScheduler().performTicks(10);
@@ -731,27 +731,6 @@ public class O2SpellTest {
         message = caster.nextMessage();
         assertNotNull(message, "player did not get spell failure message when spell failed");
         assertEquals(fiantoDuri.getFailureMessage(), TestCommon.cleanChatMessage(message), "player did not get expected failure message when spell failed");
-    }
-
-    @Nullable
-    O2Spell getBaseSpell(O2SpellType spellType) {
-        String spellClass = "net.pottercraft.ollivanders2.spell." + spellType;
-        Constructor<?> c = null;
-        try {
-            c = Class.forName(spellClass).getConstructor(Ollivanders2.class);
-        }
-        catch (Exception e) {
-        }
-        assertNotNull(c, "Failed to to get constructor for " + spellType);
-
-        O2Spell spell = null;
-        try {
-            spell = (O2Spell) c.newInstance(testPlugin);
-        }
-        catch (Exception e) {
-        }
-
-        return spell;
     }
 
     /**

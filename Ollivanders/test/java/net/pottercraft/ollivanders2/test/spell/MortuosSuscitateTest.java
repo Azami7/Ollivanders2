@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @see MORTUOS_SUSCITATE
  */
-public class MortuosSusitateTest extends ItemToEntityTransfigurationTest {
+public class MortuosSuscitateTest extends ItemToEntityTransfigurationTest {
     /**
      * Returns the spell type being tested.
      *

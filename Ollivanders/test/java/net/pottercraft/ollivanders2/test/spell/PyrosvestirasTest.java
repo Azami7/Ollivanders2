@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Azami7
  * @see PYROSVESTIRAS
  */
-public class PyrovestirasTest extends BlockTransfigurationTest {
+public class PyrosvestirasTest extends BlockTransfigurationTest {
     /**
      * Returns the spell type being tested.
      *

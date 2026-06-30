@@ -51,22 +51,40 @@ public class EntityCommon {
      */
     private static final List<EntityType> undeadMobs = new ArrayList<>() {{
         add(EntityType.BOGGED);
+        //add(EntityType.CAMEL_HUSK); MC 26
         add(EntityType.DROWNED);
         add(EntityType.GIANT);
         add(EntityType.HUSK);
+        //add(EntityType.PARCHED); MC 26
         add(EntityType.PHANTOM);
         add(EntityType.SKELETON);
         add(EntityType.SKELETON_HORSE);
         add(EntityType.STRAY);
         add(EntityType.WITHER);
         add(EntityType.WITHER_SKELETON);
+        add(EntityType.ZOGLIN);
         add(EntityType.ZOMBIE);
         add(EntityType.ZOMBIE_HORSE);
+        //add(EntityType.ZOMBIE_NAUTILUS); MC 26
         add(EntityType.ZOMBIE_VILLAGER);
         add(EntityType.ZOMBIFIED_PIGLIN);
-        add(EntityType.ZOGLIN);
     }};
 
+    /**
+     * Skeleton entities (for use with magic that targets skeletons)
+     */
+    private static final List<EntityType> skeletonMobs = new ArrayList<>() {{
+        add(EntityType.BOGGED);
+        //add(EntityType.PARCHED); MC 26
+        add(EntityType.SKELETON);
+        add(EntityType.SKELETON_HORSE);
+        add(EntityType.STRAY);
+        add(EntityType.WITHER_SKELETON);
+    }};
+
+    /**
+     * Fire entities (for use with magic that targets fire mobs)
+     */
     private static final List<EntityType> fireMobs = new ArrayList<>() {{
         add(EntityType.BLAZE);
         add(EntityType.MAGMA_CUBE);
@@ -93,41 +111,12 @@ public class EntityCommon {
     /**
      * All minecart entity types.
      */
-    private static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>() {{
-        add(EntityType.FURNACE_MINECART);
-        add(EntityType.MINECART);
-        add(EntityType.CHEST_MINECART);
-        add(EntityType.COMMAND_BLOCK_MINECART);
-        add(EntityType.HOPPER_MINECART);
-        add(EntityType.SPAWNER_MINECART);
-        add(EntityType.TNT_MINECART);
-    }};
+    private static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>();
 
     /**
      * All boat entity types.
      */
-    private static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>() {{
-        add(EntityType.ACACIA_BOAT);
-        add(EntityType.ACACIA_CHEST_BOAT);
-        add(EntityType.BIRCH_BOAT);
-        add(EntityType.BIRCH_CHEST_BOAT);
-        add(EntityType.CHERRY_BOAT);
-        add(EntityType.CHERRY_CHEST_BOAT);
-        add(EntityType.DARK_OAK_BOAT);
-        add(EntityType.DARK_OAK_CHEST_BOAT);
-        add(EntityType.JUNGLE_BOAT);
-        add(EntityType.JUNGLE_CHEST_BOAT);
-        add(EntityType.MANGROVE_BOAT);
-        add(EntityType.MANGROVE_CHEST_BOAT);
-        add(EntityType.OAK_BOAT);
-        add(EntityType.OAK_CHEST_BOAT);
-        add(EntityType.PALE_OAK_BOAT);
-        add(EntityType.PALE_OAK_CHEST_BOAT);
-        add(EntityType.SPRUCE_BOAT);
-        add(EntityType.SPRUCE_CHEST_BOAT);
-        add(EntityType.BAMBOO_RAFT);
-        add(EntityType.BAMBOO_CHEST_RAFT);
-    }};
+    private static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>();
 
     /**
      * Reference to the plugin object
@@ -138,6 +127,29 @@ public class EntityCommon {
      * Utility class for common operations and debug message printing
      */
     final private Ollivanders2Common common;
+
+    public static void initEntityLists() {
+        if (boats.isEmpty()) {
+            boats.addAll(getallEntitiesThatEndWith("_BOAT"));
+            boats.addAll(getallEntitiesThatEndWith("_RAFT"));
+        }
+
+        if (minecarts.isEmpty()) {
+            minecarts.addAll(getallEntitiesThatEndWith("_MINECART"));
+        }
+    }
+
+    public static List<EntityType> getallEntitiesThatEndWith(@NotNull String endsWith) {
+        ArrayList<EntityType> entityTypes = new ArrayList<>();
+
+        for (EntityType entityType : EntityType.values()) {
+            if (entityType.toString().endsWith(endsWith)) {
+                entityTypes.add(entityType);
+            }
+        }
+
+        return entityTypes;
+    }
 
     /**
      * Constructor
@@ -375,13 +387,7 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType(int seed) {
-        // Ensure seed is positive. nextInt() cannot accept 0 as an argument, so convert 0 to 1.
-        // Use Math.abs() to handle negative seed values.
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Cat.Type.values().length;
+        int rand = Ollivanders2Common.random.nextInt(Cat.Type.values().length);
 
         return Cat.Type.values()[rand];
     }
@@ -406,13 +412,8 @@ public class EntityCommon {
     static public Rabbit.Type getRandomRabbitType(int seed) {
         Rabbit.Type type;
 
-        // nextInt() cannot accept 0, so ensure seed is positive and non-zero
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
         // Modulo 61 to make THE_KILLER_BUNNY rare (1/60 chance, cases 60)
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
+        int rand = Ollivanders2Common.random.nextInt(61);
 
         if (rand < 10)
             type = Rabbit.Type.BROWN;
@@ -452,13 +453,8 @@ public class EntityCommon {
     static public Horse.Style getRandomHorseStyle(int seed) {
         Horse.Style style;
 
-        // nextInt() cannot accept 0, so ensure seed is positive and non-zero
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
         // Modulo 20 to make Horse.Style.NONE most common (16 out of 20 cases, 80% chance)
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 20;
+        int rand = Ollivanders2Common.random.nextInt(20);
 
         switch (rand) {
             case 0:
@@ -499,13 +495,7 @@ public class EntityCommon {
      */
     @NotNull
     static public Horse.Color getRandomHorseColor(int seed) {
-        Horse.Color color;
-
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Horse.Color.values().length;
+        int rand = Ollivanders2Common.random.nextInt(Horse.Color.values().length);
 
         return Horse.Color.values()[rand];
     }
@@ -530,12 +520,7 @@ public class EntityCommon {
     static public Llama.Color getRandomLlamaColor(int seed) {
         Llama.Color color;
 
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
-        // Modulo 4 because there are 4 different llama colors
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Llama.Color.values().length;
+        int rand = Ollivanders2Common.random.nextInt(Llama.Color.values().length);
 
         return Llama.Color.values()[rand];
     }
@@ -558,11 +543,7 @@ public class EntityCommon {
      */
     @NotNull
     static public Parrot.Variant getRandomParrotVariant(int seed) {
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Parrot.Variant.values().length;
+        int rand = Ollivanders2Common.random.nextInt(Parrot.Variant.values().length);
 
         return Parrot.Variant.values()[rand];
     }
@@ -585,12 +566,8 @@ public class EntityCommon {
      */
     @NotNull
     static public DyeColor getRandomNaturalSheepColor(int seed) {
-        seed = Math.abs(seed);
-        if (seed == 0)
-            seed = 1;
-
         // Modulo 100 provides a percentile range (0-99). Sheep should generally be white (68% chance).
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 100;
+        int rand = Ollivanders2Common.random.nextInt(100);
 
         if (rand < 2) // 2% chance
             return DyeColor.BLACK;
@@ -677,12 +654,22 @@ public class EntityCommon {
     }
 
     /**
+     * Determines whether an entity type is a skeleton.
+     *
+     * @param entityType the entity type to check
+     * @return true if the entity type is a skeleton, false otherwise
+     */
+    public static boolean isSkeleton(EntityType entityType) {
+        return skeletonMobs.contains(entityType);
+    }
+
+    /**
      * Determines whether a damage cause is from an attack.
      *
      * @param damageCause the damage cause to check
      * @return true if the damage cause is an attack type, false otherwise
      */
-    public static boolean isAttackDamageCause(EntityDamageEvent.DamageCause damageCause) {
+    public static boolean isDamageCausedByAttack(EntityDamageEvent.DamageCause damageCause) {
         return attackDamageCauses.contains(damageCause);
     }
 

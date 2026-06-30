@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>Tests block-breaking behavior including validation of blast resistance and hardness thresholds,
  * door-breaking capability, unbreakable materials, and explosion radius.</p>
  */
-abstract public class BombaraBaseTest extends O2SpellTestSuper {
+abstract public class BombardaBaseTest extends O2SpellTestSuper {
     /**
      * Must meet both the blast resistance and hardness requirements, cannot be unbreakable, should not be a door since
      * that is explicitly tested.

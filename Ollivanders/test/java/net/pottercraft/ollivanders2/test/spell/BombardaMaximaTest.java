@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>Inherits all test scenarios from BombaraBaseTest with Bombarda Maxima-specific material thresholds.</p>
  */
-public class BombardaMaximaTest extends BombaraBaseTest {
+public class BombardaMaximaTest extends BombardaBaseTest {
     @Override
     @NotNull
     O2SpellType getSpellType() {

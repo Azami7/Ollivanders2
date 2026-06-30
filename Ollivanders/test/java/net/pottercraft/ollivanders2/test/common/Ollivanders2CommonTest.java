@@ -793,7 +793,7 @@ public class Ollivanders2CommonTest {
      */
     @Test
     void chestMaterialsTest() {
-        Ollivanders2Common.initMaterials();
+        Ollivanders2Common.initMaterialLists();
 
         for (Material material : Material.values()) {
             // skip legacy materials — Ollivanders2 does not support LEGACY_* entries

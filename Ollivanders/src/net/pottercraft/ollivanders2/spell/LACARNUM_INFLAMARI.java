@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author lownes
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari">https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari">https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari</a>
  */
 public final class LACARNUM_INFLAMARI extends O2Spell {
     /**
@@ -36,7 +36,7 @@ public final class LACARNUM_INFLAMARI extends O2Spell {
             add("Cold Flames");
         }};
 
-        text = "Lacarnum Inflamarae will shoot a fire charge out of the tip of your wand. This fire charge is not a spell, and thus can pass through normal anti-spell barriers.";
+        text = "Lacarnum Inflamari will shoot a fire charge out of the tip of your wand. This fire charge is not a spell, and thus can pass through normal anti-spell barriers.";
     }
 
     /**
@@ -59,6 +59,14 @@ public final class LACARNUM_INFLAMARI extends O2Spell {
         initSpell();
     }
 
+    /**
+     * Launch a single small fireball from the caster, then end the spell.
+     *
+     * <p>On the first tick this fires a Bukkit {@link SmallFireball} from the caster in the direction the spell
+     * was cast and immediately kills the spell. Because the projectile is a real entity launched by the caster
+     * rather than the spell's own projectile, it is a fire charge, not a spell - it travels and ignites on its
+     * own and is unaffected by anti-spell barriers.</p>
+     */
     @Override
     protected void doCheckEffect() {
         caster.launchProjectile(SmallFireball.class, vector);

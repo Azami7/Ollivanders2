@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.block.O2Blocks;
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
 import net.pottercraft.ollivanders2.effect.O2Effects;
@@ -61,12 +62,6 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  */
 public class Ollivanders2 extends JavaPlugin {
-    /**
-     * All blocks temporarily changed by spells
-     */
-    @Deprecated
-    final private Map<Block, Material> tempBlocks = new HashMap<>();
-
     /**
      * All pending teleport events
      */
@@ -579,7 +574,12 @@ public class Ollivanders2 extends JavaPlugin {
         //
         // init material lists
         //
-        Ollivanders2Common.initMaterials();
+        Ollivanders2Common.initMaterialLists();
+
+        //
+        // init entity lists
+        //
+        EntityCommon.initEntityLists();
     }
 
     /**

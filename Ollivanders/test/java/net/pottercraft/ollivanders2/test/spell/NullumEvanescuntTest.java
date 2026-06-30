@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NullumEvanscuntTest extends StationarySpellTest {
+public class NullumEvanescuntTest extends StationarySpellTest {
     @Override
     @NotNull
     O2SpellType getSpellType() {

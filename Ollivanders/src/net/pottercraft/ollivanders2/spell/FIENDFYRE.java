@@ -18,7 +18,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Spawns magma cubes, blazes, and ghasts and is capable of destroying horcruxes.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Fiendfyre">https://harrypotter.fandom.com/wiki/Fiendfyre</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Fiendfyre">https://harrypotter.fandom.com/wiki/Fiendfyre</a>
  */
 public final class FIENDFYRE extends O2Spell
 {
@@ -120,7 +121,7 @@ public final class FIENDFYRE extends O2Spell
 
         if (usesModifier > 100)
         {
-            int numGhasts = Math.abs(Ollivanders2Common.random.nextInt()) % numCreatures;
+            int numGhasts = Ollivanders2Common.random.nextInt(numCreatures);
 
             for (int x = 0; x < numGhasts; x++)
             {
@@ -131,7 +132,7 @@ public final class FIENDFYRE extends O2Spell
 
         if (usesModifier > 50 && numCreatures > 0)
         {
-            int numBlazes = Math.abs(Ollivanders2Common.random.nextInt()) % numCreatures;
+            int numBlazes = Ollivanders2Common.random.nextInt(numCreatures);
 
             for (int x = 0; x < numBlazes; x++)
             {
@@ -145,5 +146,39 @@ public final class FIENDFYRE extends O2Spell
             for (int x = 0; x < numCreatures; x++)
                 world.spawnEntity(location, EntityType.MAGMA_CUBE);
         }
+    }
+
+    /**
+     * Get the number of creatures this cast will spawn, as determined by {@link #doInitSpell()} from the caster's
+     * skill and clamped to the range {@link #getMinCreatures()} to {@link #getMaxCreatures()}.
+     *
+     * <p>This value is only meaningful before the spell resolves: {@code spawnCreatures()} decrements the
+     * underlying count as it spawns, so read it before the spell ticks to its effect.</p>
+     *
+     * @return the number of creatures to spawn
+     */
+    public int getNumCreatures()
+    {
+        return numCreatures;
+    }
+
+    /**
+     * Get the minimum number of creatures any cast spawns.
+     *
+     * @return the minimum creature count
+     */
+    public int getMinCreatures()
+    {
+        return minCreatures;
+    }
+
+    /**
+     * Get the maximum number of creatures any cast can spawn, regardless of skill.
+     *
+     * @return the maximum creature count
+     */
+    public int getMaxCreatures()
+    {
+        return maxCreatures;
     }
 }

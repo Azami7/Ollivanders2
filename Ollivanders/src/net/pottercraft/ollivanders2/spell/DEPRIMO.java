@@ -67,12 +67,16 @@ public final class DEPRIMO extends O2Spell {
         branch = O2MagicBranch.CHARMS;
 
         // material black list
-        materialBlockedList.add(Material.WATER);
         materialBlockedList.add(Material.LAVA);
-        materialBlockedList.add(Material.FIRE);
 
-        // make sure none of these are on the pass-through list
+        // make sure none of the blocked list are on the pass-through list
         projectilePassThrough.removeAll(materialBlockedList);
+
+        // add water and fire to pass-through
+        projectilePassThrough.add(Material.WATER);
+        projectilePassThrough.add(Material.FIRE);
+        projectilePassThrough.add(Material.SOUL_FIRE);
+
 
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)
@@ -105,9 +109,7 @@ public final class DEPRIMO extends O2Spell {
         List<Block> nearbyBlocks = BlockCommon.getBlocksInRadius(location, radius);
 
         for (Block block : nearbyBlocks) {
-            common.printDebugMessage("block type is " + block.getType(), null, null, false);
-
-            if (materialBlockedList.contains(block.getType()))
+            if (projectilePassThrough.contains(block.getType()) || materialBlockedList.contains(block.getType())) // skip blocked and pass-through materials
                 continue;
 
             Location blockLocation = block.getLocation();
@@ -118,5 +120,33 @@ public final class DEPRIMO extends O2Spell {
         }
 
         kill();
+    }
+
+    /**
+     * Get the radius, in blocks, this cast affects. Set by {@link #doInitSpell()} from the caster's skill and
+     * clamped to the range {@link #getMinRadius()} to {@link #getMaxRadius()}.
+     *
+     * @return the affected radius
+     */
+    public double getRadius() {
+        return radius;
+    }
+
+    /**
+     * Get the minimum radius any cast affects, regardless of how low the caster's skill is.
+     *
+     * @return the minimum radius
+     */
+    public double getMinRadius() {
+        return minRadius;
+    }
+
+    /**
+     * Get the maximum radius any cast can affect, regardless of how high the caster's skill is.
+     *
+     * @return the maximum radius
+     */
+    public double getMaxRadius() {
+        return maxRadius;
     }
 }

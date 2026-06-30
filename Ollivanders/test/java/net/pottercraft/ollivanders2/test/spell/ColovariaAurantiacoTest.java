@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Tests for the {@link net.pottercraft.ollivanders2.spell.COLOVARIA_AURANTIACO} spell (orange colour change).
  */
-public class ColovariaAuranticoTest extends ChangeColorableTest {
+public class ColovariaAurantiacoTest extends ChangeColorableTest {
     @Override
     @NotNull
     O2SpellType getSpellType() {
