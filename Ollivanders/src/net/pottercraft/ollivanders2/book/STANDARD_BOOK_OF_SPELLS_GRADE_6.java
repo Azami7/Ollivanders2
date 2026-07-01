@@ -39,7 +39,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_6 extends O2Book {
         spells.add(O2SpellType.DEFODIO);
         spells.add(O2SpellType.GLACIUS_TRIA);
         spells.add(O2SpellType.MOLLIARE);
-        // todo - spells.add(O2SpellType.PARTIS_TEMPORUS);
+        spells.add(O2SpellType.PARTIS_TEMPORUS);
         // todo - vinegar to wine - https://harrypotter.fandom.com/wiki/Vinegar_to_wine_spell
         // todo - knitting charm - https://harrypotter.fandom.com/wiki/Knitting_Charm
         // todo - bubble head charm - https://harrypotter.fandom.com/wiki/Bubble-Head_Charm

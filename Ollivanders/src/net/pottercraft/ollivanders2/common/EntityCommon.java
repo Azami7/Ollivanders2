@@ -387,7 +387,13 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType(int seed) {
-        int rand = Ollivanders2Common.random.nextInt(Cat.Type.values().length);
+        // Ensure seed is positive. nextInt() cannot accept 0 as an argument, so convert 0 to 1.
+        // Use Math.abs() to handle negative seed values.
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Cat.Type.values().length;
 
         return Cat.Type.values()[rand];
     }
@@ -412,8 +418,13 @@ public class EntityCommon {
     static public Rabbit.Type getRandomRabbitType(int seed) {
         Rabbit.Type type;
 
-        // Modulo 61 to make THE_KILLER_BUNNY rare (1/60 chance, cases 60)
-        int rand = Ollivanders2Common.random.nextInt(61);
+        // nextInt() cannot accept 0, so ensure seed is positive and non-zero
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        // Mod 61 to make THE_KILLER_BUNNY rare (1/60 chance, cases 60)
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
 
         if (rand < 10)
             type = Rabbit.Type.BROWN;
@@ -453,8 +464,13 @@ public class EntityCommon {
     static public Horse.Style getRandomHorseStyle(int seed) {
         Horse.Style style;
 
-        // Modulo 20 to make Horse.Style.NONE most common (16 out of 20 cases, 80% chance)
-        int rand = Ollivanders2Common.random.nextInt(20);
+        // nextInt() cannot accept 0, so ensure seed is positive and non-zero
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        // Mod 20 to make Horse.Style.NONE most common (16 out of 20 cases, 80% chance)
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 20;
 
         switch (rand) {
             case 0:
@@ -495,7 +511,11 @@ public class EntityCommon {
      */
     @NotNull
     static public Horse.Color getRandomHorseColor(int seed) {
-        int rand = Ollivanders2Common.random.nextInt(Horse.Color.values().length);
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Horse.Color.values().length;
 
         return Horse.Color.values()[rand];
     }
@@ -518,9 +538,12 @@ public class EntityCommon {
      */
     @NotNull
     static public Llama.Color getRandomLlamaColor(int seed) {
-        Llama.Color color;
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
 
-        int rand = Ollivanders2Common.random.nextInt(Llama.Color.values().length);
+        // Mod 4 because there are 4 different llama colors
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Llama.Color.values().length;
 
         return Llama.Color.values()[rand];
     }
@@ -543,7 +566,11 @@ public class EntityCommon {
      */
     @NotNull
     static public Parrot.Variant getRandomParrotVariant(int seed) {
-        int rand = Ollivanders2Common.random.nextInt(Parrot.Variant.values().length);
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Parrot.Variant.values().length;
 
         return Parrot.Variant.values()[rand];
     }
@@ -566,8 +593,12 @@ public class EntityCommon {
      */
     @NotNull
     static public DyeColor getRandomNaturalSheepColor(int seed) {
-        // Modulo 100 provides a percentile range (0-99). Sheep should generally be white (68% chance).
-        int rand = Ollivanders2Common.random.nextInt(100);
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        // Mod 100 provides a percentile range (0-99). Sheep should generally be white (68% chance).
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 100;
 
         if (rand < 2) // 2% chance
             return DyeColor.BLACK;
