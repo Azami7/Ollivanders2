@@ -259,9 +259,6 @@ public enum O2SpellType {
      * {@link DIAMAS_REPARO}
      */
     DIAMAS_REPARO(DIAMAS_REPARO.class, MagicLevel.OWL),
-    /**
-     * {@link DIFFINDO}
-     */
     DIFFINDO(DIFFINDO.class, MagicLevel.OWL),
     /**
      * {@link DISSENDIUM}
@@ -509,10 +506,7 @@ public enum O2SpellType {
      * {@link LUMOS_MAXIMA}
      */
     LUMOS_MAXIMA(LUMOS_MAXIMA.class, MagicLevel.NEWT),
-    /**
-     * {@link LUMOS_SOLEM}
-     */
-    LUMOS_SOLEM(LUMOS_SOLEM.class, MagicLevel.NEWT),
+    // todo LUMOS_SOLEM(LUMOS_SOLEM.class, MagicLevel.NEWT),
     /**
      * {@link MANTEIA_KENTAVROS}
      */

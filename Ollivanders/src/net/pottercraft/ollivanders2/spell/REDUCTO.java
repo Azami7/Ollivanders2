@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Reductor_Curse">https://harrypotter.fandom.com/wiki/Reductor_Curse</a>
  */
 public final class REDUCTO extends O2Spell {
-    // todo rework what type of blocks this can target, make work with bombarda (prob can be a child class), 5th year dark arts spell
+    // todo rework what type of blocks this can target, make work with bombarda (prob can be a child class), 5th year dark arts spell - https://github.com/Azami7/Ollivanders2/issues/670
     /**
      * The maximum possible strength, 4f is TNT
      */
