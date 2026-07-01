@@ -17,7 +17,6 @@ import net.pottercraft.ollivanders2.spell.BRACKIUM_EMENDO;
 import net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO;
 import net.pottercraft.ollivanders2.spell.DEFODIO;
 import net.pottercraft.ollivanders2.spell.DEPRIMO;
-import net.pottercraft.ollivanders2.spell.DIFFINDO;
 import net.pottercraft.ollivanders2.spell.EPISKEY;
 import net.pottercraft.ollivanders2.spell.FIANTO_DURI;
 import net.pottercraft.ollivanders2.spell.LUMOS;
@@ -580,29 +579,29 @@ public class O2SpellTest {
         Player player = mockServer.addPlayer();
         player.teleport(targetLocation);
 
-        DIFFINDO diffindo = new DIFFINDO(testPlugin, caster, O2PlayerCommon.rightWand);
-        Ollivanders2API.getSpells().addSpell(caster, diffindo);
+        ACCIO accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
+        Ollivanders2API.getSpells().addSpell(caster, accio);
 
         // no players at time 0
-        assertTrue(diffindo.getNearbyPlayers(3).isEmpty(), "Added players at time 0");
+        assertTrue(accio.getNearbyPlayers(3).isEmpty(), "Added players at time 0");
 
         // detect the caster at time 2
         mockServer.getScheduler().performTicks(2);
-        assertFalse(diffindo.getNearbyPlayers(4).isEmpty(), "Did not add player at time 2");
+        assertFalse(accio.getNearbyPlayers(4).isEmpty(), "Did not add player at time 2");
 
         // detect the other player at time 10
         mockServer.getScheduler().performTicks(8);
-        assertFalse(diffindo.getNearbyPlayers(3).isEmpty(), "Did not find player at time 10");
+        assertFalse(accio.getNearbyPlayers(3).isEmpty(), "Did not find player at time 10");
         player.teleport(castLocation);
-        diffindo.kill();
+        accio.kill();
         mockServer.getScheduler().performTicks(10);
 
         // do not detect a cow
         testWorld.spawnEntity(targetLocation, EntityType.COW);
-        diffindo = new DIFFINDO(testPlugin, caster, O2PlayerCommon.rightWand);
-        Ollivanders2API.getSpells().addSpell(caster, diffindo);
+        accio = new ACCIO(testPlugin, caster, O2PlayerCommon.rightWand);
+        Ollivanders2API.getSpells().addSpell(caster, accio);
         mockServer.getScheduler().performTicks(10);
-        assertTrue(diffindo.getNearbyPlayers(3).isEmpty(), "Added non-player entity");
+        assertTrue(accio.getNearbyPlayers(3).isEmpty(), "Added non-player entity");
     }
 
     /**

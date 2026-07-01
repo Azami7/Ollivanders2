@@ -34,7 +34,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book {
         spells.add(O2SpellType.BOMBARDA_MAXIMA);
         spells.add(O2SpellType.HERBIVICUS);
         spells.add(O2SpellType.INFORMOUS);
-        spells.add(O2SpellType.LUMOS_SOLEM);
+        // todo spells.add(O2SpellType.LUMOS_SOLEM);
         spells.add(O2SpellType.OBLIVIATE);
         spells.add(O2SpellType.REPELLO_MUGGLETON);
         spells.add(O2SpellType.ASCENDIO);
