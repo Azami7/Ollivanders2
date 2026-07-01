@@ -115,4 +115,6 @@ public class FELIFORS extends ItemToEntityTransfiguration {
         else
             common.printDebugMessage("transfigured entity is not a cat in FELIFORS.customizeEntity()", null, null, false);
     }
+
+
 }

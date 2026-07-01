@@ -10,6 +10,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
@@ -154,5 +155,10 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
         return new HashMap<>() {{
             putAll(transfigurationMap);
         }};
+    }
+
+    @Override
+    void doRevert() {
+        HandlerList.unregisterAll(this);
     }
 }

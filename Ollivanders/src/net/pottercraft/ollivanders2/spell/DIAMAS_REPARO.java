@@ -27,7 +27,6 @@ public final class DIAMAS_REPARO extends ReparoBase {
         branch = O2MagicBranch.CHARMS;
 
         text = "A stronger version of Reparo, which repairs the durability of a tool.";
-        flavorText.clear();
     }
 
     /**
