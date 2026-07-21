@@ -14,31 +14,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Spell shield charm that actively blocks projectile attacks through tracking and removal.
- *
- * <p>PROTEGO is an active spell shield charm that protects the affected player from projectile
- * attacks by actively tracking incoming projectiles and removing them when they cross the shield
- * boundary. Unlike passive shields, PROTEGO continuously monitors the positions of tracked
- * projectiles (arrows, snowballs, eggs, splash/lingering potions) within a 120-block range of the
- * player. When a projectile enters the shield radius, it is immediately removed and an impact
- * particle effect (INSTANT_EFFECT) is displayed. The spell inherits the base shield mechanism from
- * SpellShieldEffect (spell blocking, level checking, entity targeting prevention).</p>
- *
- * <p>Shield Configuration:</p>
- * <ul>
- * <li>Active projectile tracking: continuously monitors projectiles in range</li>
- * <li>Maximum tracking distance: 120 blocks (arrow flight distance)</li>
- * <li>Supported projectiles: arrows, snowballs, eggs, splash/lingering potions</li>
- * <li>Shield removal on projectile entry: projectile is instantly removed</li>
- * <li>Pulse effect: disabled (flairPulse = false)</li>
- * <li>Impact flair: enabled (flairOnSpellImpact = true) with INSTANT_EFFECT particles</li>
- * </ul>
- *
- * <p>The Shield Charm - Protego - was a charm that protected the caster with an invisible shield
- * that deflected spells.</p>
+ * Shield charm effect that protects the target from basic projectiles (arrows, snowballs, eggs, splash/lingering
+ * potions). Tracks projectiles launched within 120 blocks and removes them, with an impact particle flair, when they
+ * cross the shield radius. Extends {@link ShieldSpellEffect} for the underlying spell-blocking behavior.
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Shield_Charm">Shield Charm on Harry Potter Wiki</a>
- * @see ShieldSpellEffect for the base spell blocking mechanism and protection behavior
+ * @see ShieldSpellEffect
  * @see net.pottercraft.ollivanders2.spell.PROTEGO for the spell that applies this effect
  */
 public class PROTEGO extends ShieldSpellEffect {
@@ -48,19 +29,14 @@ public class PROTEGO extends ShieldSpellEffect {
     ArrayList<Projectile> projectiles = new ArrayList<>();
 
     /**
-     * The maximum distance for an arrow, which is the furthest flying projectile.
+     * The tracking range in blocks, matching the maximum flight distance of an arrow.
      *
-     * @see <a href="https://minecraft.fandom.com/wiki/Arrow">https://minecraft.fandom.com/wiki/Arrow</a>
+     * @see <a href="https://minecraft.fandom.com/wiki/Arrow">Minecraft Wiki - Arrow</a>
      */
     private final int maxDistance = 120;
 
     /**
-     * Constructor for creating an active projectile-tracking spell shield.
-     *
-     * <p>Creates a spell shield that actively tracks and blocks projectile attacks. The shield initializes
-     * with projectile tracking enabled, impact particle effects configured for INSTANT_EFFECT particles,
-     * and displays an initial visual flair at the shield location. Tracked projectiles within 120 blocks
-     * are continuously monitored and removed when they cross the shield boundary.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the shield effect in game ticks
@@ -82,13 +58,8 @@ public class PROTEGO extends ShieldSpellEffect {
     }
 
     /**
-     * Track projectile positions and remove those crossing the shield boundary.
-     *
-     * <p>Called each game tick. This method ages the base shield effect and then iterates through all
-     * tracked projectiles to check if any have crossed the shield radius boundary. When a projectile
-     * enters the protected area, it is immediately removed and an impact flair particle effect is
-     * displayed (if flairOnSpellImpact is enabled). Dead projectiles are cleaned from the tracking list.
-     * Projectiles can also be blocked through the base SpellShieldEffect mechanism.</p>
+     * Remove any tracked projectile that has crossed the shield radius (with an impact flair) and drop dead
+     * projectiles from the tracking list, in addition to the base shield behavior.
      */
     @Override
     public void checkEffect() {
@@ -117,12 +88,8 @@ public class PROTEGO extends ShieldSpellEffect {
     }
 
     /**
-     * Start tracking projectiles launched near the shielded player.
-     *
-     * <p>Monitors all projectile launch events to identify basic projectiles (arrows, snowballs, eggs,
-     * splash/lingering potions) within 120 blocks of the shielded player. Only supported projectile types
-     * within range are added to the tracking list for continuous boundary checking. This allows the
-     * shield to proactively intercept projectiles before they reach the player.</p>
+     * Start tracking a launched projectile if it is a supported type (arrow, snowball, egg, splash/lingering potion)
+     * within {@link #maxDistance} of the shielded player.
      *
      * @param event the projectile launch event
      */
@@ -142,14 +109,10 @@ public class PROTEGO extends ShieldSpellEffect {
     }
 
     /**
-     * Cancel projectile hits to the shielded player as a backup protection mechanism.
+     * Cancel a projectile hit against the shielded player, as a backstop for any projectile the active tracking
+     * missed.
      *
-     * <p>Acts as a safety mechanism to cancel any projectile hit events against the shielded player
-     * that may have escaped the active projectile tracking system. This ensures complete protection
-     * even if a projectile manages to cross the shield boundary without being detected by the
-     * continuous tracking checks.</p>
-     *
-     * @param event the projectile hit event to cancel
+     * @param event the projectile hit event
      */
     @Override
     void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
@@ -160,13 +123,10 @@ public class PROTEGO extends ShieldSpellEffect {
     }
 
     /**
-     * Check if a specific projectile is currently being tracked by this shield.
-     *
-     * <p>This method is primarily used for testing to verify that projectiles launched within
-     * range are properly added to the tracking list.</p>
+     * Check whether a projectile is currently being tracked by this shield.
      *
      * @param projectile the projectile to check
-     * @return true if the projectile is in the tracking list, false otherwise
+     * @return true if the projectile is in the tracking list
      */
     public boolean isProjectileTracked(@NotNull Projectile projectile) {
         return projectiles.contains(projectile);

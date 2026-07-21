@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Turn target player in to a cat, in rare cases an ocelot.
+ * Turn target player in to a cat.
  */
 public final class FELIS extends PlayerDisguise {
     /**
@@ -52,9 +52,11 @@ public final class FELIS extends PlayerDisguise {
             watcher.setType(EntityCommon.getRandomCatType());
             watcher.setCollarColor(O2Color.getRandomDyeableColor().getDyeColor());
 
-            int rand = Ollivanders2Common.random.nextInt() % 10;
+            int rand = Ollivanders2Common.random.nextInt(10);
             if (rand == 0)
-                watcher.isTamed();
+                watcher.setTamed(false);
+            else
+                watcher.setTamed(true);
         }
 
         initSpell();

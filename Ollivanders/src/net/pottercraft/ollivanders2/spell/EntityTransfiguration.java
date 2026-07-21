@@ -23,18 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract base class for entity transfiguration spells.
- *
- * <p>Manages the transfiguration of entities into other entity types. Provides core transfiguration
- * logic including entity targeting, type validation, and reversion. Entity transfigurations default
- * to temporary and will be reverted when the spell duration expires or the spell is explicitly
- * reverted, but subclasses may set them to permanent.</p>
- *
- * <p>Subclasses must implement {@link #transfigureEntity(Entity)} to define the actual transformation logic.</p>
+ * Base class for spells that transfigure one entity into another entity type.
+ * <p>
+ * Transfigurations are temporary by default and reverted when the spell expires, though subclasses may make them
+ * permanent. Subclasses implement {@link #transfigureEntity(Entity)} to define the transformation.
+ * </p>
  *
  * @author Azami7
- * @see Transfiguration for base transfiguration mechanics
- * @see BlockTransfiguration for block transfiguration alternative
+ * @see Transfiguration
+ * @see BlockTransfiguration
  */
 public abstract class EntityTransfiguration extends Transfiguration {
     /**
@@ -84,8 +81,6 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -105,22 +100,8 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Searches for and transfigures an entity at the current spell projectile location.
-     *
-     * <p>This method is called each tick while the spell is active. It scans nearby entities within
-     * the spell's radius to find a valid target. Skips entities that are already transfigured by other
-     * active spells and applies success rate checks during the transfiguration attempt.</p>
-     *
-     * <p>If the projectile has hit a block (stopped) but no entity was transfigured, the spell fails.
-     * Once an entity is successfully transfigured, subsequent calls return immediately.</p>
-     *
-     * <p>Validation checks include:</p>
-     * <ul>
-     * <li>Entity type must match the spell's target type (unless allow list is populated)</li>
-     * <li>Entity cannot be on the blocked list</li>
-     * <li>Entity cannot already be transfigured by another spell</li>
-     * <li>Success rate check must pass (based on player skill)</li>
-     * </ul>
+     * Attempt to transfigure a nearby entity this tick, killing the spell if a target is found but its transformation
+     * fails.
      */
     @Override
     void transfigure() {
@@ -153,10 +134,13 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Determine if this entity can be transfigured by this spell.
+     * Check whether an entity is an eligible target: a transfigurable type that is not already transfigured. Enchanted
+     * items are eligible only when {@link #transfigureEnchantedItems} is set and their enchantment level does not
+     * exceed this spell's level. The result is also gated by the spell's success rate, so it may return false at
+     * random even for an otherwise-valid target.
      *
      * @param entity the entity to check
-     * @return true if the entity can be transfigured, false otherwise.
+     * @return true if the entity can be transfigured, false otherwise
      */
     public boolean canTransfigure(@NotNull Entity entity) {
         // first check success rate
@@ -185,6 +169,10 @@ public abstract class EntityTransfiguration extends Transfiguration {
         return super.canTransfigure(entity);
     }
 
+    /**
+     * @param entity the entity to check
+     * @return true if the entity is a dropped item that carries an Ollivanders2 enchantment
+     */
     boolean isEnchantedItem(@NotNull Entity entity) {
         // make sure it is an item
         if (!(entity instanceof Item))
@@ -195,19 +183,20 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Transfigures entity into new EntityType.
+     * Perform the transformation, spawning the new entity.
      *
      * @param entity the entity to transfigure
-     * @return the transfigured entity
+     * @return the newly spawned entity, or null if the transformation failed
      */
     @Nullable
     abstract protected Entity transfigureEntity(@NotNull Entity entity);
 
     /**
-     * Determines if this entity can be changed by this Transfiguration spell.
+     * Check whether an entity's type is eligible: not already the target type, not on the blocked list, and — if the
+     * allowed list is non-empty — present on it.
      *
      * @param entity the entity to check
-     * @return true if the entity can be changed, false otherwise.
+     * @return true if the entity's type may be transfigured, false otherwise
      */
     boolean targetTypeCheck(@NotNull Entity entity) {
         // get entity type
@@ -235,16 +224,8 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Revert the transfigured entity back to its original state.
-     *
-     * <p>Removes the transfigured entity from the world and restores the original entity if the
-     * spell was not set to consume the original. For regular entities, respawns the original entity
-     * with preserved properties. For Items and FallingBlocks, drops or respawns them appropriately.
-     * If the transfigured entity has inventory (is an InventoryHolder), drops all inventory contents
-     * before removal.</p>
-     *
-     * <p>This method also calls {@link #doRevert()} to allow subclasses to perform spell-specific
-     * cleanup beyond basic reversion.</p>
+     * Remove the transfigured entity and, unless {@link #consumeOriginal} is set, restore the original entity in its
+     * place. No-op for permanent spells.
      */
     @Override
     protected void revert() {
@@ -290,13 +271,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Respawn the original entity with attributes as close to the original as possible.
-     *
-     * <p>Called during reversion to restore the original entity in place of the transfigured entity.
-     * Attempts to preserve entity properties including custom name, velocity, gravity, invulnerability,
-     * and age (ticks lived). For Items and Enchanted Items, restores item meta and enchantments.</p>
-     *
-     * <p>The respawned entity is positioned at the transfigured entity's current location.</p>
+     * Restore the original entity in place of the transfigured one, preserving its properties as closely as possible.
      */
     void respawnEntity() {
         Entity respawn = transfiguredEntity.getWorld().spawnEntity(transfiguredEntity.getLocation(), originalEntity.getType());
@@ -325,22 +300,14 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Performs spell-specific revert functions beyond basic entity respawning.
-     *
-     * <p>Called at the end of the revert process after the original entity has been restored.
-     * Override this method in subclasses to perform any additional cleanup or restoration logic
-     * specific to the spell (e.g., removing applied effects, adjusting entity properties, etc.).</p>
-     *
-     * <p>Default implementation does nothing. Subclasses should override if needed.</p>
+     * Hook for spell-specific cleanup run at the end of {@link #revert()}. The default implementation does nothing.
      */
     void doRevert() {
     }
 
     /**
-     * Is this block transfigured by this spell
-     *
      * @param block the block to check
-     * @return true if transfigured, false otherwise
+     * @return always false; entity transfigurations do not affect blocks
      */
     @Override
     public boolean isTransfigured(@NotNull Block block) {
@@ -348,10 +315,8 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Is this entity transfigured by this spell
-     *
      * @param entity the entity to check
-     * @return true if transfigured, false otherwise
+     * @return true if the given entity is the one this spell transfigured
      */
     @Override
     public boolean isTransfigured(@NotNull Entity entity) {
@@ -362,7 +327,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
     }
 
     /**
-     * Let child spells optionally customize the spawned entity. This must be overridden by the child classes.
+     * Hook for subclasses to customize the newly spawned entity. The default implementation does nothing.
      */
     void customizeEntity() {
     }
@@ -394,6 +359,9 @@ public abstract class EntityTransfiguration extends Transfiguration {
         return targetType;
     }
 
+    /**
+     * @return true if this spell can transfigure enchanted items
+     */
     public boolean doesTransfigureEnchantedItems() {
         return transfigureEnchantedItems;
     }

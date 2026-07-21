@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Teleportation spell that allows players to disappear and reappear at a chosen destination.
  *
- * <p>Supports two modes of apparation:</p>
+ * <p>Supports several destination modes:</p>
  *
  * <ul>
  * <li>Named locations: Apparate to a pre-registered named location</li>
@@ -37,7 +37,6 @@ import java.util.Map;
  * <p>Subject to distance limits, WorldGuard restrictions, and event cancellation.</p>
  *
  * @author Azami7
- * @version Ollivanders2
  */
 public final class APPARATE extends O2Spell {
     /**

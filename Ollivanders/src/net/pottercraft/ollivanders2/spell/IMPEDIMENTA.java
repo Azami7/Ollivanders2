@@ -10,24 +10,17 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Impediment Jinx that slows the movement of targets.
+ * The Impediment Jinx: applies Slowness to the target for a skill-scaled duration, with a strength that rises with
+ * the caster's skill up to Slowness V.
  *
- * <p>Impedimenta is a projectile Dark Arts jinx that applies Slowness effect to targets,
- * slowing their movement for a duration based on the caster's spell level. Duration ranges from
- * 5 to 60 seconds and is calculated at 50% of the caster's skill level modifier. The amplifier
- * (Slowness strength) scales continuously with skill level, calculated as usesModifier / 20,
- * clamped to a maximum of Slowness V (amplifier 4).</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Impediment_Jinx">Impediment Jinx</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Impediment_Jinx">Harry Potter Wiki - Impediment Jinx</a>
  */
 public final class IMPEDIMENTA extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 5;
     private static final int maxDurationInSecondsConfig = 60;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -47,11 +40,7 @@ public final class IMPEDIMENTA extends AddPotionEffect {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies Slowness effect to targets, slowing their movement.
-     * Duration ranges from 5 to 60 seconds based on caster skill level. The amplifier scales
-     * continuously with skill level, with a maximum cap of Slowness V.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -72,10 +61,7 @@ public final class IMPEDIMENTA extends AddPotionEffect {
     }
 
     /**
-     * Calculate the potion effect amplifier based on caster skill level.
-     *
-     * <p>Impedimenta scales the Slowness effect continuously with skill level using the formula:
-     * amplifier = usesModifier / 20, clamped to a maximum of 4 (Slowness V).</p>
+     * Set the Slowness amplifier to {@code usesModifier / 20}, limited to 4 (Slowness V).
      */
     @Override
     void calculateAmplifier() {

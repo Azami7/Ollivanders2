@@ -18,34 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link FLAGRANTE} enchantment (burning curse).
- * <p>
- * Verifies that the FLAGRANTE curse correctly applies {@link O2EffectType#FLAGRANTE_BURNING} to players
- * holding flagrante-cursed items, and properly manages the curse lifecycle through various item interaction
- * events (pickup, drop, despawn, inventory pickup).
- * </p>
- * <p>
- * Test coverage includes:
- * <ul>
- * <li>Item despawn cancellation (flagrante items should not despawn from world)</li>
- * <li>Curse application on entity (player) pickup events</li>
- * <li>Hopper/inventory pickup blocking (block inventories cannot pick up cursed items)</li>
- * <li>Curse lifecycle on drop events (added when holding, removed when not holding)</li>
- * <li>Curse status check logic (applied/removed based on current inventory state)</li>
- * <li>No action needed for item held events</li>
- * </ul>
- * </p>
+ * Unit tests for {@link FLAGRANTE}.
  *
- * @see FLAGRANTE the enchantment implementation being tested
- * @see O2EffectType#FLAGRANTE_BURNING the burning effect applied by this curse
+ * @see FLAGRANTE
+ * @see O2EffectType#FLAGRANTE_BURNING
  */
 public class FlagranteTest extends EnchantmentTestSuper {
-    /**
-     * Configure this test instance for FLAGRANTE enchantment testing.
-     * <p>
-     * Sets the enchantment type to FLAGRANTE and uses WOODEN_SWORD material for creating test items.
-     * </p>
-     */
     @Override @BeforeEach
     void setUp() {
         enchantmentType = ItemEnchantmentType.FLAGRANTE;
@@ -53,21 +31,8 @@ public class FlagranteTest extends EnchantmentTestSuper {
     }
 
     /**
-     * Test the doEntityPickupItem event handler.
-     * <p>
-     * Verifies that when a player holding a flagrante-cursed item picks up another item,
-     * checkFlagranteStatus() is called and applies FLAGRANTE_BURNING to the player.
-     * </p>
-     * <p>
-     * Setup: Player picks up a flagrante-cursed item while already holding it.
-     * Expected: FLAGRANTE_BURNING effect is applied to the player (synchronously, no delay).
-     * </p>
-     * <p>
-     * Note: The EntityPickupItemEvent fires before the item is actually added to the player's inventory.
-     * checkFlagranteStatus() checks isHoldingEnchantedItem(), so the item must be in the player's hand
-     * before the event fires for the effect to be applied. In game, this occurs when the player picks
-     * up an enchanted item while already holding another copy of a flagrante item.
-     * </p>
+     * Picking up a cursed item while holding one applies {@link O2EffectType#FLAGRANTE_BURNING}. The item must be in
+     * hand before firing the event, since EntityPickupItemEvent fires before the item reaches the inventory.
      */
     @Override @Test
     void doEntityPickupItemTest() {
@@ -95,18 +60,8 @@ public class FlagranteTest extends EnchantmentTestSuper {
     }
 
     /**
-     * Test the doItemDrop event handler.
-     * <p>
-     * Verifies that when a player drops an item, the curse status is re-evaluated. The test verifies
-     * that dropping an item removes the {@link O2EffectType#FLAGRANTE_BURNING} effect when the player
-     * is no longer holding a flagrante-cursed item.
-     * </p>
-     * <p>
-     * Setup: First, an EntityPickupItemEvent is fired while the player holds the enchanted item
-     * (to apply the curse), then a PlayerDropItemEvent is fired after the player stops holding it.
-     * Expected: FLAGRANTE_BURNING is present after the pickup, and removed after the drop when
-     * the player is no longer holding the enchanted item.
-     * </p>
+     * Dropping the last cursed item removes {@link O2EffectType#FLAGRANTE_BURNING}: the curse is applied via a pickup
+     * while holding the item, then removed once the player drops it and holds none.
      */
     @Override @Test
     void doItemDropTest() {
@@ -133,27 +88,8 @@ public class FlagranteTest extends EnchantmentTestSuper {
     }
 
     /**
-     * Test the curse status check logic.
-     * <p>
-     * Verifies that the flagrante curse is correctly applied and removed based on whether the player
-     * is currently holding a flagrante-cursed item. This is a comprehensive lifecycle test that
-     * simulates the full curse state transitions.
-     * </p>
-     * <p>
-     * Test cases:
-     * <ul>
-     * <li>When player holds enchanted item: {@link O2EffectType#FLAGRANTE_BURNING} effect is added</li>
-     * <li>When player stops holding enchanted item: {@link O2EffectType#FLAGRANTE_BURNING} effect is removed</li>
-     * </ul>
-     * </p>
-     * <p>
-     * This tests the central curse management logic that keeps the player's curse status synchronized
-     * with their inventory at all times.
-     * </p>
-     * <p>
-     * Setup: Player holds/doesn't hold enchanted item and triggers drop events.
-     * Expected: Curse is added when holding, removed when not holding.
-     * </p>
+     * The curse tracks inventory state: {@link O2EffectType#FLAGRANTE_BURNING} is added while the player holds a cursed
+     * item and removed once they hold none.
      */
     @Test
     void checkFlagranteStatusTest() {
@@ -181,16 +117,7 @@ public class FlagranteTest extends EnchantmentTestSuper {
     }
 
     /**
-     * Test the doItemHeld event handler.
-     * <p>
-     * FLAGRANTE enchantment has no special behavior for player item slot changes. The curse is applied
-     * immediately when items are picked up (via the {@link #doEntityPickupItemTest()} and {@link #doItemDropTest()} event handlers),
-     * so no additional handling is required when the player changes which item slot is held in their hand
-     * (e.g., switching from slot 1 to slot 2 in the hotbar).
-     * </p>
-     * <p>
-     * This test is empty as no behavior needs to be verified.
-     * </p>
+     * Slot-change re-evaluation is already exercised by {@link #checkFlagranteStatusTest()}; nothing else to verify.
      */
     @Override @Test
     void doItemHeldTest() {}

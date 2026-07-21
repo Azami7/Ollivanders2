@@ -19,18 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for all divination spells, which produce a prophecy about a target player rather than a projectile effect.
+ * Base class for divination spells, which produce a prophecy about a target player instead of firing a projectile.
  * <p>
- * Divination spells do not travel or strike a target like other spells, so {@code noProjectile} is set and the spell
- * resolves on the first tick in {@link #doCheckEffect()}: it enforces any required {@link #facingBlock} (such as a
- * crystal ball) and {@link #itemHeld} (such as an egg), confirms the {@link #target} is online, then reflectively
- * constructs the prophecy for the configured {@link O2DivinationType} and divines it. The held item is consumed when
- * {@link #consumeHeld} is set.
- * </p>
- * <p>
- * Concrete subclasses set their {@link #spellType} and {@link #divinationType} in both constructors and configure any
- * facing-block or held-item requirements in the casting constructor. The magic branch is set to
- * {@link O2MagicBranch#DIVINATION}, and the casting constructor sets {@code noProjectile}, here for all subclasses.
+ * A divination may require the caster to be facing a specific block (such as a crystal ball) or holding an item (such
+ * as an egg); the held item is consumed when {@link #consumeHeld} is set.
  * </p>
  *
  * @author Azami7
@@ -100,8 +92,6 @@ public abstract class Divination extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -141,14 +131,10 @@ public abstract class Divination extends O2Spell {
     }
 
     /**
-     * Resolve the divination.
-     * <p>
-     * Because divination spells set {@code noProjectile}, the base {@link #checkEffect()} validates the spell is
-     * allowed and then calls this on the first tick. This enforces any {@link #facingBlock} and {@link #itemHeld}
-     * requirements, confirms the {@link #target} is online, then constructs and runs the prophecy for this spell's
-     * {@link #divinationType}. The held item is consumed when {@link #consumeHeld} is set. The spell is killed once
-     * resolved or whenever a requirement is not met.
-     * </p>
+     * Resolve the divination on the first tick: enforce any {@link #facingBlock} and {@link #itemHeld} requirements,
+     * confirm the {@link #target} is online, then produce the prophecy for this spell's {@link #divinationType},
+     * consuming the held item when {@link #consumeHeld} is set. The spell is killed once resolved or when a
+     * requirement is not met.
      */
     @Override
     protected void doCheckEffect() {

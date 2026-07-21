@@ -11,21 +11,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Animagus Potion - transforms a player into their animal form.
- *
- * <p>This potion is consumed after successfully casting the Animagus incantation spell.
- * When consumed, it transforms the player into their animal form and grants them the
- * ANIMAGUS_EFFECT for permanent transformation ability without needing the potion.</p>
- *
- * <p>Requirements for successful transformation:</p>
- * <ul>
- * <li>LibsDisguises plugin must be enabled</li>
- * <li>Player must have recently cast the Animagus incantation (ANIMAGUS_INCANTATION effect)</li>
- * <li>If useStrictAnimagusConditions is enabled, the transformation only works during thunderstorms</li>
- * </ul>
- *
- * <p>If the player is already an Animagus, drinking the potion has no effect but provides
- * feedback that the potion tastes familiar.</p>
+ * Animagus Potion — transforms the drinker into their animal form and grants the permanent ANIMAGUS_EFFECT.
+ * <p>
+ * Only works if LibsDisguises is enabled and the drinker has recently cast the Animagus incantation; with strict
+ * conditions enabled it additionally requires a thunderstorm.
+ * </p>
  *
  * @author Azami7
  */
@@ -59,17 +49,8 @@ public final class ANIMAGUS_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Animagus Potion and apply transformation effects.
-     *
-     * <p>The behavior depends on several conditions:</p>
-     * <ul>
-     * <li>If LibsDisguises is disabled, the potion has no effect</li>
-     * <li>If the player is already an Animagus, the potion has no transformation effect</li>
-     * <li>If useStrictAnimagusConditions is enabled and it's not thundering, the potion has no effect</li>
-     * <li>If the player has the ANIMAGUS_INCANTATION effect, they are transformed into their animal form
-     *     and granted the permanent ANIMAGUS_EFFECT</li>
-     * <li>If none of the above conditions are met, nothing happens</li>
-     * </ul>
+     * Transform the drinker into their Animagus form and grant the permanent ANIMAGUS_EFFECT, consuming the Animagus
+     * incantation effect. No-ops with a failure message when the preconditions (see class doc) are not met.
      *
      * @param player the player who drank the potion
      */
@@ -121,9 +102,9 @@ public final class ANIMAGUS_POTION extends O2Potion {
     }
 
     /**
-     * Get the messagr to send to the drinker if they are already an animagus
+     * Get the message to send to the drinker if they are already an Animagus.
      *
-     * @return the already an animagus message
+     * @return the already-an-Animagus message
      */
     public String getAlreadyAnimagusMessage() {
         return alreadyAnimagusMessage;

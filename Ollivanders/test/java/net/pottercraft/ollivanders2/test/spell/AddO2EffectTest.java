@@ -21,59 +21,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for {@link net.pottercraft.ollivanders2.spell.AddO2Effect} spell implementations.
- *
- * <p>Provides shared test infrastructure for spells that apply an {@link net.pottercraft.ollivanders2.effect.O2Effect}
- * or Bukkit potion effect to a target player. Tests verify that:
- * <ul>
- * <li>The spell applies its effect to the correct target after being cast</li>
- * <li>The effect expires after the calculated duration</li>
- * <li>Calculated duration stays within the spell's configured min/max bounds at all experience levels</li>
- * </ul>
- *
- * <p>Subclasses must implement {@link #getSpellType()}, {@link #addsPotionEffect()}, and
- * {@link #getPotionEffects()} to configure which spell and effect type are under test.</p>
+ * Base test class for {@link AddO2Effect} spells, covering effect application to the correct target, expiry after the
+ * duration, and duration bounds. Subclasses declare whether the spell adds a Bukkit potion effect or an O2Effect.
  *
  * @author Azami7
  */
 abstract public class AddO2EffectTest extends O2SpellTestSuper {
     /**
-     * Whether this spell applies a Bukkit potion effect rather than a custom O2Effect.
-     *
-     * <p>When true, {@link #doCheckEffectTest()} verifies the effect via
-     * {@link org.bukkit.entity.Player#hasPotionEffect(PotionEffectType)}. When false, it uses
-     * {@link net.pottercraft.ollivanders2.effect.O2Effects#hasEffect(java.util.UUID, O2EffectType)}.</p>
-     *
      * @return true if the spell adds a Bukkit potion effect, false if it adds an O2Effect
      */
     abstract boolean addsPotionEffect();
 
     /**
-     * The Bukkit potion effect types applied by this spell, or null if the spell adds an O2Effect instead.
-     *
-     * <p>Only used when {@link #addsPotionEffect()} returns true. The first element is used for
-     * presence checks in {@link #doCheckEffectTest()}.</p>
-     *
-     * @return list of potion effect types, or null if the spell does not add potion effects
+     * @return the potion effect types this spell applies, or null if it adds an O2Effect instead
      */
     @Nullable
     abstract List<PotionEffectType> getPotionEffects();
 
     /**
-     * Tests that the spell applies its effect to the correct target and that the effect expires after the duration.
-     *
-     * <p>Casts the spell at a target 3 blocks away and verifies:
-     * <ul>
-     * <li>The spell kills itself after hitting a target</li>
-     * <li>The expected effect is present on the target immediately after the spell hits</li>
-     * <li>The effect expires after the maximum configured duration</li>
-     * </ul>
-     *
-     * <p>For self-targeting spells the caster is the target; for non-self-targeting spells the nearby
-     * player is the target. Effect presence is checked via
-     * {@link org.bukkit.entity.Player#hasPotionEffect(PotionEffectType)} for potion effects and
-     * {@link net.pottercraft.ollivanders2.effect.O2Effects#hasEffect(java.util.UUID, O2EffectType)}
-     * for O2Effects.</p>
+     * Verify the spell applies its effect to the target (the caster when self-targeting, otherwise a nearby player)
+     * and that the effect clears once its duration expires unless the spell is permanent.
      */
     @Test
     void doCheckEffectTest() {
@@ -88,6 +55,7 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
         AddO2Effect addO2Effect = (AddO2Effect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         List<O2EffectType> effects = addO2Effect.getEffectsToAdd();
         List<PotionEffectType> potionEffects = getPotionEffects();
+        assertNotNull(potionEffects);
 
         if (addsPotionEffect()) {
             assertNotNull(potionEffects);
@@ -113,7 +81,7 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
         if (addsPotionEffect())
             assertTrue(target.hasPotionEffect(potionEffects.getFirst()), "target does not have potion effect");
         else
-            assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effects.getFirst()), "target does not have  o2effect");
+            assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effects.getFirst()), "target does not have o2effect");
 
         mockServer.getScheduler().performTicks((long) addO2Effect.getMaxDurationInSeconds() * Ollivanders2Common.ticksPerSecond);
 
@@ -130,14 +98,8 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the calculated effect duration stays within the spell's configured min/max bounds.
-     *
-     * <p>Verifies duration bounds at two experience levels:
-     * <ul>
-     * <li>Experience level 1 (minimum skill) — duration should be at least {@code minDurationInSeconds}</li>
-     * <li>Experience level {@code spellMasteryLevel * 2} (beyond mastery) — duration should be at most
-     * {@code maxDurationInSeconds}</li>
-     * </ul>
+     * Verify the computed effect duration stays within the spell's min and max bounds at both low and above-mastery
+     * skill.
      */
     @Test
     void durationTest() {

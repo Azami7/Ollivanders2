@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Extreme_Incantations">https://harrypotter.fandom.com/wiki/Extreme_Incantations</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Extreme_Incantations">Extreme Incantations</a>
  */
 public class EXTREME_INCANTATIONS extends O2Book {
     /**

@@ -32,10 +32,8 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -45,7 +43,6 @@ import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -58,42 +55,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventClassMatcher.hasFiredEventInstance;
 
 /**
- * Unit tests for O2Spell base class functionality.
- *
- * <p>Tests core spell mechanics including projectile movement, collision detection, entity detection,
- * spell validation, cooldowns, and message handling. Tests use MockBukkit to simulate server behavior
- * without requiring a full Bukkit/Paper server.</p>
- *
- * <p><strong>Test Structure:</strong> A shared MockBukkit server instance is created once before all tests
- * and reused across test methods to improve performance. Each test creates its own world and spell instances
- * to avoid state pollution.</p>
+ * Unit tests for the {@link O2Spell} base class: projectile movement, collision, entity detection, zone validation,
+ * and message handling.
  *
  * @author Azami7
  */
 @Isolated
 public class O2SpellTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, created once for all tests in the class.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin under test, loaded once with the default config.
      */
     static Ollivanders2 testPlugin;
 
     /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
+     * Start the shared MockBukkit server and load the plugin before any tests run.
      */
     @BeforeAll
     static void globalSetUp() {
@@ -107,19 +87,9 @@ public class O2SpellTest {
     }
 
     /**
-     * Test spell uses modifier calculation based on experience, wand type, and player level.
-     *
-     * <p>Verifies that usesModifier is correctly calculated considering:
-     * <ul>
-     * <li>Spell usage count (experience)</li>
-     * <li>Wand correctness (right wand, wrong wand, elder wand)</li>
-     * <li>Player year level (if years enabled)</li>
-     * <li>HIGHER_SKILL effect doubling</li>
-     * <li>maxSpellLevel setting</li>
-     * </ul>
-     *
-     * <p><strong>Note:</strong> This test is monolithic by design. Running it in parallel with other tests
-     * that modify global settings (Ollivanders2.useYears, Ollivanders2.maxSpellLevel) causes interference.
+     * Verify usesModifier reflects spell experience, wand correctness, player year, the HIGHER_SKILL effect, and the
+     * maxSpellLevel setting. Kept in one method because it toggles global settings (useYears, maxSpellLevel) that
+     * would interfere with parallel tests.
      */
     @Test
     void setUsesModifierTest() {
@@ -198,16 +168,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test spell update cycle via checkEffect() method.
-     *
-     * <p>Verifies that each tick:
-     * <ul>
-     * <li>Projectile moves one block via {@link O2Spell#move()}</li>
-     * <li>Spell age increments via {@link O2Spell#getProjectileAge()}</li>
-     * <li>Spell terminates after exceeding max lifetime</li>
-     * <li>hasHitTarget is not set when aging out (only when hitting a target)</li>
-     * <li>Hitting a block terminates the spell and sets hasHitTarget</li>
-     * </ul>
+     * Verify each {@link O2Spell#checkEffect()} tick moves the projectile and ages it, that the spell ages out after
+     * max lifetime without marking a block hit, and that hitting a block stops the projectile and kills the spell.
      */
     @Test
     void checkEffectTest() {
@@ -241,14 +203,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test spell targeting constraints: allow lists, blocked lists, and unbreakable blocks.
-     *
-     * <p>Verifies that spells are terminated when hitting:
-     * <ul>
-     * <li>Blocks not on the allow list (if allow list exists)</li>
-     * <li>Blocks on the blocked list</li>
-     * <li>Unbreakable blocks (all spells)</li>
-     * </ul>
+     * Verify a spell is killed when it hits a block off its allow list, a block on its blocked list, or an unbreakable
+     * block.
      */
     @Test
     void checkEffectAllowBlockTest() {
@@ -263,7 +219,7 @@ public class O2SpellTest {
         PYROSVESTIRAS pyrosvestiras = new PYROSVESTIRAS(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, pyrosvestiras);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(pyrosvestiras.isKilled(), "pyrovestiras not killed when it hit not allowed block type");
+        assertTrue(pyrosvestiras.isKilled(), "pyrosvestiras not killed when it hit a block off its allow list");
 
         // test blocked list, spell is killed if it hits a blocked type
         testWorld.getBlockAt(targetLocation).setType(Material.LAVA);
@@ -278,20 +234,12 @@ public class O2SpellTest {
         DEFODIO defodio = new DEFODIO(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, defodio);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(deprimo.isKilled(), "deprimo not killed when it hit an unbreakable block");
+        assertTrue(defodio.isKilled(), "defodio not killed when it hit an unbreakable block");
     }
 
     /**
-     * Test zone-based spell permission system via config.
-     *
-     * <p>Verifies that spells are blocked/allowed based on Ollivanders2 zone configuration:
-     * <ul>
-     * <li>Cuboid zones can disallow specific spells</li>
-     * <li>World zones can disallow specific spells</li>
-     * <li>Disallowed spells are killed when cast and send failure message</li>
-     * <li>Allowed spells in restricted zones are not affected</li>
-     * <li>Only spells in the disallowed list are blocked (others always allowed)</li>
-     * </ul>
+     * Verify zone config governs casting: a spell on a cuboid or world zone's disallowed list is killed when cast and
+     * the caster gets the failure message, while other spells in the same zone are unaffected.
      */
     @Test
     void checkEffectIsAllowedTest() {
@@ -372,17 +320,9 @@ public class O2SpellTest {
     }
 
     /**
-     * Test projectile movement via the move() method.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Projectile moves one block per call</li>
-     * <li>Projectile stops at max distance without hitting a target</li>
-     * <li>hasHitTarget is false when reaching max distance</li>
-     * <li>OllivandersSpellProjectileMoveEvent fires each move</li>
-     * <li>Move does not execute for killed spells</li>
-     * <li>Spell is killed if move takes it to a disallowed location</li>
-     * </ul>
+     * Verify {@link O2Spell#move()} advances the projectile one block, fires an
+     * {@link OllivandersSpellProjectileMoveEvent}, kills the spell (without marking a block hit) at max distance,
+     * no-ops once the spell is killed, and kills the spell when a move enters a disallowed location.
      */
     @Test
     void moveTest() {
@@ -429,17 +369,9 @@ public class O2SpellTest {
     }
 
     /**
-     * Test entity detection via getCloseEntities() method.
-     *
-     * <p>Verifies that getCloseEntities() correctly:
-     * <ul>
-     * <li>Excludes the caster when projectile is freshly spawned (lifeTicks == 0)</li>
-     * <li>Includes the caster after lifeTicks > 0</li>
-     * <li>Detects living entities (animals) within radius</li>
-     * <li>Uses expanded radius for large entities (Ender Dragon, Giant)</li>
-     * <li>Includes non-living entities (minecarts)</li>
-     * <li>Respects distance checks based on eye location for living entities</li>
-     * </ul>
+     * Verify {@link O2Spell#getNearbyEntities(double)} excludes the caster at projectile spawn, detects living and
+     * non-living entities in range as the projectile moves, and does not target an entity sharing the caster's
+     * location on the first tick.
      */
     @Test
     void getNearbyEntitiesTest() {
@@ -454,11 +386,11 @@ public class O2SpellTest {
         Ollivanders2API.getSpells().addSpell(caster, arrestoMomentum);
 
         // at time 0, the player is the close entity but should be excluded from the list
-        assertTrue(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() included player");
+        assertTrue(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getNearbyEntities() included the caster at projectile spawn");
 
         // run ahead 10 ticks and check for the rabbit entity
         mockServer.getScheduler().performTicks(10);
-        assertFalse(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() did not add Cow");
+        assertFalse(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getNearbyEntities() did not find the rabbit");
         arrestoMomentum.kill();
         entity.remove();
 
@@ -466,7 +398,7 @@ public class O2SpellTest {
         entity = testWorld.spawnEntity(targetLocation, EntityType.RABBIT);
         arrestoMomentum = new ARRESTO_MOMENTUM(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, arrestoMomentum);
-        assertTrue(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities() included entity at 0th lifetick");
+        assertTrue(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getNearbyEntities() targeted an entity at the caster's location on the first tick");
         arrestoMomentum.kill();
         entity.remove();
 
@@ -475,19 +407,14 @@ public class O2SpellTest {
         arrestoMomentum = new ARRESTO_MOMENTUM(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, arrestoMomentum);
         mockServer.getScheduler().performTicks(10);
-        assertFalse(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getCloseEntities did not add minecart");
+        assertFalse(arrestoMomentum.getNearbyEntities(O2Spell.defaultRadius).isEmpty(), "getNearbyEntities() did not find the minecart");
         arrestoMomentum.kill();
         entity.remove();
     }
 
     /**
-     * Test item entity detection via getNearbyItems() method.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Items are not detected when projectile is at spawn location (lifeTicks == 0)</li>
-     * <li>Items are detected when projectile is within radius</li>
-     * </ul>
+     * Verify {@link O2Spell#getNearbyItems(double)} finds a dropped item once the projectile is within range, but not
+     * at the projectile's spawn location.
      */
     @Test
     void getNearbyItemsTest() {
@@ -502,23 +429,15 @@ public class O2SpellTest {
         APARECIUM aparecium = new APARECIUM(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, aparecium);
 
-        assertTrue(aparecium.getNearbyItems(O2Spell.defaultRadius).isEmpty(), "");
+        assertTrue(aparecium.getNearbyItems(O2Spell.defaultRadius).isEmpty(), "getNearbyItems() found an item at the projectile spawn location");
 
         mockServer.getScheduler().performTicks(10);
         assertFalse(aparecium.getNearbyItems(O2Spell.defaultRadius).isEmpty(), "Did not find nearby item");
     }
 
     /**
-     * Test living entity and damageable entity detection.
-     *
-     * <p>Verifies that getNearbyLivingEntities() and getNearbyDamageableEntities():
-     * <ul>
-     * <li>Exclude entities at spawn (lifeTicks == 0)</li>
-     * <li>Include the caster after movement (lifeTicks > 0)</li>
-     * <li>Detect other living entities (cows) when in range</li>
-     * <li>Detect damageable entities (players, mobs)</li>
-     * <li>Do not include non-living entities (minecarts)</li>
-     * </ul>
+     * Verify {@link O2Spell#getNearbyLivingEntities(double)} and {@link O2Spell#getNearbyDamageableEntities(double)}
+     * include the caster and other living entities in range as the projectile moves, but never non-living entities.
      */
     @Test
     void getNearbyLivingAndDamageableEntitiesTest() {
@@ -533,8 +452,8 @@ public class O2SpellTest {
         Ollivanders2API.getSpells().addSpell(caster, brackiumEmendo);
 
         // no entities at time 0
-        assertTrue(brackiumEmendo.getNearbyLivingEntities(O2Spell.defaultRadius).isEmpty(), "");
-        assertTrue(brackiumEmendo.getNearbyDamageableEntities(O2Spell.defaultRadius).isEmpty(), "");
+        assertTrue(brackiumEmendo.getNearbyLivingEntities(O2Spell.defaultRadius).isEmpty(), "getNearbyLivingEntities() included an entity at projectile spawn");
+        assertTrue(brackiumEmendo.getNearbyDamageableEntities(O2Spell.defaultRadius).isEmpty(), "getNearbyDamageableEntities() included an entity at projectile spawn");
 
         // get player at time 2
         mockServer.getScheduler().performTicks(2);
@@ -558,15 +477,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test player entity detection via getNearbyPlayers() method.
-     *
-     * <p>Verifies that getNearbyPlayers():
-     * <ul>
-     * <li>Does not include players at spawn (lifeTicks == 0)</li>
-     * <li>Includes the caster after projectile moves</li>
-     * <li>Includes other players when within radius</li>
-     * <li>Does not include non-player entities (cows, animals)</li>
-     * </ul>
+     * Verify {@link O2Spell#getNearbyPlayers(double)} includes the caster and other players in range as the projectile
+     * moves, but never non-player entities.
      */
     @Test
     void getNearbyPlayersTest() {
@@ -605,13 +517,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test target block detection via getTargetBlock() method.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>getTargetBlock() returns null while projectile is moving (hasHitTarget == false)</li>
-     * <li>getTargetBlock() returns the block when projectile hits a target (hasHitTarget == true)</li>
-     * </ul>
+     * Verify {@link O2Spell#getTargetBlock()} returns null while the projectile is moving and the hit block once it
+     * stops on a target.
      */
     @Test
     void getTargetBlockTest() {
@@ -632,9 +539,7 @@ public class O2SpellTest {
     }
 
     /**
-     * Test spell book text retrieval via getText() method.
-     *
-     * <p>Verifies that getText() returns non-empty text for spells that have book descriptions.
+     * Verify {@link O2Spell#getText()} returns non-empty book text for a spell that has a description.
      */
     @Test
     void getTextTest() {
@@ -643,13 +548,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test spell flavor text retrieval via getFlavorText() method.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>getFlavorText() returns text for spells with flavor text</li>
-     * <li>getFlavorText() returns null for spells without flavor text</li>
-     * </ul>
+     * Verify {@link O2Spell#getFlavorText()} returns text for a spell that has flavor text and null for one that does
+     * not.
      */
     @Test
     void getFlavorTextTest() {
@@ -661,13 +561,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test success message delivery via sendSuccessMessage() method.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>sendSuccessMessage() sends the success message to the caster</li>
-     * <li>Success message is sent when spell actually affects its target</li>
-     * </ul>
+     * Verify {@link O2Spell#sendSuccessMessage()} sends the success message to the caster, both directly and when the
+     * spell actually affects its target.
      */
     @Test
     void sendSuccessMessageTest() {
@@ -698,15 +593,8 @@ public class O2SpellTest {
     }
 
     /**
-     * Test failure message delivery via sendFailureMessage() method.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>sendFailureMessage() sends the failure message to the caster</li>
-     * <li>Failure message is sent when spell fails to affect its target</li>
-     * </ul>
-     *
-     * <p>Uses DELETRIUS spell which has specific failure conditions (no valid target item).
+     * Verify {@link O2Spell#sendFailureMessage()} sends the failure message to the caster, both directly and when the
+     * spell fails against its target.
      */
     @Test
     void sendFailureMessageTest() {
@@ -733,11 +621,7 @@ public class O2SpellTest {
     }
 
     /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
+     * Stop the MockBukkit server after all tests in the class complete.
      */
     @AfterAll
     static void globalTearDown() {

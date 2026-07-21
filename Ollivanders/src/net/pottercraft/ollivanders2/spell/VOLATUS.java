@@ -11,31 +11,16 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * VOLATUS - The broomstick flight enchantment spell.
- *
- * <p>Enchants a broomstick with the ability to fly. When a player holds a VOLATUS-enchanted
- * broomstick, the enchanted items system enables flight mode, allowing the player to ride
- * the broomstick through the air.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Target: BASIC_BROOM only (O2ItemType restriction)</li>
- * <li>Strength multiplier: 0.75x (reduces spell experience effectiveness)</li>
- * <li>Maximum magnitude: 10</li>
- * <li>Classification: Charms</li>
- * <li>Effect: Enables flight when held (see {@link net.pottercraft.ollivanders2.item.enchantment.VOLATUS})</li>
- * </ul>
+ * The broomstick flight enchantment. Enchants a {@link O2ItemType#BASIC_BROOM basic broom} so that a player
+ * holding it can fly; the flight behavior itself is provided by the
+ * {@link net.pottercraft.ollivanders2.item.enchantment.VOLATUS} enchantment.
  *
  * @see net.pottercraft.ollivanders2.item.enchantment.VOLATUS the enchantment that powers this spell
  * @see <a href="https://harrypotter.fandom.com/wiki/Broomstick">Harry Potter Wiki - Broomstick</a>
  */
 public final class VOLATUS extends ItemEnchant {
     /**
-     * Constructor for generating spell information.
-     *
-     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
-     * Use the full constructor with player and wand parameters instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -56,15 +41,11 @@ public final class VOLATUS extends ItemEnchant {
     }
 
     /**
-     * Constructor for casting the VOLATUS flight enchantment spell.
+     * Constructor.
      *
-     * <p>Initializes the spell with the player and wand information needed to cast and track the spell.
-     * VOLATUS can only enchant BASIC_BROOM items (no generic material fallback). Spell magnitude is
-     * calculated using the formula: magnitude = (int)((usesModifier / 10) * 0.75), capped at maxMagnitude of 10.</p>
-     *
-     * @param plugin    the Ollivanders2 plugin
-     * @param player    the player casting this spell
-     * @param rightWand the wand strength/correctness factor
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public VOLATUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -74,12 +55,11 @@ public final class VOLATUS extends ItemEnchant {
 
         enchantmentType = ItemEnchantmentType.VOLATUS;
 
-        // set to only work for broomsticks
+        // only broomsticks can be enchanted for flight
         o2ItemTypeAllowList.add(O2ItemType.BASIC_BROOM);
 
-        // magnitude = (int) ((usesModifier / 10) * strength)
         strength = 0.75;
-        // spell experience of 200 would result in a natural magnitude of 15
+        // cap the magnitude; without it, 200 spell experience would yield a natural magnitude of 15
         maxMagnitude = 10;
 
         initSpell();

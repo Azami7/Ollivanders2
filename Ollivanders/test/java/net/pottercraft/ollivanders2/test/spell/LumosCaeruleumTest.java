@@ -17,20 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the LUMOS_CAERULEUM spell.
- *
- * <p>LUMOS_CAERULEUM transforms a glass bottle held in the caster's off-hand into a soul lantern. These tests
- * verify the happy path, the multi-bottle stack case (only one bottle is consumed, the rest are preserved), and
- * the no-op behavior when the off-hand does not hold a glass bottle.</p>
- *
- * @see LUMOS_CAERULEUM
+ * Unit tests for {@link LUMOS_CAERULEUM}.
  */
 public class LumosCaeruleumTest extends O2SpellTestSuper {
-    /**
-     * Returns the spell type being tested.
-     *
-     * @return LUMOS_CAERULEUM spell type
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -38,14 +27,7 @@ public class LumosCaeruleumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests transfiguring a single glass bottle.
-     *
-     * <p>Verifies that:</p>
-     * <ul>
-     * <li>A single glass bottle in the caster's off-hand is converted to a soul lantern</li>
-     * <li>The lantern is given the "Jar of Bluebell Flames" display name</li>
-     * <li>The spell is killed after the effect resolves</li>
-     * </ul>
+     * Verify a single off-hand glass bottle is converted to a named "Jar of Bluebell Flames" soul lantern.
      */
     @Override
     @Test
@@ -72,17 +54,7 @@ public class LumosCaeruleumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests transfiguring one bottle from a stack of bottles.
-     *
-     * <p>This covers the stack-handling case: when the caster holds more than one glass bottle, exactly one is
-     * consumed and converted to a lantern, and the remaining bottles must be preserved rather than destroyed.</p>
-     *
-     * <p>Verifies that:</p>
-     * <ul>
-     * <li>The off-hand holds a single soul lantern after the cast</li>
-     * <li>The remaining bottles (original count minus one) are dropped into the world, not lost</li>
-     * <li>The spell is killed after the effect resolves</li>
-     * </ul>
+     * Verify that from a stack of bottles exactly one is converted and the remaining bottles are dropped, not lost.
      */
     @Test
     void multipleBottlesTest() {
@@ -117,14 +89,7 @@ public class LumosCaeruleumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell behavior when the off-hand does not hold a glass bottle.
-     *
-     * <p>Verifies that:</p>
-     * <ul>
-     * <li>The unsupported item is left unchanged in the off-hand</li>
-     * <li>No leftover items are dropped into the world</li>
-     * <li>The spell is still killed after finding no valid target</li>
-     * </ul>
+     * Verify the spell leaves a non-glass-bottle off-hand item unchanged, drops nothing, and still kills itself.
      */
     @Test
     void invalidTargetTest() {

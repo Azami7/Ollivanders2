@@ -8,14 +8,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Lumos Maxima, a charm that produces a blinding flash of bright white light.
+ * Lumos Maxima: a blinding flash that applies Blindness to nearby players in a skill-scaled radius. The caster is not
+ * affected.
  *
- * <p>Lumos Maxima is an instant-radius charm that applies Blindness to nearby entities
- * within 5-10 blocks of the caster. The effect lasts between 5 and 30 seconds depending on
- * caster skill level and is accompanied by a flash particle effect at the caster's location.
- * The caster is not affected by the spell.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Lumos_Maxima">Lumos Maxima</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lumos_Maxima">Harry Potter Wiki - Lumos Maxima</a>
  */
 public final class LUMOS_MAXIMA extends AddPotionEffectInRadius {
     private final static int minEffectRadiusConfig = 5;
@@ -24,9 +20,7 @@ public final class LUMOS_MAXIMA extends AddPotionEffectInRadius {
     private final static int maxDurationInSecondsConfig = 30;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -40,11 +34,7 @@ public final class LUMOS_MAXIMA extends AddPotionEffectInRadius {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Applies Blindness effect to nearby entities within 5-10 blocks of the caster.
-     * The caster is not affected. Effect duration ranges from 5 to 30 seconds based on
-     * skill level, accompanied by a flash particle effect.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -69,10 +59,7 @@ public final class LUMOS_MAXIMA extends AddPotionEffectInRadius {
     }
 
     /**
-     * Spawn a flash particle effect at the caster's location.
-     *
-     * <p>Displays a bright flash particle to visually represent the blinding light produced
-     * by the spell.</p>
+     * Spawn a flash particle at the caster's location to represent the blinding light.
      */
     @Override
     void doFlair() {

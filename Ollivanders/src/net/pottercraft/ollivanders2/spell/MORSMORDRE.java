@@ -15,39 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Morsmordre - The Dark Mark Conjuration.
- *
- * <p>Conjures the Dark Mark (a skull with a serpent protruding from its mouth) in the sky above
- * the caster's location. The spell launches a green creeper-effect firework and applies the
- * BAD_OMEN potion effect to nearby players within a radius based on caster experience.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Creates a green skull firework with creeper burst effect</li>
- * <li>Applies BAD_OMEN effect to nearby players within 10-20 blocks</li>
- * <li>Effect duration ranges from 5-10 minutes depending on caster skill</li>
- * <li>Launches the Dark Mark as a visual flair effect at the spell's location</li>
- * </ul>
+ * Morsmordre: conjures the Dark Mark as a green creeper-burst firework and applies BAD_OMEN to nearby players for a
+ * skill-scaled duration.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Morsmordre">Morsmordre - Harry Potter Wiki</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Morsmordre">Harry Potter Wiki - Morsmordre</a>
  */
 public final class MORSMORDRE extends AddPotionEffectInRadius {
-    /**
-     * The power level for the firework
-     */
     static final int fireworkPower = 1;
 
-    /**
-     * The color for the fireworks
-     */
     static final List<Color> fireworkColors = new ArrayList<>() {{
         add(Color.GREEN);
     }};
 
-    /**
-     * The firework effect type
-     */
     static final FireworkEffect.Type fireworkType = Type.CREEPER;
 
     /**
@@ -95,10 +75,7 @@ public final class MORSMORDRE extends AddPotionEffectInRadius {
     }
 
     /**
-     * Display the Dark Mark firework as a visual flair effect.
-     *
-     * <p>Launches a green creeper-effect firework at the spell's location to create the
-     * visual appearance of the Dark Mark appearing in the sky.</p>
+     * Launch the green creeper-burst firework that represents the Dark Mark at the spell's location.
      */
     void doFlair() {
         EntityCommon.shootFirework(location, false, false, false, fireworkPower, fireworkColors, null, fireworkType);

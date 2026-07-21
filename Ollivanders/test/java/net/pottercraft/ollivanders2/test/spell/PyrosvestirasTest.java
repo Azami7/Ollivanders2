@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <li>Valid target materials: FIRE, SOUL_FIRE, CAMPFIRE, SOUL_CAMPFIRE</li>
  * <li>Invalid target materials: Unbreakable materials and non-fire blocks</li>
  * <li>Effect radius scaling based on player skill (formula: usesModifier / 10)</li>
- * <li>Radius clamping to [1, 10] block bounds</li>
+ * <li>Radius limited to [1, 10] block bounds</li>
  * <li>Permanent transfiguration (extinguished fire does not reignite)</li>
  * <li>Fire conversion behavior (fire → air, campfire → oak log)</li>
  * </ul>
@@ -91,13 +91,13 @@ public class PyrosvestirasTest extends BlockTransfigurationTest {
     /**
      * Tests that PYROSVESTIRAS effect radius scales correctly with player skill.
      *
-     * <p>PYROSVESTIRAS uses the formula: radius = (usesModifier / 10), clamped to [1, 10].
+     * <p>PYROSVESTIRAS uses the formula: radius = (usesModifier / 10), limited to [1, 10].
      * This test verifies radius calculation at multiple skill levels:
      * </p>
      * <ul>
-     * <li>Skill 5: radius = 0 (clamped to min = 1)</li>
+     * <li>Skill 5: radius = 0 (limited to min = 1)</li>
      * <li>Skill 30: radius = 3</li>
-     * <li>Skill 200: radius = 20 (clamped to max = 10)</li>
+     * <li>Skill 200: radius = 20 (limited to max = 10)</li>
      * </ul>
      */
     @Test

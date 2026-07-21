@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Break_with_a_Banshee">https://harrypotter.fandom.com/wiki/Break_with_a_Banshee</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Break_with_a_Banshee">Break with a Banshee</a>
  */
 public class BREAK_WITH_A_BANSHEE extends O2Book {
     /**

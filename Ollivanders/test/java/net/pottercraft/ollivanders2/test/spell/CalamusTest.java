@@ -5,18 +5,12 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Tests for the {@link net.pottercraft.ollivanders2.spell.CALAMUS} spell (match to needle).
- *
- * <p>CALAMUS transfigures sticks into arrows. Only sticks are valid targets.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CALAMUS}. Extends {@link ItemToItemTransfigurationTest}
+ * for the shared transfiguration tests.
  *
  * @author Azami7
  */
 public class CalamusTest extends ItemToItemTransfigurationTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.CALAMUS
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -24,18 +18,14 @@ public class CalamusTest extends ItemToItemTransfigurationTest {
     }
 
     /**
-     * Sticks are valid targets for CALAMUS.
-     *
-     * @return Material.STICK
+     * @return STICK, the only valid target for CALAMUS
      */
     Material getValidItemType() {
         return Material.STICK;
     }
 
     /**
-     * Acacia logs are not in the CALAMUS transfiguration map.
-     *
-     * @return Material.ACACIA_LOG
+     * @return ACACIA_LOG, a material not in the CALAMUS transfiguration map
      */
     Material getInvalidItemType() {
         return Material.ACACIA_LOG;

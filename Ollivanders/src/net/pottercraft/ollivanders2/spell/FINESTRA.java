@@ -13,11 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Spell that breaks glass blocks in a radius around the target.
- *
- * <p>When cast at a block, the spell shatters all glass and glass pane blocks within a radius
- * determined by the caster's experience. The radius scales with skill level up to a maximum of
- * {@value #maxRadius} blocks. Non-glass blocks are unaffected.</p>
+ * The Finestra spell: shatters all glass and glass-pane blocks within a skill-scaled radius (up to
+ * {@value #maxRadius} blocks) of the target, leaving other blocks untouched.
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Finestra_spell">Harry Potter Wiki - Finestra</a>

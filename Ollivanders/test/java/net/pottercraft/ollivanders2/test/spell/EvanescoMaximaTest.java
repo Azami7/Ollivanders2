@@ -20,44 +20,28 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the EVANESCO_MAXIMA spell (permanent vanishing of non-living entities).
- *
- * @see EVANESCO_MAXIMA
- * @see EntityTransfigurationTest
+ * Unit tests for {@link EVANESCO_MAXIMA}. Extends {@link EntityTransfigurationTest} for the shared transfiguration
+ * tests.
  */
 public class EvanescoMaximaTest extends EntityTransfigurationTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.EVANESCO
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.EVANESCO_MAXIMA;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     EntityType getValidEntityType() {
         return EntityType.MINECART;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Nullable
     EntityType getInvalidEntityType() {
         return EntityType.TURTLE;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Nullable
     EntityType getSameEntityType() {
@@ -95,8 +79,8 @@ public class EvanescoMaximaTest extends EntityTransfigurationTest {
     }
 
     /**
-     * We have to override because the generic way is to cast the same spell twice but since evanesco permanently removes items, we
-     * need to cast a different spell.
+     * Overridden because the inherited test casts the same spell twice, but EVANESCO_MAXIMA permanently removes the
+     * item, so a different spell must be used for the second cast.
      */
     @Override
     @Test

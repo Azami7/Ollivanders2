@@ -16,18 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for stationary spell implementations.
- *
- * <p>Provides common test infrastructure for testing spells that create stationary effects
- * in the world (as opposed to instant-cast spells). Subclasses must implement the spell-specific
- * setup and behavior testing.</p>
- *
- * <p>Test Coverage:</p>
- *
- * <ul>
- * <li>doCheckEffectTest: Verifies that stationary spells are correctly created with proper radius and duration</li>
- * <li>targetLocationSetup: Hook for subclasses to set up the target location for spell casting</li>
- * </ul>
+ * Base test class for {@link StationarySpell} spells, verifying the spell ends correctly and creates a stationary
+ * spell with the right location, radius, and duration. Subclasses supply the stationary spell type and target setup.
  *
  * @author Azami7
  * @see O2SpellTestSuper
@@ -35,23 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 abstract public class StationarySpellTest extends O2SpellTestSuper {
     /**
-     * Gets the spell type for this test.
-     *
-     * @return the stationary spell type being tested
+     * @return the stationary spell type this test creates
      */
     abstract O2StationarySpellType getStationarySpellType();
 
     /**
-     * Tests the core effects of stationary spell creation and configuration.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>The spell is killed appropriately (immediately for noProjectile, after hitting target otherwise)</li>
-     * <li>Radius and duration are calculated and clamped to min/max bounds</li>
-     * <li>A stationary spell instance is created at the correct location</li>
-     * <li>The stationary spell has the correct radius and duration values</li>
-     * </ul>
-     * </p>
+     * Verify the spell ends (immediately for noProjectile, otherwise on hitting its target) and creates a stationary
+     * spell at the right location with radius and duration within bounds.
      */
     @Override
     @Test
@@ -108,17 +88,15 @@ abstract public class StationarySpellTest extends O2SpellTestSuper {
     }
 
     /**
-     * Hook for subclasses to set up the target location before spell effects are verified.
-     *
-     * <p>Subclasses should override this to place any necessary blocks, entities, or other setup
-     * required for testing spell effects at the target location.</p>
+     * Hook for subclasses to place any blocks or entities needed at the spell's target location before the effect is
+     * verified.
      *
      * @param location the target location where the spell will take effect
      */
     abstract void targetLocationSetup(Location location);
 
     /**
-     * Revert test (overridden with empty implementation).
+     * No-op: stationary spell casters have no revert action of their own.
      */
     @Override
     @Test

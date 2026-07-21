@@ -4,20 +4,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for the PYRO_PRASINA spell.
- *
- * <p>PYRO_PRASINA launches green ball-burst fireworks. Tests verify that the spell correctly
- * spawns fireworks with the expected green color and large ball effect type.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.PYRO_PRASINA for the spell implementation
- * @see PyrotechniaTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.PYRO_PRASINA}. Extends {@link PyrotechniaTest} for the
+ * shared fireworks tests.
  */
 public class PyroPrasinaTest extends PyrotechniaTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.PYRO_PRASINA
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

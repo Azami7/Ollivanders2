@@ -19,36 +19,19 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for {@link ItemEnchantmentType} enum functionality.
- * <p>
- * Verifies that enchantment type accessors work correctly and that enchantment names are unique
- * across all defined enchantment types.
- * </p>
+ * Unit tests for {@link ItemEnchantmentType}.
  */
 public class ItemEnchantmentTypeTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -56,15 +39,12 @@ public class ItemEnchantmentTypeTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test {@link ItemEnchantmentType#getName()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * getName() is a simple accessor, so it needs no separate test.
      */
     @Test
     void getNameTest() {
@@ -72,10 +52,7 @@ public class ItemEnchantmentTypeTest {
     }
 
     /**
-     * Test {@link ItemEnchantmentType#getClassName()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * getClassName() is a simple accessor, so it needs no separate test.
      */
     @Test
     void getClassNameTest() {
@@ -83,10 +60,7 @@ public class ItemEnchantmentTypeTest {
     }
 
     /**
-     * Test {@link ItemEnchantmentType#getLore()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * getLore() is a simple accessor, so it needs no separate test.
      */
     @Test
     void getLoreTest() {
@@ -94,10 +68,7 @@ public class ItemEnchantmentTypeTest {
     }
 
     /**
-     * Test {@link ItemEnchantmentType#getLevel()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * getLevel() is a simple accessor, so it needs no separate test.
      */
     @Test
     void getLevelTest() {
@@ -105,10 +76,7 @@ public class ItemEnchantmentTypeTest {
     }
 
     /**
-     * Test {@link ItemEnchantmentType#isCursed()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * isCursed() is a simple accessor, so it needs no separate test.
      */
     @Test
     void isCursedTest() {
@@ -116,14 +84,7 @@ public class ItemEnchantmentTypeTest {
     }
 
     /**
-     * Test that all enchantment names are unique.
-     * <p>
-     * Verifies that no two {@link ItemEnchantmentType} enum constants share the same name,
-     * which is required for proper enchantment identification and lookup.
-     * </p>
-     * <ul>
-     *   <li>All enchantment names are unique (no duplicates)</li>
-     * </ul>
+     * No two enchantment types share a name, so lookup by name is unambiguous.
      */
     @Test
     void uniqueEnchantmentNameTest() {
@@ -138,25 +99,11 @@ public class ItemEnchantmentTypeTest {
         assertTrue(duplicates.isEmpty(), "Found duplicate item names: " + duplicates);
     }
 
-    /**
-     * Reset test state after each test method.
-     * <p>
-     * Ensures the debug flag is disabled after each test to prevent debug output from affecting
-     * subsequent tests or polluting test logs.
-     * </p>
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

@@ -89,7 +89,7 @@ public final class PACK extends O2Spell {
     }
 
     /**
-     * Set the radius based on the caster's skill, clamped to the {@link #minRadius}–{@link #maxRadius} range.
+     * Set the radius based on the caster's skill, limited to the {@link #minRadius}–{@link #maxRadius} range.
      */
     @Override
     void doInitSpell() {

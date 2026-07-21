@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * Silences a target player so they can only cast nonverbal spells.
  * <p>
  * Applies the {@link O2EffectType#MUTED_SPEECH} effect to the first nearby player the projectile reaches, for a
- * duration that scales with the caster's skill (clamped to the bounds configured on {@link AddO2Effect}).
+ * duration that scales with the caster's skill (limited to the bounds configured on {@link AddO2Effect}).
  * </p>
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Silencing_Charm">Harry Potter Wiki - Silencing Charm</a>

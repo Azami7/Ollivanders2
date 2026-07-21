@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * becomes permanent and the original item is consumed.</p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Snufflifors_Spell">https://harrypotter.fandom.com/wiki/Snufflifors_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Snufflifors_Spell">Harry Potter Wiki - Snufflifors Spell</a>
  */
 public class SNUFFLIFORS extends ItemToEntityTransfiguration
 {

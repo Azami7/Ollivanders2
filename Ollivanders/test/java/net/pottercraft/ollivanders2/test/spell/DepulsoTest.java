@@ -13,14 +13,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for DEPULSO spell functionality.
- *
- * <p>Tests the banishing charm including:</p>
- * <ul>
- * <li>Spell configuration (min/max distance)</li>
- * <li>Entity targeting (all entity types can be targeted)</li>
- * <li>Velocity application (horizontal push)</li>
- * </ul>
+ * Unit tests for {@link DEPULSO}. Extends {@link KnockbackTest} for the shared knockback tests.
  *
  * @author Azami7
  */

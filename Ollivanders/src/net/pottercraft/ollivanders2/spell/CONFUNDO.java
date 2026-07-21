@@ -8,23 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Confundus Charm that confuses targets.
+ * The Confundus Charm: applies the Confusion effect to the target for a skill-scaled duration.
  *
- * <p>Confundo is a projectile charm that applies Confusion effect to targets, disorienting them
- * for a duration based on the caster's spell level. Duration ranges from 15 to 120 seconds and
- * is calculated at 25% of the caster's skill level modifier. The confusion effect has a fixed
- * amplifier and does not scale with skill level.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Confundus_Charm">Confundus Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Confundus_Charm">Harry Potter Wiki - Confundus Charm</a>
  */
 public final class CONFUNDO extends ConfundoBase {
     static final int minDurationInSecondsConfig = 15;
     static final int maxDurationInSecondsConfig = 120;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -43,11 +36,7 @@ public final class CONFUNDO extends ConfundoBase {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies Confusion effect to targets, disorienting them.
-     * Duration ranges from 15 to 120 seconds based on caster skill level. The confusion effect
-     * has a fixed amplifier that does not scale with skill.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -60,15 +49,13 @@ public final class CONFUNDO extends ConfundoBase {
 
         minDurationInSeconds = minDurationInSecondsConfig;
         maxDurationInSeconds = maxDurationInSecondsConfig;
-        durationModifier = 0.25; // 25%
+        durationModifier = 0.25;
 
         initSpell();
     }
 
     /**
-     * Calculate the potion effect amplifier.
-     *
-     * <p>Confundo uses a fixed amplifier that does not scale with skill level.</p>
+     * Set a fixed amplifier of 0; Confundo's strength does not scale with skill.
      */
     @Override
     void calculateAmplifier() {

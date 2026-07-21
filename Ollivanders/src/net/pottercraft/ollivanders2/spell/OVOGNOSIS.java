@@ -17,7 +17,6 @@ import java.util.ArrayList;
  * </p>
  *
  * @author Azami7
- * @since 2.2.9
  * @see <a href="http://harrypotter.wikia.com/wiki/Ovomancy">Harry Potter Wiki - Ovomancy</a>
  */
 public class OVOGNOSIS extends Divination {

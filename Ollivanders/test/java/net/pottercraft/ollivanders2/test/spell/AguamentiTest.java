@@ -21,33 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the AGUAMENTI spell (water-making charm).
- *
- * <p>Tests verify that AGUAMENTI correctly creates water blocks while rejecting invalid
- * materials. AGUAMENTI is unique among transfiguration spells because it targets air blocks
- * (pass-through blocks) and converts them to water. The spell uses special targeting to place
- * water adjacent to solid surfaces.</p>
- *
- * <p>Test coverage includes:</p>
- * <ul>
- * <li>Valid target material: AIR (and other pass-through blocks)</li>
- * <li>Invalid target material: FIRE and other blocked materials</li>
- * <li>Transfiguration map test: Verifies water placement and special targeting</li>
- * <li>Already transfigured test: Verifies behavior when target is under another spell</li>
- * <li>Success and failure messaging</li>
- * <li>Temporary water creation with automatic reversion</li>
- * <li>Pass-through block targeting (air conversion to water)</li>
- * </ul>
+ * Unit tests for {@link AGUAMENTI}. Extends {@link BlockTransfigurationTest} for the shared transfiguration tests.
  *
  * @author Azami7
- * @see AGUAMENTI
  */
 public class AguamentiTest extends BlockTransfigurationTest {
-    /**
-     * Returns the spell type being tested.
-     *
-     * @return AGUAMENTI spell type
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -55,13 +33,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns the valid target material for AGUAMENTI tests.
-     *
-     * <p>AGUAMENTI targets air blocks (pass-through blocks) and converts them to water.
-     * For testing purposes, DIRT is used as a representative material that will be hit
-     * by the projectile before reaching the air block.</p>
-     *
-     * @return DIRT material type
+     * @return DIRT, a solid block the projectile strikes before the air block it converts to water
      */
     @Override
     @NotNull
@@ -69,14 +41,6 @@ public class AguamentiTest extends BlockTransfigurationTest {
         return Material.DIRT;
     }
 
-    /**
-     * Returns an invalid target material for AGUAMENTI tests.
-     *
-     * <p>AGUAMENTI's blocked list includes hot blocks like FIRE. FIRE is used as a
-     * representative invalid material that cannot be transfigured.</p>
-     *
-     * @return FIRE material type
-     */
     @Override
     @NotNull
     Material getInvalidTargetType() {
@@ -84,11 +48,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Tests AGUAMENTI's special targeting and water placement behavior.
-     *
-     * <p>AGUAMENTI places water adjacent to solid surfaces using its special getTargetBlock()
-     * override. This test verifies that the spell correctly identifies and transforms the
-     * target block into water.</p>
+     * Verify the special targeting places water in the block just before the air the projectile hit.
      */
     @Override
     @Test
@@ -110,13 +70,8 @@ public class AguamentiTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Overrides sameMaterialTest because it is not applicable to AGUAMENTI.
-     *
-     * <p>AGUAMENTI converts AIR (pass-through blocks) to WATER. Since WATER is not in the
-     * allow list (only AIR/CAVE_AIR are valid targets), this spell can never encounter a
-     * situation where it tries to transfigure a block that is already the target material type.</p>
-     *
-     * <p>Therefore, this test is not applicable and remains empty.</p>
+     * Not applicable to AGUAMENTI: it only targets air and converts it to water, so the target can never already be
+     * the output material.
      */
     @Override
     @Test
@@ -125,11 +80,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Tests that AGUAMENTI fails when the target is already affected by another transfiguration.
-     *
-     * <p>This test verifies that AGUAMENTI respects the "already transfigured" check. The test
-     * creates a water block with TERGEO transfiguration, then attempts to cast AGUAMENTI on it.
-     * AGUAMENTI should fail because the block is already under another spell's effect.</p>
+     * Verify AGUAMENTI fails on a block already under another transfiguration.
      */
     @Override
     @Test
@@ -139,7 +90,6 @@ public class AguamentiTest extends BlockTransfigurationTest {
         Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
-        Block target = testWorld.getBlockAt(targetLocation);
         TestCommon.createBlockBase(targetLocation, 3);
 
         // cast an aguamenti so we can get what the actual target block will be
@@ -165,11 +115,7 @@ public class AguamentiTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Tests AGUAMENTI's success and failure messaging.
-     *
-     * <p>This test verifies that AGUAMENTI sends appropriate messages to the caster for both
-     * successful and failed casts. Success is tested when valid blocks can be transfigured,
-     * and failure is tested when invalid materials (blocked materials) are encountered.</p>
+     * Verify AGUAMENTI sends the success message on a valid cast and the failure message on a blocked material.
      */
     @Override
     @Test

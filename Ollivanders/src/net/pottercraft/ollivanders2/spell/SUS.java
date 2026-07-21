@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turn target player in to a pig.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Human_to_pig_spell">https://harrypotter.fandom.com/wiki/Human_to_pig_spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Human_to_pig_spell">Harry Potter Wiki - Human to Pig Spell</a>
  */
 public final class SUS extends PlayerDisguise
 {

@@ -21,58 +21,35 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Abstract base class for spell unit tests.
- *
- * <p>Provides shared test infrastructure for testing O2Spell implementations including:
- * <ul>
- * <li>MockBukkit server setup and teardown</li>
- * <li>Plugin instance initialization with default configuration</li>
- * <li>Helper methods for casting spells in tests</li>
- * <li>Abstract test methods that subclasses must implement</li>
- * </ul>
- *
- * <p><strong>Test Structure:</strong> A shared MockBukkit server and plugin instance are created
- * once before all tests and reused across test methods for performance. Each test class extending
- * this base must implement {@link #spellConstructionTest()} and {@link #doCheckEffectTest()}.
+ * Base class for {@link O2Spell} unit tests. Sets up a shared MockBukkit server and plugin once for all tests and
+ * provides helpers to cast spells. Subclasses implement {@link #getSpellType()}, {@link #doCheckEffectTest()}, and
+ * {@link #revertTest()}.
  *
  * @author Azami7
  */
 public abstract class O2SpellTestSuper {
     /**
-     * Default spell experience level for test casting.
-     *
-     * <p>Used by {@link #castSpell(PlayerMock, Location, Location)} and overloads
-     * when no explicit experience is provided.</p>
+     * Default spell experience used when casting in tests without an explicit value.
      */
     static final int defaultExperience = 20;
 
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, created once for all tests in the class.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded before all test methods with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin under test, loaded once with the default config.
      */
     static Ollivanders2 testPlugin;
 
     /**
-     * X location value for use by getNextLocation
+     * Next X coordinate handed out by {@link #getNextLocation(World)}.
      */
     int nextX = 0;
 
     /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
+     * Start the shared MockBukkit server and load the plugin before any tests run.
      */
     @BeforeAll
     static void globalSetUp() {
@@ -86,7 +63,7 @@ public abstract class O2SpellTestSuper {
     }
 
     /**
-     * Get the next location.
+     * Get a fresh test location, advancing the X coordinate so successive calls do not overlap.
      *
      * @param world the world to create the location in
      * @return the new location
@@ -134,9 +111,6 @@ public abstract class O2SpellTestSuper {
     /**
      * Cast a spell with custom wand and experience.
      *
-     * <p>Sets up the player's experience with the spell type, positions them to face the target,
-     * creates the spell, and adds it to the active spell list.</p>
-     *
      * @param caster         the player casting the spell
      * @param fromLocation   the location to cast the spell from
      * @param targetLocation the location the spell should target
@@ -149,10 +123,8 @@ public abstract class O2SpellTestSuper {
     }
 
     /**
-     * Cast a spell with custom wand and experience.
-     *
-     * <p>Sets up the player's experience with the spell type, positions them to face the target,
-     * creates the spell, and adds it to the active spell list.</p>
+     * Set the caster's experience with the spell, face them at the target, then create the spell and register it as
+     * active. When {@code fromLocation} equals {@code targetLocation} the experience and facing steps are skipped.
      *
      * @param caster         the player casting the spell
      * @param fromLocation   the location to cast the spell from
@@ -180,30 +152,27 @@ public abstract class O2SpellTestSuper {
     }
 
     /**
-     * Test spell-specific set up such as anything in doInitSpell, usesModifier, pass through blocks, move effect data,
-     * target material allow and block lists, world guard flags, projectile radius, and any spell-specific settings
+     * Verify spell-specific construction: doInitSpell values, usesModifier, pass-through blocks, move effect data,
+     * material allow/block lists, WorldGuard flags, projectile radius, and any other per-spell settings. Empty here so
+     * subclasses that have nothing extra to check need not override it.
      */
     @Test
     void spellConstructionTest() {}
 
     /**
-     * Test the specific spell functionality
+     * Verify the spell's effect behavior.
      */
     @Test
     abstract void doCheckEffectTest();
 
     /**
-     * Test revert functionality
+     * Verify the spell's revert behavior.
      */
     @Test
     abstract void revertTest();
 
     /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
+     * Stop the MockBukkit server after all tests in the class complete.
      */
     @AfterAll
     static void globalTearDown() {

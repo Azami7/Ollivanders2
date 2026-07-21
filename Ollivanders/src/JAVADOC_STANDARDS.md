@@ -2,6 +2,49 @@
 
 This document outlines the javadoc conventions and standards used throughout the Ollivanders2 project to ensure consistency, clarity, and maintainability of code documentation.
 
+## General guideance for code comments
+
+- Explain only the necessary "why" for complex or surprising code. Do not comment code that speaks for itself, and never narrate straightforward lines (`// increment count` above `count++` is noise).
+- Methods document their **contract** (what it does, inputs/constraints, return, side effects, failure modes), not their internal steps. The implementation should be free to change without the javadoc going stale.
+- Classes document their **purpose and role**, not the algorithms or data structures inside.
+- Write for a reader who was not involved in the change. No "the new approach", "as discussed", or history of decisions that were made and then changed. Will this comment make sense a year from now and when these commits are squashed?
+- No comment should read as a diff between commits ("now uses X", "changed to...", "previously..."). Document the current behavior plainly.
+- Put agreed follow-ups and out-of-scope work in `// TODO: <what and why>` comments.
+- Do not reference github tasks, these will be meaningless if we ever change repositories
+- Wrap comment and javadoc lines at 120 characters.
+- Vocabulary: use "limit" (and "limited to"), not "clamp"/"clamped", when describing a value bounded to a min/max range.
+
+When improving existing javadoc, fix comments that violate these rules rather than preserving them.
+
+## Design by contract
+
+Javadoc is where the contract lives that the type system and annotations cannot enforce. Do not repeat what they already express, but document everything they cannot — conciseness never justifies dropping a real contract term.
+
+**Already enforced — do NOT restate in prose:**
+
+- `@NotNull` / `@Nullable` on a parameter or return: the null contract *is* the annotation. Never write "must not be null" for a `@NotNull` parameter.
+- The declared type: don't write "@param count an integer".
+
+**Must be documented — annotations cannot express these:**
+
+- **Preconditions** the caller must satisfy: value ranges and units (e.g. radius must be `>= 0`; duration is in ticks, not seconds), required call order or state (e.g. only valid after `initSpell()` has run), and constraints on contents (e.g. the list must be non-empty; the location's chunk must be loaded).
+- **Postconditions / guarantees**: whether a returned collection is a defensive copy or a live view, whether it may be empty, when and why a `@Nullable` return is null, and any invariant the method upholds.
+- **Side effects**: mutates a parameter, fires an event, registers or unregisters a listener, spawns or removes entities, writes to disk — anything the caller didn't obviously ask for.
+- **Failure modes**: what it throws and when, or what it does with input the annotations don't reject (throws vs. returns null vs. no-ops).
+
+If a caller could misuse the member without the compiler or an annotation stopping them, the javadoc must tell them how not to. Example:
+
+```java
+/**
+ * Get the players within a radius of this spell's projectile.
+ *
+ * @param radius the search radius in blocks; must be >= 0
+ * @return the players in range, excluding the caster; empty if none, never null
+ */
+@NotNull
+public List<Player> getNearbyPlayers(double radius) {
+```
+
 ## Table of Contents
 
 1. [Class-Level Documentation](#class-level-documentation)
@@ -15,7 +58,7 @@ This document outlines the javadoc conventions and standards used throughout the
 
 ## Class-Level Documentation
 
-Class-level javadoc should provide comprehensive context about the class's purpose, design, and usage.
+Class-level javadoc should state the class's purpose and role — why it exists and how it fits in — not its internal design.
 
 ### Structure
 
@@ -23,14 +66,14 @@ Class-level javadoc should provide comprehensive context about the class's purpo
 /**
  * [Brief one-line description of the class purpose]
  * <p>
- * [More detailed explanation of what the class does and why it exists]
+ * [More detailed explanation of what the class does and why it exists, if it is not clear from the one-line description.]
  * </p>
  * <p>
- * [Additional context about design patterns, relationships to other classes, or important concepts]
+ * [Additional context about design patterns, relationships to other classes, or important concepts if they are not 
+ * obvious. Also add any Spigot contraints or requirements that influence the class' design and are not obvious]
  * </p>
  *
  * @author [Author Name]
- * @since [Version]
  * @see <a href="url">Descriptive Label</a>
  */
 public class MyClass {
@@ -38,34 +81,36 @@ public class MyClass {
 
 ### Guidelines
 
-- **First line**: Brief, clear statement of what the class is and does
-- **Paragraph 1**: Expanded explanation providing context and purpose
-- **Paragraph 2+**: Additional details like:
-  - How this class fits into the broader system
-  - Key concepts or patterns used
-  - Relationships to parent classes or interfaces
-  - Design rationale
-- **Never leave the purpose ambiguous** - A reader should understand what this class does after reading the javadoc
+- **First line**: brief, clear statement of what the class is for. For many classes this is the whole comment.
+- **Further paragraphs**: add only when the purpose genuinely needs them (a non-obvious role, an important relationship). Explain why the class exists, not how it works inside. Do not pad with design rationale or history.
+- **Never leave the purpose ambiguous** - a reader should understand what this class does after reading the javadoc.
 
 ### Example: O2Color.java
 
+Most classes need only the one-line form:
+
 ```java
 /**
- * Color representation for Ollivanders2 supporting multiple Minecraft color formats.
+ * Color representation for Ollivanders2 supporting Minecraft's several color formats (ChatColor, Color, DyeColor).
+ *
+ * @author Azami7
+ */
+```
+
+Add a list only when it earns its place — e.g. an enum whose accessors each serve a distinct, non-obvious purpose:
+
+```java
+/**
+ * Color representation for Ollivanders2 supporting Minecraft's several color formats.
  * <p>
- * Minecraft handles colors inconsistently across different contexts - chat messages use ChatColor and format codes (§),
- * items use Color, and blocks use DyeColor. This enum provides unified access to all color representations,
- * allowing seamless conversion between formats.
+ * Minecraft exposes color differently per context, so this enum offers each representation:
  * </p>
- * <p>
- * <strong>When to use each color representation:</strong>
  * <ul>
- * <li>{@link #getBukkitColor()} - For items and potions (Color class)</li>
- * <li>{@link #getChatColor()} - For chat messages in commands and player messages (ChatColor enum)</li>
- * <li>{@link #getChatColorCode()} - For text formatting in books and signs using color codes like "§c" for red</li>
- * <li>{@link #getDyeColor()} - For dyeable blocks like wool, concrete, and glass (DyeColor enum)</li>
+ * <li>{@link #getBukkitColor()} - items and potions</li>
+ * <li>{@link #getChatColor()} - chat messages</li>
+ * <li>{@link #getChatColorCode()} - text in books and signs</li>
+ * <li>{@link #getDyeColor()} - dyeable blocks</li>
  * </ul>
- * </p>
  *
  * @author Azami7
  */
@@ -81,61 +126,53 @@ Method and constructor javadoc should clearly explain what the method does, what
 
 ```java
 /**
- * [Clear action verb]: [What the method does and why]
- * <p>
- * [Additional details about behavior, algorithm, or design considerations]
- * </p>
+ * [Clear action verb]: [what the method does — the contract, not the steps]
  *
- * @param paramName [Description of what this parameter represents and expected range/constraints]
- * @return [Description of return value and what it represents]
+ * @param paramName [what it represents and any constraints/range/null handling]
+ * @return [what the value represents and any special cases]
  */
 public ReturnType methodName(Type paramName) {
 ```
 
+Add a `<p>` body paragraph only when the contract needs it (a non-obvious side effect, failure mode, or constraint). Most methods need just the summary line and tags.
+
 ### Guidelines
 
 - **Start with action verbs**: "Get", "Create", "Transform", "Filter", "Check", etc.
-- **Explain the "why"**: Don't just describe implementation, explain purpose
-- **Parameter descriptions**: Include constraints, valid ranges, null handling
-- **Return descriptions**: Explain what the returned value represents and any special cases
-- **Use `{@link}` for cross-references**: Link to related classes/methods
+- **Document the contract, not the implementation**: state what it does and returns, not the internal steps.
+- **Parameter descriptions**: include constraints, valid ranges, null handling.
+- **Return descriptions**: explain what the returned value represents and any special cases.
+- **Use `{@link}` for cross-references**: link to related classes/methods.
 
 ### Example: Constructor Documentation
 
+Keep it to the contract — the summary line plus params. Don't restate what the body obviously does:
+
 ```java
 /**
- * Constructor that initializes a tarot cartomancy divination prophecy.
- * <p>
- * Creates a new tarot cartomancy divination instance and populates it with major arcana card prophecy prefixes.
- * Sets the divination type to CARTOMANCY_TAROT with a maximum accuracy of 35 points (higher than regular
- * cartomancy at 25 points). The prophecy prefixes reference the 22 major arcana cards and their archetypal
- * symbolic meanings, which represent significant life principles and transformative forces.
- * </p>
+ * Create a tarot cartomancy divination that generates a prophecy about the target.
  *
- * @param plugin     a callback to the plugin for accessing configuration and other resources
- * @param prophet    the player who is performing the divination (casting the tarot cartomancy spell)
- * @param target     the player who is the subject of the divination prophecy
- * @param experience the experience level of the prophet, affecting prophecy accuracy and strength
+ * @param plugin     a callback to the plugin
+ * @param prophet    the player performing the divination
+ * @param target     the player the prophecy is about
+ * @param experience the prophet's experience, which affects prophecy accuracy
  */
 public CARTOMANCY_TAROT(@NotNull Ollivanders2 plugin, @NotNull Player prophet, @NotNull Player target, int experience) {
 ```
 
-### Example: Method with Algorithm Explanation
+### Example: Method Documentation
+
+The contract is the summary line and tags; the seed-to-index mapping is an ordinary idiom that needs no comment:
 
 ```java
 /**
- * Get a dyeable color based on the provided seed.
- * <p>
- * Returns one of the 16 available dye colors that can be applied to dyeable blocks like wool, concrete, and glass.
- * The seed is used with modulo arithmetic to select from the available colors.
- * </p>
+ * Get a dyeable color selected from the given seed.
  *
- * @param seed the base value to determine which color is selected (using modulo)
- * @return a dyeable color from the seed value
+ * @param seed any value; determines which dye color is returned
+ * @return one of the dyeable colors
  */
 @NotNull
 public static O2Color getRandomDyeableColor(int seed) {
-    // Modulo 16 distributes the seed value evenly across the 16 available dye colors (0-15)
     int rand = Math.abs(seed) % dyeableColors.length;
     return dyeableColors[rand];
 }
@@ -167,15 +204,12 @@ private Type fieldName;
 
 ```java
 /**
- * The Bukkit Color object for this color.
- * Used for item coloring (e.g., potion colors). Access via {@link #getBukkitColor()}.
+ * This color for items and potions. Access via {@link #getBukkitColor()}.
  */
 final Color bukkitColor;
 
 /**
- * The chat format code for this color (e.g., "§c" for red).
- * Used for text formatting in books, signs, and other text-based UI elements.
- * Format is the section symbol (§) followed by a hexadecimal character. Access via {@link #getChatColorCode()}.
+ * The chat format code for this color, e.g. "§c" for red. Access via {@link #getChatColorCode()}.
  */
 final String chatColorCode;
 ```
@@ -184,12 +218,7 @@ final String chatColorCode;
 
 ```java
 /**
- * Global Random instance for generating random numbers across the plugin.
- * <p>
- * Seeded with {@link System#currentTimeMillis()} in the constructor to ensure different sequences
- * across plugin reloads. All plugin components should use this shared instance rather than creating
- * their own to maintain consistency in random number generation.
- * </p>
+ * Shared Random for the whole plugin. All components should use this rather than creating their own.
  */
 public final static Random random = new Random();
 ```
@@ -202,63 +231,58 @@ Inline comments explain non-obvious code patterns, design decisions, or complex 
 
 ### When to Use Inline Comments
 
-- **Non-obvious algorithms**: Explain why an unusual approach was chosen
-- **Modulo operations**: Document why specific divisors were chosen (e.g., "Modulo 16 because there are 16 dye colors")
-- **Initialization blocks**: Explain the purpose of large initialization sections
-- **Design pattern justifications**: Why create a copy before modifying? Why check for null?
-- **Workarounds or hacks**: Explain any non-obvious code patterns
+Comment only code a competent reader wouldn't immediately understand. Standard idioms — a `% length` index, copying a collection before iterating to remove from it, a null guard — need no comment.
+
+- **Non-obvious algorithms or magic values**: why an unusual approach or a specific constant was chosen
+- **Workarounds**: why a Spigot/MockBukkit limitation or bug forces this shape
+- **Non-obvious domain rules**: a constraint or interaction the code enforces that isn't self-evident
 
 ### Guidelines
 
-- **Be specific**: Don't just say "check if valid", explain what valid means
-- **Reference the "why"**: Why is this necessary? What would go wrong without it?
-- **Keep comments current**: Update comments when code changes
-- **One comment per concept**: Don't clutter code with excessive comments
+- **Explain the "why"**: what would go wrong without it, or why it's done this way — not what the line does
+- **Be specific**: "reject locations outside the arena" beats "check if valid"
+- **Keep comments current**: update them when the code changes; delete them when they stop adding value
 
 ### Example: Initialization Block Comment
 
+One line stating the purpose is enough — don't catalog the data the code already contains:
+
 ```java
-// Populate prophecy prefixes with tarot major arcana cards. These prefixes are randomly selected
-// when generating a prophecy and combined with divination text to create the final prophecy message.
-// The prefixes reference the 22 major arcana cards from a traditional tarot deck.
-// Each major arcana card represents a fundamental life principle or archetypal force:
-// - The Fool: new beginnings, innocence, risk
-// - The Magician: manifestation, resourcefulness, power
-// - The High Priestess: intuition, mystery, inner knowledge
-// ... (list continues)
-prophecyPrefix.add("The cards have revaled that");
+// prophecy prefixes, chosen at random and prepended to the divination text
+prophecyPrefix.add("The cards have revealed that");
 prophecyPrefix.add("The reading of the cards says that");
 // ... (remaining prefixes)
 ```
 
-### Example: Algorithm Explanation
+### Counter-example: don't narrate standard math
+
+Standard math and library calls explain themselves. The spherical-to-Cartesian conversion below needs no commentary — a reader recognizes it:
 
 ```java
-// X and Z form the horizontal plane (radius from Y-axis), azimuth determines direction
-double x = radius * Math.sin(inclusion) * Math.cos(azimuth);
-double z = radius * Math.sin(inclusion) * Math.sin(azimuth);
-// Y is the vertical component; cos(inclusion) ranges from -1 to 1 as inclusion goes 0 to π
-double y = radius * Math.cos(inclusion);
+double x = radius * Math.sin(inclination) * Math.cos(azimuth);
+double y = radius * Math.cos(inclination);
+double z = radius * Math.sin(inclination) * Math.sin(azimuth);
 ```
 
-### Example: Design Pattern Explanation
+### Example: a genuinely non-obvious "why"
+
+The comment earns its place — nothing in the code says why the loop starts at a random offset:
 
 ```java
-// Random offset prevents aligned grid patterns; starts at random point instead of 0
-for (double inclusion = (Math.random() * Math.PI) / intensity; inclusion < Math.PI; inclusion += Math.PI / intensity) {
+// random start offset so repeated casts don't align into a visible grid
+for (double inclination = (Math.random() * Math.PI) / intensity; inclination < Math.PI; inclination += Math.PI / intensity) {
 ```
 
-### Example: Copy Before Modification
+### Example: a non-obvious domain rule
+
+The comment explains a constraint the code enforces but that isn't self-evident:
 
 ```java
-// A copy of the original recipient set is iterated to safely remove players from the original set
-// without causing concurrent modification exceptions.
-Set<Player> temp = new HashSet<>(recipients);
-for (Player recipient : temp) {
-    if (!Ollivanders2Common.isInside(location, recipient.getLocation(), dropoff)) {
-        recipients.remove(recipient);
-    }
-}
+// maxSpellLevel and bookLearning are mutually exclusive progression systems; only one may be on
+if (!bookLearning)
+    maxSpellLevel = getConfig().getBoolean("maxSpellLevel");
+else
+    maxSpellLevel = false;
 ```
 
 ---
@@ -306,48 +330,31 @@ All external references and documentation links should use `@see` tags with prop
 
 ### Enum Documentation
 
-Enums should document each constant and explain what they represent.
+Document each constant with what it represents and its value; the class comment states the enum's purpose.
 
 ```java
 /**
- * Enumeration of standard times of day in Minecraft, based on day-relative ticks.
- * <p>
- * [Detailed explanation of the concept and usage]
- * </p>
+ * The standard Minecraft times of day, as day-relative ticks.
  */
 public enum TimeCommon {
     /**
-     * Midnight (18000 ticks) - the start of the night cycle, when darkness is complete.
+     * Midnight, 18000 ticks.
      */
     MIDNIGHT(18000),
 
     /**
-     * Dawn (23000 ticks) - early morning when the sun is just beginning to rise.
+     * Dawn, 23000 ticks.
      */
     DAWN(23000),
 ```
 
 ### Divination Class Pattern
 
-For divination spell implementations, document:
-1. What type of divination (astrology, cartomancy, etc.)
-2. How it generates prophecies (combines prefixes with text)
-3. Accuracy level and why it differs from other types
-4. What the prefixes represent
+Document what the divination is and what makes it distinct from its siblings (e.g. its accuracy). The prophecy-generation mechanics live in the parent {@link O2Divination} — don't restate them here.
 
 ```java
 /**
- * [Divination Type] divination spell implementation using [specific method].
- * <p>
- * [Definition and context about the divination type]
- * </p>
- * <p>
- * This class implements the [type] divination method, generating randomized prophecies based on
- * [method-specific details]. The prophecies are created by combining randomly selected prefixes
- * (which reference [what prefixes represent]) with divination text from the parent {@link O2Divination} class.
- * [Divination type] has [accuracy level] maximum accuracy compared to [other types],
- * [explanation of why].
- * </p>
+ * [Divination type] divination — [one line on what makes it distinct, e.g. its accuracy relative to other types].
  *
  * @author Azami7
  * @see <a href="url">Reference Link</a>
@@ -356,39 +363,28 @@ For divination spell implementations, document:
 
 ### String Transformation Documentation
 
-For methods that transform strings, explain both the input and output format with examples.
+Show the transformation with an example rather than narrating the steps:
 
 ```java
 /**
- * Transform an enum name string to a human-readable format.
- * <p>
- * Converts the input to lowercase, splits on underscores, and joins the parts with spaces.
- * For example: "AVADA_KEDAVRA" → "avada kedavra"
- * </p>
+ * Transform an enum name into a human-readable string, e.g. "AVADA_KEDAVRA" -> "avada kedavra".
  *
- * @param s the enum name as a string (typically in CONSTANT_CASE format)
- * @return a space-separated lowercase string with underscores removed
+ * @param s the enum name, typically in CONSTANT_CASE
+ * @return the name as lowercase words separated by spaces
  */
 ```
 
 ### Coordinate System Documentation
 
-For methods dealing with spatial coordinates, document the coordinate system and reference frames.
+For methods dealing with spatial coordinates, document only what the caller can't get from the types — which value is which and the units. Don't explain what the coordinate system is; the reader knows. (A dash list inside a `@param` is also not valid javadoc — it renders as a run-on line, so keep it prose.)
 
 ```java
 /**
- * Convert spherical coordinates to a Cartesian vector.
- * <p>
- * Transforms spherical coordinates (inclination and azimuth) into a 3D Cartesian vector
- * relative to the origin. The inclination angle is the polar angle measured from the positive Y-axis,
- * and the azimuth angle is measured from the positive X-axis in the horizontal plane.
- * </p>
+ * Convert spherical coordinates to a Cartesian vector relative to the origin.
  *
- * @param sphere a 2-element array where:
- *               - sphere[0] is the inclination (polar angle in radians, 0 to π)
- *               - sphere[1] is the azimuth (horizontal angle in radians, 0 to 2π)
- * @param radius the radius of the sphere, determining the distance from the origin
- * @return a Vector representing the 3D position in Cartesian coordinates
+ * @param sphere the {@code [inclination, azimuth]} angles, in radians
+ * @param radius the distance from the origin
+ * @return the equivalent Cartesian vector
  */
 ```
 
@@ -398,15 +394,13 @@ For methods dealing with spatial coordinates, document the coordinate system and
 
 When reviewing or writing javadoc, verify:
 
-- [ ] **Class**: Does the javadoc explain what the class does and why it exists?
-- [ ] **Purpose**: Is the purpose clear to someone unfamiliar with the code?
-- [ ] **Methods**: Does each method explain what it does, not just how it does it?
-- [ ] **Parameters**: Are parameter descriptions clear about constraints and expectations?
-- [ ] **Returns**: Are return values clearly explained?
-- [ ] **Links**: Are external references in `@see` tags with descriptive labels?
-- [ ] **Format**: No spaces around `=` in href attributes?
-- [ ] **Examples**: Are complex operations explained with examples?
-- [ ] **Consistency**: Does the style match other similar classes in the project?
+- [ ] **Contract, not implementation**: Do methods/classes document what and why, not the internal steps?
+- [ ] **No diff narrative**: Does it read as current behavior, not "changed to / now uses / previously"? No task numbers.
+- [ ] **Purpose**: Is the purpose clear to someone unfamiliar with the code and not part of the change?
+- [ ] **Parameters/Returns**: Are constraints, ranges, null handling, and special cases covered?
+- [ ] **Links**: Are external references in `@see` tags with descriptive labels, no spaces around `=`?
+- [ ] **Width**: Are lines wrapped at 120 characters?
+- [ ] **Follow-ups**: Are out-of-scope items captured as `// TODO:` (no task numbers), not narrated in prose?
 
 ---
 

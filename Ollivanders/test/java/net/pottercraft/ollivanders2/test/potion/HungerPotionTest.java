@@ -5,21 +5,13 @@ import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Test suite for the Hunger Potion effect.
+ * Unit tests for the Hunger Potion.
  *
- * <p>Verifies that the Hunger Potion correctly applies the HUNGER effect to players
- * when consumed. Tests both the player feedback message and the effect application to ensure
- * the potion functions as intended.</p>
- *
- * @see PotionTestSuper for the base test infrastructure
+ * @see PotionTestSuper
  */
 public class HungerPotionTest extends PotionTestSuper {
     /**
-     * Set up the test by specifying the potion type to test.
-     *
-     * <p>Initializes the test to use the HUNGER_POTION potion type and the HUNGER effect.
-     * This method is called before each test to ensure the correct potion is being tested by the
-     * inherited drinkTest() method.</p>
+     * Select the potion and effect under test.
      */
     @Override @BeforeEach
     void setUp() {

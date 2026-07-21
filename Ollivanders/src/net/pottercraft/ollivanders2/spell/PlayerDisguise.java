@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Super class for all transfigurations of players.
+ * Base class for spells that disguise a player as another entity.
  */
 public abstract class PlayerDisguise extends EntityDisguise {
     //todo make player transfiguration an effect so it persists over log out/restarts
@@ -22,8 +22,6 @@ public abstract class PlayerDisguise extends EntityDisguise {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -39,8 +37,8 @@ public abstract class PlayerDisguise extends EntityDisguise {
     }
 
     /**
-     * Calculate the success rate for this spell. This has to be run from the spell itself after setting
-     * usesModifier since it is based on specific spell usage.
+     * Set {@link #successRate} from the caster's skill: 10% below skill 10, skill-proportional up to 100%. Must be
+     * called after {@code usesModifier} has been set.
      */
     void calculateSuccessRate() {
         if (usesModifier < 10)

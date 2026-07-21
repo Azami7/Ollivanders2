@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * Spawns magma cubes, blazes, and ghasts and is capable of destroying horcruxes.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Fiendfyre">https://harrypotter.fandom.com/wiki/Fiendfyre</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Fiendfyre">Harry Potter Wiki - Fiendfyre</a>
  */
 public final class FIENDFYRE extends O2Spell
 {
@@ -150,7 +150,7 @@ public final class FIENDFYRE extends O2Spell
 
     /**
      * Get the number of creatures this cast will spawn, as determined by {@link #doInitSpell()} from the caster's
-     * skill and clamped to the range {@link #getMinCreatures()} to {@link #getMaxCreatures()}.
+     * skill and limited to the range {@link #getMinCreatures()} to {@link #getMaxCreatures()}.
      *
      * <p>This value is only meaningful before the spell resolves: {@code spawnCreatures()} decrements the
      * underlying count as it spawns, so read it before the spell ticks to its effect.</p>

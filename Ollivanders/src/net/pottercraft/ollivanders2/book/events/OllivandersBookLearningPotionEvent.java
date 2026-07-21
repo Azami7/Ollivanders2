@@ -11,25 +11,17 @@ import org.jetbrains.annotations.NotNull;
  * Event whenever a potion is learned/leveled up from book learning
  */
 public class OllivandersBookLearningPotionEvent extends PlayerEvent implements Cancellable {
-    /**
-     * the handlers for this event
-     */
     private static final HandlerList handlers = new HandlerList();
 
     /**
-     * the potion type learned
+     * the potion that was learned
      */
     final private O2PotionType potionType;
 
-    /**
-     * whether the event is canceled or not
-     */
     boolean canceled = false;
 
     /**
-     * Constructor
-     *
-     * @param player the player who found their wand
+     * @param player the player who learned the potion
      * @param potion the potion type that was learned
      */
     public OllivandersBookLearningPotionEvent(@NotNull Player player, @NotNull O2PotionType potion) {
@@ -59,7 +51,7 @@ public class OllivandersBookLearningPotionEvent extends PlayerEvent implements C
     }
 
     /**
-     * get the potion type that was learned
+     * Get the potion type that was learned.
      *
      * @return the potion type
      */

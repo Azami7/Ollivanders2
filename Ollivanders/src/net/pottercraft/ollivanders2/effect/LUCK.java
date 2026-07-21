@@ -7,29 +7,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Luck potion effect that increases the player's item drop rates and loot quality.
- *
- * <p>LUCK applies Minecraft's LUCK potion effect to enhance the target player's fortune with
- * improved item drop rates and loot quality. The effect increases the likelihood of receiving
- * better loot from mobs, fishing, and mining while the effect is active. The effect is powered
- * by the Minecraft potion effect system with strength (amplifier) set to 1, determining the luck
- * magnitude. The effect is detectable by mind-reading spells (Legilimens) and information spells
- * (Informous) which report the target "feels lucky". The player receives an affectation
- * notification of "You feel lucky." when the effect is applied.</p>
+ * Applies Minecraft's LUCK potion effect, improving the target's loot rolls. Detectable via Informous and Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
+ * @see PotionEffect
  */
 public class LUCK extends PotionEffect {
     /**
-     * Constructor for creating a luck potion effect.
-     *
-     * <p>Creates a potion effect that increases the target player's fortune with improved item drop
-     * rates using Minecraft's LUCK potion effect type. The effect is detected by information spells
-     * as the target "feels lucky" and notifies the player "You feel lucky."</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
-     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param duration    the duration in ticks, clamped to the effect type's min and max
      * @param isPermanent ignored - potion effects cannot be permanent
      * @param pid         the unique ID of the player to bless with luck
      */
@@ -47,13 +35,6 @@ public class LUCK extends PotionEffect {
         affectedPlayerText = "You feel lucky.";
     }
 
-    /**
-     * Perform cleanup when the luck effect is removed.
-     *
-     * <p>The default implementation does nothing, as LUCK is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the player's item drop rates return to normal.</p>
-     */
     @Override
     public void doRemove() {
     }

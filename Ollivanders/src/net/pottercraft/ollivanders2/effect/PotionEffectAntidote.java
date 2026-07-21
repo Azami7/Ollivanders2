@@ -8,70 +8,32 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Parent class for antidotes that neutralize standard Minecraft potion effects.
+ * Parent class for antidotes that neutralize a standard Minecraft potion effect.
  *
- * <p>PotionEffectAntidoteSuper provides a strength-based antidote mechanism that reduces the duration of active
- * potion effects rather than completely removing them. Antidotes are implemented as instant effects: they apply
- * immediately in checkEffect() and then kill themselves in the same tick.
- * </p>
- *
- * <p>Antidote Mechanism:
- * When an antidote activates, it locates any active potion effect of the target type on the player. If found:
- * <ul>
- * <li>The potion effect is removed entirely</li>
- * <li>If strength is less than 1.0, a new potion effect of the same type is re-applied with reduced duration</li>
- * <li>The reduced duration is calculated as: newDuration = originalDuration × strength</li>
- * <li>If strength is 1.0 or higher, the effect is completely removed (no re-application)</li>
- * </ul>
- * <p>Examples:</p>
- * <ul>
- * <li>strength = 1.0: Removes poison effect entirely (full antidote)</li>
- * <li>strength = 0.5: Re-applies poison with half the original duration (partial antidote)</li>
- * <li>strength = 0.25: Re-applies poison with 1/4 the original duration (weak antidote)</li>
- * </ul>
- *
- * <p>Effect Lifecycle:
- * Antidote effects are designed to be "instant" - they perform their action immediately when created and
- * expire in the same game tick. Subclasses set potionEffectType to specify which Minecraft potion effect
- * to target.</p>
+ * <p>Instant effect: on its first tick it removes the target potion effect and, if {@link #strength} is below 1.0,
+ * re-applies it with a proportionally reduced duration, then kills itself. Subclasses set {@link #potionEffectType}
+ * to choose which potion effect to counter.</p>
  *
  * @author Azami7
  */
 public abstract class PotionEffectAntidote extends O2Effect {
     /**
-     * The type of Minecraft potion effect this antidote targets.
-     *
-     * <p>Subclasses override this field to specify which potion effect (POISON, HARM, WEAKNESS, etc.) this
-     * antidote will neutralize. This value is checked against active potion effects on the target player.</p>
+     * The Minecraft potion effect this antidote counters. Subclasses set this to POISON, HARM, WEAKNESS, etc.
      */
     PotionEffectType potionEffectType = PotionEffectType.GLOWING;
 
     /**
-     * The strength of this antidote, represented as a duration multiplier.
-     *
-     * <p>Strength determines how much the potion effect's duration is reduced when this antidote is applied.
-     * The new duration is calculated as: newDuration = originalDuration × strength.
-     * Values range from 0.0 to 1.0:
-     * <ul>
-     * <li>strength = 1.0: Full antidote - removes the effect completely</li>
-     * <li>strength = 0.5: Partial antidote - effect re-applied with half duration</li>
-     * <li>strength = 0.25: Weak antidote - effect re-applied with 1/4 duration</li>
-     * <li>strength = 0.0: No antidote - effect re-applied with 0 duration (effectively removed)</li>
-     * </ul>
-     * </p>
+     * Duration multiplier in [0.0, 1.0] controlling potency: the countered effect is re-applied with
+     * {@code originalDuration * strength}. A value of 1.0 removes it entirely.
      */
     double strength = 0.25;
 
     /**
-     * Constructor for creating a potion effect antidote.
+     * Constructor
      *
-     * <p>Creates an antidote effect that will apply immediately and expire in a single game tick.
-     * Subclasses should initialize potionEffectType and strength fields before the effect is added
-     * to a player's effect list.</p>
-     *
-     * @param plugin      a reference to the plugin for logging
-     * @param duration    ignored - antidotes apply immediately and are resolved
-     * @param isPermanent ignored - antidotes are immediately applied and resolved
+     * @param plugin      a callback to the MC plugin
+     * @param duration    ignored - antidotes apply immediately and expire
+     * @param isPermanent ignored - antidotes apply immediately and expire
      * @param pid         the unique ID of the target player to receive this antidote
      */
     public PotionEffectAntidote(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
@@ -79,19 +41,8 @@ public abstract class PotionEffectAntidote extends O2Effect {
     }
 
     /**
-     * Apply this antidote immediately and expire.
-     *
-     * <p>This method executes in a single game tick and performs the following steps:</p>
-     * <ol>
-     * <li>Checks if the target has an active potion effect matching potionEffectType (target initialized in O2Effect constructor)</li>
-     * <li>If found: removes the potion effect completely</li>
-     * <li>If strength is less than 1.0: re-applies the same potion effect with reduced duration
-     *     (newDuration = originalDuration × strength)</li>
-     * <li>Kills the antidote effect so it doesn't persist</li>
-     * </ol>
-     *
-     * <p>Example: An antidote with strength 0.5 applied to a player with a 10-second poison effect
-     * will remove the poison and immediately re-apply it with a 5-second duration.</p>
+     * Remove the countered potion effect from the target and, if {@link #strength} is below 1.0, re-apply it with
+     * {@code originalDuration * strength}, then kill this antidote. No-op if the target does not have the effect.
      */
     @Override
     public void checkEffect() {
@@ -111,17 +62,10 @@ public abstract class PotionEffectAntidote extends O2Effect {
     }
 
     /**
-     * Get the strength/potency of this antidote effect.
+     * Get this antidote's strength: the duration multiplier applied to the countered effect. A value of 1.0 or higher
+     * removes the effect entirely.
      *
-     * <p>Returns a value between 0.0 and 1.0+ that determines how effectively this antidote
-     * reduces the target potion effect's duration:</p>
-     * <ul>
-     * <li><strong>strength &ge; 1.0:</strong> Full-strength antidote - completely removes the target effect</li>
-     * <li><strong>0.5 &le; strength &lt; 1.0:</strong> Medium-strength antidote - reduces target effect duration by 50-99%</li>
-     * <li><strong>0.0 &lt; strength &lt; 0.5:</strong> Weak antidote - reduces target effect duration by less than 50%</li>
-     * </ul>
-     *
-     * @return the antidote strength as a decimal value (0.0 to 1.0+)
+     * @return the antidote strength
      */
     public double getStrength() {
         return strength;

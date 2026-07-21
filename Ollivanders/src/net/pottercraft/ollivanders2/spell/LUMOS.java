@@ -9,14 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Wand-Lighting Charm that grants night vision to the caster and nearby allies.
+ * The Wand-Lighting Charm: grants Night Vision to the caster and every player in a skill-scaled radius.
  *
- * <p>Lumos is an instant-radius charm that applies Night Vision to the caster and all targets
- * within the calculated effect radius. The effect duration depends on the caster's spell level,
- * with a minimum duration of 30 seconds. The effect radius scales with spell experience and
- * ranges from 5 to 20 blocks.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm">Wand-Lighting Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm">Harry Potter Wiki - Wand-Lighting Charm</a>
  */
 public class LUMOS extends AddPotionEffectInRadius {
     public final static int minEffectRadiusConfig = 5;
@@ -24,9 +19,7 @@ public class LUMOS extends AddPotionEffectInRadius {
     private final static int minDurationInSecondsConfig = 30;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -47,10 +40,7 @@ public class LUMOS extends AddPotionEffectInRadius {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Applies Night Vision effect to the caster and nearby entities within the effect radius.
-     * Configures the spell with radius of 5-20 blocks and minimum duration of 30 seconds.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell

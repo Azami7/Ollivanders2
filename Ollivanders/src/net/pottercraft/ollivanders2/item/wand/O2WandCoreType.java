@@ -89,11 +89,7 @@ public enum O2WandCoreType {
     }
 
     /**
-     * Check if this wand core type is a legacy core.
-     * <p>
-     * Legacy cores are older core types that were used before the current wand core system was
-     * introduced. They are excluded from random core selection and destined wand assignment.
-     * </p>
+     * Check if this is a legacy core, i.e. an older type excluded from random and destined-wand core selection.
      *
      * @return true if this is a legacy core type, false otherwise
      */

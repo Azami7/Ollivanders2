@@ -8,21 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Confundus Duo, an enhanced version of the Confundus Charm.
+ * A stronger {@link CONFUNDO} that applies a more intense Confusion effect for twice the duration.
  *
- * <p>Confundus Duo is a more powerful variation of the Confundus Charm that applies a stronger
- * Confusion effect to targets. Duration ranges from 30 to 240 seconds (double the duration of
- * Confundo) and is calculated at 50% of the caster's skill level modifier. The confusion effect
- * has an amplifier of 1 (twice as strong as Confundo's amplifier of 0) and does not scale with
- * skill level.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Confundus_Duo">Confundus Duo</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Confundus_Duo">Harry Potter Wiki - Confundus Duo</a>
  */
 public final class CONFUNDUS_DUO extends ConfundoBase {
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -42,11 +34,7 @@ public final class CONFUNDUS_DUO extends ConfundoBase {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies a stronger Confusion effect to targets, disorienting them.
-     * Duration ranges from 30 to 240 seconds (double Confundo's duration) based on caster skill level.
-     * The confusion effect has a fixed amplifier of 1 that does not scale with skill.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -59,16 +47,13 @@ public final class CONFUNDUS_DUO extends ConfundoBase {
 
         minDurationInSeconds = CONFUNDO.minDurationInSecondsConfig * 2;
         maxDurationInSeconds = CONFUNDO.maxDurationInSecondsConfig * 2;
-        durationModifier = 0.5; // 50%
+        durationModifier = 0.5;
 
         initSpell();
     }
 
     /**
-     * Calculate the potion effect amplifier.
-     *
-     * <p>Confundus Duo uses a fixed amplifier of 1 (stronger than Confundo's amplifier of 0)
-     * that does not scale with skill level.</p>
+     * Set a fixed amplifier of 1; Confundus Duo's strength does not scale with skill.
      */
     @Override
     void calculateAmplifier() {

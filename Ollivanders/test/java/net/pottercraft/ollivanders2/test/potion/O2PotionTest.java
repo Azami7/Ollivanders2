@@ -29,30 +29,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for {@link O2Potion}.
+ */
 public class O2PotionTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded once before all tests with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -60,21 +50,13 @@ public class O2PotionTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test getIngredientsText returns properly formatted ingredient list.
-     * <p>
-     * Since getIngredientsText() is protected, we test it indirectly through getText()
-     * which appends the ingredients text to the description. Verifies that:
-     * <ul>
-     * <li>The text contains "Ingredients:" header</li>
-     * <li>Each ingredient name appears in the text</li>
-     * <li>Each ingredient amount appears in the text</li>
-     * </ul>
-     * </p>
+     * getText() appends a formatted ingredient list (name and amount for each) under an "Ingredients:" header;
+     * exercises the protected getIngredientsText() indirectly.
      */
     @Test
     void getIngredientsTextTest() {
@@ -107,11 +89,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getPotionType returns the potion type.
-     * <p>
-     * Simple getter - basic functionality verified by other tests that use getPotionType()
-     * to validate potion instances.
-     * </p>
+     * Simple getter, covered by tests that use getPotionType() to validate instances.
      */
     @Test
     void getPotionTypeTest() {
@@ -119,11 +97,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getName returns the potion name.
-     * <p>
-     * Simple getter - basic functionality verified by createPotionItemStackTest() which
-     * validates that the potion name matches the expected display name.
-     * </p>
+     * Simple getter, covered by createPotionItemStackTest().
      */
     @Test
     void getNameTest() {
@@ -131,11 +105,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getIngredients returns the potion ingredients.
-     * <p>
-     * Simple getter - basic functionality verified by getIngredientsTextTest() and
-     * checkRecipeTest() which both validate that ingredients are returned correctly.
-     * </p>
+     * Simple getter, covered by getIngredientsTextTest() and checkRecipeTest().
      */
     @Test
     void getIngredients() {
@@ -143,11 +113,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getText returns the potion description text.
-     * <p>
-     * Simple getter - basic functionality verified by getIngredientsTextTest() which
-     * validates that getText() returns the description with ingredients appended.
-     * </p>
+     * Simple getter, covered by getIngredientsTextTest().
      */
     @Test
     void getTextTest() {
@@ -155,14 +121,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getFlavorText returns appropriate values based on flavor text availability.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>Potions without flavor text return null</li>
-     * <li>Potions with flavor text return a non-null, non-empty string</li>
-     * </ul>
-     * </p>
+     * getFlavorText() returns null when a potion has no flavor text, and a non-empty string when it does.
      */
     @Test
     void getFlavorTextTest() {
@@ -180,11 +139,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getMagicBranch returns the magic branch for potions.
-     * <p>
-     * Simple getter - always returns POTIONS branch for all O2Potion instances.
-     * Basic functionality verified by potion instantiation and usage tests.
-     * </p>
+     * Simple getter, always POTIONS; covered by potion instantiation and usage tests.
      */
     @Test
     void getMagicBranchTest() {
@@ -192,11 +147,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test getLevel returns the magic difficulty level for the potion.
-     * <p>
-     * Simple getter - basic functionality verified by setUsesModifierTest() which
-     * validates that the potion level is used correctly in modifier calculations.
-     * </p>
+     * Simple getter, covered by setUsesModifierTest().
      */
     @Test
     void getLevelTest() {
@@ -204,17 +155,8 @@ public class O2PotionTest {
     }
 
     /**
-     * Test checkRecipe validates ingredient lists correctly.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>Exact matching ingredients return true</li>
-     * <li>Wrong number of ingredient types returns false</li>
-     * <li>Missing ingredient returns false</li>
-     * <li>Wrong ingredient amount returns false</li>
-     * <li>Empty ingredient map returns false</li>
-     * </ul>
-     * </p>
+     * checkRecipe() returns true only for an exact ingredient match: a missing, extra, or wrong-amount ingredient, or an
+     * empty map, all return false.
      */
     @Test
     void checkRecipeTest() {
@@ -257,15 +199,7 @@ public class O2PotionTest {
     }
 
     /**
-     * Test brew creates a valid potion and increments brew count.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>Brewing with checkCanBrew=false returns a valid potion</li>
-     * <li>The returned ItemStack has the correct potion type name</li>
-     * <li>The player's potion brew count is incremented</li>
-     * </ul>
-     * </p>
+     * brew() with checkCanBrew=false returns a stack named for the potion type and increments the player's brew count.
      */
     @Test
     void brewTest() {
@@ -295,17 +229,8 @@ public class O2PotionTest {
     }
 
     /**
-     * Test createPotionItemStack creates correctly configured ItemStacks.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>Single potion (amount=1) is created correctly</li>
-     * <li>Multiple potions (amount > 1) are created correctly</li>
-     * <li>The display name matches the potion type name</li>
-     * <li>The ItemStack amount matches the requested amount</li>
-     * <li>The potion can be identified via findPotionByItemStack</li>
-     * </ul>
-     * </p>
+     * createPotionItemStack() builds a stack of the requested amount, named for the potion type and identifiable via
+     * findPotionByItemStack().
      */
     @Test
     void createPotionItemStackTest() {
@@ -334,18 +259,8 @@ public class O2PotionTest {
     }
 
     /**
-     * Test canBrew determines brewing success correctly.
-     * <p>
-     * Note: canBrew() is a private method, so it is tested indirectly through brew().
-     * When checkCanBrew=true, brew() calls canBrew() to determine success.
-     * </p>
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>With maxSpellLevel enabled, brewing always succeeds</li>
-     * <li>The result is a valid potion (not a bad potion) when canBrew returns true</li>
-     * </ul>
-     * </p>
+     * With maxSpellLevel enabled, brew(checkCanBrew=true) always succeeds and returns a valid potion; exercises the
+     * private canBrew() indirectly.
      */
     @Test
     void canBrewTest() {
@@ -377,16 +292,8 @@ public class O2PotionTest {
     }
 
     /**
-     * Test brewBadPotion creates a random invalid potion.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>The method returns a non-null ItemStack</li>
-     * <li>The potion has item meta with a display name</li>
-     * <li>The display name is one of the known bad potion names</li>
-     * <li>The potion is NOT identifiable as a valid O2Potion</li>
-     * </ul>
-     * </p>
+     * brewBadPotion() returns a stack whose display name is one of the known bad-potion names and that does not resolve
+     * to a valid O2Potion.
      */
     @Test
     void brewBadPotionTest() {
@@ -417,19 +324,8 @@ public class O2PotionTest {
     }
 
     /**
-     * Test setUsesModifier calculates brewing skill modifier correctly.
-     * <p>
-     * Note: setUsesModifier() is a protected method, so we use reflection to test it directly.
-     * The usesModifier field is public and can be verified after the method call.
-     * </p>
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>With maxSpellLevel enabled, usesModifier is set to 200</li>
-     * <li>With maxSpellLevel disabled, usesModifier is based on potion count</li>
-     * <li>With HIGHER_SKILL effect, usesModifier is doubled</li>
-     * </ul>
-     * </p>
+     * setUsesModifier() sets usesModifier to 200 under maxSpellLevel, to the player's potion count otherwise, and
+     * doubles it under the HIGHER_SKILL effect; invoked via reflection as the method is protected.
      */
     @Test
     void setUsesModifierTest() throws Exception {
@@ -489,13 +385,6 @@ public class O2PotionTest {
         }
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

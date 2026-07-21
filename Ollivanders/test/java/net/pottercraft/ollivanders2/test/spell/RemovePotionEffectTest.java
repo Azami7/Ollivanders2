@@ -16,31 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Base test class for spells that remove potion effects from targets.
- *
- * <p>Tests the core functionality of potion effect removal spells, including self-targeting,
- * non-self-targeting projectile behavior, and multi-target radius behavior. Subclasses provide
- * the spell type and the potion effect type to verify.</p>
+ * Base test class for {@link RemovePotionEffect} spells, covering self-targeting, projectile targeting, and
+ * multi-target radius removal. Subclasses supply the potion effect type the spell removes.
  */
 abstract public class RemovePotionEffectTest extends O2SpellTestSuper {
     /**
-     * Get the potion effect type that the spell under test removes.
-     *
-     * @return the potion effect type to verify removal of
+     * @return the potion effect type this spell removes
      */
     abstract PotionEffectType getValidEffectType();
 
     /**
-     * Test that the spell correctly removes potion effects from targets.
-     *
-     * <p>Verifies three behaviors based on spell configuration:</p>
-     *
-     * <ul>
-     * <li>Self-targeting: if targetsSelf, caster's effect is removed and spell must be noProjectile</li>
-     * <li>Non-self-targeting: effect is removed from a target entity but not from the caster</li>
-     * <li>Multi-target: if affectsMultiple, effects are removed from all entities within the
-     *     effect radius but not from entities outside it</li>
-     * </ul>
+     * Verify the spell removes the effect from the right targets: the caster when self-targeting (and then also
+     * noProjectile), a hit target otherwise, and every entity within the radius when it affects multiple.
      */
     @Override
     @Test
@@ -111,9 +98,7 @@ abstract public class RemovePotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Revert test (empty for potion effect removal spells).
-     *
-     * <p>Potion effect removal spells do not have revert actions.</p>
+     * No-op: potion effect removal spells have no revert action.
      */
     @Override
     @Test

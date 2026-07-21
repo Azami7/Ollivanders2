@@ -14,40 +14,17 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Aqua Eructo — a water-based spell that extinguishes burning entities and items.
+ * Aqua Eructo: shoots water that extinguishes the first burning entity or item in its path, briefly placing a water
+ * block at the target. The caster is never targeted, even if on fire.
  *
- * <p>AQUA_ERUCTO shoots water from the caster's wand and targets any on-fire entity or item in its path.
- * When the spell finds a burning target, it extinguishes the fire and places a water block at the target's
- * eye location (for living entities) or center location (for items). The water block persists temporarily
- * to create a visual effect, then reverts to its original state.</p>
- *
- * <p>Spell behavior:</p>
- * <ul>
- * <li><strong>Target Detection:</strong> Searches for on-fire entities and items as the projectile travels</li>
- * <li><strong>Extinguishing:</strong> Removes fire ticks from any burning target found</li>
- * <li><strong>Water Effect:</strong> Places a temporary water block at the target's eye level</li>
- * <li><strong>Duration:</strong> Water block remains for {@link #waterBlockTTL} (1 second)</li>
- * <li><strong>Caster Protection:</strong> Does not extinguish the caster if they are on fire</li>
- * </ul>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Aqua_Eructo">Aqua Eructo on Harry Potter Wiki</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Aqua_Eructo">Harry Potter Wiki - Aqua Eructo</a>
  */
 public class AQUA_ERUCTO extends O2Spell {
     /**
-     * Time-to-live for the water block placed by this spell, in ticks.
-     *
-     * <p>Default is 1 second (20 ticks). After this duration, the water block is reverted
-     * to its original state via the revert system.</p>
+     * How long the placed water block persists before it is reverted, in ticks.
      */
     public static final int waterBlockTTL = Ollivanders2Common.ticksPerSecond;
 
-    /**
-     * Whether this spell successfully extinguished a target.
-     *
-     * <p>Set to true after finding and extinguishing a burning entity or item. Used to determine
-     * whether the spell should continue alive (maintaining the water block) or kill itself
-     * (if it hit a target but didn't extinguish anything).</p>
-     */
     private boolean extinguished = false;
 
     /**
@@ -83,16 +60,9 @@ public class AQUA_ERUCTO extends O2Spell {
     }
 
     /**
-     * Applies the water extinguishing effect to targets each tick.
-     *
-     * <p>This spell operates in three states:
-     * <ul>
-     * <li><strong>Traveling:</strong> Searches for nearby on-fire entities and items; extinguishes the first
-     * one found and places a water block at its location</li>
-     * <li><strong>Water Active:</strong> Projectile has hit and extinguished a target; waits for the
-     * water block TTL to expire before killing the spell</li>
-     * <li><strong>No Target:</strong> Projectile hit a location but found no on-fire target; kills the spell</li>
-     * </ul>
+     * While traveling, extinguish the first valid burning target in range and place a temporary water block on it;
+     * once something has been extinguished, end the spell after the water block's TTL; end immediately if the
+     * projectile hits a block without extinguishing anything.
      */
     @Override
     protected void doCheckEffect() {
@@ -135,13 +105,10 @@ public class AQUA_ERUCTO extends O2Spell {
     }
 
     /**
-     * Determines whether this spell can target a given entity.
-     *
-     * <p>An entity is a valid target if it is currently on fire (has fire ticks > 0).
-     * This method can be overridden by subclasses to implement different targeting logic.</p>
+     * Whether this spell can target the given entity. Subclasses override this to change what counts as a target.
      *
      * @param entity the entity to check
-     * @return true if the entity is on fire and can be targeted, false otherwise
+     * @return true if the entity is on fire
      */
     boolean canTarget(Entity entity) {
         common.printDebugMessage("AQUA_ERUCTO.canTarget(): checking " + entity.getType(), null, null, false);
@@ -155,22 +122,17 @@ public class AQUA_ERUCTO extends O2Spell {
     }
 
     /**
-     * Applies the extinguishing effect to a target entity, assumes canTarget() has been checked.
+     * Apply this spell's effect to a target that has passed {@link #canTarget}. The base spell extinguishes the
+     * entity; subclasses override for other effects.
      *
-     * <p>Removes all fire from the entity by setting its fire ticks to 0.
-     * This method can be overridden by subclasses to implement different effect behaviors.</p>
-     *
-     * @param entity the entity to extinguish
+     * @param entity the entity to affect
      */
     void effectEntity(Entity entity) {
         entity.setFireTicks(0);
     }
 
     /**
-     * Reverts the water block back to its original state.
-     *
-     * <p>Called when the spell ends or the water block TTL expires. Removes the temporary water block
-     * that was placed at the target location and restores it to its original material type.</p>
+     * Revert the temporary water block this spell placed back to its original material.
      */
     @Override
     protected void revert() {

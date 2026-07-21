@@ -12,53 +12,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for spells that remove potion effects from targets.
- *
- * <p>Provides functionality for removing one or more potion effects from living entities within
- * a configurable radius. Each effect removal is subject to a success check based on the caster's
- * spell experience level. Subclasses configure which effect types to remove, the effect radius,
- * number of targets, and whether to target the caster or nearby entities.</p>
- *
- * <p>Configuration:</p>
- *
- * <ul>
- * <li>Success rate: calculated from usesModifier / successModifier, clamped to [1, 100]</li>
- * <li>Does this spell affect multiple targets, set by {@link #affectsMultiple}</li>
- * <li>Target filtering: excludes caster unless {@link #targetSelf} is true</li>
- * <li>Visual flair: optional particle effect at spell location (controlled by {@link #doFlair})</li>
- * <li>Effect radius: configurable via {@link #effectRadius}, defaults to {@link O2Spell#defaultRadius}</li>
- * </ul>
+ * Base class for spells that remove Bukkit potion effects from the caster and/or nearby living entities, each removal
+ * subject to a skill-based success check. Subclasses configure the effect types, radius, and targeting.
  *
  * @see AddPotionEffect
  */
 public abstract class RemovePotionEffect extends O2Spell {
     /**
-     * The potion effects to remove
+     * The potion effect types this spell removes.
      */
     List<PotionEffectType> potionEffectTypes = new ArrayList<>();
 
     /**
-     * Does this spell affect multiple targets
+     * If true, the spell removes effects from every eligible target in range rather than just one.
      */
     boolean affectsMultiple = false;
 
     /**
-     * Whether the spell targets the caster
+     * If true, the caster is targeted in addition to nearby entities.
      */
     boolean targetSelf = false;
 
     /**
-     * The modifier for success rate on this spell
+     * Divisor applied to the caster's skill when computing the removal success rate; see {@link #checkSuccess()}.
      */
     float successModifier = 1.0f;
 
     /**
-     * Does this spell do a flair?
+     * If true, a visual particle effect is shown at the spell location when it applies.
      */
     boolean doFlair = false;
 
     /**
-     * The radius of effect for this spell
+     * The radius of entities affected around the projectile, in blocks.
      */
     double effectRadius = defaultRadius;
 
@@ -74,8 +60,6 @@ public abstract class RemovePotionEffect extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -87,12 +71,8 @@ public abstract class RemovePotionEffect extends O2Spell {
     }
 
     /**
-     * Remove potion effects from nearby targets within the effect radius.
-     *
-     * <p>If the spell has hit a block, it is killed. Otherwise, processes targets within the effect
-     * radius — starting with the caster if {@link #targetSelf} is true, then iterating through
-     * nearby living entities if {@link #affectsMultiple}. Kills the spell once at least one
-     * target has been processed.</p>
+     * Remove this spell's potion effects from eligible targets, then end the spell: the caster when
+     * {@link #targetSelf} is set, plus nearby entities when {@link #affectsMultiple}.
      */
     @Override
     protected void doCheckEffect() {
@@ -126,11 +106,8 @@ public abstract class RemovePotionEffect extends O2Spell {
     }
 
     /**
-     * Remove potion effects from the target entity.
-     *
-     * <p>Iterates through all configured {@link #potionEffectTypes} and attempts to remove each one.
-     * Each removal is subject to a {@link #checkSuccess()} roll — only effects that pass the check
-     * are removed.</p>
+     * Attempt to remove each of this spell's potion effects from the target, each subject to an independent
+     * {@link #checkSuccess()} roll.
      *
      * @param target the living entity to remove effects from
      */
@@ -144,13 +121,10 @@ public abstract class RemovePotionEffect extends O2Spell {
     }
 
     /**
-     * Determine if this spell successfully removes an effect based on the caster's experience.
+     * Roll for whether a single effect removal succeeds. The chance is {@code usesModifier / successModifier} percent,
+     * limited to [1, 100]; a lower {@link #successModifier} makes success easier.
      *
-     * <p>Calculates a success rate from {@code usesModifier / successModifier}, clamped to [1, 100],
-     * then rolls against it. A lower {@link #successModifier} makes success easier (e.g., 0.01 yields
-     * near-certain success).</p>
-     *
-     * @return true if the effect can be removed, false otherwise
+     * @return true if the removal succeeds, false otherwise
      */
     boolean checkSuccess() {
         int successRate = (int) (usesModifier / successModifier);
@@ -162,14 +136,23 @@ public abstract class RemovePotionEffect extends O2Spell {
         return Ollivanders2Common.random.nextInt(100) < successRate;
     }
 
+    /**
+     * @return true if this spell targets the caster in addition to nearby entities
+     */
     public boolean doesTargetSelf() {
         return targetSelf;
     }
 
+    /**
+     * @return true if this spell removes effects from every eligible target in range
+     */
     public boolean doesAffectMultiple() {
         return affectsMultiple;
     }
 
+    /**
+     * @return the effect radius in blocks
+     */
     public double getEffectRadius() {
         return effectRadius;
     }

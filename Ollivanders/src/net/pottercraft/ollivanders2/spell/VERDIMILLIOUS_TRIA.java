@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The strongest green sparks spell
+ * The strongest {@link VERDIMILLIOUS_DUO}: its higher magic level lets it reveal more powerful curses.
  *
- * @see VERDIMILLIOUS
  * @author Azami7
+ * @see VERDIMILLIOUS
  */
 public final class VERDIMILLIOUS_TRIA extends VERDIMILLIOUS_DUO {
     /**

@@ -20,25 +20,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract base class for item-to-entity transfiguration spells.
- *
- * <p>Transforms dropped items into living entities. Unlike other entity transfigurations, item
- * transfigurations always consume the original item — it is not restored when the spell reverts.
- * Subclasses define which item types can be transfigured via {@link #transfigurationMap}.</p>
- *
- * <p>Registers as a Bukkit {@link Listener} to handle death events for the transfigured entity.</p>
+ * Base class for spells that transfigure a dropped item into an entity, mapping eligible item types to the entity
+ * they become.
  *
  * @author Azami7
- * @see EntityTransfiguration for base entity transfiguration mechanics
+ * @see EntityTransfiguration
  */
 public abstract class ItemToEntityTransfiguration extends EntityTransfiguration implements Listener {
     /**
-     * If this is populated, any material type key will be changed to the entity type
+     * Per-source-material target entity types. An item whose material is a key is transfigured into the mapped entity
+     * type; when the map is empty any eligible item is transfigured into {@link #targetType}.
      */
     protected Map<Material, EntityType> transfigurationMap = new HashMap<>();
 
     /**
-     * Optional custom name for the transfigured entity
+     * Custom name applied to the spawned entity, or null to leave it unnamed.
      */
     String entityCustomName = null;
 
@@ -54,8 +50,6 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -73,10 +67,12 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     /**
-     * Transfigures item into EntityType. Assumes {@link #canTransfigure(Entity)} has already verified this is an Item.
+     * Transfigure the given dropped item into the target entity, consuming the item. Names the new entity when
+     * {@link #entityCustomName} is set. The spell self-terminates when the new entity dies. Assumes the entity is a
+     * dropped item, as verified by {@link #canTransfigure(Entity)}.
      *
      * @param entity the item to transfigure
-     * @return the transfigured entity if successful, null otherwise
+     * @return the new entity
      */
     @Override
     @Nullable
@@ -101,23 +97,11 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     /**
-     * Determine if this entity can be transfigured by this spell.
-     *
-     * <p>Entity can be transfigured if:</p>
-     *
-     * <ol>
-     * <li>(super) Success check passes</li>
-     * <li>(super) It is not in the blocked list</li>
-     * <li>(super) It is in the allowed list, if the allowed list exists</li>
-     * <li>(super) The entity is not already the target type</li>
-     * <li>(super) The item is not enchanted, or the enchantment level is lower than this spell's level</li>
-     * <li>(super) The entity is not already transfigured by another spell</li>
-     * <li>The entity is an Item</li>
-     * <li>The item type is in the transfiguration map, if it is populated</li>
-     * </ol>
+     * Check whether an entity is an eligible target: in addition to the base entity checks, it must be a dropped item
+     * whose material is in {@link #transfigurationMap} when that map is populated.
      *
      * @param entity the entity to check
-     * @return true if it can be changed
+     * @return true if the entity can be transfigured, false otherwise
      */
     public boolean canTransfigure(@NotNull Entity entity) {
         if (!super.canTransfigure(entity))
@@ -136,7 +120,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
     }
 
     /**
-     * Handle when the entity is killed.
+     * Kill the spell when the transfigured entity dies.
      *
      * @param event the entity death event
      */
@@ -151,12 +135,18 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
             kill();
     }
 
+    /**
+     * @return a copy of the per-material target entity-type overrides
+     */
     public Map<Material, EntityType> getTransfigurationMap() {
         return new HashMap<>() {{
             putAll(transfigurationMap);
         }};
     }
 
+    /**
+     * Stop tracking the transfigured entity's death. The transfigured item is not restored.
+     */
     @Override
     void doRevert() {
         HandlerList.unregisterAll(this);

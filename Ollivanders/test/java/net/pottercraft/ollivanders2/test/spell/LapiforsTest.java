@@ -14,11 +14,6 @@ import org.jetbrains.annotations.NotNull;
  * @see LAPIFORS
  */
 public class LapiforsTest extends ItemToEntityTransfigurationTest {
-    /**
-     * Returns the spell type being tested.
-     *
-     * @return LAPIFORS spell type
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

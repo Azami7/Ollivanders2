@@ -135,11 +135,7 @@ public class O2Items {
     }
 
     /**
-     * Cleanup when the plugin disables.
-     *
-     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Items manager performs
-     * no cleanup on disable because item data is read-only and loaded from configuration on
-     * startup. No persistent state needs to be saved.</p>
+     * No-op on disable; item data is read-only and reloaded on startup, so there is nothing to persist.
      */
     public void onDisable() {
     }
@@ -328,13 +324,9 @@ public class O2Items {
     }
 
     /**
-     * Get a copy of the recipe keys map.
+     * Get the custom-recipe {@link NamespacedKey} for each item type that has one.
      *
-     * <p>Returns a new HashMap containing all custom item recipe NamespacedKeys indexed by
-     * their corresponding O2ItemType. The returned map is a copy, so modifications do not
-     * affect the internal state.</p>
-     *
-     * @return a copy of the item type to recipe key mapping
+     * @return a copy of the item-type-to-recipe-key map
      */
     public HashMap<O2ItemType, NamespacedKey> getRecipeKeys() {
         HashMap<O2ItemType, NamespacedKey> keys = new HashMap<>();

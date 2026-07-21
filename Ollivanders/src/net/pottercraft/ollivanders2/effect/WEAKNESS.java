@@ -7,26 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Weakness potion effect that reduces the affected player's melee attack damage.
- *
- * <p>WEAKNESS applies Minecraft's WEAKNESS potion effect to decrease the target player's physical
- * attack damage. The effect reduces the damage dealt by melee attacks, making the affected player
- * less effective in combat. The effect is powered by the Minecraft potion effect system with
- * strength (amplifier) set to 1. The effect is detectable by both mind-reading spells (Legilimens)
- * and information spells (Informous) which report the target "feels weak". The player receives a
- * notification of "You feel weak." when the effect is applied.</p>
+ * Applies Minecraft's WEAKNESS potion effect to reduce the target's melee attack damage. Detectable via Informous and
+ * Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
+ * @see PotionEffect
  */
 public class WEAKNESS extends PotionEffect {
     /**
-     * Constructor for creating a weakness effect.
-     *
-     * <p>Creates a potion effect that reduces the target player's melee attack damage using Minecraft's
-     * WEAKNESS potion effect type with strength 1. Sets detection text for both mind-reading spells
-     * (Legilimens) and information spells (Informous) to "feels weak", and notifies the player
-     * "You feel weak." when the effect is applied.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -46,13 +35,6 @@ public class WEAKNESS extends PotionEffect {
         affectedPlayerText = "You feel weak.";
     }
 
-    /**
-     * Perform cleanup when the weakness effect is removed.
-     *
-     * <p>The default implementation does nothing, as WEAKNESS is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the player's attack damage returns to normal.</p>
-     */
     @Override
     public void doRemove() {
     }

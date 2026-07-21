@@ -20,18 +20,12 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://harrypotter.fandom.com/wiki/Summoning_Charm">Summoning Charm</a>
  */
 public final class ACCIO extends Knockback {
-    /**
-     * The min distance
-     */
     public static int minDistanceConfig = 0;
 
-    /**
-     * The max distance
-     */
     public static int maxDistanceConfig = 20;
 
     /**
-     * The divisor for usesModifier to determine spell strength
+     * The divisor for usesModifier to determine spell strength.
      */
     public static int strengthReducerConfig = 10;
 
@@ -76,10 +70,8 @@ public final class ACCIO extends Knockback {
     }
 
     /**
-     * Can this spell target this entity?
-     *
      * @param entity the entity to check
-     * @return true if it can target the entity, false otherwise
+     * @return true if the entity is an item
      */
     boolean canTarget(Entity entity) {
         return entity instanceof Item;

@@ -6,31 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Size increase effect that enlarges the affected player to double their normal scale.
- *
- * <p>SWELLING is a debilitating size-alteration effect that increases the target player's scale to
- * 200% of their normal size (scaleMultiplier = 2.0). The affected player appears physically larger
- * in the game world and has an expanded hitbox. The effect is detectable by both mind-reading spells
- * (Legilimens) and information spells (Informous) which report the target "is unnaturally large".</p>
- *
- * <p>Size Adjustment:</p>
- * <ul>
- * <li>Scale multiplier: 2.0 (double normal size)</li>
- * <li>Effect applies immediately upon casting</li>
- * <li>Hitbox scaling: scales proportionally with player size</li>
- * <li>Detection text: "is unnaturally large"</li>
- * </ul>
+ * Doubles the affected player's scale (and hitbox). Detectable via Informous.
  *
  * @author Azami7
- * @see PlayerChangeSize for the size adjustment mechanism
+ * @see PlayerChangeSize
  */
 public class SWELLING extends PlayerChangeSize {
     /**
-     * Constructor for creating a size increase effect.
-     *
-     * <p>Creates a swelling effect that increases the target player's scale to double their normal size.
-     * The effect applies immediately, causing the player to appear physically larger in the game world
-     * with a correspondingly expanded hitbox.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the swelling effect in game ticks
@@ -43,7 +26,7 @@ public class SWELLING extends PlayerChangeSize {
         effectType = O2EffectType.SWELLING;
         checkDurationBounds();
 
-        scaleMultiplier = 2; // increase the player's by double
+        scaleMultiplier = 2;
 
         informousText = "is unnaturally large";
     }

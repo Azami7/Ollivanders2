@@ -7,22 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for the GEMINO spell.
- *
- * <p>GEMINO is a dark arts duplication curse that enchants items to duplicate exponentially
- * (2^magnitude copies) when picked up. The spell has no magnitude variation in the duplication
- * formula itself, but magnitude still affects how many copies are created. GEMINO enchantments
- * do not modify the item appearance and generate no enchantment arguments.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.GEMINO for the spell implementation
- * @see ItemEnchantTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.GEMINO}. Extends {@link ItemEnchantTest} for the shared
+ * item-enchantment tests.
  */
 public class GeminoTest extends ItemEnchantTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.GEMINO
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

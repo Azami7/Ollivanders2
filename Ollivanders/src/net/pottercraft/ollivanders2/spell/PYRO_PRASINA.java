@@ -9,11 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Pyro Prasina - The Green Ball Fireworks Spell.
- *
- * <p>Launches one or more large green ball-burst fireworks into the air. The number of fireworks
- * spawned depends on the caster's experience level, up to a maximum of 10. Each firework
- * explodes in a large ball pattern with a green color.</p>
+ * Fireworks charm that launches large green ball fireworks.
  */
 public class PYRO_PRASINA extends Pyrotechnia {
     /**
@@ -50,10 +46,7 @@ public class PYRO_PRASINA extends Pyrotechnia {
     }
 
     /**
-     * Calculate the number of fireworks to spawn on initialization.
-     *
-     * <p>Called during spell initialization to determine how many fireworks this spell
-     * will launch based on the caster's experience level.</p>
+     * Set the number of fireworks to launch based on the caster's experience.
      */
     @Override
     void doInitSpell() {

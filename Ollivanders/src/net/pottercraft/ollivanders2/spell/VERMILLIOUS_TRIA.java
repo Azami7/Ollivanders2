@@ -6,28 +6,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The most powerful Red Sparks charm with the highest damage and large effect radius.
- *
- * <p>VERMILLIOUS_TRIA is the strongest variant of the Red Sparks charms. It shoots red sparks
- * from the caster's wand and deals the most damage of all red sparks variants to nearby entities
- * upon impact.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Visual Effect: RED_STAINED_GLASS projectile trail</li>
- * <li>Damage: Enabled with 0.25 modifier (scales with player skill)</li>
- * <li>Radius: 4 blocks for entity detection</li>
- * <li>Purpose: Most powerful damaging red sparks charm</li>
- * </ul>
+ * The strongest Red Sparks charm: shoots red sparks and deals the most damage of the variants to nearby entities.
  *
  * @author Azami7
- * @see VERMILLIOUS for the basic non-damaging variant
- * @see VERMILLIOUS_DUO for the intermediate variant
- * @since 2.21
+ * @see VERMILLIOUS
+ * @see VERMILLIOUS_DUO
  */
 public class VERMILLIOUS_TRIA extends Sparks {
     /**
-     * Default constructor for use in generating spell book text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -40,14 +27,11 @@ public class VERMILLIOUS_TRIA extends Sparks {
     }
 
     /**
-     * Constructor for casting VERMILLIOUS_TRIA spells.
+     * Constructor.
      *
-     * <p>Initializes the spell with RED_STAINED_GLASS visual effect, damage enabled,
-     * 0.25 damage modifier (highest of all red sparks variants), and a 4-block entity detection radius.</p>
-     *
-     * @param plugin    the Ollivanders2 plugin
-     * @param player    the player casting this spell
-     * @param rightWand the wand correctness factor (1.0 = correct wand)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public VERMILLIOUS_TRIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

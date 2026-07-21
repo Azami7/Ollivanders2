@@ -6,12 +6,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Abstract base class for weather-altering spells that start or stop storms.
- *
- * <p>Subclasses set {@link #storm} to indicate the desired weather change: {@code true} starts a storm
- * (METELOJINX), {@code false} ends one (METELOJINX_RECANTO). The spell shortens the time until the desired
- * weather change based on the caster's experience; if the caster's modifier is large enough to cross the
- * remaining time, the weather changes immediately.</p>
+ * Base class for weather-altering spells that start or stop a storm, with higher caster skill bringing the change
+ * sooner. Subclasses set {@link #storm} to choose which direction the weather changes.
  */
 public abstract class MetelojinxBase extends O2Spell {
     /**
@@ -29,8 +25,6 @@ public abstract class MetelojinxBase extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using

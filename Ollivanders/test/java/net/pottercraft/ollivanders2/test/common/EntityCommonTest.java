@@ -45,10 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for EntityCommon class.
- *
- * <p>Tests entity search methods, item search methods, random entity type generation,
- * and hostility detection for various mob types.</p>
+ * Unit tests for {@link EntityCommon}.
  */
 public class EntityCommonTest {
     static ServerMock mockServer;
@@ -94,7 +91,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getEntitiesInBounds() correctly finds entities within a bounding box and excludes those outside it.
+     * Test that getEntitiesInBounds() finds entities within a bounding box and excludes those outside it.
      */
     @Test
     void getEntitiesInBoundsTest() {
@@ -102,7 +99,6 @@ public class EntityCommonTest {
         testWorld.spawn(new Location(testWorld, 2, 4, 0), Rabbit.class);
         testWorld.spawn(new Location(testWorld, 0, 4, 2), Rabbit.class);
 
-        // get all entities within 10 blocks of 0, 4, 0
         Collection<Entity> entities = EntityCommon.getEntitiesInBounds(new Location(testWorld, 0, 4, 0), 10, 10, 10);
         assertEquals(3, entities.size(), "EntityCommon.getEntitiesInBounds() did not find the expected number of entities");
 
@@ -112,15 +108,13 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getEntitiesInRadius() correctly finds all entities (including non-living entities like minecarts)
-     * within a radius and excludes those outside it.
+     * Test that getEntitiesInRadius() finds all entities within a radius, including non-living ones like minecarts.
      */
     @Test void getEntitiesInRadiusTest() {
         testWorld.spawn(new Location(testWorld, 100, 4, 100), Rabbit.class);
         testWorld.spawn(new Location(testWorld, 102, 4, 100), Minecart.class);
         testWorld.spawn(new Location(testWorld, 100, 4, 102), Rabbit.class);
 
-        // get all entities within a 10 block radius of 100, 4, 100
         Collection<Entity> entities = EntityCommon.getEntitiesInRadius(new Location(testWorld, 100, 4, 100), 10);
         assertEquals(3, entities.size(), "EntityCommon.getEntitiesInRadius() did not find the expected number of entities");
 
@@ -130,8 +124,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getLivingEntitiesInRadius() correctly finds only LivingEntity instances within a radius,
-     * excluding non-living entities like minecarts.
+     * Test that getLivingEntitiesInRadius() finds only LivingEntity instances within a radius, excluding minecarts.
      */
     @Test
     void getLivingEntitiesInRadiusTest() {
@@ -149,8 +142,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getNearbyEntitiesByType() correctly finds only entities of a specific type within a radius,
-     * filtering out other entity types.
+     * Test that getNearbyEntitiesByType() finds only entities of the requested type within a radius.
      */
     @Test
     void getNearbyEntitiesByTypeTest() {
@@ -168,8 +160,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getItemsInBounds() correctly finds dropped items within a bounding box
-     * and excludes both non-item entities and items outside the bounding box.
+     * Test that getItemsInBounds() finds dropped items within a bounding box, excluding non-items and items outside it.
      */
     @Test
     void getItemsInBoundsTest() {
@@ -187,8 +178,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getItemsInRadius() correctly finds dropped items within a radius
-     * and excludes items outside the radius.
+     * Test that getItemsInRadius() finds dropped items within a radius and excludes those outside it.
      */
     @Test
     void getItemsInRadiusTest() {
@@ -205,8 +195,8 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getNearbyItemByMaterial() correctly finds items of a specific material type within a radius,
-     * returns null when no items exist, and returns null when only wrong material types are present.
+     * Test that getNearbyItemByMaterial() finds an item of the given material in radius, and returns null when none
+     * or only wrong-material items are present.
      */
     @Test
     void getNearbyItemByMaterialTest() {
@@ -224,8 +214,8 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getNearbyItemByMaterialList() correctly finds items matching any material in a provided list,
-     * returns null when no items exist, and returns null when only materials not in the list are present.
+     * Test that getNearbyItemByMaterialList() finds an item matching any material in the list, and returns null when
+     * none or only unlisted materials are present.
      */
     @Test
     void getNearbyItemByMaterialList() {
@@ -251,8 +241,8 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getNearbyO2ItemByType() correctly finds plugin-specific O2 items by type,
-     * returns null when no items exist, and returns null when only wrong O2 item types are present.
+     * Test that getNearbyO2ItemByType() finds a plugin O2 item of the given type, and returns null when none or only
+     * wrong-type O2 items are present.
      */
     @Test
     void getNearbyO2ItemByTypeTest() {
@@ -273,8 +263,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomCatType() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomCatType() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomCatTypeTest() {
@@ -292,8 +281,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomRabbitType() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomRabbitType() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomRabbitTypeTest() {
@@ -311,8 +299,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomHorseStyle() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomHorseStyle() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomHorseStyleTest() {
@@ -330,8 +317,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomHorseColor() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomHorseColor() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomHorseColorTest() {
@@ -349,8 +335,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomLlamaColor() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomLlamaColor() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomLlamaColorTest() {
@@ -368,8 +353,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomParrotVariant() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomParrotVariant() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomParrotVariantTest() {
@@ -387,8 +371,7 @@ public class EntityCommonTest {
     }
 
     /**
-     * Test that getRandomNaturalSheepColor() returns a consistent value for the same seed
-     * and produces variety when called multiple times without a seed.
+     * Test that getRandomNaturalSheepColor() is deterministic for a given seed and varies across unseeded calls.
      */
     @Test
     void getRandomNaturalSheepColor() {
@@ -444,6 +427,9 @@ public class EntityCommonTest {
         assertFalse(EntityCommon.isHostile(bee), "EntityCommon.isHostile() should return false for mobs without targets");
     }
 
+    /**
+     * Test that getItemAtLocation() returns the item dropped at a location and null where no item is present.
+     */
     @Test
     void getItemAtLocationTest() {
         Location location = new Location(testWorld, 1030, 40, 1030);

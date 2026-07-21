@@ -11,25 +11,17 @@ import org.jetbrains.annotations.NotNull;
  * The event that is fired every time a spell is learned/leveled up from book learning
  */
 public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Cancellable {
-    /**
-     * the handlers for this event
-     */
     private static final HandlerList handlers = new HandlerList();
 
     /**
-     * the spell learned
+     * the spell that was learned
      */
     private final O2SpellType spellType;
 
-    /**
-     * whether the event is canceled or not
-     */
     boolean canceled = false;
 
     /**
-     * Constructor
-     *
-     * @param player the player who found their wand
+     * @param player the player who learned the spell
      * @param spell  the spell type that was learned
      */
     public OllivandersBookLearningSpellEvent(@NotNull Player player, @NotNull O2SpellType spell) {
@@ -59,7 +51,7 @@ public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Ca
     }
 
     /**
-     * get the spell type that was learned
+     * Get the spell type that was learned.
      *
      * @return the spell type
      */

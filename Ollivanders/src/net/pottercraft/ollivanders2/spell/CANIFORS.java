@@ -11,6 +11,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Transfiguration spell that disguises the target entity as a dog for a limited duration.
+ */
 public class CANIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
@@ -55,7 +58,7 @@ public class CANIFORS extends FriendlyMobDisguise {
             WolfWatcher watcher = (WolfWatcher) disguise.getWatcher();
             watcher.setAdult();
             watcher.setCollarColor(O2Color.getRandomPrimaryDyeableColor().getDyeColor());
-            watcher.isTamed();
+            watcher.setTamed(true);
         }
 
         initSpell();

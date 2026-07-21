@@ -20,28 +20,23 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link MOV_FOTIA} spell, which creates purple firecracker fireworks.
- *
- * <p>Verifies the spell creates firework rockets at the impact location.</p>
+ * Tests for the {@link MOV_FOTIA} spell. Extends {@link StationarySpellTest} for the shared stationary-spell tests,
+ * plus a check that casting launches a firework.
  *
  * @author Azami7
- * @see MOV_FOTIA
  */
 public class MovFotiaTest extends StationarySpellTest {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.MOV_FOTIA;
     }
 
-    /** {@inheritDoc} */
     @Override
     O2StationarySpellType getStationarySpellType() {
         return O2StationarySpellType.TRANQUILLUS;
     }
 
-    /** {@inheritDoc} */
     @Override
     void targetLocationSetup(Location location) {
     }

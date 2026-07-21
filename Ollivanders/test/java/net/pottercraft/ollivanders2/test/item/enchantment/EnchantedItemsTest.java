@@ -29,40 +29,30 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for {@link EnchantedItems}.
+ */
 public class EnchantedItemsTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
     /**
-     * The test world used for all enchantment tests.
+     * The test world enchanted items are dropped in.
      */
     static World testWorld;
 
     /**
-     * The origin location used for dropping items in tests.
+     * A default location, (0, 4, 0) in {@link #testWorld}, for dropping items.
      */
     static Location origin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -72,15 +62,12 @@ public class EnchantedItemsTest {
         testWorld = mockServer.addSimpleWorld("world");
         origin = new Location(testWorld, 0, 4, 0);
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test onEnable initialization.
-     * <p>
-     * Basic initialization is verified by the plugin loading successfully in globalSetUp().
-     * </p>
+     * onEnable initialization is verified by the plugin loading successfully in globalSetUp().
      */
     @Test
     void onEnableTest() {
@@ -88,10 +75,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test adding an enchantment to an Item (dropped item entity).
-     * <p>
-     * Also provides test coverage for addEnchantedItem(ItemStack, ItemEnchantmentType, int, String, String).
-     * </p>
+     * addEnchantedItem() attaches an enchantment to a dropped Item, defaulting its ID to the item UUID.
      */
     @Test
     void addEnchantedItemTest() {
@@ -109,10 +93,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test adding an enchantment with optional args to an Item.
-     * <p>
-     * Also provides test coverage for addEnchantedItem(ItemStack, ItemEnchantmentType, int, String, String).
-     * </p>
+     * addEnchantedItem() records the optional args string on the enchantment.
      */
     @Test
     void addEnchantedItemWithArgsTest() {
@@ -130,7 +111,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test adding an enchantment directly to an ItemStack with explicit enchantment ID.
+     * addEnchantedItem() attaches an enchantment to an ItemStack with an explicit enchantment ID.
      */
     @Test
     void addEnchantedItemItemStackTest() {
@@ -148,7 +129,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test adding an enchantment to an O2Item ItemStack preserves the O2Item NBT tags.
+     * Enchanting an O2Item ItemStack preserves its existing O2Item NBT tags.
      */
     @Test
     void addEnchantedItemItemStackO2ItemTest() {
@@ -167,10 +148,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test isEnchanted with Item (dropped item entity).
-     * <p>
-     * Also provides test coverage for isEnchanted(ItemStack).
-     * </p>
+     * isEnchanted() distinguishes a plain dropped Item from an enchanted one.
      */
     @Test
     void isEnchantedTest() {
@@ -182,7 +160,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test isEnchanted with ItemStack including O2Items.
+     * isEnchanted() distinguishes plain and enchanted ItemStacks, including O2Items.
      */
     @Test
     void isEnchantedItemStackTest() {
@@ -206,10 +184,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test isCursed detects cursed enchantments (FLAGRANTE, GEMINO) but not beneficial ones (PORTUS).
-     * <p>
-     * Also provides test coverage for isCursed(ItemStack).
-     * </p>
+     * isCursed() detects cursed enchantments (FLAGRANTE, GEMINO) but not beneficial ones (PORTUS).
      */
     @Test
     void isCursedTest() {
@@ -232,10 +207,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test isCursed with ItemStack.
-     * <p>
-     * Core functionality is covered by isCursedTest() which tests both Item and ItemStack overloads.
-     * </p>
+     * The ItemStack overload of isCursed() is covered by {@link #isCursedTest()}, so it needs no separate test.
      */
     @Test
     void isCursedItemStackTest() {
@@ -243,12 +215,8 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test isCursedLevelBased detects curses based on magic level.
-     * <p>
-     * Detection succeeds if: curse_level <= detection_level + 1.
-     * FLAGRANTE is an EXPERT level curse, so it should not be detected at BEGINNER level
-     * but should be detected at NEWT level.
-     * </p>
+     * isCursedLevelBased() detects a curse only when the detector's level is high enough for the curse's level;
+     * FLAGRANTE is missed at BEGINNER but caught at NEWT.
      */
     @Test
     void isCursedLevelBasedTest() {
@@ -256,7 +224,7 @@ public class EnchantedItemsTest {
         Item item = testWorld.dropItem(origin, new ItemStack(Material.WRITTEN_BOOK, 1));
         assertFalse(Ollivanders2API.getItems().enchantedItems.isCursedLevelBased(item, MagicLevel.BEGINNER), "Normal item should not be detected as cursed");
 
-        // FLAGRANTE is EXPERT level curse - detection depends on magic level
+        // FLAGRANTE is a NEWT level curse - detection depends on magic level
         item = testWorld.dropItem(origin, new ItemStack(Material.BOW, 1));
         Ollivanders2API.getItems().enchantedItems.addEnchantedItem(item, ItemEnchantmentType.FLAGRANTE, 1, null);
         assertFalse(Ollivanders2API.getItems().enchantedItems.isCursedLevelBased(item, MagicLevel.BEGINNER), "Should not detect expert level curse at MagicLevel.BEGINNER");
@@ -264,7 +232,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test getEnchantmentTypeKey returns the enchantment type name string.
+     * getEnchantmentTypeKey() returns the enchantment type name string, or null for unenchanted items.
      */
     @Test
     void getEnchantmentTypeKeyTest() {
@@ -293,7 +261,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test getEnchantmentType returns the ItemEnchantmentType enum value.
+     * getEnchantmentType() returns the ItemEnchantmentType enum value, or null for unenchanted items.
      */
     @Test
     void getEnchantmentTypeTest() {
@@ -310,10 +278,8 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test getEnchantmentID returns the unique enchantment identifier.
-     * <p>
-     * For Item entities, the ID defaults to the item's UUID. For ItemStacks, the ID is explicitly set.
-     * </p>
+     * getEnchantmentID() returns the enchantment identifier: the item UUID for Item entities, the explicit ID for
+     * ItemStacks, and null for unenchanted items.
      */
     @Test
     void getEnchantmentIDTest() {
@@ -337,7 +303,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test getEnchantmentMagnitude returns the correct magnitude value.
+     * getEnchantmentMagnitude() returns the stored magnitude, or null for unenchanted items.
      */
     @Test
     void getEnchantmentMagnitudeTest() {
@@ -362,7 +328,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test getEnchantmentArgs returns the optional args string.
+     * getEnchantmentArgs() returns the optional args string, or null when none was set or the item is unenchanted.
      */
     @Test
     void getEnchantmentArgsTest() {
@@ -384,7 +350,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test getEnchantment returns the Enchantment object for enchanted items.
+     * getEnchantment() returns the Enchantment for enchanted Items and ItemStacks (including O2Items), null otherwise.
      */
     @Test
     void getEnchantmentTest() {
@@ -425,7 +391,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test createEnchantment creates Enchantment objects from type name strings.
+     * createEnchantment() builds an Enchantment from a type name string, with and without args.
      */
     @Test
     void createEnchantmentTest() {
@@ -450,10 +416,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test removeEnchantment removes enchantment from Item and cache.
-     * <p>
-     * Also provides test coverage for removeEnchantment(ItemStack).
-     * </p>
+     * removeEnchantment() strips the enchantment from an Item while preserving any O2Item NBT tags.
      */
     @Test
     void removeEnchantmentTest() {
@@ -481,7 +444,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test removeEnchantment removes enchantment from ItemStack and cache.
+     * removeEnchantment() strips the enchantment from an ItemStack.
      */
     @Test
     void removeEnchantmentItemStack() {
@@ -494,15 +457,8 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test that removeEnchantmentNBT removes NBT tags without affecting the cache.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>The returned ItemStack has no enchantment NBT tags (not detected as enchanted)</li>
-     * <li>The original ItemStack remains enchanted (method returns a clone)</li>
-     * <li>The enchantment cache is not affected (enchantment still retrievable by ID)</li>
-     * </ul>
-     * </p>
+     * removeEnchantmentNBT() returns a disenchanted clone, leaving the original ItemStack and the enchantment cache
+     * untouched.
      */
     @Test
     void removeEnchantmentNBTTest() {
@@ -538,10 +494,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test onItemDespawn event handling.
-     * <p>
-     * Test coverage provided by the specific enchantment tests (FlagranteTest, GeminoTest, etc.).
-     * </p>
+     * onItemDespawn() handling is covered by the specific enchantment tests.
      */
     @Test
     void onItemDespawnTest() {
@@ -549,10 +502,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test onEntityPickupItem event handling.
-     * <p>
-     * Test coverage provided by the specific enchantment tests (FlagranteTest, GeminoTest, PortusTest, etc.).
-     * </p>
+     * onEntityPickupItem() handling is covered by the specific enchantment tests.
      */
     @Test
     void onEntityPickupItemTest() {
@@ -560,10 +510,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test onInventoryPickupItem event handling (hopper pickup).
-     * <p>
-     * Test coverage provided by the specific enchantment tests.
-     * </p>
+     * onInventoryPickupItem() (hopper pickup) handling is covered by the specific enchantment tests.
      */
     @Test
     void onInventoryItemPickupTest() {
@@ -571,10 +518,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test onItemDrop event handling.
-     * <p>
-     * Test coverage provided by the specific enchantment tests.
-     * </p>
+     * onItemDrop() handling is covered by the specific enchantment tests.
      */
     @Test
     void onItemDropTest() {
@@ -582,10 +526,7 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test onItemHeld event handling.
-     * <p>
-     * Test coverage provided by the specific enchantment tests.
-     * </p>
+     * onItemHeld() handling is covered by the specific enchantment tests.
      */
     @Test
     void onItemHeldTest() {
@@ -593,35 +534,18 @@ public class EnchantedItemsTest {
     }
 
     /**
-     * Test areBroomsEnabled configuration getter.
-     * <p>
-     * Basic getter method, configuration testing covered elsewhere.
-     * </p>
+     * areBroomsEnabled() is a simple config getter, covered by configuration tests elsewhere.
      */
     @Test
     void areBroomsEnabledTest() {
         // basic getter, configuration testing covered elsewhere
     }
 
-    /**
-     * Reset test state after each test method.
-     * <p>
-     * Ensures the debug flag is disabled after each test to prevent debug output from affecting
-     * subsequent tests or polluting test logs.
-     * </p>
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

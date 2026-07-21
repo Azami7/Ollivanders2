@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="http://harrypotter.wikia.com/wiki/Advanced_Potion-Making">http://harrypotter.wikia.com/wiki/Advanced_Potion-Making</a>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Advanced_Potion-Making">Advanced Potion-Making</a>
  */
 public class ADVANCED_POTION_MAKING extends O2Book {
     /**

@@ -12,40 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract test base class for potion effect antidote effects.
- *
- * <p>Provides comprehensive testing for potion effect antidotes that counteract potion effects.
- * Tests verify both full-strength antidotes (that completely remove target effects) and
- * partial-strength antidotes (that reduce target effect duration by a percentage). Also verifies
- * that antidotes only affect their specified target effect type and do not harm unrelated effects.</p>
+ * Test base for {@link PotionEffectAntidote} effects: verifies full-strength antidotes remove their target potion
+ * effect, partial-strength antidotes reduce its duration proportionally, and unrelated effects are left untouched.
  */
 abstract public class PotionEffectAntidoteTest extends NotPermanentEffectTestSuper {
     /**
-     * Test the core antidote effect mechanism including strength-based reduction and effect targeting.
-     *
-     * <p>This test validates two critical antidote behaviors:</p>
-     * <ol>
-     * <li><strong>Strength-Based Reduction:</strong>
-     * <ul>
-     * <li>Full-strength antidotes (strength ≥ 1.0) completely kill target effects</li>
-     * <li>Partial-strength antidotes (strength < 1.0) reduce target effect duration by the correct percentage</li>
-     * <li>The test accounts for natural duration aging during test execution</li>
-     * </ul></li>
-     * <li><strong>Effect Targeting:</strong>
-     * <ul>
-     * <li>Antidotes only affect their specified target effect type</li>
-     * <li>Unrelated effects are left completely untouched</li>
-     * </ul></li>
-     * </ol>
-     *
-     * <p>Test Flow:</p>
-     * <ol>
-     * <li>Create target effect with 100-tick duration</li>
-     * <li>Apply antidote and verify strength-based reduction is correct</li>
-     * <li>Verify antidote is killed after use (instant effect)</li>
-     * <li>Create unrelated effect and apply antidote</li>
-     * <li>Verify unrelated effect is not affected by the antidote</li>
-     * </ol>
+     * A partial-strength antidote reduces its target potion effect's duration to {@code duration * strength}, a
+     * full-strength one removes it entirely, the antidote kills itself after use, and an unrelated effect is untouched.
      */
     @Override
     void checkEffectTest() {
@@ -141,17 +114,7 @@ abstract public class PotionEffectAntidoteTest extends NotPermanentEffectTestSup
         return new ANIMAGUS_INCANTATION(testPlugin, duration, false, target.getUniqueId());
     }
 
-    /**
-     * Override of event handler tests.
-     *
-     * <p>Antidotes do not have event handlers, so this test is intentionally empty.</p>
-     */
     void eventHandlerTests() {}
 
-    /**
-     * Override of cleanup tests.
-     *
-     * <p>Antidotes do not have cleanup functions, so this test is intentionally empty.</p>
-     */
     void doRemoveTest() {}
 }

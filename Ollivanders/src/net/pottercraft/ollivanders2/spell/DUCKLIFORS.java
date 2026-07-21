@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Transfigures entity into a chicken.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Ducklifors">https://harrypotter.fandom.com/wiki/Ducklifors</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Ducklifors">Harry Potter Wiki - Ducklifors</a>
  */
 public final class DUCKLIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
@@ -68,7 +68,6 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
      */
     @Override
     void populateEntityAllowedList() {
-        // add all small mobs as allowed targets by default
         entityAllowedList.addAll(smallFriendlyMobs);
     }
 }

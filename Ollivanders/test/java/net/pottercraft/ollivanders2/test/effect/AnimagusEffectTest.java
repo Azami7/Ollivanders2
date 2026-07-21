@@ -23,24 +23,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the ANIMAGUS_EFFECT.
+ * Unit tests for {@link ANIMAGUS_EFFECT}. Coverage is limited because the actual transformation runs through
+ * LibsDisguises, which is not mockable here; only the flag-tracking and event-cancelling behavior is exercised.
  *
- * <p>Tests the effect that enables players to transform into their animagus form. This test
- * suite currently has limited coverage due to dependencies on LibsDisguises library that
- * are not fully mockable in the test environment.</p>
+ * <p>TODO: mock out LibsDisguises so transformation mechanics can be tested</p>
  *
- * <p>TODO: mock out LibsDisguises so we can test transformation mechanics and event handlers</p>
- *
- * @see ANIMAGUS_EFFECT for the effect implementation being tested
- * @see PermanentEffectTestSuper for the testing framework
+ * @see PermanentEffectTestSuper
  */
 public class AnimagusEffectTest extends PermanentEffectTestSuper {
     /**
-     * Create an ANIMAGUS_EFFECT for testing.
-     *
-     * <p>Creates a permanent ANIMAGUS_EFFECT and configures the player's O2Player profile with
-     * an animagus form (COW) required for the effect to function. The isPermanent parameter is
-     * ignored as ANIMAGUS_EFFECT instances are always permanent.</p>
+     * Also sets the player's animagus form (COW), which the effect requires to function.
      *
      * @param target          the player to add the effect to
      * @param durationInTicks the duration parameter (unused for permanent effects)
@@ -59,17 +51,8 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Check effect test for ANIMAGUS_EFFECT.
-     *
-     * <p>Performs five comprehensive tests of the ANIMAGUS_EFFECT mechanics that don't require
-     * LibsDisguises mocking:</p>
-     * <ol>
-     * <li>Test 1: Constructor behavior when animagus form is null</li>
-     * <li>Test 2: O2Player animagus form is preserved after effect application</li>
-     * <li>Test 3: Effect transforms on first tick</li>
-     * <li>Test 4: Transformed flag persists across multiple tick cycles</li>
-     * <li>Test 5: Effect removal and cleanup behavior</li>
-     * </ol>
+     * Covers the effect's behavior that does not require LibsDisguises: killed when the player has no animagus form,
+     * form preserved through application, transformed on the first tick and staying transformed, and killable.
      */
     @Override
     void checkEffectTest() {
@@ -126,29 +109,12 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
         assertTrue(effect6.isKilled(), "Effect6 should be marked as killed");
     }
 
-    /**
-     * doRemove() cleanup test for ANIMAGUS_EFFECT.
-     *
-     * <p>The ANIMAGUS_EFFECT does not perform any special cleanup when removed, so this test
-     * is empty. Transformation state is managed externally by LibsDisguises.</p>
-     */
     @Override
     void doRemoveTest() {}
 
     /**
-     * Event handler tests for ANIMAGUS_EFFECT.
-     *
-     * <p>Tests the event handlers that restrict animal-like behaviors while transformed. These tests
-     * verify that the effect properly cancels events without requiring LibsDisguises mocking. Full
-     * testing of the actual transformation appearance still requires LibsDisguises mocking.</p>
-     * <ul>
-     * <li>doOnPlayerInteractEvent - Cancels block interactions</li>
-     * <li>doOnPlayerToggleFlightEvent - Cancels flight attempts</li>
-     * <li>doOnPlayerPickupItemEvent - Cancels item pickup</li>
-     * <li>doOnPlayerItemHeldEvent - Cancels item selection</li>
-     * <li>doOnPlayerItemConsumeEvent - Cancels item consumption</li>
-     * <li>doOnPlayerDropItemEvent - Cancels item dropping</li>
-     * </ul>
+     * Verifies the effect cancels the interactions forbidden while in animal form: block interaction, flight, item
+     * pickup, item selection, item consumption, and item dropping.
      */
     @Override
     void eventHandlerTests() {
@@ -161,10 +127,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Test that block interactions are cancelled while transformed.
-     *
-     * <p>Verifies that both right-click and left-click block interactions are cancelled by
-     * the ANIMAGUS_EFFECT to prevent block manipulation while in animal form.</p>
+     * Both left- and right-click block interactions are cancelled while transformed.
      */
     private void doOnPlayerInteractEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -188,10 +151,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Test that flight is cancelled while transformed.
-     *
-     * <p>Verifies that attempts to toggle flight are cancelled by the ANIMAGUS_EFFECT to prevent
-     * flight abilities inconsistent with animal form.</p>
+     * Flight toggling is cancelled while transformed.
      */
     private void doOnPlayerToggleFlightEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -208,10 +168,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Test that item pickup is cancelled while transformed.
-     *
-     * <p>Verifies that attempts to pick up items are cancelled by the ANIMAGUS_EFFECT to prevent
-     * inventory interaction while in animal form.</p>
+     * Item pickup is cancelled while transformed.
      */
     private void doOnPlayerPickupItemEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -229,10 +186,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Test that item selection is cancelled while transformed.
-     *
-     * <p>Verifies that attempts to select items in the hotbar are cancelled by the ANIMAGUS_EFFECT
-     * to prevent item interaction while in animal form.</p>
+     * Hotbar item selection is cancelled while transformed.
      */
     private void doOnPlayerItemHeldEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -249,10 +203,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Test that item consumption is cancelled while transformed.
-     *
-     * <p>Verifies that attempts to consume items are cancelled by the ANIMAGUS_EFFECT to prevent
-     * eating or drinking while in animal form.</p>
+     * Item consumption is cancelled while transformed.
      */
     private void doOnPlayerItemConsumeEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -269,10 +220,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * Test that item dropping is cancelled while transformed.
-     *
-     * <p>Verifies that attempts to drop items are cancelled by the ANIMAGUS_EFFECT to prevent
-     * inventory manipulation while in animal form.</p>
+     * Item dropping is cancelled while transformed.
      */
     private void doOnPlayerDropItemEventTest() {
         PlayerMock target = mockServer.addPlayer();

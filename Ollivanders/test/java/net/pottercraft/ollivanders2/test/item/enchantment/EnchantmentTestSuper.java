@@ -33,94 +33,41 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for item enchantment test suites.
- * <p>
- * Provides a template for testing concrete enchantment implementations via the Template Method pattern.
- * Each concrete enchantment test class (e.g., VolatusTest, FlagranteTest) extends this class and sets
- * the {@link #enchantmentType} and {@link #itemType}, then implements abstract test methods for the
- * enchantment's event handlers.
- * </p>
- * <p>
- * This superclass handles:
- * <ul>
- * <li>Mock Bukkit server setup and teardown (one-time for all tests)</li>
- * <li>Plugin initialization with default test configuration</li>
- * <li>Tests for simple accessors (getName, getMagnitude, getType, getArgs)</li>
- * <li>Comprehensive tests for isHoldingEnchantedItem() across all inventory slot combinations</li>
- * <li>Template methods for testing event handlers (doItemDespawn, doEntityPickupItem, etc.)</li>
- * <li>Cleanup of test state after each test method</li>
- * </ul>
- * </p>
- * <p>
- * Subclasses must:
- * <ol>
- * <li>Implement {@link #setUp()} to configure {@link #enchantmentType} and {@link #itemType}</li>
- * <li>Implement all five abstract event handler test methods</li>
- * </ol>
- * </p>
+ * Base class for {@link Enchantment} tests. Subclasses set {@link #enchantmentType} and {@link #itemType} in
+ * {@link #setUp()} and implement the abstract event-handler tests; shared coverage of the accessors,
+ * {@link #isHoldingEnchantedItem(Player)}, despawn, and inventory-pickup handling lives here.
  */
 public abstract class EnchantmentTestSuper {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     * <p>
-     * Static field initialized once before all tests in this class hierarchy. Reused across all test
-     * methods and instances to avoid expensive server setup/teardown overhead. All concrete test classes
-     * that extend this superclass share the same server instance.
-     * </p>
+     * Shared MockBukkit server, mocked once per class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The Ollivanders2 plugin instance loaded with test configuration.
-     * <p>
-     * Initialized once before all tests in this class hierarchy with the default test config
-     * (Ollivanders/test/resources/default_config.yml). Provides access to plugin functionality,
-     * the Bukkit scheduler, and the Ollivanders2 API during tests. The plugin is started with the
-     * server startup delay (20 ticks) performed to allow proper initialization.
-     * </p>
+     * The plugin instance, loaded once with the default test config.
      */
     static Ollivanders2 testPlugin;
 
     /**
-     * The test world used for all portkey teleportation tests
+     * The test world enchanted items are dropped into.
      */
     static World testWorld;
 
     /**
-     * The enchantment type being tested by this test class instance.
-     * <p>
-     * Set by the concrete test class's {@link #setUp()} method. Determines which enchantment
-     * implementation is tested and is used by helper methods like {@link #addEnchantment(ItemStack, int, String)}
-     * to create enchanted items of the correct type.
-     * </p>
+     * The enchantment type under test; set by the subclass {@link #setUp()}.
      */
     ItemEnchantmentType enchantmentType = ItemEnchantmentType.GEMINO;
 
     /**
-     * The Bukkit material type used for creating test items in this test class instance.
-     * <p>
-     * Set by the concrete test class's {@link #setUp()} method. Should match a material appropriate
-     * for the enchantment being tested (e.g., Material.STICK for VOLATUS/VOLATUS enchantments on brooms).
-     * Used to create ItemStacks for enchantment application in test methods.
-     * </p>
+     * The material for test items; set by the subclass {@link #setUp()} to one appropriate for the enchantment.
      */
     Material itemType = Material.APPLE;
 
     /**
-     *
+     * Default enchantment args for the shared tests; subclasses may override for enchantments that require args.
      */
     String defaultArgs = null;
 
-    /**
-     * Global setup to initialize the mock Bukkit server and plugin before all tests.
-     * <p>
-     * Called once before all tests in this class hierarchy by JUnit. Creates the shared MockBukkit
-     * server instance and loads the Ollivanders2 plugin with default test configuration. Advances the
-     * server scheduler by the startup delay (20 ticks) to allow the plugin to fully initialize. This
-     * shared server instance is reused across all concrete test classes and methods to minimize expensive
-     * server setup/teardown overhead.
-     * </p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -129,84 +76,52 @@ public abstract class EnchantmentTestSuper {
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
         testWorld = mockServer.addSimpleWorld("world");
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Per-test setup hook for subclasses to configure the enchantment being tested.
-     * <p>
-     * Called before each test method by JUnit. Subclasses must implement this to set:
-     * <ul>
-     * <li>{@link #enchantmentType} - the ItemEnchantmentType to test</li>
-     * <li>{@link #itemType} - the Bukkit Material for test items</li>
-     * </ul>
-     * </p>
+     * Configure {@link #enchantmentType} and {@link #itemType} for the enchantment under test.
      */
     @BeforeEach
     abstract void setUp();
 
     /**
-     * Test {@link Enchantment#getName()}.
-     * <p>
-     * This is a simple accessor method that returns a static value from the enchantment type.
-     * No explicit test is needed as the method's correctness is trivial.
-     * </p>
+     * {@link Enchantment#getName()} is a trivial getter; no assertions needed.
      */
     @Test
     void getNameTest() {
-        // simple getter, so we can skip this test
     }
 
     /**
-     * Test {@link Enchantment#getMagnitude()}.
-     * <p>
-     * This is a simple accessor method that returns the magnitude passed to the constructor.
-     * No explicit test is needed as the method's correctness is trivial.
-     * </p>
+     * {@link Enchantment#getMagnitude()} is a trivial getter; no assertions needed.
      */
     @Test
     void getMagnitudeTest() {
-        // simple getter, so we can skip this test
     }
 
     /**
-     * Test {@link Enchantment#getType()}.
-     * <p>
-     * This is a simple accessor method that returns the enchantment type.
-     * No explicit test is needed as the method's correctness is trivial.
-     * </p>
+     * {@link Enchantment#getType()} is a trivial getter; no assertions needed.
      */
     @Test
     void getTypeTest() {
-        // simple getter, so we can skip this test
     }
 
     /**
-     * Test {@link Enchantment#getArgs()}.
-     * <p>
-     * This is a simple accessor method that returns the optional arguments passed to the constructor.
-     * No explicit test is needed as the method's correctness is trivial.
-     * </p>
+     * {@link Enchantment#getArgs()} is a trivial getter; no assertions needed.
      */
     @Test
     void getArgsTest() {
-        // simple getter, so we can skip this test
     }
 
     /**
-     * Helper method to apply an enchantment to an ItemStack and retrieve the Enchantment object.
-     * <p>
-     * Creates a random enchantment ID, applies the currently-configured {@link #enchantmentType} to
-     * the given ItemStack with the specified magnitude and arguments, then retrieves and returns the
-     * Enchantment object. Asserts that the enchantment was successfully applied.
-     * </p>
+     * Apply {@link #enchantmentType} to the given item at the given magnitude and return the resulting enchantment,
+     * asserting it was applied.
      *
      * @param itemStack the ItemStack to enchant
      * @param magnitude the power level of the enchantment
-     * @param args      optional enchantment-specific arguments, or null
-     * @return the Enchantment object for the applied enchantment
-     * @throws AssertionError if the enchantment could not be applied or retrieved
+     * @param args      optional enchantment-specific arguments
+     * @return the applied enchantment
      */
     @NotNull
     Enchantment addEnchantment(@NotNull ItemStack itemStack, int magnitude, @Nullable String args) {
@@ -220,16 +135,11 @@ public abstract class EnchantmentTestSuper {
     }
 
     /**
-     * Helper method to create a new ItemStack with the enchantment applied.
-     * <p>
-     * Convenience method that creates a new ItemStack of the currently-configured {@link #itemType}
-     * and applies the enchantment via {@link #addEnchantment(ItemStack, int, String)} in a single call.
-     * This is useful for tests that need enchanted items without performing the setup in multiple steps.
-     * </p>
+     * Create a new {@link #itemType} ItemStack with {@link #enchantmentType} applied at the given magnitude.
      *
      * @param magnitude the power level of the enchantment
-     * @param args      optional enchantment-specific arguments, or null
-     * @return a new ItemStack with the enchantment applied
+     * @param args      optional enchantment-specific arguments
+     * @return the enchanted ItemStack
      */
     @NotNull
     ItemStack makeEnchantedItem(int magnitude, @Nullable String args) {
@@ -242,22 +152,8 @@ public abstract class EnchantmentTestSuper {
     }
 
     /**
-     * Test {@link Enchantment#isHoldingEnchantedItem(Player)} across all inventory scenarios.
-     * <p>
-     * Verifies that the method correctly detects whether a player is holding an item enchanted with the
-     * currently-configured enchantment type, checking both main hand and off-hand slots.
-     * </p>
-     * <p>
-     * Test cases verified:
-     * <ul>
-     * <li>Non-enchanted item in main hand → returns false</li>
-     * <li>Non-enchanted item in off-hand → returns false</li>
-     * <li>Enchanted item in main hand only → returns true</li>
-     * <li>Enchanted item in off-hand only → returns true</li>
-     * <li>Non-enchanted item in main hand, enchanted in off-hand → returns true</li>
-     * <li>Enchanted item in main hand, non-enchanted in off-hand → returns true</li>
-     * </ul>
-     * </p>
+     * {@link Enchantment#isHoldingEnchantedItem(Player)} returns true iff a cursed item is in either hand, across all
+     * main-hand/off-hand combinations.
      */
     @Test
     void isHoldingEnchantedItemTest() {
@@ -299,11 +195,7 @@ public abstract class EnchantmentTestSuper {
     }
 
     /**
-     * Test the doItemDespawn event handler of the enchantment being tested.
-     * <p>
-     * Subclasses must implement this to verify the enchantment's behavior when an enchanted item
-     * despawns from the world (is removed due to inactivity timeout).
-     * </p>
+     * An enchanted item's despawn is cancelled, keeping the cursed item in the world.
      */
     @Test
     void doItemDespawnTest() {
@@ -319,26 +211,13 @@ public abstract class EnchantmentTestSuper {
     }
 
     /**
-     * Test the doEntityPickupItem event handler of the enchantment being tested.
-     * <p>
-     * Subclasses must implement this to verify the enchantment's behavior when a player picks up an
-     * item enchanted with this enchantment type.
-     * </p>
+     * Verify the enchantment's behavior when a player picks up a cursed item.
      */
     @Test
     abstract void doEntityPickupItemTest();
 
     /**
-     * Test the doInventoryPickupItem event handler.
-     * <p>
-     * Verifies that when a hopper or other block-based inventory attempts to pick up the enchanted item,
-     * the pickup event is cancelled. This prevents automated item collection systems from picking up dangerous
-     * cursed items.
-     * </p>
-     * <p>
-     * Setup: A hopper inventory is created and an InventoryPickupItemEvent is fired for an enchanted item.
-     * Expected: The InventoryPickupItemEvent is cancelled, preventing the hopper from taking the item.
-     * </p>
+     * A block inventory's (e.g. hopper's) attempt to collect a cursed item is cancelled.
      */
     @Test
     void doInventoryPickupItemTest() {
@@ -355,45 +234,22 @@ public abstract class EnchantmentTestSuper {
     }
 
     /**
-     * Test the doItemDrop event handler of the enchantment being tested.
-     * <p>
-     * Subclasses must implement this to verify the enchantment's behavior when a player drops an item
-     * enchanted with this enchantment type.
-     * </p>
+     * Verify the enchantment's behavior when a player drops a cursed item.
      */
     @Test
     abstract void doItemDropTest();
 
     /**
-     * Test the doItemHeld event handler of the enchantment being tested.
-     * <p>
-     * Subclasses must implement this to verify the enchantment's behavior when a player changes which
-     * item slot is held in their hand (e.g., switching from slot 1 to slot 2 in the hotbar).
-     * </p>
+     * Verify the enchantment's behavior when a player changes which item slot is held.
      */
     @Test
     abstract void doItemHeldTest();
 
-    /**
-     * Per-test cleanup to reset the shared test state.
-     * <p>
-     * Called after each test method by JUnit. Resets the global debug flag to false to prevent
-     * debug output from one test affecting the logs or behavior of subsequent tests in the suite.
-     * </p>
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     * Global cleanup to release MockBukkit resources after all tests complete.
-     * <p>
-     * Called once after all tests in this class hierarchy have finished by JUnit. Unmocks the
-     * MockBukkit server instance and releases all server resources to prevent memory leaks and
-     * ensure clean test execution for subsequent test classes in the suite.
-     * </p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

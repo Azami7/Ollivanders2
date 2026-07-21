@@ -5,9 +5,8 @@ import net.pottercraft.ollivanders2.effect.PlayerTransformBase;
 import org.bukkit.entity.Player;
 
 /**
- * Test suite for the EQUIFORS_MAXIMA effect (horse transformation).
+ * Unit tests for {@link EQUIFORS_MAXIMA} (horse transformation).
  *
- * @see EQUIFORS_MAXIMA
  * @see PlayerTransformBaseTest
  */
 public class EquiforsMaximaTest extends PlayerTransformBaseTest {

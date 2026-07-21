@@ -39,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 public class FiniteIncantatemTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -47,12 +46,8 @@ public class FiniteIncantatemTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verify the {@code effectsRemaining} budget computed in {@link FINITE_INCANTATEM}.
-     * <p>
-     * At zero experience the budget clamps up to 1; at level 40 it scales to 2
-     * ({@code floor(usesModifier / 20)}); at three times mastery it clamps down to
-     * {@link FINITE_INCANTATEM#maxEffects}.
-     * </p>
+     * Verify the {@code effectsRemaining} budget: 1 at zero experience, 2 at level 40 ({@code floor(usesModifier/20)}),
+     * and {@link FINITE_INCANTATEM#maxEffects} at three times mastery.
      */
     @Override
     @Test
@@ -74,19 +69,9 @@ public class FiniteIncantatemTest extends O2SpellTestSuper {
     }
 
     /**
-     * Cover the player-target paths: block hit, O2Effect removal, and potion-effect removal.
-     * <p>
-     * Asserts that:
-     * </p>
-     * <ul>
-     * <li>Hitting a solid block kills the spell.</li>
-     * <li>An {@link net.pottercraft.ollivanders2.effect.O2Effect O2Effect} at or below the spell's
-     *     level (Babbling) is removed, while one above it (Lycanthropy) is left intact.</li>
-     * <li>A vanilla potion effect at or below the spell's level (Hunger) is removed.</li>
-     * </ul>
-     * <p>
-     * Item targets are covered separately by {@link #itemEffectsTest()}.
-     * </p>
+     * Cover the player-target paths: a block hit kills the spell; an O2Effect at or below the spell's level (Babbling)
+     * is removed while one above it (Lycanthropy) is left intact; a vanilla potion effect at or below the level
+     * (Hunger) is removed. Item targets are covered by {@link #itemEffectsTest()}.
      */
     @Override
     @Test
@@ -136,13 +121,9 @@ public class FiniteIncantatemTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verify enchantment removal on items, gated by enchantment level.
-     * <p>
-     * A Celatum enchantment (at or below the spell's level) is stripped from a book, while a Volatus
-     * enchantment (EXPERT, above the spell's BEGINNER level) is left intact on a broomstick. No test
-     * for cursed enchantments yet because there is no curse enchantment low enough level to be
-     * targeted by the spell.
-     * </p>
+     * Verify a Celatum enchantment (at or below the spell's level) is stripped from a book while a Volatus enchantment
+     * (EXPERT, above the spell's BEGINNER level) is left intact. No cursed-enchantment case yet — no curse enchantment
+     * is low enough level for the spell to target.
      */
     @Test
     void itemEffectsTest() {

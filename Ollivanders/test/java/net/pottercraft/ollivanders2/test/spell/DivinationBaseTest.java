@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * throws when the facing check runs. {@link #doCheckEffectTest()} is skipped for those spells - see the TODO there.</p>
  *
  * @see Divination
- * @see O2SpellTestSuper for the inherited spell testing framework
+ * @see O2SpellTestSuper
  */
 abstract class DivinationBaseTest extends O2SpellTestSuper {
     /**
@@ -152,7 +152,6 @@ abstract class DivinationBaseTest extends O2SpellTestSuper {
         return ((Divination) probe).getItemHeld() != null;
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

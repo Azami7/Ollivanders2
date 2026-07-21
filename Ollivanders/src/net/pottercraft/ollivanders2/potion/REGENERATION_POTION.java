@@ -9,26 +9,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Regeneration Potion - heals the drinker over time through magical regeneration.
- *
- * <p>When consumed, this potion applies the REGENERATION II effect to the player for the default
- * potion duration. The Regeneration effect causes the player to slowly heal over time, restoring
- * lost health points. This is a restorative potion useful for recovering from injuries sustained
- * during combat or other dangerous activities.</p>
- *
- * <p>The potion is crafted with components associated with life and resurrection, including bone,
- * blood, rotten flesh, and salamander fire, reflecting its purpose of restoring life and vitality.</p>
+ * Regeneration Potion — applies the REGENERATION effect, healing the drinker over time.
  *
  * @author Azami7
  */
 public final class REGENERATION_POTION extends O2Potion {
     /**
-     * Constructor for Regeneration Potion.
-     *
-     * <p>Initializes the potion with its ingredients (Bone, Blood, Rotten Flesh, Salamander Fire,
-     * and Standard Potion Ingredients), description text, flavor text, potion color, and the
-     * Regeneration effect. Sets up the healing effect that will be applied when the
-     * potion is consumed.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -51,12 +38,7 @@ public final class REGENERATION_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Regeneration Potion and gain health regeneration.
-     *
-     * <p>Applies the REGENERATION effect to the player for the default potion duration.
-     * This effect causes the player's health to gradually restore over time. The regeneration
-     * effect is particularly useful for recovering health after combat, falls, or other
-     * damage-dealing events.</p>
+     * Apply the REGENERATION effect to the drinker and send the success message.
      *
      * @param player the player who drank the potion
      */

@@ -27,36 +27,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Test suite for the Wiggenweld Potion effect.
- *
- * <p>Verifies that the Wiggenweld Potion correctly removes the SLEEPING effect from players
- * when splashed. Tests the splash mechanic and effect removal to ensure the potion functions
- * as intended for curing sleep.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.potion.WIGGENWELD_POTION}.
  */
 public class WiggenweldPotionTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded once before all tests with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -64,16 +47,12 @@ public class WiggenweldPotionTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test the Wiggenweld Potion's splash event behavior.
-     *
-     * <p>This test verifies that when a Wiggenweld Potion is splashed, it correctly removes the
-     * SLEEPING effect from affected players. The test creates a player with an active SLEEPING effect,
-     * splashes the potion on them, and verifies that the sleep effect is removed.</p>
+     * Splashing the potion removes the SLEEPING effect from affected players.
      */
     @Test
     void doOnPotionSplashEventTest() {
@@ -104,13 +83,6 @@ public class WiggenweldPotionTest {
         assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(player2.getUniqueId(), O2EffectType.SLEEPING));
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

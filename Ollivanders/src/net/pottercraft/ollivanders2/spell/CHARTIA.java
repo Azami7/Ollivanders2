@@ -16,7 +16,6 @@ import java.util.ArrayList;
  * </p>
  *
  * @author Azami7
- * @since 2.2.9
  * @see <a href="http://harrypotter.wikia.com/wiki/Cartomancy">Harry Potter Wiki - Cartomancy</a>
  */
 public final class CHARTIA extends Divination {

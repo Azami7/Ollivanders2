@@ -6,23 +6,10 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Test suite for the FATUUS_AURUM spell (Stone to Gold Charm).
- *
- * <p>Tests verify that FATUUS_AURUM correctly targets and transforms stone blocks into gold
- * while rejecting invalid and unbreakable materials. FATUUS_AURUM converts STONE blocks to
- * GOLD_BLOCK with a fixed 1-block radius and temporary duration.</p>
- *
- * <p>Test coverage includes:</p>
- * <ul>
- * <li>Valid target material: STONE blocks only</li>
- * <li>Invalid target materials: Unbreakable materials and non-stone blocks</li>
- * <li>Effect: Stone → Gold transformation</li>
- * <li>Fixed radius: 1 block (single-target precision spell)</li>
- * <li>Spell duration: 15 seconds to 10 minutes based on skill level</li>
- * <li>Success and failure messaging</li>
- * <li>Temporary transfiguration with automatic reversion</li>
- * <li>Handling of blocks already at target material type (GOLD_BLOCK)</li>
- * </ul>
+ * Test suite for the {@link net.pottercraft.ollivanders2.spell.FATUUS_AURUM} spell (Stone to Gold Charm), which
+ * temporarily transfigures STONE blocks into GOLD_BLOCK within a fixed 1-block radius. Inherits the shared block
+ * transfiguration tests from {@link BlockTransfigurationTest}, supplying STONE as the valid target and an
+ * unbreakable material as the invalid target.
  *
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.FATUUS_AURUM
@@ -40,9 +27,7 @@ public class FatuusAurumTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns the valid target material for FATUUS_AURUM tests.
-     *
-     * <p>FATUUS_AURUM only transfigures STONE blocks. STONE is the only valid target material.</p>
+     * Returns the valid target material for FATUUS_AURUM tests: STONE, the only block type it transfigures.
      *
      * @return STONE material type
      */
@@ -53,12 +38,10 @@ public class FatuusAurumTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns an invalid target material for FATUUS_AURUM tests.
+     * Returns an invalid target material for FATUUS_AURUM tests: an unbreakable material, which is not in the
+     * spell's STONE-only allow list.
      *
-     * <p>FATUUS_AURUM cannot transfigure unbreakable materials. Its allow list contains
-     * only STONE, so all other block types are invalid targets.</p>
-     *
-     * @return First unbreakable material from the global list
+     * @return the first unbreakable material from the global list
      */
     @Override
     @NotNull

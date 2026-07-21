@@ -12,20 +12,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Transfigures an entity into a rabbit. This is a split of the Lapifors spell since we need to handle items and mobs
- * differently.
+ * Transfigures an entity into a rabbit. Handles mob targets; {@link LAPIFORS} handles dropped-item targets.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lapifors_Spell">Harry Potter Wiki - Lapifors Spell</a>
  */
 public final class LAPIFORS_MEDIUS extends FriendlyMobDisguise {
-    /**
-     * Min duration for this transfiguration
-     */
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
 
-    /**
-     * Max duration for this transfiguration
-     */
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
     /**
@@ -78,7 +71,6 @@ public final class LAPIFORS_MEDIUS extends FriendlyMobDisguise {
      */
     @Override
     void populateEntityAllowedList() {
-        // add all small mobs as allowed targets by default
         entityAllowedList.addAll(smallFriendlyMobs);
     }
 }

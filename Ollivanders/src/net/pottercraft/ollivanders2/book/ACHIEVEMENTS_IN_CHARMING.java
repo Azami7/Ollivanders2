@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Achievements_in_Charming">https://harrypotter.fandom.com/wiki/Achievements_in_Charming</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Achievements_in_Charming">Achievements in Charming</a>
  */
 public class ACHIEVEMENTS_IN_CHARMING extends O2Book {
     /**

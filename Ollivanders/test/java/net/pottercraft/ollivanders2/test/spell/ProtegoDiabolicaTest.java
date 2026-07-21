@@ -10,13 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Unit tests for PROTEGO_DIABOLICA spell.
- *
- * <p>Tests the PROTEGO_DIABOLICA spell functionality including creation, duration/radius calculation,
- * and proper stationary spell setup. The target location is set up with dirt blocks to provide
- * a suitable environment for the spell.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.PROTEGO_DIABOLICA}. Extends {@link StationarySpellTest}
+ * for the shared stationary-spell tests.
  *
  * @author Azami7
+ * @see net.pottercraft.ollivanders2.stationaryspell.PROTEGO_DIABOLICA
  */
 public class ProtegoDiabolicaTest extends StationarySpellTest {
     @Override

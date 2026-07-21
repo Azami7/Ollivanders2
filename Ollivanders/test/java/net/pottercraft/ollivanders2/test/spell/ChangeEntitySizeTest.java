@@ -15,27 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for ENGORGIO and REDUCIO spell unit tests.
- *
- * <p>Provides shared test coverage for entity size-changing spells including:</p>
- * <ul>
- * <li>Ageable entity state change (baby/adult toggle)</li>
- * <li>Slime size change based on skill level</li>
- * <li>Hostile entity restriction at low vs. high skill</li>
- * <li>Multiple entity targeting up to the target limit</li>
- * </ul>
+ * Base test class for {@link ChangeEntitySize} spells (ENGORGIO, REDUCIO), covering baby/adult toggling of Ageable
+ * creatures, Slime resizing, the hostile-mob skill restriction, and multi-target limits.
  *
  * @author Azami7
  */
 abstract public class ChangeEntitySizeTest extends O2SpellTestSuper {
     /**
-     * Tests that doCheckEffect() changes the age state of a peaceful Ageable entity.
-     *
-     * <p>Verifies the primary spell effect:</p>
-     * <ul>
-     * <li>ENGORGIO: a baby cow becomes an adult</li>
-     * <li>REDUCIO: an adult cow becomes a baby</li>
-     * </ul>
+     * Verify the spell toggles a peaceful cow between baby and adult in the growing/shrinking direction.
      */
     @Override
     @Test
@@ -63,13 +50,7 @@ abstract public class ChangeEntitySizeTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that doCheckEffect() changes the size of a Slime entity.
-     *
-     * <p>Verifies slime size scaling:</p>
-     * <ul>
-     * <li>ENGORGIO: a size-1 slime grows larger</li>
-     * <li>REDUCIO: a size-3 slime shrinks smaller</li>
-     * </ul>
+     * Verify the spell grows or shrinks a Slime's size in the spell's direction.
      */
     @Test
     void slimeTest() {
@@ -93,13 +74,7 @@ abstract public class ChangeEntitySizeTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests the hostile mob skill restriction in changeEntityAge().
-     *
-     * <p>Verifies that hostile Ageable entities (zombies) are:</p>
-     * <ul>
-     * <li>Not affected when the caster's skill level is below 100 (usesModifier &lt; 100)</li>
-     * <li>Affected when the caster's skill level is 100 or above (usesModifier &ge; 100)</li>
-     * </ul>
+     * Verify a hostile mob is unaffected below skill 100 but affected at skill 100 or above.
      */
     @Test
     void changeAgeTest() {
@@ -143,10 +118,7 @@ abstract public class ChangeEntitySizeTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that doCheckEffect() affects multiple entities up to the target limit.
-     *
-     * <p>With default experience (usesModifier = 20), targets = 2. Verifies that both
-     * entities within range are changed by the spell.</p>
+     * Verify the spell affects multiple entities in range up to its target limit.
      */
     @Test
     void multipleTargetTest() {
@@ -180,6 +152,9 @@ abstract public class ChangeEntitySizeTest extends O2SpellTestSuper {
         }
     }
 
+    /**
+     * No-op: size-change spells have no revert action.
+     */
     @Override
     @Test
     void revertTest() {

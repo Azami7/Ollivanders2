@@ -23,42 +23,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for testing ItemToItemTransfiguration spell implementations.
- *
- * <p>Provides test coverage for item-to-item transfiguration spells including:</p>
- *
- * <ul>
- * <li>Effect validation with valid and invalid item types</li>
- * <li>canTransfigure checks for unbreakable materials, enchanted items, and transfiguration map filtering</li>
- * <li>Partial stack transfiguration and remainder handling</li>
- * <li>Permanent spell lifecycle (no revert)</li>
- * </ul>
- *
- * <p>Subclasses must implement {@link #getSpellType()}, {@link #getValidItemType()},
- * and {@link #getInvalidItemType()} to define the specific spell being tested.</p>
+ * Base test class for {@link ItemToItemTransfiguration} spells, covering valid/invalid item targeting, canTransfigure
+ * filtering, partial-stack remainders, and the permanent (no-revert) lifecycle. Subclasses supply the valid and
+ * invalid item materials.
  *
  * @author Azami7
  */
 abstract public class ItemToItemTransfigurationTest extends O2SpellTestSuper {
     /**
-     * Get a material type that the spell can transfigure.
-     *
-     * @return a valid material type for this spell
+     * @return a material this spell can transfigure
      */
     abstract Material getValidItemType();
 
     /**
-     * Get a material type that the spell cannot transfigure.
-     *
-     * @return an invalid material type for this spell
+     * @return a material this spell cannot transfigure
      */
     abstract Material getInvalidItemType();
 
     /**
-     * Test the spell effect with both invalid and valid item types.
-     *
-     * <p>Verifies that the spell fails and is killed when the target item is not a valid type,
-     * then verifies successful transfiguration when a valid item type is present.</p>
+     * Verify the spell is killed without transfiguring an invalid item type, then transfigures a valid one.
      */
     @Test
     void doCheckEffectTest() {
@@ -81,7 +64,7 @@ abstract public class ItemToItemTransfigurationTest extends O2SpellTestSuper {
         original = testWorld.dropItem(targetLocation, new ItemStack(getValidItemType(), 1));
         itemToItemTransfiguration = (ItemToItemTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(itemToItemTransfiguration.isTransfigured(), "spell did not transfigure valid entity type");
+        assertTrue(itemToItemTransfiguration.isTransfigured(), "spell did not transfigure valid item type");
         assertTrue(original.isDead(), "original item not removed");
         assertTrue(itemToItemTransfiguration.isKilled(), "spell not killed after transfiguration completed");
         assertEquals(1, EntityCommon.getEntitiesInRadius(targetLocation, 3).size(), "unexpected number of items at target location");

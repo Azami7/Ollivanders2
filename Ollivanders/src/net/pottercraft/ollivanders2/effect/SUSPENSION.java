@@ -12,51 +12,30 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Suspension effect that hoists the affected player into the air and maintains them there.
- *
- * <p>SUSPENSION is a debilitating effect that suspends the target player in mid-air by teleporting
- * them to a suspended location 1 block above their starting position. The effect applies two additional
- * permanent effects to maintain the suspension state: FLYING (to prevent falling due to gravity) and
- * FULL_IMMOBILIZE (to prevent any movement or teleportation that could break the suspension). The
- * player's original location is recorded and restored when the effect is removed. This effect replaced
- * the original LEVICORPUS implementation.</p>
- *
- * <p>Suspension Configuration:</p>
- * <ul>
- * <li>Suspension height: 1 block above the player's starting position</li>
- * <li>Head pitch: 45 degrees (downward tilt)</li>
- * <li>Secondary effects: FLYING (permanent, prevents falling) and FULL_IMMOBILIZE (permanent, prevents all movement)</li>
- * <li>Suspension initialization: delayed 5 ticks after effect activation to allow FLYING to activate before teleport</li>
- * <li>Immobilization timing: FULL_IMMOBILIZE is added after teleport to avoid cancelling the suspension teleport</li>
- * <li>Suspension state: tracked via boolean flag</li>
- * <li>Velocity events: cancelled to maintain suspension stability</li>
- * </ul>
+ * Suspends the affected player one block above their starting position, tilting their head 45 degrees down. Applies
+ * companion permanent {@link FLYING} (prevents falling) and {@link FULL_IMMOBILIZE} (prevents movement) effects to
+ * hold them there, and restores the original location on removal.
  *
  * @author Azami7
  */
 public class SUSPENSION extends O2Effect {
     /**
-     * the original location of the player
+     * The player's location before suspension, recorded at suspend time and restored on removal.
      */
     Location originalLocation;
 
     /**
-     * are they currently suspended
+     * Whether the player has been hoisted into the air yet; ensures suspension runs exactly once.
      */
     boolean suspended = false;
 
     /**
-     * additional effect such as immobilization
+     * The companion effects (FLYING, FULL_IMMOBILIZE) added to hold the suspension, removed on cleanup.
      */
     final ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
 
     /**
-     * Constructor for creating a suspension effect.
-     *
-     * <p>Creates a suspension effect that will hoist the target player into the air on the first
-     * checkEffect() call. The player will be teleported to a suspended location and secondary effects
-     * (FLYING and IMMOBILIZE) will be applied to maintain the suspension state. The original location
-     * is recorded for restoration when the effect is removed.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the suspension effect in game ticks
@@ -71,19 +50,8 @@ public class SUSPENSION extends O2Effect {
     }
 
     /**
-     * Age the suspension effect and initialize suspension on first tick.
-     *
-     * <p>Called each game tick. This method ages the effect counter and checks if the player has been
-     * suspended yet via the suspended flag. If not, it performs the suspension initialization in two steps:</p>
-     * <ol>
-     * <li>Immediately adds the FLYING effect to allow it to activate</li>
-     * <li>Delays the actual suspension (teleport and setFlying) by 5 ticks to ensure the FLYING effect
-     * has time to activate before the player is moved</li>
-     * </ol>
-     *
-     * <p>This delay is necessary because the FLYING effect must be initialized before calling setFlying(true),
-     * otherwise the player could briefly fall before the effect prevents gravity. The FULL_IMMOBILIZE effect
-     * is added after the teleport (in the suspend() method) to prevent it from cancelling the teleport event.</p>
+     * On the first tick, adds the FLYING effect and schedules the suspend 5 ticks later so FLYING is active before the
+     * teleport; otherwise the player would briefly fall. Ages the effect each tick.
      */
     @Override
     public void checkEffect() {
@@ -106,14 +74,9 @@ public class SUSPENSION extends O2Effect {
     }
 
     /**
-     * Hoist the player into the air and apply suspension effects.
-     *
-     * <p>Teleports the player to a suspension location 1 block above their original position with a head
-     * pitch of 45 degrees (downward tilt), records their original location for later restoration, and
-     * enables flying mode to prevent falling. The FULL_IMMOBILIZE effect is added after the teleport to
-     * prevent it from cancelling the suspension teleport event. This method is called 5 ticks after
-     * checkEffect() to ensure the FLYING effect has time to activate before the player is moved and set
-     * to flying mode.</p>
+     * Records the player's location, teleports them one block up with a 45-degree downward head pitch, sets them
+     * flying, and adds the FULL_IMMOBILIZE effect. FULL_IMMOBILIZE is added here rather than earlier so it does not
+     * cancel this teleport.
      */
     private void suspend() {
         // we need to add the additional effects first so that flying gets enabled for the player before we then try to set them flying
@@ -136,12 +99,7 @@ public class SUSPENSION extends O2Effect {
     }
 
     /**
-     * Apply the FLYING effect necessary to maintain suspension.
-     *
-     * <p>Applies the FLYING effect as a permanent effect to prevent the player from falling due to gravity.
-     * This effect must be initialized early (in checkEffect()) so that it has time to activate before the
-     * player is teleported and set to flying mode. The FULL_IMMOBILIZE effect is added separately in the
-     * suspend() method after the teleport to prevent it from cancelling the suspension teleport event.</p>
+     * Adds the permanent FLYING companion effect that keeps the player from falling once suspended.
      */
     private void addAdditionalEffects() {
         // make them fly so they do not fall from suspension
@@ -151,11 +109,7 @@ public class SUSPENSION extends O2Effect {
     }
 
     /**
-     * Clean up the suspension effect and restore the player to normal state.
-     *
-     * <p>When the suspension effect is removed, this method disables flying mode and removes the
-     * secondary effects (FLYING and FULL_IMMOBILIZE) that were applied to maintain suspension. The player
-     * is responsible for handling their own descent or location after the suspension ends.</p>
+     * Disables flying and removes the companion FLYING and FULL_IMMOBILIZE effects.
      */
     @Override
     public void doRemove() {
@@ -169,12 +123,9 @@ public class SUSPENSION extends O2Effect {
     }
 
     /**
-     * Cancel velocity changes to maintain suspension stability.
+     * Cancels the target's velocity events so nothing pushes them out of suspension.
      *
-     * <p>Cancels all player velocity events that would otherwise change the player's motion, ensuring
-     * they remain suspended in their designated location without falling or being pushed away.</p>
-     *
-     * @param event the player velocity event to cancel
+     * @param event the player velocity event
      */
     void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {
         if (!event.getPlayer().getUniqueId().equals(targetID))
@@ -185,12 +136,7 @@ public class SUSPENSION extends O2Effect {
     }
 
     /**
-     * Check if the player is currently suspended in the air.
-     *
-     * <p>Returns true after the player has been hoisted into the air via the suspend() method.
-     * This flag is used to ensure the suspension mechanism runs exactly once per effect.</p>
-     *
-     * @return true if the player has been suspended, false if the suspension is still pending
+     * @return true once the player has been hoisted into the air, false while suspension is still pending
      */
     public boolean isSuspended() {
         return suspended;

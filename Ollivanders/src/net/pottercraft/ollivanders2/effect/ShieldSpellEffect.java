@@ -13,79 +13,43 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Parent class for all shield effects that block incoming spells.
- *
- * <p>ShieldSpellEffect provides a protective barrier that blocks spell projectiles from hitting the protected
- * player. The shield operates within a specified radius around the player and prevents spells based on a
- * spell level comparison: the shield can only block spells up to one level higher than the shield spell itself.
- * For example, a shield at level OWL can block spells up to level NEWT (one level higher), but cannot block
- * level EXPERT spells.
+ * Parent class for all shield effects that block incoming spells within a radius of the protected player.
+ * <p>
+ * A shield blocks spell projectiles up to one level higher than the shield's own level (an OWL shield blocks up
+ * to NEWT), exempts spells cast by the protected player, and cancels mob targeting of that player. Subclasses
+ * may enable a periodic pulse particle and/or an impact particle for visual feedback.
  * </p>
- *
- * <p>Protection Mechanics:</p>
- * <ul>
- * <li>Radius: The shield protects in a sphere of radius around the player</li>
- * <li>Spell Level Check: Incoming spell level must be ≤ (shield level + 1) to be blocked</li>
- * <li>Entity Targeting: Prevents enemies from targeting the protected player via entity targeting events</li>
- * <li>Self Exemption: Does not block spells cast by the protected player themselves</li>
- * </ul>
- *
- * <p>Visual Effects:</p>
- * Subclasses can configure two types of visual particle effects:
- * <ul>
- * <li>Pulse Flair: A periodic visual effect displayed every 10 ticks (flairPulse, pulseFlairParticle)</li>
- * <li>Impact Flair: A visual effect displayed when a spell hits the shield boundary (flairOnSpellImpact, impactFlairParticle)</li>
- * </ul>
  *
  * @author Azami7
  */
 public abstract class ShieldSpellEffect extends O2Effect {
     /**
-     * The protection radius of this shield, measured in blocks from the player's location.
-     *
-     * <p>Spell projectiles that enter this radius around the player will be blocked (subject to spell level
-     * restrictions). The radius is also used for particle effect positions.</p>
+     * The protection radius in blocks from the player's location; also used to position particle effects.
      */
     int radius = 3;
 
     /**
-     * Whether this shield displays a periodic pulse visual effect.
-     *
-     * <p>If true, a particle effect (pulseFlairParticle) will be displayed every 10 ticks (0.5 seconds) at
-     * the player's location. This provides continuous visual feedback that the shield is active.</p>
+     * Whether to emit {@link #pulseFlairParticle} every 10 ticks while the shield is active.
      */
     boolean flairPulse = false;
 
     /**
-     * The particle type used for the periodic pulse visual effect.
-     *
-     * <p>This particle is displayed every 10 ticks at the player's location when flairPulse is true.
-     * Common choices: Particle.CLOUD, Particle.ENCHANTMENT_TABLE, Particle.SPELL, etc.</p>
+     * The particle emitted for the periodic pulse when {@link #flairPulse} is true.
      */
     Particle pulseFlairParticle = Particle.CLOUD;
 
     /**
-     * Whether this shield displays a visual effect when spell projectiles hit its boundary.
-     *
-     * <p>If true, a particle effect (impactFlairParticle) will be displayed when a spell projectile
-     * collides with the shield boundary, providing immediate visual feedback of spell blocking.</p>
+     * Whether to emit {@link #impactFlairParticle} when a spell is blocked at the shield boundary.
      */
     boolean flairOnSpellImpact = false;
 
     /**
-     * The particle type used for the spell impact visual effect.
-     *
-     * <p>This particle is displayed at the player's location when a spell hits the shield boundary
-     * and flairOnSpellImpact is true. Common choices: Particle.BLOCK_DUST, Particle.CRIT, etc.</p>
+     * The particle emitted on spell impact when {@link #flairOnSpellImpact} is true.
      */
     Particle impactFlairParticle = Particle.CLOUD;
 
     /**
-     * Constructor for creating a spell shield effect.
-     *
-     * <p>Creates a protective shield around the target player. This constructor attempts to look up the
-     * player entity and kills the effect if the player is not found online. Subclasses should set shield
-     * configuration fields (radius, flairPulse, flairOnSpellImpact, particles) during initialization.</p>
+     * Constructor. Subclasses set the shield configuration fields (radius, flair flags, particles) after calling.
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the shield in game ticks
@@ -97,15 +61,7 @@ public abstract class ShieldSpellEffect extends O2Effect {
     }
 
     /**
-     * Check the effect each game tick and apply visual effects.
-     *
-     * <p>This method executes once per tick and performs the following:</p>
-     * <ol>
-     * <li>Ages the effect by 1 tick (for non-permanent effects)</li>
-     * <li>Returns early if the effect has been killed</li>
-     * <li>If flairPulse is enabled and the duration is divisible by 10 (every 10 ticks / 0.5 seconds),
-     *     displays the pulse flair particle effect</li>
-     * </ol>
+     * Age the shield and, when pulse flair is enabled, emit the pulse particle every 10 ticks.
      */
     @Override
     public void checkEffect() {
@@ -122,13 +78,6 @@ public abstract class ShieldSpellEffect extends O2Effect {
         }
     }
 
-    /**
-     * Perform cleanup when this shield effect is removed.
-     *
-     * <p>This method is called when the shield expires or is explicitly removed. The default implementation
-     * does nothing, as shields do not require special cleanup (particles and targeting restrictions are
-     * automatically handled). Subclasses can override to perform additional cleanup if needed.</p>
-     */
     @Override
     public void doRemove() {
     }
@@ -136,23 +85,15 @@ public abstract class ShieldSpellEffect extends O2Effect {
     /**
      * Get the radius for this shield spell effect.
      *
-     * @return the radius for this shield spell effect.
+     * @return the radius in blocks
      */
     public int getRadius() {
         return radius;
     }
 
     /**
-     * Block spell projectiles that hit the shield boundary.
-     *
-     * <p>This method is called when a spell projectile moves and checks if it has entered the shield radius.
-     * If the projectile is within the shield radius:
-     * <ul>
-     * <li>Performs a spell level check: the spell's level must be ≤ (shield's level + 1) to be blocked</li>
-     * <li>If the spell qualifies, cancels the projectile movement to block it</li>
-     * <li>If flairOnSpellImpact is enabled, displays the impact flair particle effect</li>
-     * </ul>
-     * Spells cast by the protected player are always exempted from blocking.
+     * Block a spell projectile that enters the shield radius, unless it is above (shield level + 1) or was cast by
+     * the protected player. On a block, emits the impact particle if {@link #flairOnSpellImpact} is set.
      *
      * @param event the spell projectile move event
      */
@@ -180,9 +121,6 @@ public abstract class ShieldSpellEffect extends O2Effect {
     /**
      * Kill the shield when the protected player quits the server.
      *
-     * <p>If the protected player logs out, the shield is automatically removed since it no longer has
-     * a target player to protect. This prevents orphaned shield effects from remaining active.</p>
-     *
      * @param event the player quit event
      */
     void doOnPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
@@ -191,11 +129,7 @@ public abstract class ShieldSpellEffect extends O2Effect {
     }
 
     /**
-     * Prevent entity targeting of the protected player.
-     *
-     * <p>When an entity (mob) attempts to target the protected player, this method cancels the
-     * EntityTargetEvent, preventing the entity from acquiring the player as a target. This provides
-     * protection against mob aggression in addition to spell blocking.</p>
+     * Cancel any mob's attempt to target the protected player.
      *
      * @param event the entity target event
      */

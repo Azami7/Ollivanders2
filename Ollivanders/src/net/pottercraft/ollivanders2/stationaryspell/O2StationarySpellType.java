@@ -9,14 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Enumeration of all available stationary spells in Ollivanders2.
- *
- * <p>Each stationary spell type encapsulates the implementation class and magic level required
- * to cast the spell. Stationary spells are area-of-effect spells that persist in a location
- * and affect players within their radius.</p>
- *
- * <p>This enum provides utility methods for looking up spells by name, checking if a player is
- * within a spell's radius, and retrieving spell metadata such as class and magic level.</p>
+ * The stationary spells available in Ollivanders2. Each constant pairs a spell name with its implementation class and
+ * the magic level required to cast it.
  *
  * @author Azami7
  * @version Ollivanders2
@@ -124,25 +118,18 @@ public enum O2StationarySpellType {
     TRANQUILLUS(TRANQUILLUS.class, MagicLevel.NEWT);
 
     /**
-     * The implementation class for this stationary spell.
-     *
-     * <p>Used to instantiate new instances of this spell type and access spell-specific behavior.</p>
+     * The {@link O2StationarySpell} subclass that implements this spell.
      */
     private final Class<?> className;
 
     /**
-     * The magic level required to cast this stationary spell.
-     *
-     * <p>Used to determine compatibility with counter-spells and other magic interactions that depend
-     * on spell power levels.</p>
+     * The magic level required to cast this spell; also gates which counter-spells can dispel it.
      */
     private final MagicLevel level;
 
     /**
-     * Constructs a new stationary spell type with the specified implementation class and magic level.
-     *
-     * @param className the implementation class for this spell type (not null)
-     * @param level     the magic level required to cast this spell (not null)
+     * @param className the implementation class for this spell type
+     * @param level     the magic level required to cast this spell
      */
     O2StationarySpellType(@NotNull Class<?> className, @NotNull MagicLevel level) {
         this.className = className;
@@ -150,9 +137,9 @@ public enum O2StationarySpellType {
     }
 
     /**
-     * Gets the implementation class for this stationary spell type.
+     * Get the implementation class for this spell type.
      *
-     * @return the Class object representing the implementation of this spell (never null)
+     * @return the class implementing this spell
      */
     @NotNull
     public Class<?> getClassName() {
@@ -160,12 +147,9 @@ public enum O2StationarySpellType {
     }
 
     /**
-     * Gets the magic level required to cast this stationary spell.
+     * Get the magic level required to cast this spell. A counter-spell must be of equal or higher level to dispel it.
      *
-     * <p>The level is used to determine compatibility with counter-spells and defensive magic.
-     * A counter-spell must be of equal or higher level to successfully dispel this spell.</p>
-     *
-     * @return the magic level of this spell (never null)
+     * @return the magic level of this spell
      */
     @NotNull
     public MagicLevel getLevel() {
@@ -173,14 +157,10 @@ public enum O2StationarySpellType {
     }
 
     /**
-     * Looks up a stationary spell type by its enum name (case-insensitive).
+     * Look up a stationary spell type by its enum name, case-insensitively.
      *
-     * <p>The method converts the input string to uppercase and attempts to match it against
-     * the enum constant names. For example, "muffliato" or "MUFFLIATO" both resolve to
-     * {@link #MUFFLIATO}. Invalid names gracefully return null without throwing an exception.</p>
-     *
-     * @param name the name of the spell to look up (not null)
-     * @return the matching spell type, or null if no spell with that name exists
+     * @param name the spell name, e.g. "muffliato" or "MUFFLIATO"
+     * @return the matching spell type, or null if the name matches no spell
      */
     @Nullable
     public static O2StationarySpellType getStationarySpellTypeFromString(@NotNull String name) {
@@ -197,13 +177,9 @@ public enum O2StationarySpellType {
     }
 
     /**
-     * Gets the human-readable name for this spell type.
+     * Get the human-readable name for this spell type, e.g. {@link #PROTEGO_MAXIMA} becomes "Protego Maxima".
      *
-     * <p>Transforms the enum constant name by replacing underscores with spaces and capitalizing
-     * the first letter of each word. For example, {@link #MUFFLIATO} becomes "Muffliato" and
-     * {@link #PROTEGO_MAXIMA} becomes "Protego Maxima".</p>
-     *
-     * @return the formatted spell name (never null)
+     * @return the formatted spell name
      */
     @NotNull
     public String getSpellName() {
@@ -213,14 +189,10 @@ public enum O2StationarySpellType {
     }
 
     /**
-     * Checks whether a player is within the radius of an active stationary spell of this type.
+     * Check whether a player is within the radius of any stationary spell of this type.
      *
-     * <p>Retrieves all active stationary spells at the player's current location and checks if any
-     * are of this spell type. A player may be affected by multiple spell types simultaneously.</p>
-     *
-     * @param player the player to check (not null)
-     * @return true if the player is within the radius of at least one active spell of this type,
-     *         false otherwise
+     * @param player the player to check
+     * @return true if the player is inside at least one stationary spell of this type, false otherwise
      */
     public boolean isPlayerInsideStationarySpell(@NotNull Player player) {
         Location location = player.getLocation();

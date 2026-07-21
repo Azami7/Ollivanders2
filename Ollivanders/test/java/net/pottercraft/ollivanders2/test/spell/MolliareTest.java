@@ -10,24 +10,19 @@ import org.jetbrains.annotations.NotNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Tests for the {@link net.pottercraft.ollivanders2.spell.MOLLIARE} spell.
- *
- * <p>Verifies the spell creates a stationary cushioning effect at the target location by testing that
- * a dirt block is properly set up before the spell is cast.</p>
+ * Tests for the {@link net.pottercraft.ollivanders2.spell.MOLLIARE} spell. Extends {@link StationarySpellTest} for
+ * the shared stationary-spell tests.
  *
  * @author Azami7
- * @see net.pottercraft.ollivanders2.spell.MOLLIARE
  * @see net.pottercraft.ollivanders2.stationaryspell.MOLLIARE
  */
 public class MolliareTest extends StationarySpellTest {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.MOLLIARE;
     }
 
-    /** {@inheritDoc} */
     @Override
     O2StationarySpellType getStationarySpellType() {
         return O2StationarySpellType.MOLLIARE;

@@ -16,39 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for {@link net.pottercraft.ollivanders2.spell.Pyrotechnia}
- * spell implementations.
- *
- * <p>Provides shared test infrastructure for all spells that launch fireworks. Tests verify that:
- * <ul>
- * <li>The spell correctly calculates the number of fireworks based on caster experience</li>
- * <li>Fireworks are spawned with the correct properties (power, type, colors, effects)</li>
- * <li>All configured fireworks are spawned before the spell completes</li>
- * <li>Fireworks are properly configured with fade and flicker effects when enabled</li>
- * </ul></p>
- *
- * <p>All tests are combined into a single method because parallel test execution would interfere
- * with entity persistence and timing-dependent assertions.</p>
+ * Base test class for {@link Pyrotechnia} spell implementations.
  *
  * @author Azami7
- * @see Pyrotechnia for the spell superclass being tested
- * @see O2SpellTestSuper for the base spell testing framework
+ * @see Pyrotechnia
  */
 abstract public class PyrotechniaTest extends O2SpellTestSuper {
     /**
-     * Test that the spell correctly spawns all configured fireworks with proper properties.
-     *
-     * <p>Verifies:
-     * <ul>
-     * <li>Number of fireworks is calculated correctly and within min/max bounds</li>
-     * <li>First firework is spawned with correct power, type, colors, and effects</li>
-     * <li>Fade and flicker effects are applied when enabled</li>
-     * <li>All fireworks are spawned over the spell's duration</li>
-     * <li>Final count matches the expected number of fireworks</li>
-     * </ul></p>
-     *
-     * <p>Note: All tests are combined into one method to prevent parallel test execution from
-     * interfering with entity persistence and timing-dependent assertions.</p>
+     * Verify the spell spawns the expected number of fireworks, each with the configured power, type, colors, and
+     * effects. Everything is asserted in one method because the counts and spawned entities are order- and
+     * timing-dependent and cannot run in parallel.
      */
     @Override
     @Test
@@ -74,6 +51,10 @@ abstract public class PyrotechniaTest extends O2SpellTestSuper {
 
         assertEquals(pyrotechnia.getFireworkPower(), meta.getPower(), "firework power not expected");
         assertEquals(pyrotechnia.getFireworkType(), meta.getEffects().getFirst().getType(), "firework type not expected");
+        // the color getters must always return a non-null defensive copy, including for spells that set no fade colors
+        assertNotNull(pyrotechnia.getFireworkColors(), "getFireworkColors() returned null");
+        assertNotNull(pyrotechnia.getFadeColors(), "getFadeColors() returned null");
+
         for (Color color : pyrotechnia.getFireworkColors()) {
             assertTrue(meta.getEffects().getFirst().getColors().contains(color), "firework color missing");
         }

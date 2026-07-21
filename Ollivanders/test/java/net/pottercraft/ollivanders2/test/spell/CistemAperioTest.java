@@ -25,16 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the CISTEM_APERIO spell, the Box-Blasting Charm.
- *
- * <p>CISTEM_APERIO blasts open a container that the projectile strikes and ejects some of its contents into the
- * world. These tests verify the successful eject (including that duplicate stacks are each handled by slot rather
- * than destroyed), the failure paths for an empty container and for a skill level too low to eject anything, and
- * the no-op behavior against a non-container block.</p>
- *
- * <p>The per-item eject chance is normally a {@code usesModifier / 2} random roll. In test mode a cast at or above
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CISTEM_APERIO}.
+ * <p>
+ * The per-item eject chance is normally a {@code usesModifier / 2} random roll. In test mode a cast at or above
  * {@link O2Spell#spellMasteryLevel} is guaranteed to eject, so these tests are deterministic: casting at mastery
- * ejects every item, while experience 0 (modifier 0) can never satisfy the roll and ejects nothing.</p>
+ * ejects every item, while experience 0 can never satisfy the roll and ejects nothing.
+ * </p>
  *
  * @author Azami7
  */
@@ -46,15 +42,9 @@ public class CistemAperioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests blasting open a chest with contents.
-     *
-     * <p>The chest is seeded into specific slots (so the two identical emerald stacks stay separate rather than
-     * merging) and the caster's skill is maxed so every item is ejected. Verifies that:</p>
-     * <ul>
-     * <li>The spell is killed after striking the chest</li>
-     * <li>Every slot is emptied from the chest</li>
-     * <li>Every item, including both identical duplicate stacks, is dropped into the world (none destroyed)</li>
-     * </ul>
+     * Verify a maxed-skill cast empties every slot of a struck chest and drops every item into the world. Items are
+     * seeded into specific slots so the two identical emerald stacks stay separate, proving duplicates are each
+     * dropped rather than destroyed.
      */
     @Override
     @Test
@@ -93,10 +83,8 @@ public class CistemAperioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that blasting an empty container fails gracefully.
-     *
-     * <p>Verifies that the caster receives the "container shakes" failure message, no items are dropped, and the
-     * spell is killed.</p>
+     * Verify blasting an empty container sends the "container shakes" failure message, drops nothing, and kills the
+     * spell.
      */
     @Test
     void emptyContainerTest() {
@@ -119,10 +107,8 @@ public class CistemAperioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that a container fails to eject when the caster's skill is too low.
-     *
-     * <p>With experience 0 the eject roll can never pass. Verifies that the caster receives the "container shakes"
-     * failure message, the chest keeps all of its contents, and nothing is dropped.</p>
+     * Verify that at experience 0 (the roll can never pass) the chest keeps all its contents, nothing is dropped, and
+     * the caster gets the "container shakes" failure message.
      */
     @Test
     void noEjectTest() {
@@ -148,9 +134,7 @@ public class CistemAperioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the spell does nothing against a block that is not a container.
-     *
-     * <p>Verifies that the spell is killed, no failure message is sent, and no items are dropped.</p>
+     * Verify the spell is killed with no failure message and no dropped items when the target is not a container.
      */
     @Test
     void nonContainerTest() {

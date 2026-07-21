@@ -68,11 +68,7 @@ public final class VENTO_FOLIO extends O2Spell {
     }
 
     /**
-     * Set the per-cast success rate and flight duration based on the caster's skill.
-     * <p>
-     * Both values scale with {@code usesModifier}, so they are computed once per cast here rather
-     * than in the constructor. See {@link #calculateSuccessRate()} and {@link #calculateDuration()}.
-     * </p>
+     * Set the per-cast success rate and flight duration from the caster's skill.
      */
     @Override
     void doInitSpell() {
@@ -81,14 +77,10 @@ public final class VENTO_FOLIO extends O2Spell {
     }
 
     /**
-     * Set {@link #successRate} from the caster's skill.
-     * <p>
-     * The chance scales with {@code usesModifier}: a flat 100% at mastery ({@code >= 200}), half the
-     * modifier between 100 and 199, then fixed tiers of 25%, 10%, and a 5% floor for novices.
-     * </p>
+     * Set {@link #successRate} from the caster's skill: the chance rises with {@code usesModifier} to 100% at
+     * mastery, with a 5% floor for novices.
      */
     void calculateSuccessRate() {
-        // set success rate based on their experience
         if (usesModifier >= 200)
             successRate = 100;
         else if (usesModifier >= 100)
@@ -102,25 +94,18 @@ public final class VENTO_FOLIO extends O2Spell {
     }
 
     /**
-     * Set {@link #durationInSeconds}, the flight time granted on a successful cast, from the caster's skill.
-     * <p>
-     * Duration scales with {@code usesModifier}: half the modifier in seconds at high skill
-     * ({@code >= 100}, so at least 50 seconds), then fixed tiers of 30, 10, and 5 seconds. The value
-     * is converted to game ticks in {@link #doCheckEffect()} before the flight effect is applied.
-     * </p>
+     * Set {@link #durationInSeconds}, the flight time granted on a successful cast, from the caster's skill: the
+     * duration rises with {@code usesModifier}, with a 5-second floor for novices. Converted to game ticks in
+     * {@link #doCheckEffect()} before the flight effect is applied.
      */
     void calculateDuration() {
         if (usesModifier >= 100)
-            // >= 50 seconds
             durationInSeconds = (int)(usesModifier / 2);
         else if (usesModifier >= 50)
-            // 30 seconds
             durationInSeconds = 30;
         else if (usesModifier >= 10)
-            // 10 seconds
             durationInSeconds = 10;
-        else // < 10
-            // 5 seconds
+        else
             durationInSeconds = 5;
     }
 

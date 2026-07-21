@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2">The Standard Book of Spells, Grade 2</a>
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_2 extends O2Book {
     /**

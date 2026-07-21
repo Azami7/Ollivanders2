@@ -2,8 +2,10 @@ package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.effect.HIGHER_SKILL;
+import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
@@ -23,17 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link AMATO_ANIMO_ANIMATO_ANIMAGUS} spell, which handles the Animagus incantation and
- * transformation process.
- *
- * <p>Verifies the incantation effect is applied with and without strict conditions, including the dawn/sunset
- * time requirement.</p>
+ * Unit tests for {@link AMATO_ANIMO_ANIMATO_ANIMAGUS}, which handles the Animagus incantation and transformation.
  *
  * @author Azami7
- * @see AMATO_ANIMO_ANIMATO_ANIMAGUS
  */
 public class AmatoAnimoAnimatoAnimagusTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -41,16 +37,9 @@ public class AmatoAnimoAnimatoAnimagusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies the animagus incantation and transformation behavior.
-     *
-     * <ul>
-     * <li>Non-animagus with strict conditions disabled: incantation effect is applied regardless of time</li>
-     * <li>Non-animagus with strict conditions enabled: incantation fails outside dawn/sunset windows</li>
-     * <li>Non-animagus with strict conditions enabled: incantation succeeds at dawn and sunset</li>
-     * <li>Animagus: transforms to animal form with sufficient spell experience</li>
-     * <li>Animagus in animal form: reverts to human form</li>
-     * <li>Animagus with {@link HIGHER_SKILL}: transforms with doubled uses modifier</li>
-     * </ul>
+     * Walk the spell through its paths: a non-Animagus applies the incantation (always without strict conditions, only
+     * at dawn/sunset with them), and an Animagus transforms to animal form at sufficient skill, reverts from it, and
+     * transforms with a HIGHER_SKILL-doubled modifier.
      */
     @Override
     @Test
@@ -68,6 +57,12 @@ public class AmatoAnimoAnimatoAnimagusTest extends O2SpellTestSuper {
         assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(caster.getUniqueId(), O2EffectType.ANIMAGUS_INCANTATION), "animagus incantation effect not set");
         String message = caster.nextMessage();
         assertNotNull(message, "caster did not get success message");
+
+        // the incantation opens a 5-minute window to drink the potion; the effect's duration bounds enforce this
+        // regardless of the value passed by the spell, so verify it is ~5 minutes and not a shorter window
+        O2Effect incantation = Ollivanders2API.getPlayers().playerEffects.getEffect(caster.getUniqueId(), O2EffectType.ANIMAGUS_INCANTATION);
+        assertNotNull(incantation, "animagus incantation effect not found");
+        assertTrue(incantation.duration > (5 * Ollivanders2Common.ticksPerMinute) - 100, "animagus incantation window is not ~5 minutes");
 
         // cleanup
         Ollivanders2API.getPlayers().playerEffects.removeEffect(caster.getUniqueId(), O2EffectType.ANIMAGUS_INCANTATION);
@@ -124,7 +119,6 @@ public class AmatoAnimoAnimatoAnimagusTest extends O2SpellTestSuper {
         assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(caster.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT), "animagus caster did not change form with HIGHER_SKILL");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

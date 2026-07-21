@@ -38,27 +38,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link net.pottercraft.ollivanders2.potion.O2Potions} potion manager.
- * <p>
- * Verifies potion management functionality including potion instantiation, ingredient detection,
- * brewing, and lookup operations. Tests ensure that potions are properly loaded, cached, and
- * can be retrieved by various identifiers.
- * </p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.potion.O2Potions}, the potion manager.
  */
 public class O2PotionsTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded once before all tests with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
@@ -67,13 +56,6 @@ public class O2PotionsTest {
      */
     static World testWorld;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -87,10 +69,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getAllPotionTypes returns a list of all loaded potion type enums.
-     * <p>
-     * Simple getter - basic functionality verified by other potion tests.
-     * </p>
+     * getAllPotionTypes() is a simple getter, verified by the potion instantiation tests.
      */
     @Test
     void getAllPotionTypesTest() {
@@ -98,17 +77,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getAllPotions returns a collection of all loaded potion instances.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>The returned collection is not null</li>
-     * <li>The collection contains O2Potion instances (not null elements)</li>
-     * <li>The count matches expected loaded potions (all O2PotionType values minus those depending on disabled LibsDisguises)</li>
-     * <li>Each potion has a valid potion type set</li>
-     * <li>No duplicate potions exist in the collection</li>
-     * </ul>
-     * </p>
+     * getAllPotions() returns one valid, non-duplicate O2Potion instance per loaded potion type.
      */
     @Test
     void getAllPotionsTest() {
@@ -135,17 +104,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getAllPotionNames returns a list of all potion display names.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>The returned list is not null</li>
-     * <li>The list contains all O2PotionType display names</li>
-     * <li>The count matches the total number of potion types</li>
-     * <li>No names are null or empty</li>
-     * <li>All names are unique (verified through O2PotionTypeTest)</li>
-     * </ul>
-     * </p>
+     * getAllPotionNames() returns one non-empty display name per potion type.
      */
     @Test
     void getAllPotionNamesTest() {
@@ -169,7 +128,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test brewPotion creates a potion from cauldron ingredients (happy path).
+     * brewPotion() creates the expected potion from matching cauldron ingredients (happy path).
      */
     @Test
     void brewPotionTest() {
@@ -196,10 +155,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test brewPotion returns null when block is not a cauldron.
-     * <p>
-     * Verifies that brewPotion() rejects blocks that are not water cauldrons.
-     * </p>
+     * brewPotion() returns null when the block is not a water cauldron.
      */
     @Test
     void brewPotionNotCauldronTest() {
@@ -214,10 +170,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test brewPotion returns null when cauldron is empty.
-     * <p>
-     * Verifies that brewPotion() rejects cauldrons with no ingredients.
-     * </p>
+     * brewPotion() returns null for a cauldron with no ingredients.
      */
     @Test
     void brewPotionEmptyCauldronTest() {
@@ -229,10 +182,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test brewPotion returns bad potion when ingredients don't match any recipe.
-     * <p>
-     * Verifies that brewPotion() creates a bad potion when ingredients don't match any known potion recipe.
-     * </p>
+     * brewPotion() returns a bad potion when the ingredients match no known recipe.
      */
     @Test
     void brewPotionUnknownRecipeTest() {
@@ -250,10 +200,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test brewPotion returns bad potion when ingredients match wrong amounts.
-     * <p>
-     * Verifies that brewPotion() creates a bad potion when ingredients are present but in wrong amounts.
-     * </p>
+     * brewPotion() returns a bad potion when the right ingredients are present in the wrong amounts.
      */
     @Test
     void brewPotionWrongAmountsTest() {
@@ -274,10 +221,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test brewPotion returns bad potion when ingredients are incomplete.
-     * <p>
-     * Verifies that brewPotion() creates a bad potion when only some of the required ingredients are present.
-     * </p>
+     * brewPotion() returns a bad potion when only some of the required ingredients are present.
      */
     @Test
     void brewPotionIncompleteIngredientsTest() {
@@ -316,14 +260,10 @@ public class O2PotionsTest {
     }
 
     /**
-     * Create a water cauldron at the specified x-coordinate.
-     * <p>
-     * Helper method to reduce boilerplate in brewPotion tests. Creates a cauldron
-     * at (x, 4, 0) in the test world.
-     * </p>
+     * Create a water cauldron at (x, 4, 0) in the test world.
      *
      * @param x the x-coordinate for the cauldron location
-     * @return the Block set as a water cauldron
+     * @return the block set as a water cauldron
      */
     Block createCauldronAt(int x) {
         Location location = new Location(testWorld, x, 4, 0);
@@ -333,10 +273,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Drop an ingredient item at the specified location.
-     * <p>
-     * Helper method to reduce boilerplate when adding ingredients to cauldrons.
-     * </p>
+     * Drop an ingredient item at the given location.
      *
      * @param location       the location to drop the ingredient
      * @param ingredientType the type of ingredient to drop
@@ -349,14 +286,10 @@ public class O2PotionsTest {
     }
 
     /**
-     * Assert that the brewed result is a bad potion (not a valid O2Potion).
-     * <p>
-     * Helper method for tests that expect brewPotion to return a bad potion.
-     * Verifies the result is not null but cannot be found as a valid O2Potion.
-     * </p>
+     * Assert the brewed result is a bad potion: non-null but not resolvable to a valid O2Potion.
      *
-     * @param result   the ItemStack result from brewPotion (may be null, will fail assertion)
-     * @param scenario description of the test scenario for assertion messages
+     * @param result   the ItemStack result from brewPotion; a null result fails the assertion
+     * @param scenario description of the test scenario, used in assertion messages
      */
     void assertBadPotion(@Nullable ItemStack result, @NotNull String scenario) {
         assertNotNull(result, "brewPotion should return a bad potion for " + scenario);
@@ -365,11 +298,8 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test findPotionByIngredients (private method) matches potion recipes against ingredients.
-     * <p>
-     * This is a private method tested indirectly through public API. Verifies that ingredient
-     * matching works correctly for exact matches, wrong amounts, missing ingredients, and empty maps.
-     * </p>
+     * findPotionByIngredients() matches only exact ingredient-and-amount sets, returning null for wrong amounts,
+     * missing ingredients, or an empty map.
      */
     @Test
     void findPotionByIngredientsTest() {
@@ -399,11 +329,8 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getIngredientsInCauldron (private method) detects items in cauldron regions.
-     * <p>
-     * This is a private method tested indirectly through public API. Verifies that only O2Items
-     * are detected, non-O2Items are ignored, and multiple ingredients are properly aggregated.
-     * </p>
+     * getIngredientsInCauldron() detects only O2Items dropped in the cauldron, ignoring non-O2Items and aggregating
+     * distinct ingredient types.
      */
     @Test
     void getIngredientsInCauldronTest() {
@@ -431,16 +358,8 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test findPotionByItemMeta retrieves potions from item NBT metadata.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>Standard Minecraft potion items return null (not O2Potions)</li>
-     * <li>Empty item metadata returns null</li>
-     * <li>Valid O2Potion ItemStacks are correctly identified and retrieved</li>
-     * <li>The retrieved potion has the correct potion type set</li>
-     * </ul>
-     * </p>
+     * findPotionByItemMeta() resolves the O2Potion from a tagged ItemStack's meta, and returns null for empty meta or
+     * standard Minecraft potion meta.
      */
     @Test
     void findPotionByItemMetaTest() {
@@ -469,15 +388,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getPotionFromType instantiates potion classes from enum using reflection.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>A valid potion type returns a non-null O2Potion instance</li>
-     * <li>The returned potion has the correct potion type set</li>
-     * <li>All potion types in the enum can be successfully instantiated</li>
-     * </ul>
-     * </p>
+     * getPotionFromType() instantiates each potion type via reflection, returning an instance with the matching type.
      */
     @Test
     void getPotionFromTypeTest() {
@@ -496,17 +407,7 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getAllIngredientNames returns a list of all potion ingredient display names.
-     * <p>
-     * Verifies that:
-     * <ul>
-     * <li>The returned list is not null</li>
-     * <li>The list is not empty</li>
-     * <li>The count matches the ingredients list size</li>
-     * <li>No names are null or empty</li>
-     * <li>All names are unique (no duplicates)</li>
-     * </ul>
-     * </p>
+     * getAllIngredientNames() returns one non-empty, unique display name per ingredient.
      */
     @Test
     void getAllIngredientNamesTest() {
@@ -529,12 +430,8 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test isLoaded checks if a potion type is currently loaded.
-     * <p>
-     * Verifies that potion types in the cache are reported as loaded.
-     * Note: In test mode, all potions are loaded by default, so this primarily
-     * tests that the cache lookup works correctly.
-     * </p>
+     * isLoaded() reports true for a potion type in the cache. In test mode all potions are loaded, so this exercises
+     * only the cache lookup.
      */
     @Test
     void isLoadedTest() {
@@ -543,23 +440,13 @@ public class O2PotionsTest {
     }
 
     /**
-     * Test getPotionEffectMagicLevel returns the magic level for potion effects.
-     * <p>
-     * Simple getter - basic functionality verified by FINITE_INCANTATEM spell tests.
-     * </p>
+     * getPotionEffectMagicLevel() is a simple getter, verified by the FINITE_INCANTATEM spell tests.
      */
     @Test
     void getPotionEffectMagicLevelTest() {
         // simple getter, verified by FINITE_INCANTATEM spell tests
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

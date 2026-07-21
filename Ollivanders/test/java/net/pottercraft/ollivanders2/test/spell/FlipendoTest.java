@@ -13,14 +13,8 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for FLIPENDO spell functionality.
- *
- * <p>Tests the knockback jinx including:</p>
- * <ul>
- * <li>Spell configuration (min/max distance, strength reducer)</li>
- * <li>Entity targeting (all entity types can be targeted)</li>
- * <li>Velocity application (horizontal push, more powerful than Depulso)</li>
- * </ul>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.FLIPENDO}. Extends {@link KnockbackTest} for the shared
+ * knockback tests.
  *
  * @author autumnwoz
  * @author Azami7
@@ -51,9 +45,6 @@ public class FlipendoTest extends KnockbackTest {
         return EntityType.EGG;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override @Test
     void spellConstructionTest() {
         World testWorld = mockServer.addSimpleWorld("world");

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * Fantastic Beasts and Where to Find Them
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Fantastic_Beasts_and_Where_to_Find_Them">https://harrypotter.fandom.com/wiki/Fantastic_Beasts_and_Where_to_Find_Them</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Fantastic_Beasts_and_Where_to_Find_Them">Fantastic Beasts and Where to Find Them</a>
  */
 public class FANTASTIC_BEASTS extends O2Book {
     // todo make creature summoning and banishment charms

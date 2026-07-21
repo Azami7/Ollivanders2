@@ -28,11 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract test suite for PlayerTransformBase effects.
- *
- * <p>Tests the common transformation behavior: entity spawning, player hiding, passenger mounting,
- * and all event handlers (damage, death, teleport, apparition, dismount, vehicle exit). Each test
- * uses a unique world location to avoid entity persistence issues between tests.</p>
+ * Base test suite for {@link PlayerTransformBase} effects, covering the shared transformation behavior (entity
+ * spawn, player hiding, passenger mounting) and every event handler. Each scenario uses a distinct world
+ * location so spawned entities from different tests do not collide.
  *
  * @see PlayerTransformBase
  * @see EffectTestSuper

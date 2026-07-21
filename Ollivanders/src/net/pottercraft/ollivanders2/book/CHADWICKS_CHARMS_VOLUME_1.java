@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Chadwick's_Charms">https://harrypotter.fandom.com/wiki/Chadwick's_Charms</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Chadwick's_Charms">Chadwick's Charms</a>
  */
 public class CHADWICKS_CHARMS_VOLUME_1 extends O2Book {
     /**

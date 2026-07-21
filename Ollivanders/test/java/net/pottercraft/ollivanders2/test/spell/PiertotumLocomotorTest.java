@@ -34,32 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventClassMatcher.hasFiredEventInstance;
 
 /**
- * Unit tests for the PIERTOTUM_LOCOMOTOR spell.
- *
- * <p>PIERTOTUM_LOCOMOTOR transfigures iron and snow blocks into iron and snow golems. The spell has a
- * variable duration based on caster skill, becoming permanent at mastery level ≥ 1.5 (with house/year
- * restrictions). The spawned golem is loyal to its creator—it will not attack them and will automatically
- * retaliate against attackers.</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Spell targeting and entity transfiguration (inherited from BlockToEntityTransfigurationTest)</li>
- * <li>Success rate (always 100%)</li>
- * <li>Duration calculation and permanent transfiguration thresholds</li>
- * <li>House/year restrictions on permanent transfiguration</li>
- * <li>Event handlers for golem loyalty (no self-damage, retaliation against attackers, no targeting creator)</li>
- * </ul>
- *
- * @see net.pottercraft.ollivanders2.spell.PIERTOTUM_LOCOMOTOR for the spell implementation
- * @see BlockToEntityTransfigurationTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.PIERTOTUM_LOCOMOTOR}. Extends
+ * {@link BlockToEntityTransfigurationTest} for the shared transfiguration tests.
  */
 @Isolated
 public class PiertotumLocomotorTest extends BlockToEntityTransfigurationTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.PIERTOTUM_LOCOMOTOR
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -80,16 +59,16 @@ public class PiertotumLocomotorTest extends BlockToEntityTransfigurationTest {
     /**
      * Test spell-specific construction including success rate, duration calculation, and permanence thresholds.
      *
-     * <p>Verifies:
+     * <p>Verifies:</p>
      * <ul>
      * <li>Success rate is always 100%</li>
      * <li>Spell is temporary when caster skill &lt; spellMasteryLevel * 1.5</li>
-     * <li>Duration is clamped to min/max bounds</li>
+     * <li>Duration is limited to min/max bounds</li>
      * <li>Spell becomes permanent at skill ≥ spellMasteryLevel * 1.5 (when useYears is disabled)</li>
      * <li>Permanence is blocked when useYears is enabled and player year &lt; spell level requirement</li>
      * <li>Permanence is enabled when useYears is enabled and player year ≥ spell level requirement</li>
      * <li>Permanent transfigurations return false for isEntityTransfigured()</li>
-     * </ul></p>
+     * </ul>
      */
     @Override @Test
     void spellConstructionTest() {
@@ -148,16 +127,15 @@ public class PiertotumLocomotorTest extends BlockToEntityTransfigurationTest {
     /**
      * Test the golem's event handlers for loyalty behavior.
      *
-     * <p>Verifies that the spawned golem:
+     * <p>Verifies that the spawned golem:</p>
      * <ul>
      * <li>Does not damage its creator (attacks are cancelled)</li>
      * <li>Automatically retaliates against entities that attack its creator</li>
      * <li>Does not target its creator even when approached</li>
      * <li>Can target and be attacked by other entities normally</li>
-     * </ul></p>
+     * </ul>
      *
-     * <p>Note: Tests must be in a single method to avoid listener registration/cleanup conflicts
-     * between test instances.</p>
+     * <p>Tests must be in a single method to avoid listener registration/cleanup conflicts between test instances.</p>
      */
     @Test
     void eventHandlersTest() {

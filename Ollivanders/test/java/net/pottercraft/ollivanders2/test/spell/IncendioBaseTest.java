@@ -23,37 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for unit testing IncendioSuper spell implementations.
- *
- * <p>Provides comprehensive test coverage for fire-based spell mechanics including:
- * <ul>
- * <li><strong>Fire Effect:</strong> Verifies fire is placed above burnable blocks</li>
- * <li><strong>Block Targeting:</strong> Tests single-target vs strafe (radius) behavior</li>
- * <li><strong>Entity Targeting:</strong> Validates fire applied to entities and items in effective radius</li>
- * <li><strong>Duration:</strong> Confirms burn duration is calculated and clamped correctly</li>
- * <li><strong>Reversion:</strong> Verifies temporary fire blocks are reverted when spell ends</li>
- * <li><strong>Invalid Targets:</strong> Tests spell behavior on non-burnable blocks</li>
- * <li><strong>Permanent Burn:</strong> Verifies fire on soul sand/netherrack is not reverted</li>
- * </ul>
- *
- * <p>Subclasses implement {@link #getSpellType()} to specify which IncendioSuper variant to test.
- * The same test methods are run for each subclass, allowing different spell configurations
- * (e.g., INCENDIO, INCENDIO_DUO, INCENDIO_TRIA) to be validated with the same test suite.</p>
+ * Base test class for {@link IncendioBase} spells, covering fire placement on blocks/entities/items, single vs strafe
+ * targeting, burn duration bounds, reversion, invalid targets, and permanent burn on soul sand/netherrack.
  *
  * @author Azami7
  */
 abstract public class IncendioBaseTest extends O2SpellTestSuper {
     /**
-     * Tests basic fire spell effect on a burnable block.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Fire is placed above the target block (one block up)</li>
-     * <li>The target block itself is not destroyed or changed</li>
-     * <li>Fire effects work on burnable materials like OAK_PLANKS</li>
-     * </ul>
-     *
-     * <p>This is the fundamental test that the spell actually sets blocks on fire.</p>
+     * Verify the spell places fire above a burnable block without changing the block itself.
      */
     @Override
     @Test
@@ -75,15 +52,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell behavior when cast on a non-burnable block.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>No fire is placed on water or other non-burnable blocks</li>
-     * <li>The spell is killed when its target cannot burn</li>
-     * </ul>
-     *
-     * <p>This ensures the spell fails safely when cast on inappropriate targets.</p>
+     * Verify the spell places no fire and is killed when cast at a non-burnable block.
      */
     @Test
     void invalidTargetTest() {
@@ -103,17 +72,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests permanent fire behavior on soul sand and netherrack.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Fire is placed on soul sand as expected</li>
-     * <li>Fire on soul sand is NOT tracked as a temporary block change (will burn permanently)</li>
-     * <li>When the spell ends, the fire is NOT reverted (stays lit permanently)</li>
-     * </ul>
-     *
-     * <p>This ensures that fire on certain materials (soul sand, netherrack) is not cleaned up
-     * when the spell duration expires, allowing it to burn indefinitely.</p>
+     * Verify fire placed on soul sand is not tracked for reversion and stays lit after the spell ends.
      */
     @Test
     void staysLitTest() {
@@ -138,15 +97,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests fire effect on dropped items.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Items at the target location are set on fire</li>
-     * <li>Item fire ticks are set to the calculated burn duration</li>
-     * </ul>
-     *
-     * <p>This ensures the spell can ignite items as well as blocks and entities.</p>
+     * Verify the spell sets a dropped item on fire.
      */
     @Test
     void itemTargetTest() {
@@ -165,16 +116,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests fire effect on living entities.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Entities at the target location are set on fire</li>
-     * <li>Entity fire ticks are set to the calculated burn duration</li>
-     * <li>The spell continues to exist (not killed) when targeting entities</li>
-     * </ul>
-     *
-     * <p>This ensures the spell affects entities as well as blocks.</p>
+     * Verify the spell sets a living entity on fire and keeps burning (not killed).
      */
     @Test
     void entityTargetTest() {
@@ -194,16 +136,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests radius/strafe behavior for block targeting.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Strafe spells (with radius > 1) affect multiple blocks in an area</li>
-     * <li>Non-strafe spells affect only the single target block</li>
-     * </ul>
-     *
-     * <p>This ensures the spell's strafe configuration controls whether it affects a single target
-     * or all blocks within a radius.</p>
+     * Verify a strafe spell ignites multiple blocks in its radius while a non-strafe spell ignites only one.
      */
     @Test
     void blockStrafeTest() {
@@ -226,17 +159,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests radius/strafe behavior for entity targeting.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Strafe spells affect all entities within the effective radius (target1, target2, target3)</li>
-     * <li>Non-strafe spells affect only one entity even if multiple are present at the target location</li>
-     * <li>Entities outside the effective radius (target3 at NORTH) are only affected by strafe spells</li>
-     * </ul>
-     *
-     * <p>This ensures the spell's strafe configuration controls whether it affects one entity
-     * or all entities within the area.</p>
+     * Verify a strafe spell ignites every entity in its radius while a non-strafe spell ignites only one.
      */
     @Test
     void entityStrafeTest() {
@@ -266,17 +189,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests radius/strafe behavior for item targeting.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Strafe spells affect all items within the effective radius (target1, target2, target3)</li>
-     * <li>Non-strafe spells affect only one item even if multiple are present at the target location</li>
-     * <li>Items outside the effective radius (target3 at EAST) are only affected by strafe spells</li>
-     * </ul>
-     *
-     * <p>This ensures the spell's strafe configuration controls whether it affects one item
-     * or all items within the area.</p>
+     * Verify a strafe spell ignites every item in its radius while a non-strafe spell ignites only one.
      */
     @Test
     void itemStrafeTest() {
@@ -306,16 +219,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests burn duration calculation and clamping.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>The calculated burn duration is within valid bounds (min to max)</li>
-     * <li>The spell respects configured min and max duration limits</li>
-     * </ul>
-     *
-     * <p>This ensures burn duration scaling (based on caster spell level and duration modifier)
-     * produces reasonable values that don't exceed configured boundaries.</p>
+     * Verify the computed burn duration stays within the spell's min and max bounds.
      */
     @Test
     void burnDurationTest() {
@@ -334,19 +238,7 @@ abstract public class IncendioBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests fire block reversion when spell ends.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Fire is placed above the target block</li>
-     * <li>The fire block is tracked as a temporary block change</li>
-     * <li>The target block itself is not tracked (only the fire block above it)</li>
-     * <li>When the spell is killed, the fire block is reverted to its original type (AIR)</li>
-     * <li>The fire block is removed from temporary block tracking after reversion</li>
-     * </ul>
-     *
-     * <p>This ensures that temporary fire blocks are properly cleaned up and the world is restored
-     * to its original state when the spell ends.</p>
+     * Verify killing the spell reverts the temporary fire block back to air and clears it from change tracking.
      */
     @Override
     @Test

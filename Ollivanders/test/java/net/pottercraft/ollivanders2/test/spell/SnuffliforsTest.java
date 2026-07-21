@@ -22,18 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for {@link SNUFFLIFORS}.
- *
- * <p>Tests Snufflifors-specific behavior: verifies the transfigured fox is set to baby.</p>
- *
- * @see SNUFFLIFORS
+ * Unit tests for {@link SNUFFLIFORS}. Extends {@link ItemToEntityTransfigurationTest} for the shared transfiguration
+ * tests.
  */
 public class SnuffliforsTest extends ItemToEntityTransfigurationTest {
-    /**
-     * Returns the spell type being tested.
-     *
-     * @return SNUFFLIFORS spell type
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

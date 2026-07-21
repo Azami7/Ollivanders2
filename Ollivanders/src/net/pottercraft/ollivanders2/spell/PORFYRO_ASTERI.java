@@ -11,11 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Porfyro Asteri - The Purple Star Fireworks Spell.
- *
- * <p>Launches one or more purple star-burst fireworks into the air. The number of fireworks
- * spawned depends on the caster's experience level, up to a maximum of 10. Each firework
- * explodes in a star pattern with a purple color.</p>
+ * Fireworks charm that launches purple star-burst fireworks.
  */
 public final class PORFYRO_ASTERI extends Pyrotechnia {
     /**
@@ -55,10 +51,7 @@ public final class PORFYRO_ASTERI extends Pyrotechnia {
     }
 
     /**
-     * Calculate the number of fireworks to spawn on initialization.
-     *
-     * <p>Called during spell initialization to determine how many fireworks this spell
-     * will launch based on the caster's experience level.</p>
+     * Set the number of fireworks to launch based on the caster's experience.
      */
     @Override
     void doInitSpell() {

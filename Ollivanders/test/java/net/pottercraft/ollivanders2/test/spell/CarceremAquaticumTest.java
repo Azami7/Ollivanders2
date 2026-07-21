@@ -15,34 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the CARCEREM_AQUATICUM spell.
- *
- * <p>CARCEREM_AQUATICUM traps the target player in a protective orb of non-flowing water,
- * immobilizing them while preventing drowning damage. The spell creates a 3x3 grid of water
- * blocks above, at, and below the player's eye level. The spell only affects players at normal
- * or reduced size (scale ≤ 1.0).</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Spell targeting and effect application (inherited from ImmobilizePlayerTest)</li>
- * <li>Effect duration calculation (inherited)</li>
- * <li>Partial immobilization behavior (inherited)</li>
- * <li>Water breathing effect application</li>
- * <li>Water block creation in 3-level grid pattern</li>
- * <li>Water block tracking as temporarily changed blocks</li>
- * <li>Water block cleanup and reversion after effect duration</li>
- * <li>Scale attribute validation (not testable in MockBukkit)</li>
- * </ul>
- *
- * @see net.pottercraft.ollivanders2.spell.CARCEREM_AQUATICUM for the spell implementation
- * @see ImmobilizePlayerTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CARCEREM_AQUATICUM}. Extends {@link ImmobilizePlayerTest}
+ * for the shared immobilization tests; adds coverage for the WATER_BREATHING effect that keeps the trapped player
+ * from drowning.
  */
 public class CarceremAquaticumTest extends ImmobilizePlayerTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.CARCEREM_AQUATICUM
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -50,11 +27,8 @@ public class CarceremAquaticumTest extends ImmobilizePlayerTest {
     }
 
     /**
-     * Test that only normal-sized players can be targeted.
-     *
-     * <p>CARCEREM_AQUATICUM only targets players with scale ≤ 1.0. This test cannot be implemented
-     * as MockBukkit does not support the SCALE attribute. The test is overridden to do nothing but
-     * would verify that oversized players (scale > 1.0) cannot be targeted.</p>
+     * Overridden to a no-op: the scale ≤ 1.0 targeting restriction cannot be tested because MockBukkit does not
+     * support the SCALE attribute.
      */
     @Override
     @Test
@@ -63,11 +37,8 @@ public class CarceremAquaticumTest extends ImmobilizePlayerTest {
     }
 
     /**
-     * Test that the WATER_BREATHING effect is applied to the target.
-     *
-     * <p>Verifies that the spell applies the WATER_BREATHING effect to the target player to prevent
-     * drowning inside the water orb. Water block creation is tested via the inherited
-     * {@link ImmobilizePlayerTest#imprisonEffectTest()}.</p>
+     * Verify the spell applies WATER_BREATHING to the target so it does not drown in the orb. Water-block creation is
+     * covered by the inherited {@link ImmobilizePlayerTest#imprisonEffectTest()}.
      */
     @Override
     @Test

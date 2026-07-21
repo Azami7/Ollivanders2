@@ -16,54 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link MOLLIARE} stationary spell.
- *
- * <p>Tests the molliare charm spell (Cushioning Charm), which prevents entities from taking fall
- * damage within the spell's protected area. Inherits common spell tests from
- * {@link O2StationarySpellTest} and provides spell-specific factory methods for test setup.</p>
- *
- * <p>The test verifies:
- * <ul>
- *   <li>Entities inside the spell area do not take fall damage</li>
- *   <li>Entities outside the spell area take normal fall damage</li>
- *   <li>Entities inside the spell area still take damage from other sources</li>
- * </ul>
- * </p>
+ * Unit tests for {@link MOLLIARE}. Extends {@link O2StationarySpellTest} for the shared stationary-spell tests.
  *
  * @author Azami7
  */
 public class MolliareTest extends O2StationarySpellTest {
-    /**
-     * Gets the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#MOLLIARE}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.MOLLIARE;
     }
 
-    /**
-     * Creates a MOLLIARE spell instance for testing.
-     *
-     * <p>Constructs a new molliare spell at the specified location with the test's configured
-     * radius and duration values (minimum values by default).</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new MOLLIARE spell instance (not null)
-     */
     @Override
     MOLLIARE createStationarySpell(Player caster, Location location) {
         return new MOLLIARE(testPlugin, caster.getUniqueId(), location, MOLLIARE.minRadiusConfig, MOLLIARE.minDurationConfig);
     }
 
-    /**
-     * Tests molliare upkeep behavior (skipped - covered by base class tests).
-     *
-     * <p>The molliare spell's upkeep method only performs aging, which is already tested
-     * comprehensively by the inherited ageAndKillTest() from the base test class.</p>
-     */
     @Override
     @Test
     void upkeepTest() {
@@ -71,15 +38,7 @@ public class MolliareTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests fall damage negation and selective damage blocking behavior.
-     *
-     * <p>Verifies that the spell properly handles entity damage events:
-     * <ul>
-     *   <li>Entities inside the spell area do not take fall damage (event is cancelled)</li>
-     *   <li>Entities outside the spell area take normal fall damage (event is not cancelled)</li>
-     *   <li>Entities inside the spell area still take damage from other sources like fire</li>
-     * </ul>
-     * </p>
+     * Fall damage is cancelled inside the spell area but not outside it, and non-fall damage inside is not cancelled.
      */
     @Test
     void doOnEntityDamageEventTest() {
@@ -95,7 +54,7 @@ public class MolliareTest extends O2StationarySpellTest {
         caster.setLocation(location);
         assertTrue(molliare.isLocationInside(caster.getLocation()));
         DamageSource damageSource = DamageSource.builder(DamageType.FALL)
-                .withDamageLocation(caster.getLocation())  // location of the fire block
+                .withDamageLocation(caster.getLocation())
                 .build();
         EntityDamageEvent event = new EntityDamageEvent(caster, EntityDamageEvent.DamageCause.FALL, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(event);
@@ -114,7 +73,7 @@ public class MolliareTest extends O2StationarySpellTest {
         caster.setLocation(location);
         assertTrue(molliare.isLocationInside(caster.getLocation()));
         damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                .withDamageLocation(caster.getLocation())  // location of the fire block
+                .withDamageLocation(caster.getLocation())
                 .build();
         event = new EntityDamageEvent(caster, EntityDamageEvent.DamageCause.FIRE, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(event);

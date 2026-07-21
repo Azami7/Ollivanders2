@@ -14,8 +14,7 @@ import java.util.ArrayList;
  * Turn target player in to a spider.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Insect_Hex">https://harrypotter.fandom.com/wiki/Insect_Hex</a>
- * @since 2.2.6
+ * @see <a href="https://harrypotter.fandom.com/wiki/Insect_Hex">Harry Potter Wiki - Insect Hex</a>
  */
 public final class ENTOMORPHIS extends PlayerDisguise {
     /**
@@ -56,6 +55,9 @@ public final class ENTOMORPHIS extends PlayerDisguise {
         initSpell();
     }
 
+    /**
+     * Calculate the spell's success rate from the caster's skill level.
+     */
     @Override
     void doInitSpell() {
         calculateSuccessRate();

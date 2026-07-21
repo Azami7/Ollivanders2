@@ -27,23 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for {@link REPARIFORS}, the healing spell.
- *
- * <p>Tests cover the spell's three-stage priority healing cascade:
- * <ul>
- * <li><strong>No target:</strong> Spell hits a block with no nearby players and is killed</li>
- * <li><strong>Minor heal:</strong> Player without ailments receives {@link PotionEffectType#INSTANT_HEALTH}.
- *     Because {@code INSTANT_HEALTH} is an instant effect (it fires once and is never stored in
- *     the active effects list), the test observes it via an {@link EntityPotionEffectEvent} listener
- *     rather than {@code hasPotionEffect}.</li>
- * <li><strong>Immobilize aging:</strong> Player with {@link O2EffectType#IMMOBILIZE} has the effect's
- *     duration reduced by an experience-scaled percentage</li>
- * <li><strong>Suspension blocks immobilize healing:</strong> Player with both
- *     {@link O2EffectType#IMMOBILIZE} and {@link O2EffectType#SUSPENSION} is not treated for
- *     immobilize (to prevent falling while suspended)</li>
- * <li><strong>Poison halving:</strong> Player with {@link PotionEffectType#POISON} has the poison
- *     duration halved, preserving the original amplifier</li>
- * </ul>
+ * Unit tests for {@link REPARIFORS}. INSTANT_HEALTH is an instant effect that is never stored in the active-effects
+ * list, so the minor-heal case is observed via an {@link EntityPotionEffectEvent} listener rather than
+ * {@code hasPotionEffect}.
  *
  * @author Azami7
  */
@@ -55,12 +41,9 @@ public class RepariforsTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests the full progression of Reparifors healing scenarios.
-     *
-     * <p>Sub-tests run in order against the same world and target player. Effect state is
-     * cleaned up between sub-tests via explicit effect removal. The target is placed 10 blocks
-     * from the caster (rather than the usual 3) to give more ticks of projectile travel,
-     * making the natural-aging arithmetic in the duration assertions more predictable.
+     * Walk Reparifors through its healing cascade against one target: no-target kill, minor heal, immobilize aging,
+     * suspension blocking immobilize healing, and poison halving. The target sits 10 blocks away (not the usual 3) so
+     * projectile travel gives predictable natural-aging arithmetic in the duration assertions.
      */
     @Override
     @Test

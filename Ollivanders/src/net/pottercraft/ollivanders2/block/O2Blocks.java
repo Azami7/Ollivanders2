@@ -30,13 +30,10 @@ import java.util.Set;
  */
 public final class O2Blocks implements Listener {
     /**
-     * temporarily changed blocks and their original blockState
+     * Blocks temporarily changed by magic, keyed to their original data and the magic that changed them.
      */
     private final Map<Block, ChangedBlockData> temporarilyChangedBlocks = new HashMap<>();
 
-    /**
-     * Reference to the Ollivanders2 plugin instance
-     */
     private final Ollivanders2 p;
 
     /**
@@ -51,10 +48,9 @@ public final class O2Blocks implements Listener {
         O2StationarySpell changedByStationary;
 
         /**
-         * Constructor.
-         *
-         * @param data  the original block data
-         * @param spell the spell that changed the block
+         * @param data            the original block data
+         * @param spell           the spell that changed the block, or null if a stationary spell did
+         * @param stationarySpell the stationary spell that changed the block, or null if a spell did
          */
         ChangedBlockData(@NotNull BlockData data, @Nullable O2Spell spell, @Nullable O2StationarySpell stationarySpell) {
             blockData = data;
@@ -75,17 +71,18 @@ public final class O2Blocks implements Listener {
     }
 
     /**
-     *
+     * Plugin enable hook; no startup work is needed.
      */
     public void onEnable() {
     }
 
     /**
-     * Add a block *before* it has been changed. This should not be used for blocks that should not be reverted when the
-     * magic that created them is killed or the server is restarted.
+     * Track a block before a spell changes it so its original state can be restored later. Call this before modifying
+     * the block. Do not use for permanent changes meant to survive the magic ending or a server restart.
      *
-     * @param block     the block
-     * @param changedBy the spell that changed the block
+     * @param block     the block, captured at its current pre-change state
+     * @param changedBy the spell changing the block
+     * @return true if the block is now tracked; false if it was already tracked
      */
     public synchronized boolean addTemporarilyChangedBlock(@NotNull Block block, @NotNull O2Spell changedBy) {
         if (temporarilyChangedBlocks.containsKey(block))
@@ -100,11 +97,12 @@ public final class O2Blocks implements Listener {
     }
 
     /**
-     * Add a block *before* it has been changed. This should not be used for blocks that should not be reverted when the
-     * magic that created them is killed or the server is restarted.
+     * Track a block before a stationary spell changes it so its original state can be restored later. Call this before
+     * modifying the block. Do not use for permanent changes meant to survive the magic ending or a server restart.
      *
-     * @param block     the block
-     * @param changedBy the stationary spell that changed the block
+     * @param block     the block, captured at its current pre-change state
+     * @param changedBy the stationary spell changing the block
+     * @return true if the block is now tracked; false if it was already tracked
      */
     public synchronized boolean addTemporarilyChangedBlock(@NotNull Block block, @NotNull O2StationarySpell changedBy) {
         if (temporarilyChangedBlocks.containsKey(block))
@@ -132,7 +130,7 @@ public final class O2Blocks implements Listener {
      * Get all blocks that were changed by a specific spell.
      *
      * @param spell the spell to query
-     * @return list of blocks changed by the spell
+     * @return the blocks changed by the spell; empty if none
      */
     @NotNull
     public List<Block> getBlocksChangedBySpell(@NotNull O2Spell spell) {
@@ -153,7 +151,7 @@ public final class O2Blocks implements Listener {
      * Get all blocks that were changed by a specific stationary spell.
      *
      * @param spell the stationary spell to query
-     * @return list of blocks changed by the spell
+     * @return the blocks changed by the stationary spell; empty if none
      */
     @NotNull
     public List<Block> getBlocksChangedByStationarySpell(@NotNull O2StationarySpell spell) {

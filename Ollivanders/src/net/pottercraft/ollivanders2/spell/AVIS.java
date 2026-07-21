@@ -14,10 +14,6 @@ import java.util.ArrayList;
 
 /**
  * The Bird-Conjuring Charm, which conjures a flock of birds from the tip of the wand.
- * <p>
- * This is a non-projectile spell: one bird is spawned at the caster's location on each tick until the number of birds
- * (determined by the caster's skill in {@link #doInitSpell()}) is exhausted, producing a stream of birds.
- * </p>
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Bird-Conjuring_Charm">Harry Potter Wiki - Bird-Conjuring Charm</a>
  */

@@ -14,16 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for the AZURILLIOUS blue sparks spell.
- *
- * <p>Provides test coverage for the spell's area effect cloud functionality beyond the
- * base Sparks tests:</p>
- * <ul>
- * <li><strong>Cloud Spawning:</strong> Verifies an AreaEffectCloud is spawned at the target location</li>
- * <li><strong>Cloud Configuration:</strong> Confirms the cloud has the correct radius and duration</li>
- * </ul>
- *
- * <p>Inherits sound and projectile travel testing from {@link SparksTest}.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.AZURILLIOUS}. Extends {@link SparksTest} for the shared
+ * sparks tests.
  *
  * @author Azami7
  */
@@ -35,17 +27,7 @@ public class AzurilliousTest extends SparksTest {
     }
 
     /**
-     * Tests that doOtherEffects() spawns an AreaEffectCloud at the target's location.
-     *
-     * <p>Verifies the following when the spell hits a target entity:</p>
-     * <ul>
-     * <li>An AreaEffectCloud is spawned at the target player's location</li>
-     * <li>The cloud has radius 2.0 blocks</li>
-     * <li>The cloud has duration 100 ticks (5 seconds)</li>
-     * </ul>
-     *
-     * <p>Places a target player 10 blocks away and advances ticks to allow the
-     * projectile to travel to the target and apply effects.</p>
+     * Verify a hit spawns an area effect cloud at the target with the expected radius (2.0) and duration (100 ticks).
      */
     @Test
     void doOtherEffectsTest() {

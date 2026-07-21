@@ -6,29 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Variant of the FLYING effect optimized for broom-based flight with permanent duration and no smoke effects.
- *
- * <p>BROOM_FLYING is a specialized flight effect that extends the base {@link FLYING} effect with modifications
- * suitable for magical broom flight. Unlike regular FLYING effects, broom flight is always permanent and does not
- * produce smoke particle effects, resulting in cleaner visual flight for broom-mounted players.</p>
- *
- * <p>Differences from parent FLYING effect:</p>
- * <ul>
- * <li>Always permanent - duration parameter is ignored</li>
- * <li>Smoke effects disabled (doSmokeEffect = false) for cleaner visuals</li>
- * <li>Suitable for persistent broom-based flight mechanics</li>
- * </ul>
+ * {@link FLYING} variant for broom flight: always permanent (duration is ignored) and with smoke particles disabled.
  *
  * @author Azami7
  * @see FLYING for the base flight effect mechanism
  */
 public class BROOM_FLYING extends FLYING {
     /**
-     * Constructor for creating a permanent broom flight effect.
-     *
-     * <p>Creates a specialized flight effect optimized for broom-based flight. The duration parameter is
-     * accepted for API consistency with other effects but is ignored - broom flight is always permanent.
-     * Smoke particle effects are disabled to provide cleaner visuals during broom flight.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    ignored - broom flight is always permanent

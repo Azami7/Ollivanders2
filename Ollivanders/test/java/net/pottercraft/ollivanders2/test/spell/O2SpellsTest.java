@@ -31,41 +31,27 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link net.pottercraft.ollivanders2.spell.O2Spells} spell management system.
- *
- * <p>Tests the core spell lifecycle and management functionality including spell loading and lookup,
- * active spell management, cast count tracking, spell creation, upkeep processing, and zone-based
- * spell permission checks.</p>
- *
- * <p><strong>IMPORTANT: Single MockServer Architecture</strong></p>
- *
- * <p>This test class uses a single static MockBukkit.mock() server instance that is shared across
- * all tests. All tests are consolidated into a single @Test mega-test method that calls helper
- * methods sequentially to prevent test interference with shared server state.</p>
- *
- * <p>Test Categories:</p>
- * <ul>
- * <li><strong>Spell Loading:</strong> getAllSpellTypes, getSpellTypeByName, isLoaded</li>
- * <li><strong>Spell Creation:</strong> createSpell via reflection</li>
- * <li><strong>Active Spell Management:</strong> addSpell, getActiveSpells, upkeep, onDisable</li>
- * <li><strong>Cast Count Tracking:</strong> Normal increment and FAST_LEARNING double increment</li>
- * <li><strong>Zone Permissions:</strong> Default (no restrictions), global disallow, global allow</li>
- * </ul>
+ * Unit tests for the {@link O2Spells} manager: spell loading and lookup, active-spell management, cast-count
+ * tracking, creation, upkeep, and zone permissions. Everything runs in one method sharing a static MockBukkit server
+ * because the tests would interfere with each other's server state if parallelized.
  *
  * @author Azami7
  */
 @Isolated
 public class O2SpellsTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
+     * Shared MockBukkit server, created once for all tests in the class.
      */
     static ServerMock mockServer;
 
     /**
-     * Plugin instance loaded once for all tests.
+     * The plugin under test, loaded once with the default config.
      */
     static Ollivanders2 testPlugin;
 
+    /**
+     * Start the shared MockBukkit server and load the plugin before any tests run.
+     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -77,10 +63,7 @@ public class O2SpellsTest {
     }
 
     /**
-     * Comprehensive O2Spells system test.
-     *
-     * <p>Runs all spell manager tests in sequence within a single @Test method to ensure
-     * shared game state remains consistent throughout all validations.</p>
+     * Run all O2Spells manager checks in sequence (see the class comment for why they share one method).
      */
     @Test
     void o2SpellsTest() {
@@ -347,6 +330,9 @@ public class O2SpellsTest {
         Ollivanders2API.getSpells().upkeep();
     }
 
+    /**
+     * Stop the MockBukkit server after all tests in the class complete.
+     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

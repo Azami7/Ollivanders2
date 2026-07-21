@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Shield_Charm">Shield Charm</a>
  * @see net.pottercraft.ollivanders2.effect.PROTEGO
  * @see net.pottercraft.ollivanders2.stationaryspell.ShieldSpell
+ * @author Azami7
  */
 public final class PROTEGO extends AddO2Effect {
     /**

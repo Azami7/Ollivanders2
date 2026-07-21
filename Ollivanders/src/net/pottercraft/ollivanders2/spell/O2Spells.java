@@ -19,74 +19,54 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Central manager for all Ollivanders2 spells.
- *
- * <p>Manages spell registration, loading, and lifecycle. Maintains active spell projectiles and
- * performs per-tick updates. Coordinates spell permission validation through a zone-based system that
- * supports global, world-wide, WorldGuard region, and cuboid-based allow/disallow lists.</p>
- *
- * <p><strong>Spell Permission Hierarchy:</strong></p>
- * <ol>
- * <li>If a global allow list is defined, only globally allowed spells can be cast</li>
- * <li>Check zone-specific allow lists (WORLD, WORLD_GUARD, CUBOID) - if found, only zone-allowed spells pass</li>
- * <li>Check zone-specific disallow lists - if spell is found in any zone's disallow list, deny it</li>
- * <li>Check global disallow list - if spell is found, deny it</li>
- * <li>If no restrictions apply, allow the spell</li>
- * </ol>
+ * Central manager for all Ollivanders2 spells: registration, loading, per-tick upkeep of active projectiles, and
+ * zone-based cast permissions.
+ * <p>
+ * A spell's cast permission is resolved by {@link #isSpellTypeAllowed(Location, O2SpellType)}: a global allow list,
+ * if set, takes precedence; otherwise a matching zone's allow list (WORLD, WORLD_GUARD, or CUBOID) governs; finally
+ * global and zone disallow lists can deny an otherwise-allowed spell.
+ * </p>
  *
  * @author Azami7
  */
 public class O2Spells {
-    /**
-     * Callback to the plugin
-     */
     private final Ollivanders2 p;
 
-    /**
-     * Common functions
-     */
     private final Ollivanders2Common common;
 
-    /**
-     * All active spells
-     */
     final private List<O2Spell> activeSpells = new ArrayList<>();
 
     /**
-     * List of loaded spells
+     * Loaded spell types keyed by lowercased display name. Static, so only spells that survived {@link #onEnable()}
+     * plugin-dependency filtering are present.
      */
     final static private Map<String, O2SpellType> O2SpellMap = new HashMap<>();
 
     /**
-     * Wandless spells
+     * Spells that can be cast without a wand. Populated at startup; divination spells are added in {@link #onEnable()}.
      */
     public static final List<O2SpellType> wandlessSpells = new ArrayList<>() {{
         add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
     }};
 
-    /**
-     * Spell allowed/disallowed zone config
-     */
     private ConfigurationSection zoneConfig;
 
     /**
-     * Globally allowed spells. If this is set, it will take precedence over disallowed spells.
+     * Spells denied everywhere. A disallow list denies a spell that is not otherwise permitted by an allow list.
      */
     private ArrayList<O2SpellType> globalDisallowedSpells = new ArrayList<>();
 
     /**
-     * Globally disallowed spells. If this is set, it will take precedence over regionally disallowed spells.
+     * Spells permitted everywhere. When non-empty, only these spells may be cast anywhere, overriding all other lists.
      */
     private ArrayList<O2SpellType> globalAllowedSpells = new ArrayList<>();
 
     /**
-     * Spell allow/disallow zones.
+     * The configured per-zone allow/disallow rules.
      */
     final ArrayList<SpellZone> spellZones = new ArrayList<>();
 
     /**
-     * Constructor
-     *
      * @param plugin a callback to the MC plugin
      */
     public O2Spells(@NotNull Ollivanders2 plugin) {
@@ -95,17 +75,8 @@ public class O2Spells {
     }
 
     /**
-     * Initializes spell data when the plugin is enabled.
-     *
-     * <p>Called during plugin startup. Performs the following initialization steps:</p>
-     * <ul>
-     * <li>Loads all available spell types from {@link O2SpellType}, skipping spells that depend on
-     *     unavailable plugins (e.g., LibsDisguises spells if LibsDisguises is not installed)</li>
-     * <li>Logs the total number of loaded spells</li>
-     * <li>Loads spell-specific static data (e.g., Apparate locations)</li>
-     * <li>Loads zone-based spell permission configuration from config.yml</li>
-     * <li>Adds divination spells to the wandless spells list</li>
-     * </ul>
+     * Initialize the spell subsystem at plugin startup. Only spells whose plugin dependencies are met are registered,
+     * so a spell needing an absent plugin (e.g. LibsDisguises) is left unloaded.
      */
     public void onEnable() {
         // load enabled spells
@@ -128,11 +99,7 @@ public class O2Spells {
     }
 
     /**
-     * Cleanup when the plugin disables.
-     *
-     * <p>Called when the Ollivanders2 plugin is being shut down. Spell projectile management
-     * (killing active projectiles) is currently handled by the main Ollivanders2.onDisable()
-     * method. When projectile management is moved to this class, cleanup will be performed here.</p>
+     * Kill all active spells at plugin shutdown.
      */
     public void onDisable() {
         // kill all active spells
@@ -142,15 +109,7 @@ public class O2Spells {
     }
 
     /**
-     * Updates all active spell projectiles for one game tick.
-     *
-     * <p>Called each server tick by the main scheduler. Iterates through all active spells and:</p>
-     * <ul>
-     * <li>Calls {@link O2Spell#checkEffect()} to update each spell's state</li>
-     * <li>Removes spells that have been killed from the active spell list</li>
-     * </ul>
-     *
-     * <p>Uses a temporary copy of the active spells list to safely remove spells during iteration.</p>
+     * Advance every active spell one game tick via {@link O2Spell#checkEffect()} and drop any that were killed.
      */
     public void upkeep() {
         if (activeSpells.isEmpty())
@@ -166,19 +125,19 @@ public class O2Spells {
     }
 
     /**
-     * Get all loaded spells
+     * Get all loaded spell types.
      *
-     * @return a list of all loaded spell types
+     * @return a copy of the loaded spell type list
      */
     public static List<O2SpellType> getAllSpellTypes() {
         return new ArrayList<>(O2SpellMap.values());
     }
 
     /**
-     * Get a spell type by name.
+     * Get a spell type by its display name, matched case-insensitively.
      *
-     * @param name the name of the spell or potion
-     * @return the type if found, null otherwise
+     * @param name the spell's display name
+     * @return the matching spell type, or null if none is loaded under that name
      */
     @Nullable
     public O2SpellType getSpellTypeByName(@NotNull String name) {
@@ -403,7 +362,8 @@ public class O2Spells {
     }
 
     /**
-     * Add the spell and increment cast count
+     * Register a cast spell as active and increment the player's cast count for it. The count is incremented twice
+     * when the player has the FAST_LEARNING effect.
      *
      * @param player the player who cast the spell
      * @param spell  the spell cast
@@ -418,9 +378,9 @@ public class O2Spells {
     }
 
     /**
-     * Get all the active spell projectiles
+     * Get the active spells.
      *
-     * @return a list of all active spell projectiles
+     * @return a copy of the active spell list
      */
     @NotNull
     public List<O2Spell> getActiveSpells() {
@@ -428,12 +388,13 @@ public class O2Spells {
     }
 
     /**
-     * This creates the spell projectile.
+     * Construct a spell instance of the given type. The returned spell is not yet active; register it with
+     * {@link #addSpell(Player, O2Spell)} to run it.
      *
      * @param player the player that cast the spell
-     * @param name   the name of the spell cast
+     * @param name   the spell type to create
      * @param wandC  the wand check value for the held wand
-     * @return the spell that was created, or null if something failed
+     * @return the new spell, or null if construction failed
      */
     @Nullable
     public O2Spell createSpell(@NotNull Player player, @NotNull O2SpellType name, double wandC) {

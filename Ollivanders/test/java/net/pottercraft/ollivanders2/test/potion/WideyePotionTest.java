@@ -5,21 +5,13 @@ import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Test suite for the Wideye Potion effect.
+ * Unit tests for {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}.
  *
- * <p>Verifies that the Wideye Potion correctly applies the AWAKE effect to players
- * when consumed. Tests both the player feedback message and the effect application to ensure
- * the potion functions as intended.</p>
- *
- * @see PotionTestSuper for the base test infrastructure
+ * @see PotionTestSuper
  */
 public class WideyePotionTest extends PotionTestSuper {
     /**
-     * Set up the test by specifying the potion type to test.
-     *
-     * <p>Initializes the test to use the WIDEYE_POTION potion type and the AWAKE effect.
-     * This method is called before each test to ensure the correct potion is being tested by the
-     * inherited drinkTest() method.</p>
+     * Set the potion and effect under test.
      */
     @Override @BeforeEach
     void setUp() {

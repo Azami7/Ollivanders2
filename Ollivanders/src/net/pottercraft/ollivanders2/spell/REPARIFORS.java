@@ -10,23 +10,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Healing spell that reverts minor magically-induced ailments on a nearby player.
- * <p>
- * Reparifors uses the entity-scanning projectile model: each tick it scans for players near
- * the projectile and treats the first non-caster it finds. Only one ailment is treated per
- * cast, checked in priority order:
- * </p>
- * <ol>
- * <li><strong>Immobilize</strong> (if not also suspended) — ages the
- *     {@link net.pottercraft.ollivanders2.effect.O2EffectType#IMMOBILIZE} effect by a percentage
- *     that scales with caster experience.</li>
- * <li><strong>Poison</strong> — halves the remaining duration of the Minecraft
- *     {@link PotionEffectType#POISON} effect, preserving the original amplifier.</li>
- * <li><strong>Minor heal</strong> — applies a one-time {@link PotionEffectType#INSTANT_HEALTH}
- *     effect if no specific ailment was found.</li>
- * </ol>
+ * Healing spell that treats one minor, magically-induced ailment on the nearest non-caster player per cast, chosen in
+ * priority order: immobilize, then poison, otherwise a small heal.
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Reparifors">Reparifors</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Reparifors">Harry Potter Wiki - Reparifors</a>
  */
 public class REPARIFORS extends O2Spell {
     /**
@@ -60,23 +47,10 @@ public class REPARIFORS extends O2Spell {
     }
 
     /**
-     * Scan for a nearby player and treat their highest-priority ailment.
-     * <p>
-     * Each tick, the method scans within {@link #defaultRadius} for players. The caster is
-     * skipped. The first non-caster player found is treated using a priority cascade:
-     * </p>
-     * <ol>
-     * <li>If the target has {@link O2EffectType#IMMOBILIZE} but not {@link O2EffectType#SUSPENSION},
-     *     the immobilize effect is aged by a caster-experience-scaled percentage. Suspension blocks
-     *     this treatment because freeing a suspended player could cause them to fall.</li>
-     * <li>Otherwise, if the target has {@link PotionEffectType#POISON}, the poison duration is
-     *     halved (preserving the original amplifier).</li>
-     * <li>Otherwise, a one-time {@link PotionEffectType#INSTANT_HEALTH} is applied as a minor heal.</li>
-     * </ol>
-     * <p>
-     * Only one ailment is treated per cast (single-target, single-ailment). If the projectile
-     * hits a block before finding a player, the spell is killed silently.
-     * </p>
+     * Treat the highest-priority ailment on the nearest non-caster player: age an {@link O2EffectType#IMMOBILIZE}
+     * effect (unless the player is also under {@link O2EffectType#SUSPENSION}), else halve a
+     * {@link PotionEffectType#POISON} duration, else apply a small {@link PotionEffectType#INSTANT_HEALTH} heal. Only
+     * one ailment is treated per cast; killed silently if the projectile hits a block first.
      */
     @Override
     protected void doCheckEffect() {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manage wands and wand functions
+ * Manager for wands: creating them (with wood/core NBT and lore), identifying them, and matching a player's destined wand.
  */
 public class O2Wands {
     /**
@@ -276,16 +276,14 @@ public class O2Wands {
         if (meta == null)
             return null;
 
-        // set NBT
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(wandWoodKey, PersistentDataType.STRING, wood);
         container.set(wandCoreKey, PersistentDataType.STRING, core);
 
-        // set the lore
         lore.add(createLore(wood, core));
         meta.setLore(lore);
 
-        // make wands not look like sticks
+        // enchant + hide enchants so the wand doesn't look like a plain stick
         meta.addEnchant(Enchantment.LOYALTY, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
@@ -340,11 +338,9 @@ public class O2Wands {
         if (itemMeta == null)
             return null;
 
-        // set the NBT
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         container.set(wandWoodKey, PersistentDataType.STRING, woodType.getLabel());
 
-        // set the lore
         ArrayList<String> lore = new ArrayList<>();
         lore.add(woodType.getLabel());
 

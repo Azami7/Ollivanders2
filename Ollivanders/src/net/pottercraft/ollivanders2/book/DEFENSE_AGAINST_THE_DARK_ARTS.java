@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)">https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)">Defence Against the Dark Arts (book)</a>
  */
 public class DEFENSE_AGAINST_THE_DARK_ARTS extends O2Book {
     /**

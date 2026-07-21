@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Unit tests for {@link REPARIFARGE}, the untransfiguration counter-spell.
  *
  * <p>Tests cover both block and entity untransfiguration paths, the magic-level gating, and
- * the success-rate clamping:
+ * the success-rate limiting:
  * <ul>
  * <li><strong>Non-transfigured block:</strong> Spell hits a normal block — failure message sent</li>
  * <li><strong>Block revert (within level):</strong> Reverts an OWL-level block transfiguration
@@ -39,8 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *     ({@link LAPIFORS}) via the entity-scanning projectile path</li>
  * <li><strong>Entity revert blocked (too high):</strong> Cannot revert a NEWT-level entity
  *     transfiguration ({@link MORTUOS_SUSCITATE})</li>
- * <li><strong>Success rate clamping:</strong> Verifies {@link REPARIFARGE#getSuccessRate()} is
- *     clamped to [{@link REPARIFARGE#minSuccessRate}, {@link REPARIFARGE#maxSuccessRate}]</li>
+ * <li><strong>Success rate limiting:</strong> Verifies {@link REPARIFARGE#getSuccessRate()} is
+ *     limited to [{@link REPARIFARGE#minSuccessRate}, {@link REPARIFARGE#maxSuccessRate}]</li>
  * </ul>
  *
  * @author Azami7
@@ -131,12 +131,12 @@ public class ReparifargeTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the success rate is clamped to the configured min/max bounds.
+     * Tests that the success rate is limited to the configured min/max bounds.
      *
      * <p>Verifies that:
      * <ul>
      * <li>Experience 0 produces a success rate at or above {@link REPARIFARGE#minSuccessRate}</li>
-     * <li>Experience 50 produces exactly 50 (mid-range, no clamping)</li>
+     * <li>Experience 50 produces exactly 50 (mid-range, no limiting)</li>
      * <li>Experience 150 produces a success rate at or below {@link REPARIFARGE#maxSuccessRate}</li>
      * </ul>
      */

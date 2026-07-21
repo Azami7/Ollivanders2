@@ -16,20 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Base test class for spells that add potion effects to targets.
- *
- * <p>Tests the core functionality of potion effect spells, including effect application,
- * radius calculations, duration calculations, amplifier scaling, and single-target vs.
- * multi-target behavior. Subclasses implement abstract methods to specify the spell type
- * being tested.</p>
+ * Base test class for {@link AddPotionEffect} spells, covering effect application, radius, duration, amplifier
+ * scaling, and single- vs multi-target behavior.
  */
 abstract class AddPotionEffectTest extends O2SpellTestSuper {
     /**
-     * Test that the spell applies potion effects to the correct target(s).
-     *
-     * <p>Verifies that when a spell is cast toward a nearby player, the appropriate potion
-     * effect is applied. For spells that target the caster (targetsSelf=true), the caster
-     * receives the effect. For spells that target others, nearby entities receive the effect.</p>
+     * Verify the spell applies its potion effect to the right target: the caster when self-targeting, otherwise a
+     * nearby player.
      */
     @Test
     void doCheckEffectTest() {
@@ -56,11 +49,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that targets outside the effect radius do not receive effects.
-     *
-     * <p>Only runs for spells with no projectile that affect multiple targets. Places a target
-     * 20 blocks away (outside the effect radius) and verifies that the target does not receive
-     * the potion effect, while the caster (if targetsSelf=true) still does.</p>
+     * Verify a target outside the effect radius is not affected (for no-projectile, multi-target spells).
      */
     @Test
     void targetNotInRadiusTest() {
@@ -86,11 +75,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that effect radius is calculated and clamped correctly.
-     *
-     * <p>Verifies that the effect radius scales with caster skill level (using formula:
-     * effectRadius = usesModifier / 10) and is clamped within the min and max radius bounds.
-     * Tests are performed at skill level 1 (low scaling) and level 200 (high scaling).</p>
+     * Verify the effect radius stays within its min and max bounds at both low and high skill.
      */
     @Test
     void radiusTest() {
@@ -113,12 +98,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that effect duration is calculated and clamped correctly.
-     *
-     * <p>Verifies that the effect duration scales with caster skill level (using formula:
-     * durationInSeconds = usesModifier * durationModifier) and is clamped within the min
-     * and max duration bounds. Tests are performed at skill level 1 (low scaling) and
-     * level 200 (high scaling).</p>
+     * Verify the effect duration stays within its min and max bounds at both low and high skill.
      */
     @Test
     void durationTest() {
@@ -144,12 +124,8 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that potion effect amplifier (strength) is calculated correctly.
-     *
-     * <p>Verifies that amplifier starts at 0 (effect strength I) at low skill levels and
-     * increases to 1 (effect strength II) at the threshold (skill level = spellMasteryLevel / 2).
-     * Uses the default amplifier calculation; subclasses with custom scaling should override
-     * this method.</p>
+     * Verify the amplifier is 0 at low skill and rises to 1 past half spell mastery. Subclasses with custom amplifier
+     * scaling should override this.
      */
     @Test
     void amplifierTest() {
@@ -173,12 +149,8 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that single-target spells affect only the first target in range.
-     *
-     * <p>Only runs for spells that affect a single target (affectsSingleTarget=true).
-     * When targetsSelf=true, verifies the caster is targeted first and other entities are
-     * not affected. When targetsSelf=false, verifies that only one of multiple nearby
-     * entities receives the effect.</p>
+     * Verify a single-target spell affects only one target: the caster when self-targeting, otherwise exactly one of
+     * several nearby players.
      */
     @Test
     void singleTargetTest() {
@@ -211,9 +183,7 @@ abstract class AddPotionEffectTest extends O2SpellTestSuper {
     }
 
     /**
-     * Revert test (empty for potion effect spells).
-     *
-     * <p>Potion effect spells do not have revert actions.</p>
+     * No-op: potion effect spells have no revert action.
      */
     @Override
     @Test

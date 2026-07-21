@@ -8,19 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Shrinking Charm that makes entities smaller.
- *
- * <p>When cast, the spell targets living entities within a skill-based radius (up to 20 blocks)
- * and shrinks them. Adult peaceful creatures become babies, while Slimes and Magma Cubes decrease
- * in size. At higher skill levels (100+), the spell can also affect hostile mobs.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Target Limit: Up to 10 entities per cast (scales with skill)</li>
- * <li>Range: 20-block maximum detection radius (scales with skill)</li>
- * <li>Effects: Adults → Babies, Slimes shrink 1-2 sizes</li>
- * <li>Restrictions: Hostile mobs require skill level &ge; 100</li>
- * </ul>
+ * Shrinking Charm — shrinks nearby living entities, turning adults into babies and reducing slimes and magma cubes by
+ * a size.
+ * <p>
+ * The number of entities affected and the search radius both scale with the caster's skill, up to 10 entities within
+ * 20 blocks. Size-change mechanics are shared with {@link ChangeEntitySize}.
+ * </p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Shrinking_Charm">Shrinking Charm</a>
@@ -69,11 +62,7 @@ public final class REDUCIO extends ChangeEntitySize {
     }
 
     /**
-     * Initializes the spell by calculating targets and effect radius based on caster skill.
-     *
-     * <p>Called during spell initialization to set up dynamic values that scale with the
-     * caster's experience with the spell. Both target count and effect radius are clamped
-     * to their configured limits (10 targets max, 20 blocks max).</p>
+     * Calculate the number of targets and the effect radius for this cast from the caster's skill.
      */
     @Override
     void doInitSpell() {

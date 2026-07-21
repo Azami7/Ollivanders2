@@ -28,12 +28,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Ollivanders2 magical potion.
- *
- * <p>O2Potions can have either or both of the following types of effects:<br>
- * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the brew().<br>
- * Ollivanders Effect - effects related to the mechanics of the Ollivanders plugin. These are applied on the potion
- * drink action in OllivandersListener in the onPlayerDrink().</p>
+ * Abstract base class for all Ollivanders2 potions. A potion may carry a standard Minecraft {@link PotionEffect} (set
+ * in the item metadata by {@link #brew}) and/or an Ollivanders effect applied by {@link #drink} when the potion is
+ * consumed.
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Potion">Harry Potter Wiki - Potion</a>
  */
@@ -163,10 +160,9 @@ public abstract class O2Potion {
     }
 
     /**
-     * Get the description text for this potion.  This can be used to write books, for lessons, or other in-game messages.
-     * Description text is required for adding a spell to an Ollivanders2 book.
+     * Get the description text for this potion, with its recipe appended. Required for adding the potion to a book.
      *
-     * @return the description text for this potion
+     * @return the description text plus ingredients
      */
     @NotNull
     public String getText() {
@@ -174,10 +170,9 @@ public abstract class O2Potion {
     }
 
     /**
-     * Get the flavor text for this potion.  This can be used to make books, lessons, and other descriptions of spells more interesting.
-     * Flavor text is optional.
+     * Get a random line of this potion's optional flavor text.
      *
-     * @return the flavor text for this potion.
+     * @return a random flavor-text line, or null if this potion has none
      */
     @Nullable
     public String getFlavorText() {
@@ -279,14 +274,10 @@ public abstract class O2Potion {
     }
 
     /**
-     * Create an ItemStack for this potion with the specified amount.
-     * <p>
-     * Sets up the potion metadata including display name, color, custom effects,
-     * and NBT tags for potion type identification.
-     * </p>
+     * Create an ItemStack for this potion with its name, color, custom effect, and potion-type NBT tag.
      *
      * @param amount the number of potions in the ItemStack
-     * @return an ItemStack containing the potion, or a bad potion if metadata creation fails
+     * @return the potion ItemStack, or a bad potion if its metadata could not be created
      */
     public ItemStack createPotionItemStack(int amount) {
         ItemStack potion = new ItemStack(potionMaterialType);
@@ -314,13 +305,11 @@ public abstract class O2Potion {
     }
 
     /**
-     * Determine if a player can successfully brew this potion.
-     * <p>
-     * This takes in to consideration whether book learning is enabled, the player's experience with the potion, and the
-     * difficulty of the potion.
+     * Determine whether a player brews this potion successfully, based on book-learning config, their experience with
+     * the potion, and its difficulty. Always succeeds in test mode, when overridden in config, or at max spell level.
      *
      * @param brewer the player brewing the potion
-     * @return true if the player will be successful, false otherwise.
+     * @return true if the brew succeeds, false otherwise
      */
     private boolean canBrew(@NotNull Player brewer) {
         // brewing success is a random roll against the brewer's skill; force success under test so brewing is
@@ -463,10 +452,8 @@ public abstract class O2Potion {
             else if (maxLevelForPlayer.ordinal() > potionType.getLevel().ordinal())
                 // 50% skill increase when 1 level above
                 usesModifier *= 1.5;
-                /*
-                    maxLevelForPlayer.ordinal() == potionType.getLevel().ordinal())
-                    no change to usesModifier
-                 */
+            // maxLevelForPlayer.ordinal() == potionType.getLevel().ordinal())
+               // no change to usesModifier
             else if ((maxLevelForPlayer.ordinal() + 1) < potionType.getLevel().ordinal())
                 // 25% skill when 2 or more levels below
                 usesModifier *= 0.25;

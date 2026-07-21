@@ -7,26 +7,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Movement slowness potion effect that reduces the affected player's movement speed.
- *
- * <p>SLOWNESS applies Minecraft's SLOWNESS potion effect to decrease the target player's movement
- * and attack speed. The effect reduces how quickly the player can move, making them sluggish and
- * slowing their combat capabilities. The effect is powered by the Minecraft potion effect system
- * with strength (amplifier) set to 1. The effect is detectable by both mind-reading spells
- * (Legilimens) and information spells (Informous) which report the target "feels sluggish". The
- * player receives a notification of "You feel sluggish." when the effect is applied.</p>
+ * Applies Minecraft's SLOWNESS potion effect (amplifier 1) to reduce the target's movement and attack speed.
+ * Detectable via Informous and Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
  */
 public class SLOWNESS extends PotionEffect {
     /**
-     * Constructor for creating a movement slowness effect.
-     *
-     * <p>Creates a potion effect that reduces the target player's movement and attack speed using
-     * Minecraft's SLOWNESS potion effect type with strength 1. Sets detection text for both
-     * mind-reading spells (Legilimens) and information spells (Informous) to "feels sluggish", and
-     * notifies the player "You feel sluggish." when the effect is applied.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -48,11 +36,7 @@ public class SLOWNESS extends PotionEffect {
     }
 
     /**
-     * Perform cleanup when the slowness effect is removed.
-     *
-     * <p>The default implementation does nothing, as SLOWNESS is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the player's movement speed returns to normal.</p>
+     * No cleanup needed; the Minecraft potion effect expires on its own.
      */
     @Override
     public void doRemove() {

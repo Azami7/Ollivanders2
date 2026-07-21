@@ -24,69 +24,53 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Protego Diabolica creates a protective ring of soul fire around the caster that harms players
- * outside the caster's house who cross the boundary.
- *
- * <p>The spell creates a ring of soul sand at ground level with soul fire above it. Once the
- * ring is created, the radius cannot be modified. The spell damages disloyal players (Muggles and
- * students from other houses) when they move or teleport into the protected area, with a cooldown
- * to prevent rapid damage ticks. Loyal players (the caster and students from the same house) are
- * immune to fire damage from the spell.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Creates a ring of soul sand and soul fire at the spell's radius on first upkeep</li>
- * <li>Deals fire damage to Muggles and students from other houses who enter the protected area</li>
- * <li>Does not harm the caster or students from the same house</li>
- * <li>Radius modification locked after fire ring creation</li>
- * <li>Damage cooldown of 0.5 seconds prevents rapid fire ticks on the same player</li>
- * <li>Protects from fire damage from the created soul fire blocks</li>
- * <li>Radius range: 5-10 blocks</li>
- * <li>Duration range: 5-30 minutes</li>
- * </ul>
+ * Protego Diabolica: a stationary ring of soul fire around the caster that burns disloyal players (muggles and members
+ * of other houses) who move or teleport into it. The caster and members of the caster's house are immune to the fire.
+ * <p>
+ * The ring is soul sand at ground level with soul fire above, built on the first upkeep; the radius is locked once the
+ * ring exists. A short cooldown keeps a player from taking repeated fire ticks.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Protego_Diabolica">https://harrypotter.fandom.com/wiki/Protego_Diabolica</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Protego_Diabolica">Harry Potter Wiki - Protego Diabolica</a>
  */
 public class PROTEGO_DIABOLICA extends O2StationarySpell {
     /**
-     * Minimum spell radius
+     * Minimum spell radius, in blocks.
      */
     public static final int minRadiusConfig = 5;
 
     /**
-     * Maximum spell radius
+     * Maximum spell radius, in blocks.
      */
     public static final int maxRadiusConfig = 10;
 
     /**
-     * Minimum spell duration
+     * Minimum spell duration: 5 minutes.
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
     /**
-     * Maximum spell duration
+     * Maximum spell duration: 30 minutes.
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
-     * Flag to track if fire ring has been created on first upkeep
+     * Whether the fire ring has been built yet; set on the first {@link #upkeep()} and locks the radius afterward.
      */
     boolean createdFireRing = false;
 
     /**
-     * Cooldown between damage ticks for players (0.5 seconds in ticks)
+     * Minimum ticks between fire damage ticks on the same player.
      */
     final static int maxCooldown = Ollivanders2Common.ticksPerSecond / 2;
 
     /**
-     * Tracks damage cooldown for each player by UUID
+     * Remaining damage cooldown per player, keyed by UUID.
      */
     final HashMap<UUID, Integer> damageCooldowns = new HashMap<>();
 
     /**
-     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     * Constructor for loading a saved spell from disk or generating spell text; do not use to cast a new spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -97,30 +81,24 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Constructs a new PROTEGO_DIABOLICA spell cast by a player.
-     *
-     * <p>Creates a ring of soul sand and soul fire around the caster's location with the specified radius and duration.
-     * Players outside the caster's house who enter the protected area take fire damage.</p>
+     * Constructor for casting a new Protego Diabolica spell.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the UUID of the player who cast the spell
-     * @param location the center location of the spell =
-     * @param radius   the radius for this spell =
-     * @param duration the duration of the spell in ticks
+     * @param location the center location of the spell
+     * @param radius   the radius for this spell, clamped to the min/max bounds
+     * @param duration the duration in ticks, clamped to the min/max bounds
      */
     public PROTEGO_DIABOLICA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_DIABOLICA;
 
         setRadius(radius);
-        setDuration(duration);
+        setDuration(duration, false);
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
-    /**
-     * Initializes the minimum and maximum radius and duration values.
-     */
     @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
@@ -130,10 +108,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Handles spell upkeep on each tick.
-     *
-     * <p>Ages the spell (decrements duration), creates the fire ring on the first upkeep,
-     * and decrements damage cooldowns for all players.</p>
+     * Age the spell, build the fire ring on the first call, and count down each player's damage cooldown.
      */
     @Override
     public void upkeep() {
@@ -157,12 +132,9 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Creates the soul sand and soul fire ring around the spell center.
-     *
-     * <p>Iterates 360 degrees around the spell location at the configured radius,
-     * placing soul sand at ground level and soul fire above it. Skips positions where
-     * the fire block is not air or the base block is unbreakable. All changed blocks
-     * are tracked for reversion when the spell expires.</p>
+     * Build the ring of soul sand and soul fire at the spell radius, skipping positions where the fire block is not air
+     * or the base block is unbreakable. Changed blocks are registered as temporary so {@link #doCleanUp()} can revert
+     * them.
      */
     void createFireRing() {
         common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: creating fire ring", null, null, false);
@@ -193,52 +165,46 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Sets the spell radius if the fire ring has not yet been created.
+     * Set the radius, unless the fire ring already exists, in which case the radius is locked.
      *
-     * <p>Once the fire ring is created, the radius becomes locked and cannot be modified.</p>
-     *
-     * @param radius the new radius value (will be clamped to min/max bounds)
+     * @param radius the new radius, clamped to the min/max bounds
      */
     @Override
     void setRadius(int radius) {
-        if (createdFireRing) // spell's radius cannot be changed once the fire ring is active
+        if (createdFireRing)
             return;
 
         super.setRadius(radius);
     }
 
     /**
-     * Increases the spell radius if the fire ring has not yet been created.
-     *
-     * <p>Once the fire ring is created, the radius becomes locked and cannot be modified.</p>
+     * Increase the radius, unless the fire ring already exists, in which case the radius is locked.
      *
      * @param increase the amount to increase the radius by
      */
     @Override
     public void increaseRadius(int increase) {
-        if (createdFireRing) // spell's radius cannot be changed once the fire ring is active
+        if (createdFireRing)
             return;
 
         super.increaseRadius(increase);
     }
 
     /**
-     * Decreases the spell radius if the fire ring has not yet been created.
-     *
-     * <p>Once the fire ring is created, the radius becomes locked and cannot be modified.</p>
+     * Decrease the radius, unless the fire ring already exists, in which case the radius is locked.
      *
      * @param decrease the amount to decrease the radius by
      */
     @Override
     public void decreaseRadius(int decrease) {
-        if (createdFireRing) // spell's radius cannot be changed once the fire ring is active
+        if (createdFireRing)
             return;
 
         super.decreaseRadius(decrease);
     }
 
     /**
-     * Handles player move events to damage players moving into the spell area.
+     * Burn a disloyal player who moves into the area.
      *
      * @param event the player move event
      */
@@ -252,7 +218,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Handles player teleport events to damage players teleporting into the spell area.
+     * Burn a disloyal player who teleports into the area.
      *
      * @param event the player teleport event
      */
@@ -265,19 +231,16 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Damages a player if they are not in the caster's house and not on cooldown.
+     * Deal fire damage to a player unless they are the caster, loyal to the caster, or still on cooldown. Damaged
+     * players are put on the damage cooldown.
      *
-     * <p>Checks if the player is a Muggle or in a different house than the caster.
-     * If so, applies fire damage and adds them to the damage cooldown map.</p>
-     *
-     * @param player the player to potentially damage
+     * @param player the player to damage
      */
     void damageUnloyalPlayer(Player player) {
-        if (player.getUniqueId().equals(getCasterID()) || damageCooldowns.containsKey(player.getUniqueId())) // don't damage the caster, only damage player every cooldown ticks
+        if (player.getUniqueId().equals(getCasterID()) || damageCooldowns.containsKey(player.getUniqueId()))
             return;
 
         if (!isLoyal(player)) {
-            // add fire damage to player
             DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE)
                     .withDamageLocation(player.getLocation())
                     .build();
@@ -287,10 +250,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Determines if a player is loyal to the caster (same house or both unsorted).
-     *
-     * <p>A player is considered loyal if they are in the same house as the caster.
-     * If both the player and caster are unsorted (no house), they are also considered loyal.</p>
+     * Whether a player is loyal to the caster, i.e. in the same house (two unsorted players count as the same house).
      *
      * @param player the player to check
      * @return true if the player is loyal, false otherwise
@@ -306,18 +266,16 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Handles entity combust events to prevent loyal players from being set on fire.
-     *
-     * <p>Cancels the combust event if the entity is a loyal player inside the spell area.</p>
+     * Prevent the caster or a loyal player inside the area from catching fire.
      *
      * @param event the entity combust event
      */
     @Override
     void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {
-        Entity entity = event.getEntity(); // will never be null
+        Entity entity = event.getEntity();
 
         if (entity instanceof Player) {
-            Location entityLocation = entity.getLocation(); // will never be null
+            Location entityLocation = entity.getLocation();
 
             if (isLocationInside(entityLocation)) {
                 if (entity.getUniqueId().equals(getCasterID()) || isLoyal((Player) entity)) {
@@ -329,18 +287,16 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     }
 
     /**
-     * Handles entity damage events to prevent fire damage to loyal players.
-     *
-     * <p>Cancels fire damage events if the entity is a loyal player inside the spell area.</p>
+     * Prevent fire damage to the caster or a loyal player inside the area. Other damage is unaffected.
      *
      * @param event the entity damage event
      */
     @Override
     void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
-        Entity entity = event.getEntity(); // will never be null
+        Entity entity = event.getEntity();
 
         if (entity instanceof Player) {
-            Location entityLocation = entity.getLocation(); // will never be null
+            Location entityLocation = entity.getLocation();
 
             if (event.getCause() == EntityDamageEvent.DamageCause.CAMPFIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
                 if (isLocationInside(entityLocation)) {
@@ -353,34 +309,18 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
         }
     }
 
-    /**
-     * Serializes spell data for persistence.
-     *
-     * <p>PROTEGO_DIABOLICA does not have persistent data beyond the base spell properties.</p>
-     *
-     * @return an empty map (no custom data to serialize)
-     */
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
-    /**
-     * Deserializes spell data from stored persistence data.
-     *
-     * <p>PROTEGO_DIABOLICA does not have custom data to deserialize.</p>
-     *
-     * @param spellData the stored spell data
-     */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
     /**
-     * Cleans up when the spell ends.
-     *
-     * <p>Reverts all temporarily changed blocks (soul sand and soul fire) back to their original state.</p>
+     * Revert the soul sand and soul fire blocks this spell placed.
      */
     @Override
     void doCleanUp() {

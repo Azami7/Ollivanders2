@@ -19,14 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for ALOHOMORA spell functionality.
- *
- * <p>Tests the unlocking charm including:</p>
- * <ul>
- * <li>Spell failure when no COLLOPORTUS spells are at target location</li>
- * <li>Spell has no effect on non-COLLOPORTUS stationary spells</li>
- * <li>Successfully removes COLLOPORTUS stationary spells at target location</li>
- * </ul>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.ALOHOMORA}.
  *
  * @author Azami7
  */
@@ -38,10 +31,8 @@ public class AlohomoraTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test ALOHOMORA spell behavior for COLLOPORTUS removal.
-     *
-     * <p>Verifies that the spell sends a failure message when no COLLOPORTUS spells are found, leaves
-     * other stationary spells unharmed, and successfully kills COLLOPORTUS spells at the target location.</p>
+     * Verify ALOHOMORA fails when no COLLOPORTUS is present, leaves other stationary spells unharmed, and removes
+     * COLLOPORTUS spells at the target location.
      */
     @Override
     @Test

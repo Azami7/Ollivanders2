@@ -15,24 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Blue sparks charm that damages entities and spawns an area effect cloud on impact.
- *
- * <p>AZURILLIOUS shoots blue sparks from the caster's wand. Upon hitting a target entity,
- * it deals damage and spawns a lingering AreaEffectCloud at the target's location.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Visual Effect: BLUE_STAINED_GLASS projectile trail</li>
- * <li>Damage: Enabled (damageModifier = 0, base 1 damage)</li>
- * <li>Radius: 4 blocks for entity detection</li>
- * <li>On Hit: Spawns a 2-block radius cloud lasting 5 seconds (100 ticks)</li>
- * </ul>
+ * Blue Sparks charm: shoots blue sparks that damage the entity hit and spawn a lingering area effect cloud at it.
  *
  * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Blue_Sparks">Blue Sparks</a>
  */
 public class AZURILLIOUS extends Sparks {
     /**
-     * Default constructor for use in generating spell book text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -43,20 +33,18 @@ public class AZURILLIOUS extends Sparks {
 
         flavorText = new ArrayList<>() {{
             add("Blue Sparks Charm");
+            add("\"I'm in a colourful mood, class, so today we'll be expanding our palette a bit. I'm sure you all remember how to conjure Red Sparks with Vermillious, yes? Well, I say it's about time we move beyond red and learn to cast Blue Sparks. The theory may be familiar, but I'd still appreciate your full attention.\" -Professor Flitwick");
         }};
 
-        text = "Shoots blue sparks from the caster's wand and can .";
+        text = "A minor dueling spell that shoots blue sparks from the caster's wand that can linger and harm nearby entities.";
     }
 
     /**
-     * Constructor for casting AZURILLIOUS spells.
+     * Constructor.
      *
-     * <p>Initializes the spell with BLUE_STAINED_GLASS visual effect, damage enabled,
-     * and a 4-block entity detection radius.</p>
-     *
-     * @param plugin    the Ollivanders2 plugin
-     * @param player    the player casting this spell
-     * @param rightWand the wand correctness factor (1.0 = correct wand)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public AZURILLIOUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -70,15 +58,7 @@ public class AZURILLIOUS extends Sparks {
     }
 
     /**
-     * Spawns a blue-tinted AreaEffectCloud at the target's location on impact.
-     *
-     * <p>Called by {@link Sparks#doCheckEffect()} when the spell hits an entity. The cloud:</p>
-     * <ul>
-     * <li>Radius: 2.0 blocks</li>
-     * <li>Duration: 100 ticks (5 seconds)</li>
-     * <li>Does not shrink on use or over time</li>
-     * <li>Reapplies effects every 20 ticks (1 second)</li>
-     * </ul>
+     * Spawn a lingering blue area effect cloud at the target's location on impact.
      *
      * @param target the entity that was hit by the spell
      */

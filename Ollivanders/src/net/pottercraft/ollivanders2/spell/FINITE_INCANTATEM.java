@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Reduces any spell or potion effects on an item or player.
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Finestra_spell">https://harrypotter.fandom.com/wiki/Finestra_spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/General_Counter-Spell">General Counter-Spell</a>
  */
 public final class FINITE_INCANTATEM extends O2Spell {
     /**
@@ -69,6 +69,9 @@ public final class FINITE_INCANTATEM extends O2Spell {
         initSpell();
     }
 
+    /**
+     * Set the number of effects this cast can clear from the caster's skill, limited to [1, {@link #maxEffects}].
+     */
     @Override
     void doInitSpell() {
         effectsRemaining = (int)Math.floor(usesModifier / 20);
@@ -163,6 +166,9 @@ public final class FINITE_INCANTATEM extends O2Spell {
         }
     }
 
+    /**
+     * @return the number of effects this cast can still clear, decremented as it clears them
+     */
     public int getEffectsRemaining() {
         return effectsRemaining;
     }

@@ -9,27 +9,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The concealment charm - used to hide secret messages in books.
- * <p>
- * Enchantment behavior:</p>
- * <ul>
- * <li>Player pickup: no special behavior, players can pick up celatum items normally</li>
- * <li>Hopper pickup: blocked, hoppers cannot collect celatum-enchanted items</li>
- * <li>Drop events: no special behavior, items can be dropped normally</li>
- * <li>Slot switching: no special behavior, celatum status is independent of player actions</li>
- * </ul>
+ * The concealment charm — hides secret messages in books. Its only item-event behavior is blocking block inventories
+ * (e.g. hoppers) from collecting the enchanted item.
  *
- * @see net.pottercraft.ollivanders2.spell.CELATUM the spell that casts this enchantment
- * @see <a href="https://harrypotter.fandom.com/wiki/Revealing_Charm">https://harrypotter.fandom.com/wiki/Revealing_Charm</a>
+ * @see net.pottercraft.ollivanders2.spell.CELATUM
+ * @see <a href="https://harrypotter.fandom.com/wiki/Revealing_Charm">Harry Potter Wiki - Revealing Charm</a>
  */
 public class CELATUM extends Enchantment {
     /**
-     * Constructor for creating a CELATUM enchantment instance.
+     * Constructor
      *
      * @param plugin   the Ollivanders2 plugin instance
      * @param mag      the magnitude (power level) of this enchantment
-     * @param args     optional configuration arguments specific to this enchantment instance
-     * @param itemLore optional custom lore to display on the enchanted item
+     * @param args     optional configuration arguments for this enchantment
+     * @param itemLore optional custom lore for the enchanted item
      */
     public CELATUM(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         super(plugin, mag, args, itemLore);
@@ -39,27 +32,12 @@ public class CELATUM extends Enchantment {
             common.printDebugMessage("CELATUM enchantment created with null arguments", null, null, true);
     }
 
-    /**
-     * No special handling for player item pickup events.
-     * <p>
-     * CELATUM enchantments do not respond to players picking up items. Players can freely pick up
-     * celatum-enchanted items without any restrictions or special effects. The enchantment only
-     * affects whether hoppers and other block inventories can collect the items.
-     * </p>
-     *
-     * @param event the entity item pickup event (not used)
-     */
     @Override
     public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
     }
 
     /**
-     * Prevent hoppers and block inventories from picking up celatum-enchanted items.
-     * <p>
-     * Celatum-enchanted items cannot be picked up by hoppers or other automated inventory systems.
-     * This prevents the items from being automatically collected, allowing them to persist in
-     * specific world locations without being moved into storage systems.
-     * </p>
+     * Prevent block inventories (e.g. hoppers) from collecting the celatum-enchanted item.
      *
      * @param event the inventory pickup item event
      */
@@ -68,30 +46,10 @@ public class CELATUM extends Enchantment {
         event.setCancelled(true);
     }
 
-    /**
-     * No special handling for item held events.
-     * <p>
-     * CELATUM enchantments do not respond to players switching between hotbar slots. The enchantment's
-     * concealment behavior is independent of what the player is currently holding and applies to
-     * the item at all times.
-     * </p>
-     *
-     * @param event the player item held event (not used)
-     */
     @Override
     public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
     }
 
-    /**
-     * No special handling for item drop events.
-     * <p>
-     * CELATUM enchantments do not respond to players dropping items. The enchantment's concealment
-     * behavior applies to the item whether it's in a player's inventory or dropped in the world.
-     * Items can be dropped freely without any restrictions.
-     * </p>
-     *
-     * @param event the player drop item event (not used)
-     */
     @Override
     public void doItemDrop(@NotNull PlayerDropItemEvent event) {
     }

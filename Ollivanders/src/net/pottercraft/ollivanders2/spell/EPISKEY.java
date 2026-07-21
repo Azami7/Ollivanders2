@@ -9,23 +9,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Episkey spell that provides healing to targets.
+ * The Episkey healing charm: applies Regeneration to the target for a skill-scaled duration; its strength does not
+ * scale with skill.
  *
- * <p>Episkey is a projectile healing charm that applies Regeneration effect to targets,
- * allowing them to heal minor injuries. Duration ranges from 15 to 120 seconds and is
- * calculated at 50% of the caster's skill level modifier. The spell's amplifier does not
- * scale with skill level, providing consistent healing strength.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Episkey">Episkey</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Episkey">Harry Potter Wiki - Episkey</a>
  */
 public final class EPISKEY extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 15;
     private static final int maxDurationInSecondsConfig = 120;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -44,11 +38,7 @@ public final class EPISKEY extends AddPotionEffect {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies Regeneration effect to targets, healing their injuries.
-     * Duration ranges from 15 to 120 seconds based on caster skill level. The healing effect
-     * strength is consistent and does not scale with skill.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell

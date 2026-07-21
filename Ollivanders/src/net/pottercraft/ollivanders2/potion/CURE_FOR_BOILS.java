@@ -9,26 +9,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Cure for Boils - a potion that provides instant healing to cure boils and other conditions.
- *
- * <p>This potion cures boils and similar skin conditions, even those produced by the Pimple Jinx curse.
- * When consumed, it applies an Instant Health I effect (restores health) and is marked with a blue color
- * to indicate its healing properties. Despite being called a "cure" for boils, it functions as a general
- * healing potion.</p>
- *
- * <p>Reference: Harry Potter Potions, used to cure boils caused by spells and other sources.</p>
+ * Cure for Boils — a general healing potion that applies the HEAL effect when drunk.
  *
  * @author Azami7
- * @since 2.2.8
  */
 public class CURE_FOR_BOILS extends O2Potion {
     /**
-     * Constructor for Cure for Boils potion.
-     *
-     * <p>Initializes the potion with its ingredients (Ground Snake Fangs, Dried Nettles, Ground
-     * Porcupine Quills, Horned Slug Mucus, and Standard Potion Ingredients), description text,
-     * flavor text, and the Instant Health I potion effect. Sets up the recipe and the healing
-     * effect that will be applied when the potion is consumed.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -51,12 +38,7 @@ public class CURE_FOR_BOILS extends O2Potion {
     }
 
     /**
-     * Drink the Cure for Boils potion and receive healing.
-     *
-     * <p>Applies the HEAL effect to the player for the default potion duration. This effect restores
-     * the player's health, curing boils and other skin conditions. The healing is instant and allows
-     * the player to recover from damage or ailments caused by curses like the Pimple Jinx. The potion
-     * displays a success message to confirm the healing has taken effect.</p>
+     * Apply the HEAL effect to the player for the default potion duration.
      *
      * @param player the player who drank the potion
      */

@@ -10,24 +10,17 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Freezing Charm that immobilizes targets by slowing their movement.
+ * The Freezing Charm: applies Slowness and Slow Falling to the target for a skill-scaled duration, with a strength
+ * that rises in three tiers with the caster's skill.
  *
- * <p>Immobulus is a projectile charm that applies Slowness and Slow Falling effects to targets,
- * immobilizing them for a duration based on the caster's spell level. Duration ranges from
- * 15 to 180 seconds and is calculated at 50% of the caster's skill level modifier. The amplifier
- * (effect strength) scales in three tiers with skill level: Slowness I (0-spellMasteryLevel/2),
- * Slowness II (spellMasteryLevel/2 to spellMasteryLevel), and Slowness III (spellMasteryLevel+).</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Freezing_Charm">Freezing Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Freezing_Charm">Harry Potter Wiki - Freezing Charm</a>
  */
 public final class IMMOBULUS extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 15;
     private static final int maxDurationInSecondsConfig = 180;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -47,11 +40,7 @@ public final class IMMOBULUS extends AddPotionEffect {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies Slowness and Slow Falling effects to targets.
-     * Duration ranges from 15 to 180 seconds based on caster skill level. The amplifier
-     * scales in three tiers with skill progression.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -73,15 +62,7 @@ public final class IMMOBULUS extends AddPotionEffect {
     }
 
     /**
-     * Calculate the potion effect amplifier based on caster skill level.
-     *
-     * <p>Immobulus scales the Slowness effect in three tiers:</p>
-     *
-     * <ul>
-     * <li>Amplifier 0 (Slowness I): usesModifier &lt; spellMasteryLevel / 2</li>
-     * <li>Amplifier 1 (Slowness II): usesModifier &lt; spellMasteryLevel</li>
-     * <li>Amplifier 2 (Slowness III): usesModifier &gt;= spellMasteryLevel</li>
-     * </ul>
+     * Set the Slowness amplifier in three skill tiers: 0 below half of spell mastery, 1 below mastery, 2 at or above.
      */
     @Override
     void calculateAmplifier() {

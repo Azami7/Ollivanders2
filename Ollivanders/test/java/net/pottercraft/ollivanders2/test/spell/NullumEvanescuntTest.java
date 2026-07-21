@@ -9,6 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Tests for the {@link net.pottercraft.ollivanders2.spell.NULLUM_EVANESCUNT} spell. Extends
+ * {@link StationarySpellTest} for the shared stationary-spell tests.
+ *
+ * @author Azami7
+ */
 public class NullumEvanescuntTest extends StationarySpellTest {
     @Override
     @NotNull

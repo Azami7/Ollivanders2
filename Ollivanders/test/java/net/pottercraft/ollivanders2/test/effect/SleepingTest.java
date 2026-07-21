@@ -13,53 +13,19 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the SLEEPING effect.
+ * Unit tests for {@link SLEEPING}.
  *
- * <p>Tests the sleep induction effect that forces players into a debilitating sleep state. Verifies
- * core effect behaviors (aging, duration expiration) and specific SLEEPING mechanics:</p>
- * <ul>
- * <li>Applies secondary effects (SLEEP_SPEECH and FULL_IMMOBILIZE) to simulate sleep state</li>
- * <li>Tilts player's head downward (pitch = 45 degrees)</li>
- * <li>Sends player notification when falling asleep</li>
- * <li>Is immediately killed when AWAKE effect is present (effect override)</li>
- * <li>Properly cleans up secondary effects when removed</li>
- * </ul>
- *
- * <p>Special attention is given to the interaction between SLEEPING and AWAKE effects to ensure
- * they are mutually exclusive and AWAKE properly overrides SLEEPING.</p>
+ * @see EffectTestSuper
  */
 public class SleepingTest extends EffectTestSuper {
-    /**
-     * Create a SLEEPING effect for testing.
-     *
-     * <p>Instantiates a new SLEEPING effect with the specified parameters. This method is called
-     * by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new SLEEPING effect targeting the specified player
-     */
     @Override
     SLEEPING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new SLEEPING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
     /**
-     * Test SLEEPING effect behavior for applying sleep state and interacting with AWAKE.
-     *
-     * <p>Performs three comprehensive tests:</p>
-     * <ol>
-     * <li><strong>Test 1: SLEEPING applies secondary effects</strong> - Applies SLEEPING to a player,
-     * advances ticks to initialize it, and verifies that SLEEP_SPEECH and FULL_IMMOBILIZE secondary effects
-     * are applied, player's head is tilted (pitch = 45 degrees), and the sleep notification message is sent.</li>
-     * <li><strong>Test 2: SLEEPING is prevented if AWAKE already present</strong> - Applies AWAKE to a player first,
-     * then applies SLEEPING and advances ticks. Verifies that SLEEPING is immediately killed because
-     * AWAKE is present.</li>
-     * <li><strong>Test 3: SLEEPING is removed when AWAKE is applied after</strong> - Applies SLEEPING to a player,
-     * advances ticks to initialize it, then applies AWAKE and advances ticks. Verifies that both effects
-     * are active initially, then confirms SLEEPING is removed after AWAKE processes.</li>
-     * </ol>
+     * SLEEPING applies its SLEEP_SPEECH and FULL_IMMOBILIZE secondary effects, tilts the head, and notifies the
+     * player; it is killed when AWAKE is already present and removed when AWAKE is applied afterward.
      */
     @Override
     void checkEffectTest() {
@@ -129,14 +95,7 @@ public class SleepingTest extends EffectTestSuper {
     }
 
     /**
-     * Event handler tests for the SLEEPING effect.
-     *
-     * <p>SLEEPING does not implement any event handlers because Spigot does not provide a
-     * PlayerWakeEvent that would allow custom code to react to players waking. While a
-     * PlayerLeaveBedEvent exists, it cannot be relied upon to detect sleep termination since
-     * players might leave their bed for other reasons. Therefore, this test method is empty
-     * as there are no event handlers to test. The AWAKE effect handles the wake-up interaction
-     * via its own checkEffect() method instead.</p>
+     * SLEEPING has no event handlers; the wake-up interaction lives in AWAKE's own checkEffect().
      */
     @Override
     void eventHandlerTests() {
@@ -144,11 +103,7 @@ public class SleepingTest extends EffectTestSuper {
     }
 
     /**
-     * Verify that SLEEPING cleanup removes secondary effects.
-     *
-     * <p>Tests that when the SLEEPING effect is removed via doRemove(), the secondary effects
-     * (SLEEP_SPEECH and FULL_IMMOBILIZE) that were applied during sleep initialization are properly
-     * cleaned up. This ensures the player is fully restored when the sleep effect ends.</p>
+     * doRemove() removes the SLEEP_SPEECH and FULL_IMMOBILIZE secondary effects.
      */
     @Override
     void doRemoveTest() {

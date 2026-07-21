@@ -7,25 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Reduced-potency antidote to the POISON potion effect.
- *
- * <p>POISON_ANTIDOTE_LESSER is a partial antidote that counteracts the POISON potion effect with
- * reduced potency. As an antidote with strength 0.25, it reduces the duration of any active POISON
- * effects on the player by 25%. This allows for incomplete recovery from poison-based attacks,
- * leaving some residual poison effect that requires additional healing or stronger antidotes to
- * fully remove.</p>
+ * Partial antidote to {@link POISON}: at strength 0.25 it cuts the remaining duration of active POISON effects by 25%.
  *
  * @author Azami7
- * @see PotionEffectAntidote for the antidote strength mechanism
- * @see POISON for the poison potion effect this antidote counteracts
+ * @see PotionEffectAntidote
+ * @see POISON
  */
 public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidote {
     /**
-     * Constructor for creating a reduced-potency poison antidote.
-     *
-     * <p>Creates an antidote effect that reduces the duration of active POISON potion effects by
-     * 25% (strength 0.25). The duration parameter is accepted for API consistency with other effects
-     * but is not used by antidote effects.</p>
+     * Constructor
      *
      * @param plugin      a reference to the plugin for logging
      * @param duration    ignored - antidotes apply immediately and are resolved
@@ -42,13 +32,6 @@ public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidote {
         strength = 0.25;
     }
 
-    /**
-     * Perform cleanup when the antidote effect is removed.
-     *
-     * <p>The default implementation does nothing, as antidote effects have no persistent state to
-     * clean up. When removed, the player's remaining POISON effect duration remains at its reduced
-     * value.</p>
-     */
     @Override
     public void doRemove() {
     }

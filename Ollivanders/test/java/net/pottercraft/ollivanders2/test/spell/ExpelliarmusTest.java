@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <li>A cast at an entity holding a main-hand item removes it and drops it, and kills the spell</li>
  * <li>A cast falls back to the off-hand when the main hand is empty</li>
  * <li>An empty-handed entity is left alone</li>
- * <li>The launch velocity scales with caster skill and is clamped to the spell's min/max bounds</li>
+ * <li>The launch velocity scales with caster skill and is limited to the spell's min/max bounds</li>
  * </ul>
  *
  * <p>A block base is placed under the target so the projectile resolves on a block when no entity is
@@ -160,11 +160,11 @@ public class ExpelliarmusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the launch velocity scales with caster skill and is clamped to the spell's min/max bounds.
+     * Tests that the launch velocity scales with caster skill and is limited to the spell's min/max bounds.
      *
      * <p>With the destined wand the {@code usesModifier} equals the spell experience, driving the velocity
-     * formula in {@code doInitSpell()}. Verifies all three branches: very low skill clamps up to
-     * {@link EXPELLIARMUS#getMinVelocity()}, very high skill clamps down to {@link EXPELLIARMUS#getMaxVelocity()},
+     * formula in {@code doInitSpell()}. Verifies all three branches: very low skill limits up to
+     * {@link EXPELLIARMUS#getMinVelocity()}, very high skill limits down to {@link EXPELLIARMUS#getMaxVelocity()},
      * and mid-skill is strictly between the two bounds.</p>
      */
     @Test
@@ -174,15 +174,15 @@ public class ExpelliarmusTest extends O2SpellTestSuper {
         Location targetLocation = new Location(testWorld, location.getX() + 3, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
-        // experience 1 -> usesModifier 1 -> 0.1, clamped up to the minimum
+        // experience 1 -> usesModifier 1 -> 0.1, limited up to the minimum
         EXPELLIARMUS lowSkill = (EXPELLIARMUS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1);
-        assertEquals(lowSkill.getMinVelocity(), lowSkill.getLaunchVelocity(), "low skill velocity not clamped to minimum");
+        assertEquals(lowSkill.getMinVelocity(), lowSkill.getLaunchVelocity(), "low skill velocity not limited to minimum");
 
-        // experience mastery -> usesModifier 100 -> 10, clamped down to the maximum
+        // experience mastery -> usesModifier 100 -> 10, limited down to the maximum
         EXPELLIARMUS highSkill = (EXPELLIARMUS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
-        assertEquals(highSkill.getMaxVelocity(), highSkill.getLaunchVelocity(), "high skill velocity not clamped to maximum");
+        assertEquals(highSkill.getMaxVelocity(), highSkill.getLaunchVelocity(), "high skill velocity not limited to maximum");
 
-        // experience 10 -> usesModifier 10 -> 1.0, between the bounds and not clamped
+        // experience 10 -> usesModifier 10 -> 1.0, between the bounds and not limited
         EXPELLIARMUS midSkill = (EXPELLIARMUS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 10);
         assertTrue(midSkill.getLaunchVelocity() > midSkill.getMinVelocity(), "mid skill velocity not above minimum");
         assertTrue(midSkill.getLaunchVelocity() < midSkill.getMaxVelocity(), "mid skill velocity not below maximum");

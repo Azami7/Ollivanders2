@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.spell;
 
-import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
@@ -28,46 +27,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for testing BlockTransfiguration spell implementations.
- *
- * <p>Provides comprehensive test coverage for block transfiguration spells including:
- * <ul>
- * <li>Effect validation and target block changes</li>
- * <li>Invalid target handling and blocked materials</li>
- * <li>Success rate and skill-based behavior</li>
- * <li>Transfiguration mapping and material type handling</li>
- * <li>Edge cases: same material targets, permanent vs. temporary effects</li>
- * <li>Duration and radius mechanics</li>
- * <li>Temporary block tracking and reversion</li>
- * </ul>
- *
- * <p>Subclasses must implement {@link #getSpellType()}, {@link #getValidTargetType()},
- * and {@link #getInvalidTargetType()} to define the specific spell being tested.</p>
+ * Base test class for {@link BlockTransfiguration} spells, covering target changes, blocked materials, success rate,
+ * transfiguration mapping, radius, duration, permanence, reversion, and messaging. Subclasses supply the valid and
+ * invalid target materials.
  *
  * @author Azami7
  */
 abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     /**
-     * Get the valid target block material for this spell.
-     *
-     * @return a material type that can be transfigured by this spell
+     * @return a material this spell can transfigure
      */
     @NotNull
     abstract Material getValidTargetType();
 
     /**
-     * Get an invalid target block material that should block transfiguration.
-     *
-     * @return a material type that cannot be transfigured, or null if no invalid type exists
+     * @return a material this spell cannot transfigure
      */
     @NotNull
     abstract Material getInvalidTargetType();
 
     /**
-     * Tests spell behavior when targeting invalid (blocked) materials.
-     *
-     * <p>Verifies that the spell hits the target but fails to transfigure blocks
-     * that are on the blocked materials list (e.g., unbreakable materials).</p>
+     * Verify the spell hits an invalid target block but leaves it unchanged.
      */
     @Test
     void doCheckEffectTest() {
@@ -89,16 +69,13 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
 
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(blockTransfiguration.hasHitBlock(), "hitTarget not set when spell hit invalid target " + blockTransfiguration.getLocation().getBlock().getType());
+        assertTrue(blockTransfiguration.hasHitBlock(), "hasHitBlock not set when spell hit invalid target " + blockTransfiguration.getLocation().getBlock().getType());
         assertFalse(blockTransfiguration.isTransfigured(target), "invalid block was transfigured");
         assertEquals(invalidType, target.getType(), "material for invalid block was changed");
     }
 
     /**
-     * Tests that blocked materials cannot be transfigured.
-     *
-     * <p>Verifies the spell is killed when the target block is on the blocked list
-     * and no transfiguration occurs.</p>
+     * Verify the spell is killed and nothing is transfigured when the target is on the blocked materials list.
      */
     @Test
     void blockedMaterialsTest() {
@@ -119,10 +96,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests success rate mechanics based on player spell skill level.
-     *
-     * <p>Verifies that spells fail with low skill (when success rate < 100%) and succeed
-     * at spell mastery level (skill = 100).</p>
+     * Verify the transfiguration fails at zero skill (success rate under 100%) and succeeds at mastery skill.
      */
     @Test
     void effectSuccessRateTest() {
@@ -148,15 +122,10 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests custom transfiguration mapping for spells with source-to-target material mappings.
-     *
-     * <p>Verifies that blocks are transformed according to the spell's transfiguration map,
-     * or to the default transfigure type if no mapping exists.</p>
+     * Verify a block is changed to its mapped material, or the default transfigure type when the map is empty.
      */
     @Test
     void transfigurationMapTest() {
-        Ollivanders2.debug = true;
-
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());
         Location location = getNextLocation(testWorld);
         Location targetLocation = new Location(testWorld, location.getX() + 10, location.getY(), location.getZ());
@@ -184,10 +153,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell behavior when the target block is already the transfiguration type.
-     *
-     * <p>Verifies that the spell is killed and no transfiguration occurs when the
-     * target block material is already the spell's transfiguration target type.</p>
+     * Verify the spell is killed and nothing changes when the target is already the transfiguration type.
      */
     @Test
     void sameMaterialTest() {
@@ -211,10 +177,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell duration and automatic termination for temporary transfigurations.
-     *
-     * <p>Verifies that non-permanent spells run for their specified duration and are
-     * killed when the duration expires.</p>
+     * Verify a temporary transfiguration stays alive until its duration expires, then is killed.
      */
     @Test
     void ageAndKillTest() {
@@ -244,10 +207,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests permanent transfiguration spells that are not reverted after duration expires.
-     *
-     * <p>Verifies that permanent spells are immediately killed after transfiguration
-     * and transfigured blocks remain in their changed state.</p>
+     * Verify a permanent transfiguration is killed immediately on success and leaves the block changed.
      */
     @Test
     void isPermanentTest() {
@@ -271,10 +231,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that blocks already affected by another transfiguration spell cannot be re-transfigured.
-     *
-     * <p>Verifies that the spell fails when attempting to transfigure a block that is
-     * already being affected by another active transfiguration.</p>
+     * Verify a block already under an active transfiguration cannot be re-transfigured by another spell.
      */
     @Test
     void isAlreadyTransfiguredTest() {
@@ -299,10 +256,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests the effect radius of the spell and transfiguration of multiple blocks.
-     *
-     * <p>For spells with radius > 1, verifies that multiple blocks within the radius
-     * are transfigured, not just the exact target block.</p>
+     * Verify the effect radius stays within its min/max bounds and, for spells with radius greater than 1, changes
+     * multiple blocks rather than just the target.
      */
     @Test
     void effectRadiusTest() {
@@ -332,10 +287,7 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that spell duration is within configured min/max bounds for temporary spells.
-     *
-     * <p>Verifies that the duration of temporary transfigurations is properly calculated
-     * and falls within the valid range.</p>
+     * Verify a temporary transfiguration's computed duration falls within its min and max bounds.
      */
     @Test
     void effectDurationTest() {
@@ -356,10 +308,8 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that appropriate success and failure messages are sent to the caster.
-     *
-     * <p>Verifies that the caster receives the success message when transfiguration succeeds
-     * and the failure message when transfiguration fails.</p>
+     * Verify the caster gets the success message when the transfiguration succeeds and the failure message when it
+     * hits an invalid target.
      */
     @Test
     void successAndFailureMessageTest() {
@@ -386,18 +336,15 @@ abstract public class BlockTransfigurationTest extends O2SpellTestSuper {
         blockTransfiguration = (BlockTransfiguration) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
         assertTrue(blockTransfiguration.isKilled());
-        assertFalse(blockTransfiguration.isTransfigured(), "block trans"); // should fail because the block is already transfigured
+        assertFalse(blockTransfiguration.isTransfigured(), "invalid target block was transfigured");
         message = caster.nextMessage();
         assertNotNull(message, "caster did not receive failure message");
         assertEquals(blockTransfiguration.getFailureMessage(), TestCommon.cleanChatMessage(message), "caster did not get expected failure message");
     }
 
     /**
-     * Tests that temporary transfigurations are properly reverted when the spell ends.
-     *
-     * <p>Verifies that transfigured blocks are restored to their original material type
-     * when the spell duration expires or is explicitly killed. For permanent spells,
-     * verifies that blocks remain in their transfigured state.</p>
+     * Verify killing a temporary transfiguration restores the block and clears it from change tracking, while a
+     * permanent one leaves the block changed and untracked.
      */
     @Override
     @Test

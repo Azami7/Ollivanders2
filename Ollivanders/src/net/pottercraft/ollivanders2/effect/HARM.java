@@ -7,29 +7,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Instant damage potion effect that harms the affected player.
- *
- * <p>HARM applies Minecraft's INSTANT_DAMAGE potion effect to inflict sudden damage
- * to the target player. Unlike the BURNING effect which inflicts periodic damage over
- * time, HARM delivers its damage instantly when applied. The effect is powered by the
- * Minecraft potion effect system with strength (amplifier) set to 1, determining the
- * damage magnitude. The effect is detectable by mind-reading spells (Legilimens) which
- * report the target "feels unwell".</p>
+ * Applies Minecraft's INSTANT_DAMAGE potion effect to harm the affected player. Detectable via Informous and
+ * Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
- * @see BURNING for a time-based damage alternative
+ * @see PotionEffect
+ * @see BURNING
  */
 public class HARM extends PotionEffect {
     /**
-     * Constructor for creating an instant damage potion effect.
-     *
-     * <p>Creates a potion effect that applies instant damage to the target player using
-     * Minecraft's INSTANT_DAMAGE potion effect type. The effect is detected by
-     * information spells as the target "feels unwell".</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
-     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param duration    the duration in ticks, clamped to the effect type's min/max bounds
      * @param isPermanent ignored - potion effects cannot be permanent
      * @param pid         the unique ID of the player to harm
      */
@@ -45,13 +35,6 @@ public class HARM extends PotionEffect {
         strength = 1;
     }
 
-    /**
-     * Perform cleanup when the instant damage effect is removed.
-     *
-     * <p>The default implementation does nothing, as INSTANT_DAMAGE is an instant potion
-     * effect with no persistent state to clean up. The damage is applied immediately when
-     * the effect is created, so no additional cleanup is required on removal.</p>
-     */
     @Override
     public void doRemove() {
     }

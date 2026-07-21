@@ -1,8 +1,8 @@
 package net.pottercraft.ollivanders2.spell;
 
 /**
- *
+ * Placeholder for the Lumos Solem spell, pending reimplementation.
  */
 public final class LUMOS_SOLEM {
-    //todo make it work like the book - https://github.com/Azami7/Ollivanders2/issues/669
+    // TODO: reimplement to match the spellbook behavior
 }

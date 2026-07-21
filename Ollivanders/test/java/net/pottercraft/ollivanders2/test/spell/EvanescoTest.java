@@ -18,44 +18,27 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the EVANESCO spell (temporary vanishing of non-living entities).
- *
- * @see EVANESCO
- * @see EntityTransfigurationTest
+ * Unit tests for {@link EVANESCO}. Extends {@link EntityTransfigurationTest} for the shared transfiguration tests.
  */
 public class EvanescoTest extends EntityTransfigurationTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.EVANESCO
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.EVANESCO;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     EntityType getValidEntityType() {
         return EntityCommon.getBoats().getFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Nullable
     EntityType getInvalidEntityType() {
         return EntityType.RABBIT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Nullable
     EntityType getSameEntityType() {

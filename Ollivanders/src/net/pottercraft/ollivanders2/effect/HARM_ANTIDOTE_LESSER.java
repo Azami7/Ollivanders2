@@ -7,27 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Reduced-potency antidote to the HARM instant damage potion effect.
- *
- * <p>HARM_ANTIDOTE_LESSER is a partial antidote that counteracts the HARM instant
- * damage potion effect with reduced potency. As an antidote with strength 0.25, it
- * reduces the duration of any active HARM instant damage effects on the player by 25%.
- * This allows for incomplete recovery from harm-based attacks, leaving some residual
- * damage effect that requires additional healing or stronger antidotes to fully remove.</p>
+ * Reduced-potency antidote to the {@link HARM} effect, cancelling it at strength 0.25.
  *
  * @author Azami7
- * @see PotionEffectAntidote for the antidote strength mechanism
- * @see HARM for the instant damage effect this antidote counteracts
+ * @see PotionEffectAntidote
  */
 public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidote {
     /**
-     * Constructor for creating a reduced-potency harm antidote.
+     * Constructor
      *
-     * <p>Creates an antidote effect that reduces the duration of active HARM instant damage
-     * effects by 25% (strength 0.25). The duration parameter is accepted for API consistency
-     * with other effects but is not used by antidote effects.</p>
-     *
-     * @param plugin      a reference to the plugin for logging
+     * @param plugin      a callback to the MC plugin
      * @param duration    ignored - antidotes apply immediately and are resolved
      * @param isPermanent is this effect permanent (does not age)
      * @param pid         the unique ID of the player to treat with the antidote
@@ -42,13 +31,6 @@ public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidote {
         strength = 0.25;
     }
 
-    /**
-     * Perform cleanup when the antidote effect is removed.
-     *
-     * <p>The default implementation does nothing, as antidote effects have no persistent
-     * state to clean up. When removed, the player's remaining HARM effect duration remains
-     * at its reduced value.</p>
-     */
     @Override
     public void doRemove() {
     }

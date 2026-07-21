@@ -26,14 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * duration. Both the success chance and the duration are derived from the caster's skill in
  * {@code doInitSpell()}.</p>
  *
- * <p>Tests verify:
- * <ul>
- * <li>Construction sets the correct spell type, magic branch, and no-projectile flag</li>
- * <li>A guaranteed-success cast (mastery-level skill) applies flight to the caster, the spell
- * kills itself, and the effect expires after the calculated duration</li>
- * <li>The success rate and duration scale correctly across skill tiers and their boundaries</li>
- * </ul>
- *
  * @author Azami7
  */
 public class VentoFolioTest extends O2SpellTestSuper {

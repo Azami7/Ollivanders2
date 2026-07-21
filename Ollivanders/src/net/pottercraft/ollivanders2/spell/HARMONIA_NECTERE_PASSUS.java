@@ -18,21 +18,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Creates a pair of vanishing cabinets for teleportation between two locations.
+ * Creates a linked pair of vanishing cabinets that teleport players between two locations.
  *
- * <p>The spell requires two properly configured vanishing cabinet signs. Each sign must contain
- * the world name and XYZ coordinates of the other cabinet on four separate lines. When cast on a sign,
- * the spell creates a pair of stationary vanishing cabinets that allow players to teleport between them.
+ * <p>Cast at a sign whose four lines give the world name and XYZ coordinates of a matching sign elsewhere; if a valid
+ * twin sign is found at those coordinates and neither end already holds a cabinet, a stationary vanishing cabinet is
+ * anchored at each sign, enabling bidirectional travel.</p>
  *
- * <p>The spell validates:
- * <ul>
- * <li>Target block is a sign</li>
- * <li>Sign contains valid destination coordinates</li>
- * <li>To and from locations are different</li>
- * <li>No vanishing cabinet already exists at either location</li>
- * </ul>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus">Harmonia Nectere Passus</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus">Harry Potter Wiki - Harmonia Nectere Passus</a>
  */
 public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     /**
@@ -90,21 +82,10 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     }
 
     /**
-     * Create vanishing cabinets when spell hits a valid sign target.
-     *
-     * <p>Validates the target sign and creates a pair of stationary vanishing cabinets if all
-     * requirements are met. Sends appropriate failure messages to the caster if validation fails.</p>
-     *
-     * <p>Validation checks:
-     * <ul>
-     * <li>Target block is a sign ({@link #getTargetBlock()})</li>
-     * <li>Sign contains valid destination coordinates via {@link #getTwinLocation(Block)}</li>
-     * <li>From and to locations are different (cannot create self-referential cabinet)</li>
-     * <li>No stationary vanishing cabinet already exists at either location</li>
-     * </ul>
-     *
-     * <p>If all checks pass, creates two stationary HARMONIA_NECTERE_PASSUS spells (one at each location)
-     * that enable bidirectional teleportation.</p>
+     * On the tick the projectile stops, find a vanishing cabinet sign near the hit point and link it to the twin sign
+     * named on it. On success a stationary vanishing cabinet is anchored at each sign, enabling bidirectional
+     * teleportation; on failure the caster is told why (no sign found, malformed or missing twin sign, the two ends
+     * are the same location, or a cabinet already exists at either end).
      */
     @Override
     protected void doCheckEffect() {
@@ -179,19 +160,12 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     }
 
     /**
-     * Extract destination coordinates from a vanishing cabinet sign.
-     *
-     * <p>Reads the four lines of text from the sign's front face:
-     * <ul>
-     * <li>Line 0: World name</li>
-     * <li>Line 1: X coordinate</li>
-     * <li>Line 2: Y coordinate</li>
-     * <li>Line 3: Z coordinate</li>
-     * </ul>
+     * Read a twin-cabinet destination from a vanishing cabinet sign. The sign's front face must carry the world name
+     * on line 0 and integer X, Y, Z coordinates on lines 1–3.
      *
      * @param block the sign block to parse
-     * @return a Location constructed from the sign's coordinates, or null if the sign is missing
-     * coordinates, coordinates are not integers, or the world does not exist
+     * @return the destination location, or null if the sign does not have four lines, names an unknown world, or has
+     * non-integer coordinates
      */
     @Nullable
     private Location getTwinLocation(Block block) {

@@ -15,7 +15,6 @@ import java.util.ArrayList;
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell">Dancing Feet Spell</a>
- * @since 2.21
  */
 public class TARANTALLEGRA extends AddO2Effect {
     /**

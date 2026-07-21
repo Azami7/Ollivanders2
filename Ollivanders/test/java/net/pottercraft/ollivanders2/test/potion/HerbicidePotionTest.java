@@ -23,36 +23,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the Herbicide Potion effect.
- *
- * <p>Verifies that the Herbicide Potion correctly creates a HERBICIDE stationary spell effect
- * when the potion splash event occurs. Tests the splash mechanic and stationary spell creation
- * to ensure the potion functions as intended.</p>
+ * Unit tests for the Herbicide Potion.
  */
 public class HerbicidePotionTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded once before all tests with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -60,17 +43,12 @@ public class HerbicidePotionTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test the Herbicide Potion's splash event behavior.
-     *
-     * <p>This test verifies that when a Herbicide Potion is splashed, it correctly creates a
-     * HERBICIDE stationary spell at the splash location. The test creates a thrown potion item,
-     * triggers a splash event, and then verifies that the stationary spell was created at the
-     * expected location.</p>
+     * Splashing a Herbicide Potion creates a HERBICIDE stationary spell at the splash location.
      */
     @Test
     void doOnPotionSplashEventTest() {
@@ -80,7 +58,6 @@ public class HerbicidePotionTest {
         ItemStack potionItemStack = Ollivanders2API.getPotions().getPotionItemStackByType(O2PotionType.HERBICIDE_POTION, 1);
         assertNotNull(potionItemStack);
 
-        // Spawn the ThrownPotion entity
         ThrownPotion thrownPotion = testWorld.spawn(location, ThrownPotion.class);
         thrownPotion.setItem(potionItemStack);
 
@@ -91,13 +68,6 @@ public class HerbicidePotionTest {
         assertTrue(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location, O2StationarySpellType.HERBICIDE), "Herbicide potion did not create herbicide stationary spell");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

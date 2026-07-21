@@ -18,21 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract tests for {@link ChangeColorable} colour change spells.
- *
- * <p>Verifies the shared behaviour across all colour change variants: non-colorable blocks produce a failure
- * message, colorable blocks are recolored, non-sheep entities produce a failure message, and sheep are
- * recolored to the spell's target color.</p>
+ * Base test class for {@link ChangeColorable} color-change spells. Verifies that a colorable block or a sheep is
+ * recolored to the spell's color, while a non-colorable block or entity fails with a message.
  */
 abstract public class ChangeColorableTest extends O2SpellTestSuper {
     /**
-     * Verify the spell handles different target types correctly.
-     * <ul>
-     *   <li>Non-colorable block (CHEST): Spell kills with failure message</li>
-     *   <li>Colorable block (wool): Block recolored to spell's color, no failure message</li>
-     *   <li>Non-colorable entity (COW): Spell kills with failure message</li>
-     *   <li>Sheep: Sheep dye color changed to spell's color</li>
-     * </ul>
+     * Verify the spell recolors a colorable block and a sheep, and fails with a message on a non-colorable block or a
+     * non-sheep entity.
      */
     @Override
     @Test
@@ -87,6 +79,9 @@ abstract public class ChangeColorableTest extends O2SpellTestSuper {
         assertNull(message, "caster received a message when success does not send a message");
     }
 
+    /**
+     * No-op: color-change spells have no revert action.
+     */
     @Override
     @Test
     void revertTest() {

@@ -21,24 +21,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Piertotum Locomotor - The Animation Charm.
+ * Piertotum Locomotor - The Animation Charm: transfigures an iron block into an iron golem or a snow block into a snow
+ * golem that is loyal to the caster — it will not attack them and retaliates against anyone who does.
  *
- * <p>Transfigures a block of iron into an iron golem or a block of snow into a snow golem. The spawned
- * golem is loyal to its creator—it will not attack the caster and will defend them against attackers.
- * The transfiguration can be temporary (duration depends on caster skill) or permanent (for highly
- * skilled casters).</p>
+ * <p>The transfiguration lasts a skill-scaled duration, or becomes permanent for a sufficiently skilled caster.</p>
  *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Targets iron blocks and snow blocks only</li>
- * <li>Spawns an iron golem from iron blocks, a snow golem from snow blocks</li>
- * <li>Spawned golem is loyal to the caster and will not attack them</li>
- * <li>Golem will automatically attack entities that attack the caster</li>
- * <li>Temporary transfigurations revert when duration expires or the golem is killed</li>
- * <li>Permanent transfigurations require spell mastery level ≥ 1.5 (adjusted for houses)</li>
- * </ul>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Animation_Charm">Animation Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Animation_Charm">Harry Potter Wiki - Animation Charm</a>
  */
 public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     private static final int minDurationConfig = 30 * Ollivanders2Common.ticksPerSecond;
@@ -103,11 +91,9 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     }
 
     /**
-     * Calculate the transfiguration duration or make it permanent based on caster skill.
-     *
-     * <p>At spell mastery level ≥ 1.5, the transfiguration becomes permanent (subject to house/year
-     * restrictions if enabled). Below that threshold, duration is calculated from experience and
-     * clamped to the configured min/max bounds.</p>
+     * Set the transfiguration duration from the caster's skill, or make it permanent at 1.5x spell mastery (subject to
+     * the caster's house/year level when years are enabled). Below that threshold the duration is floored and capped
+     * at the configured min/max bounds.
      */
     @Override
     void setDuration() {
@@ -127,13 +113,8 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     }
 
     /**
-     * Prevent the golem from attacking its creator and make it retaliate against attackers.
-     *
-     * <p>When the spawned golem takes damage from an attack, this handler ensures:
-     * <ul>
-     * <li>If the golem attacks its creator, the attack is cancelled</li>
-     * <li>If someone attacks the creator, the golem retaliates against the attacker</li>
-     * </ul></p>
+     * Keep the golem loyal to its creator: cancel any attack the golem makes on the caster, and make the golem
+     * retaliate against anyone who attacks the caster.
      *
      * @param event the entity damage by entity event
      */
@@ -157,9 +138,6 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
 
     /**
      * Prevent the golem from targeting its creator.
-     *
-     * <p>When the golem attempts to acquire a target, this handler ensures it will not target
-     * its creator.</p>
      *
      * @param event the entity target event
      */

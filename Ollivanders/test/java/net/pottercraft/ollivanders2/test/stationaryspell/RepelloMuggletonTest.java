@@ -19,50 +19,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link REPELLO_MUGGLETON} stationary spell implementation.
- *
- * <p>Tests the repel muggles protection spell, which prevents non-magical people from entering
- * a protected area. Inherits common concealment shield spell tests from {@link ConcealmentShieldSpellTest}
- * and provides spell-specific factory methods for test setup.</p>
+ * Unit tests for {@link REPELLO_MUGGLETON}. Extends {@link ConcealmentShieldSpellTest} for the shared
+ * concealment-shield tests.
  */
 public class RepelloMuggletonTest extends ConcealmentShieldSpellTest {
-    /**
-     * Gets the spell type for this test suite.
-     *
-     * @return {@link O2StationarySpellType#REPELLO_MUGGLETON}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.REPELLO_MUGGLETON;
     }
 
-    /**
-     * Creates a {@link REPELLO_MUGGLETON} spell instance for testing.
-     *
-     * <p>Constructs a new spell at the specified location cast by the given player, using default
-     * radius and duration values inherited from the parent test class.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location for the spell (not null)
-     * @return a new REPELLO_MUGGLETON spell instance
-     */
     @Override
     REPELLO_MUGGLETON createStationarySpell(Player caster, Location location) {
         return new REPELLO_MUGGLETON(testPlugin, caster.getUniqueId(), location, defaultRadius, defaultDuration);
     }
 
     /**
-     * Tests REPELLO_MUGGLETON's prevention of muggle entry. Overrides parent function because
-     * repello muggleton only hides players from muggles.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Casters (non-muggles) can freely enter their own spell areas</li>
-     *   <li>Muggles are blocked from entering with a cancellation of the move event</li>
-     *   <li>Muggles receive an entry denial message from the configured list</li>
-     *   <li>Non-muggles can freely enter the spell area</li>
-     * </ul>
-     * </p>
+     * A muggle is blocked from entering the area and gets an entry-deny message, while a non-muggle (including the
+     * caster) enters freely. Overrides the parent test because only muggles are affected.
      */
     @Override @Test
     void doOnPlayerMoveEventTest() {
@@ -116,16 +89,7 @@ public class RepelloMuggletonTest extends ConcealmentShieldSpellTest {
     }
 
     /**
-     * Tests REPELLO_MUGGLETON's visibility toggling from muggle perspective.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Muggles outside the spell can see wizards normally</li>
-     *   <li>When a wizard enters the spell area, they become invisible to outside muggles</li>
-     *   <li>When a wizard exits the spell area, they become visible again to outside muggles</li>
-     *   <li>The visibility changes are properly applied using MockBukkit hidePlayer/canSee mechanics</li>
-     * </ul>
-     * </p>
+     * A wizard is hidden from an outside muggle while inside the area and visible again once they leave.
      */
     @Override @Test
     void doOnEntityTargetEventTestVisibilityCheck() {

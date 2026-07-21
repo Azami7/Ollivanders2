@@ -21,17 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for {@link MULTICORFORS}, the Multicorfors color-changing spell.
- *
- * <p>Tests cover the entity-scanning projectile model and the leather-armor recoloring behavior:
- * <ul>
- * <li><strong>No target:</strong> Spell hits a block with no entities nearby — killed, no failure message</li>
- * <li><strong>Non-leather entity:</strong> Entity without leather armor (cow) — killed, failure message sent</li>
- * <li><strong>Empty armor stand:</strong> Armor stand with no equipment — killed, failure message sent</li>
- * <li><strong>Iron armor:</strong> Non-leather armor is not modified, failure message sent</li>
- * <li><strong>Single leather piece:</strong> Leather chestplate is recolored to the spell's random color</li>
- * <li><strong>Multiple leather pieces:</strong> All leather pieces receive the same random color</li>
- * </ul>
+ * Unit tests for {@link MULTICORFORS}.
  *
  * @author Azami7
  */
@@ -43,13 +33,9 @@ public class MulticorforsTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests the full progression of Multicorfors targeting scenarios against various entity
-     * and equipment configurations.
-     *
-     * <p>Sub-tests are ordered so that entities from earlier scenarios remain in the world,
-     * verifying the spell's iteration logic correctly skips entities without leather armor
-     * and continues searching. Each sub-test clears the caster's message queue after
-     * assertions to avoid stale messages leaking into the next sub-test.
+     * Walk Multicorfors through its targeting scenarios (no target, non-leather entity, empty and iron-armor stands,
+     * single and multiple leather pieces). Entities from earlier sub-tests are deliberately left in the world to
+     * exercise the spell's skip-and-continue iteration; the caster's message queue is cleared between sub-tests.
      */
     @Override
     @Test

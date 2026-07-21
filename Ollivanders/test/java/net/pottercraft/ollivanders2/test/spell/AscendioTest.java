@@ -18,15 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for ASCENDIO spell functionality.
- *
- * <p>Tests the climbing charm including:</p>
- * <ul>
- * <li>Spell configuration (vertical, targets self, min/max distance)</li>
- * <li>Self-targeting behavior (spell affects caster only)</li>
- * <li>Upward velocity application</li>
- * <li>Underwater handling (propels to surface)</li>
- * </ul>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.ASCENDIO}. Extends {@link KnockbackTest} for the shared
+ * knockback tests.
  *
  * @author Azami7
  */
@@ -79,11 +72,7 @@ public class AscendioTest extends KnockbackTest {
     }
 
     /**
-     * Tests that addOtherEffects() applies SLOW_FALLING to the caster.
-     *
-     * <p>Verifies that after casting ASCENDIO, the caster receives a SLOW_FALLING potion
-     * effect with the expected duration (30 seconds = 600 ticks) to prevent fall damage
-     * when they come back down.</p>
+     * Verify casting ASCENDIO gives the caster a 30-second SLOW_FALLING effect.
      */
     @Test
     void addOtherEffectsSlowFallingTest() {
@@ -103,10 +92,7 @@ public class AscendioTest extends KnockbackTest {
     }
 
     /**
-     * Tests that addOtherEffects() does not override an existing SLOW_FALLING effect.
-     *
-     * <p>Verifies that if the caster already has SLOW_FALLING when ASCENDIO is cast,
-     * the existing effect is preserved and not replaced by the spell's 30-second duration.</p>
+     * Verify ASCENDIO does not overwrite a SLOW_FALLING effect the caster already has.
      */
     @Test
     void addOtherEffectsAlreadyHasSlowFallingTest() {

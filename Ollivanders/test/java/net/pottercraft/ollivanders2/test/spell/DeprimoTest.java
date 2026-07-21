@@ -15,12 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the DEPRIMO spell, the Blasting Charm.
- *
- * <p>Where its projectile lands, DEPRIMO turns every solid block within a skill-scaled radius into a falling
- * block and replaces it with air. Pass-through materials (air, water, fire) and protected materials (lava and
- * the unbreakable blocks) within the radius are left untouched. The radius scales deterministically with the
- * caster's skill, so these tests are deterministic from the cast experience alone.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.DEPRIMO}. The affected radius scales deterministically
+ * with the caster's skill, so these tests are deterministic from the cast experience alone.
  *
  * @author Azami7
  */
@@ -48,18 +44,9 @@ public class DeprimoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests turning solid blocks around the impact point into falling blocks.
-     *
-     * <p>The projectile is stopped by a solid block at the target. Solid blocks within the radius (the impact
-     * block and its four orthogonal neighbours offset in y and z, so they do not block the projectile's path) plus
-     * a protected bedrock block and a distant solid block are placed. With a single cast, verifies that:</p>
-     * <ul>
-     * <li>Each in-range solid block becomes air</li>
-     * <li>A protected (bedrock) block in range is left intact</li>
-     * <li>A solid block outside the radius is left intact</li>
-     * <li>One falling block is spawned per converted block, and none for protected, distant, or air blocks</li>
-     * <li>The spell is killed after the effect resolves</li>
-     * </ul>
+     * Verify each in-range solid block becomes air and spawns one falling block, while a protected (bedrock) block, a
+     * block outside the radius, and air are left untouched, then the spell ends. In-range neighbours are offset in y
+     * and z so they do not block the projectile's path to the impact point.
      */
     @Override
     @Test
@@ -105,10 +92,8 @@ public class DeprimoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the affected radius scales with the caster's skill and is clamped at both ends.
-     *
-     * <p>Verifies that very low skill clamps the radius to the minimum, very high skill clamps it to the maximum,
-     * and a mid-range skill falls strictly between the two bounds.</p>
+     * Verify the radius limits to the minimum at very low skill and the maximum at very high skill, with a mid-range
+     * skill falling strictly between.
      */
     @Test
     void radiusScalesWithSkillTest() {
@@ -121,9 +106,9 @@ public class DeprimoTest extends O2SpellTestSuper {
         DEPRIMO mid = castDeprimo(caster, location, targetLocation, experience);
         DEPRIMO high = castDeprimo(caster, location, targetLocation, 1000);
 
-        assertEquals(low.getMinRadius(), low.getRadius(), "low-skill radius was not clamped to the minimum");
-        assertEquals(high.getMaxRadius(), high.getRadius(), "high-skill radius was not clamped to the maximum");
-        assertTrue(mid.getRadius() > low.getRadius() && mid.getRadius() < high.getRadius(), "mid-skill radius is not between the clamps");
+        assertEquals(low.getMinRadius(), low.getRadius(), "low-skill radius was not limited to the minimum");
+        assertEquals(high.getMaxRadius(), high.getRadius(), "high-skill radius was not limited to the maximum");
+        assertTrue(mid.getRadius() > low.getRadius() && mid.getRadius() < high.getRadius(), "mid-skill radius is not between the limits");
     }
 
     /**

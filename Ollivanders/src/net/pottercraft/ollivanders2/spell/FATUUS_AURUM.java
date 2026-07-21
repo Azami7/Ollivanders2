@@ -52,7 +52,7 @@ public final class FATUUS_AURUM extends BlockTransfiguration {
     /**
      * Minimum spell duration for FATUUS_AURUM (15 seconds).
      *
-     * <p>The spell's duration is clamped to not go below this value, ensuring gold blocks
+     * <p>The spell's duration is limited to not go below this value, ensuring gold blocks
      * remain gold for at least a minimum time.</p>
      */
     private static final int minDurationConfig = 15 * Ollivanders2Common.ticksPerSecond;
@@ -60,7 +60,7 @@ public final class FATUUS_AURUM extends BlockTransfiguration {
     /**
      * Maximum spell duration for FATUUS_AURUM (10 minutes).
      *
-     * <p>The spell's duration is clamped to not exceed this value, establishing an upper
+     * <p>The spell's duration is limited to not exceed this value, establishing an upper
      * bound on how long blocks remain golden.</p>
      */
     private static final int maxDurationConfig = 10 * Ollivanders2Common.ticksPerMinute;

@@ -16,48 +16,36 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * A stationary locking spell that prevents access to doors, trapdoors, and chests.
- *
- * <p>The Colloportus charm (Locking Spell) creates a protective barrier that prevents entities from
- * opening, breaking, or interacting with doors, trapdoors, and chests within the spell's protected area.
- * The spell is permanent and cannot be dispelled by normal means. Any attempt to open or break a protected
- * door or trapdoor will fail silently.</p>
- *
- * <p>Spell characteristics:</p>
- * <ul>
- *   <li>Radius: 5 blocks (fixed)</li>
- *   <li>Duration: Permanent (cannot be dispelled)</li>
- *   <li>Effect: Prevents opening/breaking doors, trapdoors, and chests within the protected area</li>
- * </ul>
+ * Colloportus (Locking Spell): a permanent stationary spell that stops doors, trapdoors, and chests within its radius
+ * from being opened, broken, or otherwise changed. It cannot be dispelled by normal aging.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">Harry Potter Wiki - Locking Spell</a>
  */
 public class COLLOPORTUS extends O2StationarySpell {
     /**
-     * Minimum spell radius (5 blocks).
+     * Minimum spell radius, in blocks.
      */
     public static final int minRadiusConfig = 2;
 
     /**
-     * Maximum spell radius (5 blocks).
+     * Maximum spell radius, in blocks.
      */
     public static final int maxRadiusConfig = 2;
 
     /**
-     * Minimum spell duration (not used - colloportus is permanent).
+     * Duration bound, unused because Colloportus is permanent.
      */
     public static final int minDurationConfig = 1000;
 
     /**
-     * Maximum spell duration (not used - colloportus is permanent).
+     * Duration bound, unused because Colloportus is permanent.
      */
     public static final int maxDurationConfig = 1000;
 
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -69,14 +57,11 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     /**
-     * Constructs a new COLLOPORTUS spell cast by a player.
+     * Constructor for casting a new Colloportus spell.
      *
-     * <p>Creates a colloportus charm at the specified location. The spell prevents opening and breaking
-     * of doors, trapdoors, and chests within a 5-block radius.</p>
-     *
-     * @param plugin   a callback to the MC plugin (not null)
-     * @param pid      the UUID of the player who cast the spell (not null)
-     * @param location the center location of the spell (not null)
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the UUID of the player who cast the spell
+     * @param location the center location of the spell
      */
     public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
         super(plugin, pid, location);
@@ -91,35 +76,29 @@ public class COLLOPORTUS extends O2StationarySpell {
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
-    /**
-     * Initializes the radius and duration constraints for this spell.
-     *
-     * <p>Sets the spell's radius to 5 blocks (fixed - not configurable) and duration constraints
-     * which are not used since colloportus is permanent.</p>
-     */
     @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig; // not used, colloportus is permanent
-        maxDuration = maxDurationConfig; // not used, colloportus is permanent
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**
-     * No upkeep for this spell
+     * No-op; this spell is permanent and never ages.
      */
     @Override
     public void upkeep() {
     }
 
     /**
-     * Prevent doors and trapdoors being broken
+     * Cancel breaking a block inside the spell radius.
      *
      * @param event the event
      */
     @Override
     void doOnBlockBreakEvent(@NotNull BlockBreakEvent event) {
-        Block block = event.getBlock(); // will never be null
+        Block block = event.getBlock();
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
@@ -128,13 +107,13 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     /**
-     * Prevent doors from being broken
+     * Cancel an entity breaking a door inside the spell radius.
      *
      * @param event the event
      */
     @Override
     void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event) {
-        Block block = event.getBlock(); // will never be null
+        Block block = event.getBlock();
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
@@ -143,13 +122,13 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     /**
-     * Prevent door and trapdoor blocks from being changed
+     * Cancel an entity changing a block inside the spell radius.
      *
      * @param event the event
      */
     @Override
     void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event) {
-        Block block = event.getBlock(); // will never be null
+        Block block = event.getBlock();
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
@@ -158,13 +137,13 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     /**
-     * Prevent doors and trapdoors from being interacted with
+     * Cancel an entity interacting with a block inside the spell radius.
      *
      * @param event the event
      */
     @Override
     void doOnEntityInteractEvent(@NotNull EntityInteractEvent event) {
-        Block block = event.getBlock(); // will never be null
+        Block block = event.getBlock();
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
@@ -173,7 +152,7 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     /**
-     * Prevent doors and trapdoors from being interacted with
+     * Cancel a player interacting with a block inside the spell radius.
      *
      * @param event the event
      */
@@ -189,36 +168,16 @@ public class COLLOPORTUS extends O2StationarySpell {
         }
     }
 
-    /**
-     * Serializes the colloportus spell data for persistence.
-     *
-     * <p>The colloportus spell has no extra data to serialize beyond the base spell properties,
-     * so this method returns an empty map.</p>
-     *
-     * @return an empty map (the spell has no custom data to serialize)
-     */
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
-    /**
-     * Deserializes colloportus spell data from saved state.
-     *
-     * <p>The colloportus spell has no extra data to deserialize, so this method does nothing.</p>
-     *
-     * @param spellData the serialized spell data map (not used)
-     */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
-    /**
-     * Cleans up when the colloportus spell ends.
-     *
-     * <p>The colloportus spell requires no special cleanup on termination.</p>
-     */
     @Override
     void doCleanUp() {
     }

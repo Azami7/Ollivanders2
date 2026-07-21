@@ -36,24 +36,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Abstract base class for all Ollivanders2 spells.
- *
- * <p>Provides core spell functionality including projectile movement, collision detection, validation,
- * cooldowns, and basic lifecycle management. All spells cast by players extend this class and must
- * implement spell-specific behavior in {@link #doCheckEffect()}.</p>
- *
- * <p><strong>Spell Lifecycle:</strong></p>
- * <ol>
- * <li>Spell is instantiated with player and wand information</li>
- * <li>{@link #initSpell()} is called to perform player-based initialization (uses, skills, etc.)</li>
- * <li>Each game tick, {@link #checkEffect()} is called to update spell state</li>
- * <li>Projectile moves via {@link #move()} until it hits a block or reaches max distance</li>
- * <li>Spell-specific effects are applied via {@link #doCheckEffect()}</li>
- * <li>Spell is terminated via {@link #kill()}, which calls {@link #revert()} for cleanup</li>
- * </ol>
- *
- * <p><strong>Spell Validation:</strong> Spells are validated against Ollivanders2 configuration settings
- * and WorldGuard permissions. Invalid spells are automatically terminated.</p>
+ * Base class for all player-cast Ollivanders2 spells, providing projectile movement, collision, location and
+ * WorldGuard validation, cooldowns, and lifecycle management.
+ * <p>
+ * Lifecycle: the spell is constructed with the caster and wand, then {@link #initSpell()} runs the player-based
+ * setup. Each game tick {@link #checkEffect()} advances the projectile via {@link #move()} and runs the spell's
+ * own {@link #doCheckEffect()} until the spell is killed. {@link #kill()} calls {@link #revert()} for cleanup.
+ * </p>
+ * <p>
+ * Subclasses must implement {@link #doCheckEffect()} and typically override {@link #doInitSpell()} and
+ * {@link #revert()}; they rarely override the lifecycle methods themselves.
+ * </p>
  *
  * @author Azami7
  */
@@ -150,7 +143,7 @@ public abstract class O2Spell {
     protected Vector vector;
 
     /**
-     * Represents which wand the user was holding. See Ollivanders2Common.wandCheck()
+     * The caster's wand-correctness factor: 1 for the destined wand, 0.5 for a wrong wand, 2 for the elder wand.
      */
     protected double rightWand;
 
@@ -252,11 +245,13 @@ public abstract class O2Spell {
     }
 
     /**
-     * Constructor
+     * Create a spell cast by a player. The projectile starts one block ahead of the caster's eye location along
+     * their facing direction.
      *
      * @param plugin    a callback to the O2 plugin
      * @param player    the player casting the spell
-     * @param rightWand wand check for the player
+     * @param rightWand the caster's wand-correctness factor from O2PlayerCommon.wandCheck; 1 for the destined wand,
+     *                  0.5 for a wrong wand, 2 for the elder wand
      */
     public O2Spell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         p = plugin;
@@ -291,11 +286,11 @@ public abstract class O2Spell {
     }
 
     /**
-     * Initialize player-dependent spell properties that cannot be determined in the constructor.
-     *
-     * <p>Called once during spell setup to calculate spell type, usage modifier, and perform spell-specific
-     * initialization. Must be called from the most-derived spell class constructor since usage depends on
-     * the specific spell type which is only available after full object construction.</p>
+     * Set the usage modifier and run spell-specific setup that depends on the caster.
+     * <p>
+     * Must be called from the most-derived spell constructor, since it needs the concrete {@link #spellType}.
+     * Kills the spell if {@link #spellType} has not been set.
+     * </p>
      */
     void initSpell() {
         if (spellType == null) {
@@ -311,19 +306,15 @@ public abstract class O2Spell {
     }
 
     /**
-     * Spell-specific initialization logic performed once during setup.
-     *
-     * <p>Called from {@link #initSpell()} after general initialization. Subclasses should override this
-     * to perform custom setup such as loading spell-specific data, initializing effect parameters, or
-     * setting up spell behavior. The default implementation does nothing.</p>
+     * Hook for spell-specific setup, run once from {@link #initSpell()}. The default implementation does nothing.
      */
     void doInitSpell() {
     }
 
     /**
-     * Get the world guard flags for this spell.
+     * Get the WorldGuard flags this spell requires.
      *
-     * @return a copy of the world guard flags
+     * @return a copy of the flag list; empty if the spell needs none
      */
     public List<StateFlag> getWorldGuardFlags() {
         return new ArrayList<>(worldGuardFlags);
@@ -346,18 +337,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Main game tick update called every server tick while the spell is active.
-     *
-     * <p>Handles core spell lifecycle logic:</p>
-     * <ul>
-     * <li>Validates spell is allowed at current location; kills if not</li>
-     * <li>Increments spell lifetime and kills if exceeding max lifetime</li>
-     * <li>Moves projectile via {@link #move()} if projectile hasn't hit a target</li>
-     * <li>Executes spell-specific effects via {@link #doCheckEffect()}</li>
-     * </ul>
-     *
-     * <p>Subclasses typically override {@link #doCheckEffect()} instead of this method.
-     * Only override this method if you need to customize the spell's entire tick behavior.</p>
+     * Advance the spell one game tick. Kills the spell if it is no longer allowed at its current location.
+     * <p>
+     * Subclasses put their per-tick behavior in {@link #doCheckEffect()} rather than overriding this method.
+     * </p>
      */
     public void checkEffect() {
         if (isKilled())
@@ -383,20 +366,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Advances the spell projectile one block in its direction of travel.
-     *
-     * <p>Called each game tick while the spell is active and hasn't hit a target. Performs the following:</p>
-     * <ul>
-     * <li>Checks if spell has been killed or already hit target; exits early if so</li>
-     * <li>Checks if projectile has exceeded max travel distance; kills spell if so</li>
-     * <li>Updates projectile location and fires {@link OllivandersSpellProjectileMoveEvent}</li>
-     * <li>Validates spell is still allowed at new location per config and WorldGuard</li>
-     * <li>Plays movement visual effect at new location</li>
-     * <li>Checks if projectile hit a solid block; stops projectile and validates block target if so</li>
-     * </ul>
-     *
-     * <p>The projectile travels in the direction specified by {@link #vector} and can travel up to
-     * {@link #maxProjectileDistance} blocks before being automatically terminated.</p>
+     * Advance the projectile one block along {@link #vector}, firing an {@link OllivandersSpellProjectileMoveEvent}
+     * and stopping it when it hits a non pass-through block. Kills the spell if it exceeds
+     * {@link #maxProjectileDistance} or is no longer allowed at the new location. No-op once the spell is killed or
+     * the projectile has stopped.
      */
     public void move() {
         // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
@@ -477,7 +450,8 @@ public abstract class O2Spell {
     }
 
     /**
-     * Check to see if this spell is allowed per Ollivanders2 config and WorldGuard.
+     * Check whether this spell is allowed at its current location per Ollivanders2 config and WorldGuard. When it is
+     * not, this also kills the spell and sends the caster the failure message as a side effect.
      *
      * @return true if the spell can exist here, false otherwise
      */
@@ -524,10 +498,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Gets entities within a radius of current spell projectile location, excluding the caster
+     * Get the entities within a radius of the projectile, excluding the caster.
      *
-     * @param radius radius within which to get entities
-     * @return a list of entities within the radius of the projectile
+     * @param radius the search radius in blocks; values &lt;= 0 are treated as 1.0
+     * @return the entities in range, excluding the caster; empty if none
      */
     @NotNull
     public List<Entity> getNearbyEntities(double radius) {
@@ -562,10 +536,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get all living entities within the radius of projectile, including the caster if within the radius
+     * Get the living entities within a radius of the projectile, including the caster when in range.
      *
-     * @param radius radius within which to get entities
-     * @return a list of living entities within one block of projectile
+     * @param radius the search radius in blocks
+     * @return the living entities in range, including the caster; empty if none
      */
     @NotNull
     public List<LivingEntity> getNearbyLivingEntities(double radius) {
@@ -576,8 +550,8 @@ public abstract class O2Spell {
                 living.add((LivingEntity) e);
         }
 
-        // handle also adding the current player when the projectile is close to the player since getCloseEntities()
-        // excludes the player
+        // getNearbyEntities excludes the caster, so add them back in when the projectile is on top of them; the
+        // projectileAge > 1 guard avoids catching the caster in the first ticks before the projectile has left them
         if (Ollivanders2Common.isInside(caster.getLocation(), location, (int) radius) && !entities.contains(caster) && projectileAge > 1)
             living.add(caster);
 
@@ -585,10 +559,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get all players within the radius of projectile, including the caster if within the radius.
+     * Get the players within a radius of the projectile, including the caster when in range.
      *
-     * @param radius radius within which to get entities
-     * @return a list of players within the specified radius of projectile
+     * @param radius the search radius in blocks
+     * @return the players in range, including the caster; empty if none
      */
     @NotNull
     public List<Player> getNearbyPlayers(double radius) {
@@ -599,8 +573,8 @@ public abstract class O2Spell {
                 players.add((Player) e);
         }
 
-        // handle also adding the current player when the projectile is close to the player since getCloseEntities()
-        // excludes the player
+        // getNearbyEntities excludes the caster, so add them back in when the projectile is on top of them (see
+        // getNearbyLivingEntities for the projectileAge > 1 rationale)
         if (Ollivanders2Common.isInside(caster.getLocation(), location, (int) radius) && !entities.contains(caster) && projectileAge > 1)
             players.add(caster);
 
@@ -608,10 +582,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get all damageable entities within the radius of projectile, including the caster if within the radius
+     * Get the damageable entities within a radius of the projectile, including the caster when in range.
      *
-     * @param radius the radius to check
-     * @return a list of damageable entities within the radius
+     * @param radius the search radius in blocks
+     * @return the damageable entities in range, including the caster; empty if none
      */
     @NotNull
     public List<Damageable> getNearbyDamageableEntities(double radius) {
@@ -622,8 +596,8 @@ public abstract class O2Spell {
                 damageable.add((Damageable) e);
         }
 
-        // handle also adding the current player when the projectile is close to the player since getCloseEntities()
-        // excludes the player
+        // getNearbyEntities excludes the caster, so add them back in when the projectile is on top of them (see
+        // getNearbyLivingEntities for the projectileAge > 1 rationale)
         if (Ollivanders2Common.isInside(caster.getLocation(), location, (int) radius) && !entities.contains(caster) && projectileAge > 1)
             damageable.add(caster);
 
@@ -631,15 +605,8 @@ public abstract class O2Spell {
     }
 
     /**
-     * Calculate and set the {@link #usesModifier} based on spell experience, wand type, and player level.
-     *
-     * <p>The modifier accounts for:</p>
-     * <ul>
-     * <li>Spell usage count (or max level if enabled)</li>
-     * <li>Wand correctness (halved if wrong wand, doubled if elder wand)</li>
-     * <li>HIGHER_SKILL effect (doubles modifier)</li>
-     * <li>Player year/level compared to spell level (if years enabled)</li>
-     * </ul>
+     * Calculate and set {@link #usesModifier} from the caster's spell experience, wand correctness, the HIGHER_SKILL
+     * effect, and — when years are enabled — the caster's level relative to the spell's level.
      */
     protected void setUsesModifier() {
         // if max skill is set, set usesModifier to max level
@@ -698,19 +665,14 @@ public abstract class O2Spell {
     }
 
     /**
-     * Spell-specific effects and behavior executed each game tick.
-     *
-     * <p>Called each tick from {@link #checkEffect()} after validation and movement logic.
-     * Subclasses must override this method to implement the spell's unique effects such as
-     * damage, block changes, particle effects, or other gameplay mechanics.</p>
+     * Apply the spell's unique effects for one game tick. Called each tick from {@link #checkEffect()}; subclasses
+     * implement their behavior here.
      */
     abstract protected void doCheckEffect();
 
     /**
-     * Terminates this spell, stopping projectile movement and performing cleanup.
-     *
-     * <p>Stops the projectile via {@link #stopProjectile()}, performs spell-specific cleanup via {@link #revert()},
-     * and marks the spell as killed so it will no longer be processed.</p>
+     * Terminate this spell. Its projectile stops, any temporary changes are reverted, and the spell is no longer
+     * processed on subsequent ticks.
      */
     public void kill() {
         stopProjectile();
@@ -721,11 +683,8 @@ public abstract class O2Spell {
     }
 
     /**
-     * Reverts any temporary changes made to the world by this spell.
-     *
-     * <p>Called when the spell is terminated via {@link #kill()}. Subclasses should override this method
-     * to undo any temporary block changes, entity modifications, or other side effects. The default
-     * implementation does nothing.</p>
+     * Hook to undo any temporary world changes this spell made, run from {@link #kill()}. Subclasses that mutate the
+     * world override this; the default implementation does nothing.
      */
     protected void revert() {
     }
@@ -740,10 +699,8 @@ public abstract class O2Spell {
     }
 
     /**
-     * Stops the spell projectile from moving further and marks it as having hit a non pass-through block.
-     *
-     * <p>Sets {@link #hasHitBlock} to true only if the projectile has not already exceeded max distance.
-     * This prevents marking as "hit target" when the spell is killed due to reaching max distance.</p>
+     * Stop the projectile and mark it as having hit a block — but only if it has not already exceeded max distance,
+     * so a spell killed for reaching max distance is not treated as having hit a target.
      */
     void stopProjectile() {
         if (!isAtMaxDistance()) {
@@ -770,9 +727,9 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get the spell's book text
+     * Get the spell's book text, preferring a config.yml override over the built-in {@link #text}.
      *
-     * @return the book text for this spell
+     * @return the book text, or an empty string if none is set
      */
     @NotNull
     public String getText() {
@@ -790,9 +747,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get the spell's book flavor text
+     * Get flavor text for the spell's book entry, preferring a config.yml override, otherwise a random entry from
+     * {@link #flavorText}.
      *
-     * @return the flavor text for this spell
+     * @return the flavor text, or null if none is set
      */
     @Nullable
     public String getFlavorText() {
@@ -924,9 +882,9 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get the list of pass through materials for this spell projectile.
+     * Get the materials this spell's projectile passes through.
      *
-     * @return the list of materials the projectile can pass through
+     * @return a copy of the pass-through material list
      */
     public List<Material> getProjectilePassThroughMaterials() {
         return new ArrayList<>()  {{
@@ -935,9 +893,9 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get the list of blocked materials for this spell to target.
+     * Get the materials this spell cannot target.
      *
-     * @return the list of blocked materials
+     * @return a copy of the blocked material list
      */
     public List<Material> getBlockedMaterials() {
         return new ArrayList<>() {{
@@ -946,9 +904,10 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get the list of allowed materials for this spell to target.
+     * Get the materials this spell may target. An empty list means all materials are allowed; when non-empty it
+     * takes precedence over the blocked list.
      *
-     * @return the list of allowed materials
+     * @return a copy of the allowed material list
      */
     @NotNull
     public List<Material> getAllowedMaterials() {
@@ -957,18 +916,32 @@ public abstract class O2Spell {
         }};
     }
 
+    /**
+     * @return true if this spell targets the caster and sends no projectile
+     */
     public boolean isNoProjectile() {
         return noProjectile;
     }
 
+    /**
+     * @return this spell's type
+     */
     public O2SpellType getSpellType() {
         return spellType;
     }
 
+    /**
+     * Get the projectile's current location. This is the live location that moves each tick, not a copy.
+     *
+     * @return the current projectile location
+     */
     public Location getLocation() {
         return location;
     }
 
+    /**
+     * @return the uses modifier set by {@link #setUsesModifier()}
+     */
     public double getUsesModifier() {
         return usesModifier;
     }

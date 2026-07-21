@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Magick_Moste_Evile">https://harrypotter.fandom.com/wiki/Magick_Moste_Evile</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Magick_Moste_Evile">Magick Moste Evile</a>
  */
 public class MAGICK_MOSTE_EVILE extends O2Book {
     /**

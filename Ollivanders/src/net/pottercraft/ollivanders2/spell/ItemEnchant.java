@@ -17,71 +17,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for item enchantment spells.
+ * Base class for spells that place an {@link ItemEnchantmentType} enchantment on an item — a dropped item at the
+ * projectile endpoint, or the caster's off-hand item in held-item mode (noProjectile). The enchanted item is split
+ * from its stack and registered with the enchanted-items system; the enchantment magnitude scales with caster skill.
+ * <p>
+ * Subclasses override {@link #createEnchantmentArgs(ItemStack)} to store spell-specific data and
+ * {@link #alterItem(Item)} to modify the enchanted item.
+ * </p>
  *
- * <p>Provides common functionality for spells that place enchantments on items, either via
- * projectile targeting (finding nearby dropped items) or held-item mode (targeting the caster's
- * off-hand item). When an item is enchanted, it is split from its stack (if applicable) and
- * registered with the enchanted items system along with spell-specific magnitude and arguments.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Magnitude is calculated from caster skill: magnitude = (int)((usesModifier / 10) * strength), clamped to [minMagnitude, maxMagnitude]</li>
- * <li>Item stacks are split when enchanted: one item is enchanted, remainder (if any) is dropped separately</li>
- * <li>Wands and already-enchanted items cannot be re-enchanted</li>
- * <li>Unbreakable materials cannot be enchanted</li>
- * <li>Item type filtering via o2ItemTypeAllowList (O2ItemType) or itemTypeAllowlist (Material)</li>
- * <li>Projectile mode: targets items at the projectile endpoint</li>
- * <li>Held-item mode (noProjectile): targets the caster's off-hand item</li>
- * <li>WorldGuard integration: requires ITEM_PICKUP and ITEM_DROP flags</li>
- * </ul>
- *
- * <p>Subclasses should override {@link #createEnchantmentArgs(ItemStack)} to store spell-specific
- * data with the enchantment, and {@link #alterItem(Item)} to apply visual or functional modifications.</p>
- *
- * @see net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType for supported enchantment types
+ * @see ItemEnchantmentType
  */
 public abstract class ItemEnchant extends O2Spell {
     /**
-     * The type of enchantment
+     * The type of enchantment this spell applies.
      */
     protected ItemEnchantmentType enchantmentType;
 
     /**
-     * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted
-     * Cannot be mixed and match with itemTypeAllowList (only use one or the other)
+     * Restricts which {@link O2ItemType}s this spell can enchant; empty means no restriction. Use this or
+     * {@link #itemTypeAllowlist}, not both.
      */
     protected ArrayList<O2ItemType> o2ItemTypeAllowList = new ArrayList<>();
 
     /**
-     * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted.
-     * Cannot be mixed and match with o2ItemTypeAllowList (only use one or the other)
+     * Restricts which materials this spell can enchant; empty means no restriction. Use this or
+     * {@link #o2ItemTypeAllowList}, not both.
      */
     protected ArrayList<Material> itemTypeAllowlist = new ArrayList<>();
 
     /**
-     * Minimum magnitude
+     * Lower limit for {@link #magnitude}.
      */
     int minMagnitude = 1;
 
     /**
-     * Maximum magnitude
+     * Upper limit for {@link #magnitude}.
      */
     int maxMagnitude = 10;
 
     /**
-     * Strength multiplier for this enchantment
+     * Scales the enchantment magnitude with caster skill; see {@link #doInitSpell()} for the formula.
      */
     double strength = 1;
 
     /**
-     * Magnitude of this enchantment - this is the final value used to determine the enchantment effect
+     * The enchantment's magnitude, set by {@link #doInitSpell()}.
      */
     int magnitude;
 
     /**
-     * The optional arguments for the enchantment
+     * Optional arguments stored with the enchantment; set by {@link #createEnchantmentArgs(ItemStack)}.
      */
     String enchantmentArgs = "";
 
@@ -95,8 +80,6 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -115,11 +98,8 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Calculate the enchantment magnitude based on the caster's spell experience.
-     *
-     * <p>Magnitude is calculated using the formula: magnitude = (int)((usesModifier / 10) * strength),
-     * then clamped to the range [minMagnitude, maxMagnitude]. The magnitude determines how powerful
-     * the enchantment effect will be.</p>
+     * Set {@link #magnitude} to {@code (usesModifier / 10) * strength}, limited to [{@link #minMagnitude},
+     * {@link #maxMagnitude}].
      */
     @Override
     void doInitSpell() {
@@ -134,14 +114,8 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Check for nearby items and apply enchantment to the first valid target found.
-     *
-     * <p>For projectile-based spells (noProjectile == false):
-     * Searches for nearby items and enchants the first one that passes validation.
-     * When found, makes a final check at the projectile's endpoint before killing the spell.
-     * <p>
-     * For held-item spells (noProjectile == true):
-     * Directly enchants the item held in the player's off-hand, if valid.</p>
+     * Enchant a valid target and end the spell: the caster's off-hand item in held-item mode, otherwise the first
+     * valid dropped item near the projectile.
      */
     @Override
     protected void doCheckEffect() {
@@ -170,11 +144,7 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Enchant the item held in the player's off-hand.
-     *
-     * <p>Used in held-item mode (noProjectile == true) to enchant the item currently in
-     * the caster's off-hand inventory slot. If the caster is not holding a valid item
-     * (empty slot or item fails validation), the spell completes without enchanting anything.</p>
+     * Enchant the caster's off-hand item if it is present and valid; otherwise do nothing.
      */
     protected void enchantHeldItem() {
         ItemStack targetItem = caster.getInventory().getItemInOffHand();
@@ -190,16 +160,8 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Determine if an item can be enchanted by this spell.
-     *
-     * <p>An item can be enchanted if it passes all validation checks:</p>
-     *
-     * <ul>
-     * <li>Not a wand (wands cannot have enchantments stacked)</li>
-     * <li>Not already enchanted (cannot stack enchantments on the same item)</li>
-     * <li>Not an unbreakable material</li>
-     * <li>Matches the spell's item type restrictions (if any)</li>
-     * </ul>
+     * Check whether an item can be enchanted: not a wand or an already-enchanted item, not an unbreakable material,
+     * and matching this spell's item-type restrictions if any are set.
      *
      * @param itemStack the item to check
      * @return true if the item can be enchanted, false otherwise
@@ -249,11 +211,8 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Enchant a dropped item entity.
-     *
-     * <p>Enchants the item and removes the original entity from the world.
-     * The enchanted and remainder items are dropped as new entities.
-     * Assumes validation has already been performed via {@link #canBeEnchanted(Item)}.</p>
+     * Enchant a dropped item, replacing the original entity with the enchanted item and a remainder stack if any.
+     * Assumes {@link #canBeEnchanted(Item)} has passed.
      *
      * @param item the Item entity to enchant
      */
@@ -265,20 +224,9 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Enchant an item stack.
-     *
-     * <p>Performs the complete enchantment process:</p>
-     *
-     * <ul>
-     * <li>Calls {@link #createEnchantmentArgs(ItemStack)} to generate spell-specific enchantment data</li>
-     * <li>Splits the stack: one item for enchanting, remainder (if any) to be dropped separately</li>
-     * <li>Drops the enchanted item at the spell location</li>
-     * <li>Calls {@link #alterItem(Item)} to apply any spell-specific modifications</li>
-     * <li>Registers the item with the enchanted items system</li>
-     * <li>Drops any remaining items from the original stack</li>
-     * </ul>
-     *
-     * <p>Assumes validation has already been performed via {@link #canBeEnchanted(ItemStack)}.</p>
+     * Enchant one item split from the given stack: register it with the enchanted-items system, apply
+     * {@link #alterItem(Item)}, and drop the enchanted item plus any remainder at the spell location. Assumes
+     * {@link #canBeEnchanted(ItemStack)} has passed.
      *
      * @param itemStack the ItemStack to enchant
      */
@@ -315,12 +263,8 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Generate spell-specific enchantment argument data.
-     *
-     * <p>Called during the enchantment process to create and store spell-specific data
-     * (e.g., book content for CELATUM, destination coordinates for PORTUS) that will be
-     * associated with the enchanted item. Subclasses should override this method to set
-     * {@link #enchantmentArgs} with relevant data. The default implementation does nothing.</p>
+     * Hook for subclasses to store spell-specific data in {@link #enchantmentArgs} before the item is enchanted (e.g.
+     * book content for CELATUM, destination coordinates for PORTUS). The default implementation does nothing.
      *
      * @param itemStack the item being enchanted
      */
@@ -328,16 +272,11 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Apply spell-specific modifications to an enchanted item.
-     *
-     * <p>Called after an item is registered with the enchanted items system, allowing
-     * subclasses to apply visual or functional modifications (e.g., clearing book pages,
-     * changing item properties). The method can return the same item or a modified replacement
-     * dropped at the same location. Subclasses should override this method if modifications
-     * are needed. The default implementation returns the item unchanged.</p>
+     * Hook for subclasses to modify the freshly enchanted item; may return a replacement dropped at the same location.
+     * The default implementation returns the item unchanged.
      *
      * @param item the Item entity to modify
-     * @return the altered item (may be a replacement if the item was removed and re-dropped)
+     * @return the altered item, or a replacement if it was re-dropped
      */
     @NotNull
     public Item alterItem(Item item) {

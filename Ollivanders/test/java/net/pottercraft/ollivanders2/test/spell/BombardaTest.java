@@ -5,9 +5,8 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Tests for the BOMBARDA spell.
- *
- * <p>Inherits all test scenarios from BombaraBaseTest with Bombarda-specific material thresholds.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.BOMBARDA}. Extends {@link BombardaBaseTest} for the shared
+ * bombardment tests, with Bombarda-specific material thresholds.
  */
 public class BombardaTest extends BombardaBaseTest {
     @Override

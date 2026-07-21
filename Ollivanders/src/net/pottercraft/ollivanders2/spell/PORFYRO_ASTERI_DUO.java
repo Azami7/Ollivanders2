@@ -10,12 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Porfyro Asteri Duo - The Purple and Fuchsia Star Fireworks with Trails and Fade Spell.
- *
- * <p>Launches one or more purple and fuchsia star-burst fireworks with trailing and fade effects.
- * The number of fireworks spawned depends on the caster's experience level, up to a maximum of 10.
- * Each firework explodes in a star pattern with dual purple and fuchsia colors, includes trailing
- * effects, and fades to white.</p>
+ * Fireworks charm that launches purple and fuchsia star-burst fireworks with trails, fading to white.
  */
 public final class PORFYRO_ASTERI_DUO extends Pyrotechnia {
     /**
@@ -60,10 +55,7 @@ public final class PORFYRO_ASTERI_DUO extends Pyrotechnia {
     }
 
     /**
-     * Calculate the number of fireworks to spawn on initialization.
-     *
-     * <p>Called during spell initialization to determine how many fireworks this spell
-     * will launch based on the caster's experience level.</p>
+     * Set the number of fireworks to launch based on the caster's experience.
      */
     @Override
     void doInitSpell() {

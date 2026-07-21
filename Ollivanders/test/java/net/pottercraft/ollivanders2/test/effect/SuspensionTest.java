@@ -16,26 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the SUSPENSION effect.
- *
- * <p>SUSPENSION is a debilitating effect that hoists the target player into the air and maintains them
- * in suspension by applying secondary effects (FLYING and FULL_IMMOBILIZE). This test class verifies that the
- * effect correctly suspends the player, applies necessary secondary effects, prevents movement via event
- * cancellation, and properly cleans up when the effect expires.</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Suspension activation - verifies the player is hoisted into the air and marked as suspended</li>
- * <li>Secondary effect application - verifies FLYING and FULL_IMMOBILIZE effects are applied to maintain suspension</li>
- * <li>Flying state - verifies the player's flying state is enabled during suspension</li>
- * <li>Velocity event handling - verifies PlayerVelocityEvent is cancelled to prevent escape from suspension</li>
- * <li>Location restoration - verifies the player is returned to original location when effect is removed</li>
- * <li>State cleanup - verifies flying is disabled and secondary effects are removed upon effect expiration</li>
- * </ul>
+ * Unit tests for {@link SUSPENSION}.
  *
  * @author Azami7
- * @see SUSPENSION for the effect implementation being tested
- * @see EffectTestSuper for the base testing framework
+ * @see EffectTestSuper
  */
 @Isolated
 public class SuspensionTest extends EffectTestSuper {
@@ -45,11 +29,7 @@ public class SuspensionTest extends EffectTestSuper {
     }
 
     /**
-     * Verify that the SUSPENSION effect correctly suspends the player.
-     *
-     * <p>Tests that when a SUSPENSION effect is applied, the player is properly hoisted into the air,
-     * the flying state is enabled to prevent falling, and secondary effects (FLYING and FULL_IMMOBILIZE)
-     * are applied to maintain the suspension state.</p>
+     * SUSPENSION hoists the player up, enables flying, and applies FLYING and FULL_IMMOBILIZE.
      */
     @Override
     void checkEffectTest() {
@@ -75,23 +55,13 @@ public class SuspensionTest extends EffectTestSuper {
         assertTrue(suspendLoc.getY() > origin.getY(), "SUSPENSION did not move player up on Y axis");
     }
 
-    /**
-     * Run all event handler tests for SUSPENSION.
-     *
-     * <p>Executes tests for event handlers that the SUSPENSION effect listens to,
-     * ensuring that velocity events are properly cancelled during suspension.</p>
-     */
     @Override
     void eventHandlerTests() {
         doOnPlayerVelocityEventTest();
     }
 
     /**
-     * Verify that SUSPENSION cancels PlayerVelocityEvent to prevent escape from suspension.
-     *
-     * <p>Tests that when a player velocity event occurs while SUSPENSION is active, the event
-     * is cancelled to prevent the player from breaking free of the suspension state through
-     * velocity changes.</p>
+     * SUSPENSION cancels PlayerVelocityEvent so the player cannot escape.
      */
     void doOnPlayerVelocityEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -105,11 +75,7 @@ public class SuspensionTest extends EffectTestSuper {
     }
 
     /**
-     * Verify that SUSPENSION properly cleans up when the effect is removed.
-     *
-     * <p>Tests that when the SUSPENSION effect is removed, the player is returned to their original
-     * location, the flying state is disabled, and all secondary effects (FLYING and FULL_IMMOBILIZE)
-     * are properly cleaned up to restore the player to their normal state.</p>
+     * Removing SUSPENSION disables flying and removes the FLYING and FULL_IMMOBILIZE effects.
      */
     @Override
     void doRemoveTest() {

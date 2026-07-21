@@ -21,57 +21,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the NULLUM_APPAREBIT stationary spell.
- *
- * <p>Tests spell-specific behavior for the anti-apparition barrier that prevents entities
- * from entering the protected area through apparition or teleportation. Inherits common
- * stationary spell tests from the base class and adds tests for event handling specific to
- * this spell's escape-prevention mechanics.</p>
+ * Unit tests for {@link NULLUM_APPAREBIT}. Extends {@link O2StationarySpellTest} for the shared stationary-spell tests.
  *
  * @author Azami7
  */
 public class NullumApparebitTest extends O2StationarySpellTest {
-    /**
-     * Gets the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#NULLUM_APPAREBIT}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.NULLUM_APPAREBIT;
     }
 
-    /**
-     * Creates a NULLUM_APPAREBIT spell instance for testing.
-     *
-     * <p>Constructs a new spell at the specified location with the minimum radius and duration values.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new NULLUM_APPAREBIT spell instance (not null)
-     */
     @Override
     NULLUM_APPAREBIT createStationarySpell(Player caster, Location location) {
         return new NULLUM_APPAREBIT(testPlugin, caster.getUniqueId(), location, NULLUM_APPAREBIT.minRadiusConfig, NULLUM_APPAREBIT.minDurationConfig);
     }
 
-    /**
-     * Tests upkeep behavior (skipped - covered by base class tests).
-     *
-     * <p>The upkeep method only performs aging, which is already tested comprehensively by the inherited
-     * ageAndKillTest() from the base test class.</p>
-     */
     @Override @Test
     void upkeepTest() {
     }
 
     /**
-     * Tests apparate by name and coordinates event handling.
-     *
-     * <p>Verifies that players outside the spell area cannot apparate in by name or coordinates,
-     * while players inside the spell area can freely apparate out. Confirms that both blocked and
-     * allowed apparations are handled correctly, and that players receive feedback when their
-     * entry attempts are prevented.</p>
+     * Apparition into the area (by name and by coordinates) is blocked with feedback, while apparition out is allowed.
      */
     @Test
     void doOnOllivandersApparateEventsTest() {
@@ -124,10 +94,7 @@ public class NullumApparebitTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests entity teleport event handling.
-     *
-     * <p>Verifies that non-player entities outside the spell area are prevented from teleporting in,
-     * while entities inside the spell area can freely teleport out of the protected area.</p>
+     * A non-player entity is blocked teleporting into the area but may teleport out.
      */
     @Test
     void doOnEntityTeleportEventTest() {
@@ -158,11 +125,7 @@ public class NullumApparebitTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests player teleport event handling.
-     *
-     * <p>Verifies that players outside the spell area are prevented from teleporting in and receive
-     * feedback when their entry attempts are blocked, while players inside the spell area can
-     * freely teleport out of the protected area.</p>
+     * A player is blocked teleporting into the area (with feedback) but may teleport out.
      */
     @Test
     void doOnPlayerTeleportEventTest() {

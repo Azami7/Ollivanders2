@@ -9,30 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Sleep induction effect that forces the affected player into a deep sleep state.
- *
- * <p>SLEEPING is a temporary debilitating effect that simulates sleep for the target player since
- * Minecraft does not support actual sleep actions for non-player-initiated sleeps. When activated,
- * the effect immobilizes the player, tilts their head downward (pitch = 45 degrees), applies the
- * SLEEP_SPEECH effect to replace their chat with sleep sounds, and applies the FULL_IMMOBILIZE effect
- * to prevent all movement and interaction. The sleep state can be broken by applying the AWAKE effect,
- * which automatically kills this effect. When removed, all secondary effects (speech replacement and
- * immobilization) are cleaned up and the player is notified of awakening.</p>
- *
- * <p>Sleep Configuration:</p>
- * <ul>
- * <li>Secondary effects: SLEEP_SPEECH (sleep vocalizations) and FULL_IMMOBILIZE (paralysis)</li>
- * <li>Head tilt: downward pitch angle of 45 degrees</li>
- * <li>Sleep state tracking: boolean flag to detect sleep initialization</li>
- * <li>Breaking condition: AWAKE effect application</li>
- * <li>Permanent: false (temporary effect with time-based expiration)</li>
- * <li>Detection text: "is affected by an unnatural sleep"</li>
- * </ul>
+ * Forces the affected player into a simulated deep sleep: tilts their head down and applies {@link SLEEP_SPEECH} and
+ * {@link FULL_IMMOBILIZE} for the duration. Broken early by the {@link AWAKE} effect. Detectable via Informous and
+ * Legilimens.
  *
  * @author Azami7
- * @see SLEEP_SPEECH for the sleep vocalization effect applied during sleep
- * @see FULL_IMMOBILIZE for the paralysis effect applied during sleep
- * @see AWAKE for the effect that breaks the sleep state
+ * @see SLEEP_SPEECH
+ * @see FULL_IMMOBILIZE
+ * @see AWAKE
  */
 public class SLEEPING extends O2Effect {
     /**
@@ -46,17 +30,12 @@ public class SLEEPING extends O2Effect {
     public static final String SLEEP_WAKEUP_MESSAGE = "You awaken from a deep sleep.";
 
     /**
-     * Track if we put them in to sleep, real or simulated
+     * Whether the sleep state has been applied, so it is only set up once.
      */
     private boolean sleeping = false;
 
     /**
-     * Constructor for creating a sleep induction effect.
-     *
-     * <p>Creates a sleep effect that forces the target player into a deep sleep state. On the first
-     * checkEffect() call, the player will be immobilized, their head will be tilted downward, sleep
-     * vocalizations will begin, and they will receive a notification. The sleep persists until the
-     * duration expires or the AWAKE effect is applied to break the sleep.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the sleep effect in game ticks
@@ -72,40 +51,18 @@ public class SLEEPING extends O2Effect {
         informousText = legilimensText = "is affected by an unnatural sleep";
     }
 
-    /**
-     * Age the sleep effect and apply sleep state once per effect lifetime.
-     *
-     * <p>Called each game tick. This method first ages the effect by 1 tick. Then it checks if the sleep
-     * state has been initialized via the sleeping flag. If not, it calls playerSleep() once to initialize
-     * the sleep state (applying secondary effects, head tilt, and messaging). The sleep persists each tick
-     * until the effect duration expires or is explicitly removed.</p>
-     */
     @Override
     public void checkEffect() {
         age(1);
 
-        // if the player is not sleeping, put them to sleep
         if (!sleeping) {
             playerSleep();
         }
     }
 
     /**
-     * Initialize the sleep state by applying effects and visual changes.
-     *
-     * <p>Applies the complete sleep transformation to the target player in multiple steps:</p>
-     * <ol>
-     * <li>Attempts to put the player to sleep via Bukkit API (skipped in test mode)</li>
-     * <li>If the player is not actually sleeping after the attempt, simulates sleep by tilting their head
-     * downward (pitch = 45 degrees) and applying the FULL_IMMOBILIZE effect for paralysis</li>
-     * <li>Always applies the SLEEP_SPEECH effect for sleep vocalizations</li>
-     * <li>Notifies the player they have fallen into a deep sleep</li>
-     * <li>Marks the sleeping flag as true to prevent re-application</li>
-     * </ol>
-     *
-     * <p>This method is called once when the sleep effect first activates via checkEffect(). The head tilt
-     * and FULL_IMMOBILIZE are conditional to handle both real sleep (via Bukkit API) and simulated sleep
-     * (when the player is not actually in a bed).</p>
+     * Set up the sleep state: tilt the head down, immobilize the player, apply {@link SLEEP_SPEECH}, and notify them.
+     * Runs once, guarded by the sleeping flag.
      */
     private void playerSleep() {
         if (!Ollivanders2.testMode) { // MockBukkit does not have player sleep and doing this will cause an UnimplementedOperationException
@@ -134,11 +91,7 @@ public class SLEEPING extends O2Effect {
     }
 
     /**
-     * Clean up the sleep effect and restore the player to normal state.
-     *
-     * <p>When the sleep effect is removed, this method cleans up the secondary effects (SLEEP_SPEECH
-     * and FULL_IMMOBILIZE) that were applied during sleep. The player is notified of awakening and the
-     * sleeping flag is reset. If the player is offline, cleanup is gracefully skipped.</p>
+     * Remove the secondary effects ({@link SLEEP_SPEECH}, {@link FULL_IMMOBILIZE}), wake the player, and notify them.
      */
     @Override
     public void doRemove() {

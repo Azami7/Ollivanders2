@@ -16,30 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the AWAKE effect.
+ * Unit tests for {@link AWAKE}, the insomnia effect that removes SLEEPING and blocks bed entry.
  *
- * <p>Tests the insomnia effect that prevents players from sleeping. Verifies core effect behaviors
- * (aging, duration expiration) and specific AWAKE mechanics:</p>
- * <ul>
- * <li>Removes active SLEEPING effects when applied (effect override)</li>
- * <li>Cancels PlayerBedEnterEvent to prevent new sleep attempts</li>
- * <li>Properly ages and expires based on duration</li>
- * </ul>
- *
- * <p>Special attention is given to the interaction between AWAKE and SLEEPING effects to ensure
- * they are mutually exclusive and properly resolve conflicts.</p>
+ * @see EffectTestSuper
  */
 public class AwakeTest extends EffectTestSuper {
     /**
-     * Create an AWAKE effect for testing.
-     *
-     * <p>Instantiates a new AWAKE effect with the specified parameters. This method is called
-     * by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new AWAKE effect targeting the specified player
+     * {@inheritDoc}
      */
     @Override
     AWAKE createEffect(Player target, int durationInTicks, boolean isPermanent) {
@@ -47,19 +30,8 @@ public class AwakeTest extends EffectTestSuper {
     }
 
     /**
-     * Test AWAKE effect behavior for waking sleeping players and preventing bed entry.
-     *
-     * <p>Performs two comprehensive tests:</p>
-     * <ol>
-     * <li><strong>Test 1: AWAKE removes SLEEPING effect</strong> - Applies a SLEEPING effect to a player,
-     * advances ticks to initialize it, then applies AWAKE and advances ticks again. Verifies that both effects
-     * are active after initialization, then confirms that SLEEPING is removed after AWAKE processes.</li>
-     * <li><strong>Test 2: AWAKE prevents bed entry</strong> - Creates a bed, applies AWAKE to a player,
-     * simulates a PlayerBedEnterEvent, and verifies the event is cancelled.</li>
-     * </ol>
-     *
-     * <p>The timing sequence is critical: SLEEPING must initialize before AWAKE is applied to ensure
-     * proper effect state for testing the interaction between the two effects.</p>
+     * Applying AWAKE removes an active SLEEPING effect, and AWAKE cancels bed-entry attempts. SLEEPING must
+     * initialize before AWAKE is applied so the interaction between the two effects is exercised.
      */
     @Override
     void checkEffectTest() {
@@ -118,10 +90,7 @@ public class AwakeTest extends EffectTestSuper {
     }
 
     /**
-     * Run all event handler tests for the AWAKE effect.
-     *
-     * <p>Executes the bed enter event test to verify that the effect correctly intercepts
-     * and cancels attempts by affected players to enter beds.</p>
+     * {@inheritDoc}
      */
     @Override
     void eventHandlerTests() {
@@ -129,11 +98,7 @@ public class AwakeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that AWAKE effect prevents players from entering beds.
-     *
-     * <p>Creates a bed block in the test world, places a player at the bed location, applies
-     * the AWAKE effect, then simulates a PlayerBedEnterEvent. Verifies that the event is
-     * cancelled by the AWAKE effect, preventing the player from sleeping.</p>
+     * AWAKE cancels a player's bed-entry event, preventing them from sleeping.
      */
     void doOnPlayerBedEnterEventTest() {
         Block bed = testWorld.getBlockAt(new Location(testWorld, 200, 4, 300));
@@ -154,7 +119,7 @@ public class AwakeTest extends EffectTestSuper {
     }
 
     /**
-     * doRemove() for AWAKE does not do anything
+     * AWAKE has no doRemove() cleanup to test.
      */
     @Override
     void doRemoveTest() {}

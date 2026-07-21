@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="http://harrypotter.wikia.com/wiki/Moste_Potente_Potions">http://harrypotter.wikia.com/wiki/Moste_Potente_Potions</a>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Moste_Potente_Potions">Moste Potente Potions</a>
  */
 public class MOSTE_POTENTE_POTIONS extends O2Book {
     /**

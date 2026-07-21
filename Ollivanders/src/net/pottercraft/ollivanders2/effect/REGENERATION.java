@@ -7,24 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * REGENERATION effect - restores a player's health over time.
- *
- * <p>When applied to a player, this effect continuously restores their health over the duration
- * of the effect. It is a beneficial potion effect that provides passive healing. The effect uses
- * the Minecraft REGENERATION potion effect with strength level 1.</p>
- *
- * <p>The effect displays "feels healthy" in informous and legilimency spell text, indicating
- * the restorative nature of the effect.</p>
+ * Applies Minecraft's REGENERATION potion effect at strength 1, restoring the target's health over time. Detectable
+ * via Informous and Legilimens.
  *
  * @author Azami7
+ * @see PotionEffect
  */
 public class REGENERATION extends PotionEffect {
     /**
-     * Constructor for REGENERATION effect.
-     *
-     * <p>Initializes the effect with the specified duration and permanent flag. Sets up the effect
-     * type as REGENERATION, applies strength level 1, and configures the informous and legilimency
-     * spell text to "feels healthy".</p>
+     * Constructor
      *
      * @param plugin the plugin instance
      * @param duration the duration of the effect in server ticks
@@ -43,12 +34,6 @@ public class REGENERATION extends PotionEffect {
         strength = 1;
     }
 
-    /**
-     * Clean up the REGENERATION effect when removed.
-     *
-     * <p>Called when the effect is removed from a player. This effect has no special cleanup
-     * required beyond the standard effect removal handled by the parent class.</p>
-     */
     @Override
     public void doRemove() {
     }

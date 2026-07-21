@@ -15,24 +15,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Turns all blocks in a radius into fallingBlock entities
+ * The Blasting Charm: turns every block in a radius around the impact into a falling-block entity, leaving air behind.
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Deprimo_Spell">https://harrypotter.fandom.com/wiki/Deprimo_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Deprimo_Spell">Harry Potter Wiki - Deprimo Spell</a>
  */
 public final class DEPRIMO extends O2Spell {
-    /**
-     * The minimum radius to affect
-     */
     private final double minRadius = 1.0;
 
-    /**
-     * The max possible radius
-     */
     private final double maxRadius = 10.0;
 
-    /**
-     * The radius this spell instance will affect
-     */
     private double radius;
 
     /**
@@ -124,7 +115,7 @@ public final class DEPRIMO extends O2Spell {
 
     /**
      * Get the radius, in blocks, this cast affects. Set by {@link #doInitSpell()} from the caster's skill and
-     * clamped to the range {@link #getMinRadius()} to {@link #getMaxRadius()}.
+     * limited to the range {@link #getMinRadius()} to {@link #getMaxRadius()}.
      *
      * @return the affected radius
      */

@@ -16,22 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the PORTUS spell.
- *
- * <p>PORTUS is a charms spell that creates portkeys—items that teleport whoever picks them up
- * to a pre-arranged destination. The spell uses held-item mode, enchanting the off-hand item
- * and storing the caster's current location as the portkey destination. PORTUS does not
- * modify the item appearance and has no item type restrictions.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.PORTUS for the spell implementation
- * @see ItemEnchantTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.PORTUS}. Extends {@link ItemEnchantTest} for the shared
+ * item-enchantment tests.
  */
 public class PortusTest extends ItemEnchantTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.PORTUS
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

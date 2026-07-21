@@ -13,20 +13,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Eradication Spell that removes lingering potion effect clouds.
- *
- * <p>When cast, the spell launches a projectile that removes any area effect clouds it encounters.
- * The spell scans a 4-block radius for cloud entities and destroys them upon impact.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Detection: Scans 4 blocks around the projectile for AreaEffectCloud entities</li>
- * <li>Effect: Removes all detected clouds from the world</li>
- * <li>Termination: Kills itself after removing the first cloud found</li>
- * </ul>
+ * Eradication Spell that removes lingering area effect clouds (such as potion clouds) near the projectile's path.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Eradication_Spell">Eradication Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Eradication_Spell">Harry Potter Wiki - Eradication Spell</a>
  */
 public final class DELETRIUS extends O2Spell {
     private static final double effectRadius = 4;
@@ -70,14 +60,8 @@ public final class DELETRIUS extends O2Spell {
     }
 
     /**
-     * Scans for and removes area effect clouds within the effect radius.
-     *
-     * <p>Each tick, this method checks the projectile's current location for AreaEffectCloud
-     * entities within a 4-block radius. Any clouds found are removed from the world.
-     * After removing the first cloud, the spell kills itself to stop execution.</p>
-     *
-     * <p>If the spell has already hit a block target (hasHitTarget), it immediately
-     * terminates without scanning for clouds.</p>
+     * Remove area effect clouds within {@code effectRadius} of the projectile and end the spell once any is removed;
+     * ends immediately if the projectile hits a block.
      */
     @Override
     protected void doCheckEffect() {

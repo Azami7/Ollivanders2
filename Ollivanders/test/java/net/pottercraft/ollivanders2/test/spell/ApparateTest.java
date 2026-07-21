@@ -36,7 +36,6 @@ import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventCl
  */
 @Isolated
 public class ApparateTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -228,13 +227,9 @@ public class ApparateTest extends O2SpellTestSuper {
         // canApparateFrom and canApparateTo cannot be tested until we mock world guard
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>No state changes to revert for this spell.</p>
-     */
     @Override
     @Test
     void revertTest() {
+        // apparate has no state to revert
     }
 }

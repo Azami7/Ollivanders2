@@ -6,23 +6,18 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Tests for the {@link REPARO} spell, the standard Mending Charm that repairs ordinary damageable tools.
- *
- * <p>Inherits the shared repair and skip-path coverage from {@link ReparoBaseTest}, supplying the REPARO
- * spell type and a diamond tool as the repair target.</p>
+ * Unit tests for {@link REPARO}. Extends {@link ReparoBaseTest} for the shared repair and skip-path tests, supplying
+ * a diamond tool as the repair target.
  *
  * @author Azami7
- * @see REPARO
  */
 public class ReparoTest extends ReparoBaseTest {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.REPARO;
     }
 
-    /** {@inheritDoc} */
     @Override
     @NotNull
     Material getRepairableMaterial() {

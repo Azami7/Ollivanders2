@@ -18,11 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for O2Color enum.
- *
- * <p>Tests the various color conversion methods and utilities provided by the O2Color enum,
- * including Bukkit color, chat color, dye color conversions, material color operations,
- * and random color generation.</p>
+ * Unit tests for {@link O2Color}.
  */
 public class O2ColorTest {
 
@@ -72,7 +68,6 @@ public class O2ColorTest {
 
     /**
      * Test that getColoredMaterial() creates the correct colored material from a base material name.
-     * Tests wool, carpet, and concrete materials.
      */
     @Test
     void getColoredMaterialTest() {
@@ -100,7 +95,6 @@ public class O2ColorTest {
      */
     @Test
     void getBukkitColorByNumberTest() {
-        // Test valid numbers
         O2Color color0 = O2Color.getBukkitColorByNumber(0);
         assertNotNull(color0);
 
@@ -116,7 +110,6 @@ public class O2ColorTest {
      */
     @Test
     void getBukkitColorByNumberOutOfRangeTest() {
-        // Test out of range numbers
         assertEquals(O2Color.WHITE, O2Color.getBukkitColorByNumber(-1));
         assertEquals(O2Color.WHITE, O2Color.getBukkitColorByNumber(16));
         assertEquals(O2Color.WHITE, O2Color.getBukkitColorByNumber(100));
@@ -145,12 +138,11 @@ public class O2ColorTest {
      */
     @Test
     void getRandomPrimaryDyeableColorWithSeedTest() {
-        // Same seed should produce same color
         O2Color color1 = O2Color.getRandomPrimaryDyeableColor(42);
         O2Color color2 = O2Color.getRandomPrimaryDyeableColor(42);
         assertSame(color1, color2, "Same seed should produce same color");
 
-        // Different seeds should potentially produce different colors
+        // different seeds should vary
         Set<O2Color> colors = new HashSet<>();
         for (int i = 0; i < 20; i++) {
             O2Color color = O2Color.getRandomPrimaryDyeableColor(i);
@@ -183,12 +175,11 @@ public class O2ColorTest {
      */
     @Test
     void getRandomDyeableColorWithSeedTest() {
-        // Same seed should produce same color
         O2Color color1 = O2Color.getRandomDyeableColor(123);
         O2Color color2 = O2Color.getRandomDyeableColor(123);
         assertSame(color1, color2, "Same seed should produce same color");
 
-        // Different seeds should potentially produce different colors
+        // different seeds should vary
         Set<O2Color> colors = new HashSet<>();
         for (int i = 0; i < 30; i++) {
             O2Color color = O2Color.getRandomDyeableColor(i);

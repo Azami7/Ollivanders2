@@ -12,11 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract base class for spells with knockback effects (push/pull, vertical/horizontal).
- *
- * <p>Provides common functionality for calculating and applying velocity to entities. Subclasses must implement
- * {@link #canTarget(Entity)} to determine valid targets. The spell finds the nearest valid entity at the projectile
- * location, calculates the appropriate velocity based on distance and drag factors, and applies it to the target.</p>
+ * Base class for knockback spells that push or pull entities, vertically or horizontally. Subclasses implement
+ * {@link #canTarget(Entity)} to define valid targets; the spell applies a skill-scaled velocity to each.
  *
  * @author Azami7
  */
@@ -81,8 +78,6 @@ public abstract class Knockback extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -92,11 +87,8 @@ public abstract class Knockback extends O2Spell {
     }
 
     /**
-     * Finds an entity at the projectile location and applies velocity to it.
-     *
-     * <p>Searches for a valid target entity near the projectile, calculates the appropriate velocity based on
-     * the caster's skill level, and applies the velocity to the target. For vertical spells targeting entities
-     * underwater, the distance is capped to prevent launching them out of water at unrealistic speeds.</p>
+     * Apply a skill-scaled knockback velocity to the target(s) this tick, then end the spell: the caster when
+     * {@link #targetsSelf} is set, otherwise up to {@link #maxTargets} valid nearby entities.
      */
     @Override
     protected void doCheckEffect() {
@@ -144,7 +136,7 @@ public abstract class Knockback extends O2Spell {
     }
 
     /**
-     * To be overridden by child classes if they want to add additional effects to the target.
+     * Hook for subclasses to apply extra effects to a knocked-back target. The default implementation does nothing.
      *
      * @param target the entity to affect
      */
@@ -267,9 +259,7 @@ public abstract class Knockback extends O2Spell {
     }
 
     /**
-     * Get the velocity for this spell.
-     *
-     * @return the velocity this spell will add to the target entity
+     * @return a copy of the velocity this spell last applied to a target
      */
     public Vector getVelocity() {
         return velocity.clone();

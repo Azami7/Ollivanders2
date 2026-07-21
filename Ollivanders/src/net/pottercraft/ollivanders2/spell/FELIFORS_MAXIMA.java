@@ -7,16 +7,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Jinx that transforms the target player into a cat.
+ * Jinx that transfigures the target player into a cat for a limited duration.
  * <p>
- * This is the most powerful variant of the Felifors transfiguration line. It extends {@link AddO2Effect} to apply
- * the {@link O2EffectType#FELIFORS_MAXIMA} effect to the target, which handles the cat transformation. The effect
- * lasts at least 30 seconds, scaled by the caster's experience.
- * </p>
- * <p>
- * Unlike {@link FELIFORS_MEDIUS}, which applies a reversible disguise to any entity, this variant targets players
- * and works through the effect system. {@code targetSelf} is enabled so the jinx can resolve onto the casting
- * player when no other target is in range.
+ * Unlike {@link FELIFORS_MEDIUS}, which applies a reversible disguise to any entity, this variant targets players.
  * </p>
  *
  * @author Azami7
@@ -52,7 +45,6 @@ public class FELIFORS_MAXIMA extends AddO2Effect {
         effectsToAdd.add(O2EffectType.FELIFORS_MAXIMA);
         strengthModifier = 1;
         minDurationInSeconds = 30;
-        targetSelf = true;
 
         initSpell();
     }

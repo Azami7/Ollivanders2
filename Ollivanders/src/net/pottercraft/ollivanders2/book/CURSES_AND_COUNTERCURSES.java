@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.wikia.com/wiki/Curses_and_Counter-Curses">https://harrypotter.wikia.com/wiki/Curses_and_Counter-Curses</a>
+ * @see <a href="https://harrypotter.wikia.com/wiki/Curses_and_Counter-Curses">Curses and Counter-Curses</a>
  */
 public class CURSES_AND_COUNTERCURSES extends O2Book {
     /**

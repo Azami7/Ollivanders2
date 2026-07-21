@@ -13,14 +13,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Captures magical blue flames in a glass bottle, creating a portable light source.
  * <p>
- * Lumos Caeruleum is the Minecraft adaptation of the Bluebell Flames charm. When cast while the caster holds a
- * glass bottle in their off-hand, it converts a single bottle into a {@link Material#SOUL_LANTERN soul lantern}
- * renamed "Jar of Bluebell Flames" - a waterproof, portable light source. If the caster is holding a stack of
- * bottles, only one is consumed and the remainder are dropped at the caster's location so they are not lost.
- * </p>
- * <p>
- * This is a {@code noProjectile} charm: it acts immediately on the caster's inventory in {@link #doCheckEffect()}
- * rather than firing a projectile, and does nothing if the off-hand is not holding a glass bottle.
+ * Lumos Caeruleum is the Minecraft adaptation of the Bluebell Flames charm. When the caster holds a glass bottle in
+ * their off-hand, it converts a single bottle into a {@link Material#SOUL_LANTERN soul lantern} renamed "Jar of
+ * Bluebell Flames" - a waterproof, portable light source; a stack of bottles loses only one, the rest being dropped
+ * at the caster's location so they are not lost. The charm does nothing if the off-hand is not holding a glass bottle.
  * </p>
  *
  * @author Azami7

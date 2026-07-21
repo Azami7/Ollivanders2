@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Vanishes non-living entities.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Spell">https://harrypotter.fandom.com/wiki/Vanishing_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Spell">Harry Potter Wiki - Vanishing Spell</a>
  */
 public class EVANESCO extends EntityTransfiguration {
     /**

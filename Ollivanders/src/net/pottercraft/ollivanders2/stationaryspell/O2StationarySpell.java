@@ -43,108 +43,77 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Abstract base class for stationary spells (area-of-effect persistent spells).
- *
- * <p>Stationary spells create protective barriers or effects that persist at a fixed location and affect
- * all players and entities within their radius. They age over time (unless permanent), emit visual effects
- * (flair), and provide a hook system for handling game events. Each spell has configurable minimum and
- * maximum radius and duration constraints that subclasses must define.</p>
- *
- * <p>Key features:</p>
- * <ul>
- *   <li>Fixed location with configurable radius</li>
- *   <li>Time-based duration (ages each tick unless permanent)</li>
- *   <li>Active/inactive state (duration continues to age when inactive)</li>
- *   <li>Event handler overrides for spell-specific behavior</li>
- *   <li>Serialization/deserialization for persistence across server restarts</li>
- *   <li>Visual effects (flair) at spell location</li>
- * </ul>
+ * Abstract base class for stationary spells: area-of-effect spells that persist at a fixed location and act on the
+ * players and entities within their radius until their duration expires.
+ * <p>
+ * Subclasses define their radius and duration bounds via {@link #initRadiusAndDurationMinMax()}, drive their own
+ * lifecycle in {@link #upkeep()}, and override the {@code doOn...Event} hooks to react to game events. Spells age each
+ * tick (unless {@link #permanent}) and are serialized to disk so they survive server restarts.
  *
  * @author Azami7
  * @version Ollivanders2
  */
 public abstract class O2StationarySpell implements Serializable {
     /**
-     * The minimum radius for this spell, this must be set by the specific spell
+     * Radius bounds this spell clamps to; set by the subclass in {@link #initRadiusAndDurationMinMax()}.
      */
     int minRadius = 0;
 
     /**
-     * The maximum radius for this spell, this must be set by the specific spell
+     * Radius bounds this spell clamps to; set by the subclass in {@link #initRadiusAndDurationMinMax()}.
      */
     int maxRadius = 0;
 
     /**
-     * The minimum duration for the spell, this must be set by the specific spell
+     * Duration bounds this spell clamps to; set by the subclass in {@link #initRadiusAndDurationMinMax()}.
      */
     int minDuration = 0;
 
     /**
-     * The maximum duration for the spell, this must be set by the specific spell
+     * Duration bounds this spell clamps to; set by the subclass in {@link #initRadiusAndDurationMinMax()}.
      */
     int maxDuration = 0;
 
     /**
-     * Whether this spell is permanent (never ages or expires).
+     * Whether this spell is permanent; a permanent spell never ages or expires.
      */
     boolean permanent = false;
 
-    /**
-     * A reference to the plugin
-     */
     Ollivanders2 p;
 
-    /**
-     * Common functions
-     */
     final Ollivanders2Common common;
 
     /**
-     * The UUID of the caster of this stationary spell
+     * The UUID of the player who cast this spell.
      */
     UUID playerUUID;
 
-    /**
-     * The type of stationary spell
-     */
     O2StationarySpellType spellType;
 
-    /**
-     * The location of this stationary spell
-     */
     Location location;
 
-    /**
-     * The world the stationary spell is in
-     */
     World world;
 
     /**
-     * The remaining duration of this stationary spell
+     * Remaining duration in ticks. Counts down each tick regardless of {@link #active}.
      */
     int duration = 10;
 
     /**
-     * Is this spell currently active. Duration still counts down when spell is inactive.
+     * Whether this spell is currently acting on its area. Duration still counts down while inactive.
      */
     boolean active = true;
 
     /**
-     * Whether this spell is marked for removal (expired and waiting to be cleaned up).
+     * Whether this spell is marked for removal. See {@link #isKilled()}.
      */
     boolean kill = false;
 
-    /**
-     * The radius of this stationary spell from the location
-     */
     int radius = 1;
 
     /**
-     * Constructs a stationary spell from deserialized data at server startup.
-     *
-     * <p>Used only for loading saved spells from disk. Subclasses should not call this directly
-     * when casting a new spell - use the full constructor instead. Calls initRadiusAndDurationMinMax()
-     * to set spell-specific radius and duration constraints.</p>
+     * Constructor for loading a saved spell from disk. The caller must populate the spell's location, caster, and
+     * serialized state afterwards; use the location constructor when casting a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -156,10 +125,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Constructs a new stationary spell cast by a player.
-     *
-     * <p>Creates a new spell at the specified location with the given caster. Initializes spell-specific
-     * constraints via initRadiusAndDurationMinMax(). This constructor should be used when casting a new spell.</p>
+     * Constructor for casting a new stationary spell. The spell is killed immediately if the location has no world.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the UUID of the player who cast the spell
@@ -182,15 +148,13 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Initializes the minimum and maximum radius and duration bounds for this spell.
-     *
-     * <p>Subclasses must implement to set spell-specific constraints. These values are used to clamp
-     * radius and duration values when they're set or modified. Must be called during object construction.</p>
+     * Set this spell's {@link #minRadius}, {@link #maxRadius}, {@link #minDuration}, and {@link #maxDuration} bounds.
+     * Called during construction, before radius or duration are clamped.
      */
     abstract void initRadiusAndDurationMinMax();
 
     /**
-     * Get the duration remaining for this spell
+     * Get the remaining duration in ticks.
      *
      * @return the duration remaining
      */
@@ -199,21 +163,17 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Set the duration remaining for this stationary spell. This can be lower than the min duration since spells may reduce the time remaining and loading stationary spells from the
-     * save file on restart should set them to however much time was left
+     * Set the remaining duration, clamped to {@code [minDuration, maxDuration]} unless allowLowerThanMin then it only
+     * limits maxDuration.
      *
      * @param duration the duration in game ticks
+     * @param allowLowerThanMin if set to true, allows duration to be set below min - this is used for reloading the spell from save
      */
-    void setDuration(int duration) {
-        if (maxDuration == 0 || minDuration == 0) {
-            common.printDebugMessage("Min or max duration not set in " + spellType.getSpellName(), null, null, true);
-        }
-        else {
-            if (duration > maxDuration)
-                duration = maxDuration;
-            else if (duration < minDuration)
-                duration = minDuration;
-        }
+    void setDuration(int duration, boolean allowLowerThanMin) {
+        if (duration > maxDuration)
+            duration = maxDuration;
+        else if (!allowLowerThanMin && duration < minDuration)
+            duration = minDuration;
 
         this.duration = duration;
     }
@@ -228,7 +188,8 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Set the radius of this stationary spell.
+     * Set the radius, clamped to {@code [minRadius, maxRadius]}. No clamping happens (and a debug message is logged)
+     * if either bound is still zero.
      *
      * @param radius the radius in blocks
      */
@@ -247,12 +208,11 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Increase the radius of this stationary spell.
+     * Increase the radius, capped at {@link #maxRadius}.
      *
-     * @param increase the amount to increase the radius by
+     * @param increase the amount to increase the radius by; ignored if not positive
      */
     public void increaseRadius(int increase) {
-        // if they sent a negative number, do nothing
         if (increase <= 0)
             return;
 
@@ -268,18 +228,16 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Decrease the radius of this stationary spell.
+     * Decrease the radius. Kills the spell if the radius drops below {@link #minRadius}.
      *
-     * @param decrease the amount to decrease the radius
+     * @param decrease the amount to decrease the radius by; ignored if not positive
      */
     public void decreaseRadius(int decrease) {
-        // if they sent negative number, do nothing
         if (decrease <= 0)
             return;
 
         radius = radius - decrease;
 
-        // if radius is smaller than the min, kill this spell
         if (minRadius == 0) {
             common.printDebugMessage("Min radius not set in " + spellType.getSpellName(), null, null, true);
         }
@@ -290,7 +248,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Increase the duration of this stationary spell.
+     * Increase the remaining duration, capped at {@link #maxDuration}.
      *
      * @param increase the amount to increase the duration by
      */
@@ -307,8 +265,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Set the center location of this stationary spell. This should only be used at start up to set up the saved
-     * stationary spells.
+     * Set the center location. Kills the spell if the location has no world. Used when restoring saved spells.
      *
      * @param location the spell location
      */
@@ -317,14 +274,13 @@ public abstract class O2StationarySpell implements Serializable {
 
         world = location.getWorld();
         if (world == null) {
-            common.printLogMessage("O2StationarySpell.setLocation: null worlld", null, null, true);
+            common.printLogMessage("O2StationarySpell.setLocation: null world", null, null, true);
             kill();
         }
     }
 
     /**
-     * Set the ID of the player who cast this spell. This should only be used at start up to set up the saved
-     * stationary spells.
+     * Set the UUID of the caster. Used when restoring saved spells.
      *
      * @param pid the player ID
      */
@@ -361,7 +317,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Ages the StationarySpellObj
+     * Age this spell by one tick. No-op if the spell is permanent.
      */
     public void age() {
         if (permanent)
@@ -371,7 +327,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Ages the StationarySpellObj
+     * Age this spell, killing it once duration reaches zero. No-op if the spell is permanent.
      *
      * @param i number of ticks to age the spell by
      */
@@ -386,9 +342,10 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Ages the stationary spell by the specified percent.
+     * Age this spell by a fraction of its remaining duration. No-op if the spell is permanent.
      *
-     * @param percent the percent (as a decimal) to age the spell by, 0.1-1 where 0.1 = 10%
+     * @param percent the fraction to age by, in the range (0, 1]; values &gt; 1 are treated as 1, which kills the
+     *                spell; non-positive values are ignored
      */
     public void ageByPercent(double percent) {
         if (permanent)
@@ -406,7 +363,8 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * This kills the spell
+     * End this spell: runs a final flair, marks it for removal, runs {@link #doCleanUp()}, and notifies the caster if
+     * they are online.
      */
     public void kill() {
         flair(20);
@@ -421,17 +379,17 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Is the location specified inside the stationary spell's radius?
+     * Check whether a location falls within this spell's radius.
      *
-     * @param loc the location specified.
-     * @return true if the location is inside of this spell radius, false otherwise
+     * @param loc the location to test
+     * @return true if the location is inside this spell's radius, false otherwise
      */
     public boolean isLocationInside(@NotNull Location loc) {
         return Ollivanders2Common.isInside(location, loc, radius);
     }
 
     /**
-     * Gets the block at the center of this spell radius
+     * Get the block at the center of this spell.
      *
      * @return the center block for this spell
      */
@@ -441,9 +399,10 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Get living entities whose eye location is within the radius. We use eye radius to handle entities bigger than 1 block.
+     * Get the living entities whose eye location is within the radius. Eye location is used so that entities taller
+     * than one block are caught.
      *
-     * @return a list of living entities with an eye location within radius
+     * @return the matching living entities; empty if none
      */
     @NotNull
     public List<LivingEntity> getLivingEntitiesInsideSpellRadius() {
@@ -451,7 +410,6 @@ public abstract class O2StationarySpell implements Serializable {
 
         List<LivingEntity> close = new ArrayList<>();
 
-        /* only add living entities if their eye location is within the radius */
         for (LivingEntity e : entities) {
             if (location.distance(e.getEyeLocation()) < radius)
                 close.add(e);
@@ -461,9 +419,9 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Get the players inside this spell radius. We use eye radius to handle entities bigger than 1 block.
+     * Get the online players whose location is within this spell's radius.
      *
-     * @return a list of the players with an eye location within the radius
+     * @return the matching players; empty if none
      */
     public List<Player> getPlayersInsideSpellRadius() {
         List<Player> players = new ArrayList<>();
@@ -477,11 +435,9 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Makes a particle effect at all points along the radius of spell and at spell loc
-     * <p>
-     * {@link Ollivanders2Common}
+     * Emit a particle effect around this spell's radius and center as a visual cue.
      *
-     * @param intensity intensity of the flair
+     * @param intensity the intensity of the flair
      */
     public void flair(int intensity) {
         Ollivanders2Common.flair(location, radius, intensity);
@@ -562,11 +518,8 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Performs per-tick upkeep for this spell.
-     *
-     * <p>Subclasses must implement to handle spell lifecycle management. Should call age() or age(int)
-     * to decrement the spell duration each tick, which will automatically kill the spell when duration
-     * reaches zero. Permanent spells will never age.</p>
+     * Run this spell's per-tick behavior. Implementations should call {@link #age()} or {@link #age(int)} so the
+     * spell expires when its duration runs out.
      */
     abstract public void upkeep();
 
@@ -586,10 +539,7 @@ public abstract class O2StationarySpell implements Serializable {
     abstract void deserializeSpellData(@NotNull Map<String, String> spellData);
 
     /**
-     * Handles player movement events across the spell area.
-     *
-     * <p>Subclasses can override to implement spell-specific behavior when players move relative to
-     * the spell area, such as entry restrictions, visibility toggling, or boundary detection.</p>
+     * Handle a player move event. Override to react to players moving into, out of, or within the spell area.
      *
      * @param event the player move event
      */
@@ -605,7 +555,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Handle entities spawning
+     * Handle an entity target event
      *
      * @param event the event
      */
@@ -613,10 +563,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Handles asynchronous player chat events.
-     *
-     * <p>Subclasses can override to implement spell-specific chat behavior, such as filtering recipients
-     * or blocking messages from reaching certain areas.</p>
+     * Handle an async player chat event. Override to filter recipients or block messages around the spell area.
      *
      * @param event the async player chat event
      */
@@ -720,9 +667,9 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Handle spell world load events
+     * Handle a player join event
      *
-     * @param event the world load event
+     * @param event the player join event
      */
     void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
     }
@@ -792,20 +739,15 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Performs cleanup when this spell ends.
-     *
-     * <p>Called by kill() when the spell's duration expires. Subclasses implement to remove spell effects,
-     * unhide hidden players, undo restrictions, or perform any other cleanup necessary for spell termination.</p>
+     * Undo this spell's effects when it ends. Called by {@link #kill()}; implementations remove effects, unhide
+     * players, and reverse any restrictions the spell put in place.
      */
     abstract void doCleanUp();
 
     /**
-     * Checks if this spell has been properly deserialized with required data.
+     * Check that this spell was deserialized with the caster UUID and location it needs to function.
      *
-     * <p>Verifies that the spell has both a caster UUID and a location set, which are required
-     * for a spell to function correctly.</p>
-     *
-     * @return true if both playerUUID and location are set, false otherwise
+     * @return true if both the caster UUID and location are set, false otherwise
      */
     public boolean checkSpellDeserialization() {
         return playerUUID != null && location != null;

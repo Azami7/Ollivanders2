@@ -14,25 +14,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Arresto Momentum - The Slowing Charm.
+ * The Slowing Charm: reduces the velocity of the first valid target by an amount that scales with caster skill. A
+ * nearby living entity (never the caster, and only one no taller than 2 blocks) is preferred over the nearest item;
+ * targeting a living entity also requires the caster to be at least Year 5 when years are enabled.
  *
- * <p>ARRESTO_MOMENTUM slows down the velocity of any item or living entity according to the caster's
- * spell experience level. The spell targets living entities first (if the caster's year level permits),
- * then falls back to items if no valid living entity is found. Living entities must be normal-sized
- * (bounding box height ≤ 2 blocks) to be targetable.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Prioritizes targeting living entities over items</li>
- * <li>Living entities must have bounding box height ≤ 2 blocks (excludes Giants, Ender Dragons, etc.)</li>
- * <li>Living entity targeting restricted to casters at Year 5 or higher (if years are enabled)</li>
- * <li>Falls back to nearest item if no valid living entity found</li>
- * <li>Does not target the caster</li>
- * <li>Velocity reduction scales with spell experience: 60% (novice) to 20% (expert)</li>
- * <li>Makes one final check at the projectile's stop location</li>
- * </ul>
- *
- * <p>Reference: <a href="https://harrypotter.fandom.com/wiki/Slowing_Charm">Harry Potter Wiki - Slowing Charm</a></p>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Slowing_Charm">Harry Potter Wiki - Slowing Charm</a>
  */
 public final class ARRESTO_MOMENTUM extends O2Spell {
     /**
@@ -71,12 +57,8 @@ public final class ARRESTO_MOMENTUM extends O2Spell {
     }
 
     /**
-     * Check for nearby entities and items, then slow the first valid target found.
-     *
-     * <p>Searches for nearby living entities first (respecting year restrictions and size limits),
-     * then falls back to items. When a valid target is found, applies velocity reduction based on
-     * spell experience level, then kills the spell. If the projectile hits a solid block, the spell
-     * is killed but still checks for targets at that location before dying.</p>
+     * Slow the first valid target near the projectile — a living entity if one qualifies, otherwise the nearest item —
+     * then end the spell. A final check runs at the projectile's stop location before it dies.
      */
     @Override
     protected void doCheckEffect() {
@@ -118,12 +100,8 @@ public final class ARRESTO_MOMENTUM extends O2Spell {
     }
 
     /**
-     * Reduce the target entity's velocity based on spell experience.
-     *
-     * <p>Calculates a velocity multiplier based on the caster's spell experience (usesModifier).
-     * Higher experience results in stronger slowing (lower multiplier). The multiplier ranges from
-     * 0.6 (novice, least slow) to 0.2 (expert, most slow). Applies the multiplier to the target's
-     * current velocity vector.</p>
+     * Multiply the target's velocity by a factor that shrinks with caster skill (0.6 for a novice down to 0.2 for an
+     * expert), so higher skill slows it more.
      *
      * @param entity the entity to slow down
      */

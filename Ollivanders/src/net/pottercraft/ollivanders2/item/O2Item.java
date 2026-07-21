@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Items for Ollivanders
+ * A custom Ollivanders2 item, wrapping its {@link O2ItemType} to produce item stacks and expose its name and material.
  *
  * @author Azami7
  */
@@ -50,7 +50,8 @@ public class O2Item {
     }
 
     /**
-     * get the type for this item
+     * Get the type for this item.
+     *
      * @return the O2ItemType
      */
     @NotNull
@@ -59,7 +60,8 @@ public class O2Item {
     }
 
     /**
-     * get the name of this item
+     * Get the name of this item.
+     *
      * @return the item name
      */
     @NotNull
@@ -68,7 +70,8 @@ public class O2Item {
     }
 
     /**
-     * get the material type for this item
+     * Get the material type for this item.
+     *
      * @return the material type
      */
     @NotNull

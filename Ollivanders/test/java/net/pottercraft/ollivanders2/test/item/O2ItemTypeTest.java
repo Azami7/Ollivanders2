@@ -30,47 +30,19 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the O2ItemType enum.
- *
- * <p>Tests the custom item type system that defines all special items in Ollivanders2, including
- * potion ingredients, wand cores, wizard money, enchanted items, and divination objects. Verifies
- * that item properties (name, lore, material, enchantment) are correctly configured and that
- * item lookup and creation methods work as expected.</p>
- *
- * <p>Test Categories:</p>
- * <ul>
- * <li><strong>Property Accessors:</strong> getName(), getLore(), getMaterial(), getItemEnchantment()</li>
- * <li><strong>Property Mutators:</strong> setMaterial() for configurable materials</li>
- * <li><strong>Lookup Methods:</strong> getTypeByName() for finding items by display name</li>
- * <li><strong>Type Checking:</strong> isItemThisType() for verifying ItemStack types via NBT</li>
- * <li><strong>Item Creation:</strong> getItem() for creating ItemStacks with proper metadata</li>
- * <li><strong>Data Integrity:</strong> Verifying all items have unique names</li>
- * </ul>
+ * Unit tests for {@link O2ItemType}.
  */
 public class O2ItemTypeTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -78,19 +50,12 @@ public class O2ItemTypeTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test that getName() returns the correct display name for items.
-     *
-     * <p>Verifies item names for:</p>
-     * <ul>
-     * <li>Items with custom names different from Minecraft material (DEW_DROP)</li>
-     * <li>Items with names matching their Minecraft material (BONE)</li>
-     * <li>Enchanted items (BROOMSTICK)</li>
-     * </ul>
+     * getName() returns the item's display name, whether custom, material-matching, or enchanted.
      */
     @Test
     void getNameTest() {
@@ -105,13 +70,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that getLore() returns the correct lore string for items.
-     *
-     * <p>Verifies:</p>
-     * <ul>
-     * <li>Items without lore return their name as the lore (DEW_DROP)</li>
-     * <li>Items with custom lore return that lore string (INVISIBILITY_CLOAK)</li>
-     * </ul>
+     * getLore() returns the custom lore, or the item name when there is no lore.
      */
     @Test
     void getLoreTest() {
@@ -125,9 +84,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that getMaterial() returns the correct Bukkit Material for items.
-     *
-     * <p>Verifies material types for regular items and enchanted items.</p>
+     * getMaterial() returns the item's backing Bukkit material.
      */
     @Test
     void getMaterialTypeTest() {
@@ -141,13 +98,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that getItemEnchantment() returns the correct enchantment for items.
-     *
-     * <p>Verifies:</p>
-     * <ul>
-     * <li>Non-enchanted items return null (DEW_DROP)</li>
-     * <li>Enchanted items return the correct ItemEnchantmentType (BROOMSTICK has VOLATUS)</li>
-     * </ul>
+     * getItemEnchantment() returns the item's enchantment, or null when it has none.
      */
     @Test
     void getItemEnchantmentTest() {
@@ -165,11 +116,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that setMaterial() correctly changes the material for an item type.
-     *
-     * <p>Verifies that the material can be changed at runtime. This allows server admins to
-     * customize which Minecraft material represents each O2ItemType. The test resets the
-     * material after testing to avoid affecting other tests.</p>
+     * setMaterial() changes an item type's material at runtime (restored afterward to isolate other tests).
      */
     @Test
     void setMaterialTest() {
@@ -187,17 +134,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that getTypeByName() correctly finds item types by their display name.
-     *
-     * <p>Verifies:</p>
-     * <ul>
-     * <li>Items with names matching their Minecraft material (BONE)</li>
-     * <li>Items with custom names (DEW_DROP)</li>
-     * <li>Enchanted items (BROOMSTICK)</li>
-     * <li>Invalid names return null</li>
-     * <li>Case-insensitive matching works</li>
-     * <li>Potion items can be found by name</li>
-     * </ul>
+     * getTypeByName() finds item types by display name, case-insensitively, and returns null for an unknown name.
      */
     @Test
     void getTypeByNameTest() {
@@ -231,10 +168,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Every item must have a unique name or things like getTypeByName() will have an ambiguous return value.
-     *
-     * <p>Groups all O2ItemType values by their name and checks for duplicates. If any name appears
-     * more than once, the test fails and reports which names are duplicated.</p>
+     * Every item has a unique name, so lookups like getTypeByName() are unambiguous.
      */
     @Test
     void uniqueItemNamesTest() {
@@ -250,16 +184,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that isItemThisType() correctly identifies ItemStacks by their NBT tags.
-     *
-     * <p>O2Items are identified by NBT tags, not by display name alone. This prevents players
-     * from renaming vanilla items to match O2Item names. Verifies:</p>
-     * <ul>
-     * <li>Matching O2Items return true</li>
-     * <li>Different O2Item types return false</li>
-     * <li>Vanilla items renamed to match O2Item names return false (no NBT tag)</li>
-     * <li>Enchanted O2Items are correctly identified</li>
-     * </ul>
+     * isItemThisType() matches by NBT tag, not display name, so a renamed vanilla item does not match.
      */
     @Test
     void isItemThisTypeTest() {
@@ -290,17 +215,7 @@ public class O2ItemTypeTest {
     }
 
     /**
-     * Test that getItem() creates ItemStacks with correct metadata.
-     *
-     * <p>Verifies that getItem() creates properly configured ItemStacks with:</p>
-     * <ul>
-     * <li>Correct display name</li>
-     * <li>Correct stack amount</li>
-     * <li>NBT tags for item identification</li>
-     * <li>Lore for items that have custom lore</li>
-     * <li>Proper metadata for enchanted items</li>
-     * <li>Hidden tooltip flag for potion items</li>
-     * </ul>
+     * getItem() builds an ItemStack with the right name, amount, NBT type tag, lore, and (for potions) hidden tooltip.
      */
     @Test
     void getItemTest() {
@@ -350,13 +265,6 @@ public class O2ItemTypeTest {
         assertTrue(itemMeta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP), "potion item did not have ItemFlag.HIDE_ADDITIONAL_TOOLTIP");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

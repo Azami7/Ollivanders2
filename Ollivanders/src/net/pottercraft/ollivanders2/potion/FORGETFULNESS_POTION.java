@@ -14,28 +14,15 @@ import java.util.Set;
 import java.util.ArrayList;
 
 /**
- * Forgetfulness Potion - causes memory loss affecting spell or potion skills.
- *
- * <p>This potion causes the drinker to lose experience with either a randomly selected spell
- * or a randomly selected potion. The amount of skill lost is random (1-20 levels), and there
- * is a 50% chance it will affect spell skills vs. potion skills. The skill loss can significantly
- * impact the player's ability to cast spells or brew potions effectively.</p>
- *
- * <p>If the player has no known spells and the spell skill loss is selected (or vice versa
- * for potions), no effect is applied.</p>
+ * Forgetfulness Potion — when drunk, reduces the drinker's experience with one random known spell or potion.
  *
  * @see <a href="http://harrypotter.wikia.com/wiki/Forgetfulness_Potion">Harry Potter Wiki - Forgetfulness Potion</a>
  *
  * @author Azami7
- * @since 2.2.7
  */
 public final class FORGETFULNESS_POTION extends O2Potion {
     /**
-     * Constructor for Forgetfulness Potion.
-     *
-     * <p>Initializes the potion with its ingredients (Mistletoe Berries, Valerian Sprigs, Lethe
-     * River Water, and Standard Potion Ingredients), description text, flavor text, and potion
-     * color. Sets up the recipe for brewing this potion that causes skill loss in the drinker.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -56,17 +43,8 @@ public final class FORGETFULNESS_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Forgetfulness Potion and suffer skill loss.
-     *
-     * <p>Causes the player to lose experience with a randomly selected skill:</p>
-     * <ul>
-     * <li>50% chance: A random known spell's skill count is reduced by 1-20 levels</li>
-     * <li>50% chance: A random known potion's skill count is reduced by 1-20 levels</li>
-     * </ul>
-     *
-     * <p>The amount of skill lost is determined randomly (1-20 levels). If the selected skill
-     * type (spell or potion) has no known skills, no effect is applied. The skill loss can
-     * significantly impact the player's ability to successfully cast spells or brew potions.</p>
+     * On drink, lower the drinker's experience by 1-20 with one random known spell, or (50% chance) one random known
+     * potion. No-op if the chosen skill type has no known skills.
      *
      * @param player the player who drank the potion
      */
@@ -91,10 +69,7 @@ public final class FORGETFULNESS_POTION extends O2Potion {
                 ArrayList<O2SpellType> listOfSpells = new ArrayList<>(keySet);
                 int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfSpells.size());
 
-                // spell to affect
                 O2SpellType spell = listOfSpells.get(index);
-
-                // decrease their skill level
                 int curLevel = o2p.getSpellCount(spell);
                 o2p.setSpellCount(spell, curLevel - memLoss);
                 lostSkill = spell.toString();
@@ -107,10 +82,7 @@ public final class FORGETFULNESS_POTION extends O2Potion {
                 ArrayList<O2PotionType> listOfPotions = new ArrayList<>(keySet);
                 int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfPotions.size());
 
-                // potion to affect
                 O2PotionType potion = listOfPotions.get(index);
-
-                // decrease their skill level
                 int curLevel = o2p.getPotionCount(potion);
                 o2p.setPotionCount(potion, curLevel - memLoss);
                 lostSkill = potion.toString();

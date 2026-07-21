@@ -17,66 +17,56 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * A stationary spell that creates a paired teleportation portal (vanishing cabinet).
- *
- * <p>Harmonia Nectere Passus creates a vanishing cabinet that teleports players to its twin
- * cabinet when they enter. The spell:</p>
- * <ul>
- *   <li>Maintains a paired connection with another vanishing cabinet</li>
- *   <li>Teleports players between the two cabinets when they move into one</li>
- *   <li>Includes a cooldown to prevent immediate re-teleportation</li>
- *   <li>Verifies cabinet structural integrity on each upkeep</li>
- *   <li>Disables itself if the twin cabinet is destroyed or the structure is compromised</li>
- * </ul>
- *
- * <p>The spell is permanent and persists across server restarts.</p>
+ * Harmonia Nectere Passus: a permanent stationary spell placed on a vanishing cabinet that teleports a player who steps
+ * into it to its twin cabinet. A per-player cooldown prevents immediate re-teleport. Each upkeep re-checks that the
+ * cabinet structure and its twin still exist, and kills both cabinets if not.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">Harry Potter Wiki - Vanishing Cabinet</a>
  */
 public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     /**
-     * Minimum spell radius (1 block) - cabinet must be exactly at the spell location.
+     * Minimum spell radius, in blocks; the cabinet occupies exactly the spell location.
      */
     public static final int minRadiusConfig = 1;
 
     /**
-     * Maximum spell radius (1 block) - cabinet must be exactly at the spell location.
+     * Maximum spell radius, in blocks; the cabinet occupies exactly the spell location.
      */
     public static final int maxRadiusConfig = 1;
 
     /**
-     * Minimum spell duration (1000 ticks) - not used, harmonia nectere passus is permanent.
+     * Duration bound, unused because this spell is permanent.
      */
     public static final int minDurationConfig = 1000;
 
     /**
-     * Maximum spell duration (1000 ticks) - not used, harmonia nectere passus is permanent.
+     * Duration bound, unused because this spell is permanent.
      */
     public static final int maxDurationConfig = 1000;
 
     /**
-     * The location of this cabinet's twin
+     * The location of this cabinet's twin, the destination players are sent to.
      */
     private Location twinCabinetLocation;
 
     /**
-     * The label for this spell's twin for serializing
+     * Serialization key for {@link #twinCabinetLocation}.
      */
     private final String twinLabel = "Twin";
 
     /**
-     * Players currently using this pair of vanishing cabinets
+     * Players currently on teleport cooldown, mapped to their remaining cooldown ticks.
      */
     HashMap<Player, Integer> inUseBy = new HashMap<>();
 
     /**
-     * The cooldown between uses
+     * Teleport cooldown per player, in ticks.
      */
     public final static int cooldown = Ollivanders2Common.ticksPerSecond * 30;
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -89,16 +79,12 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     }
 
     /**
-     * Constructs a new HARMONIA_NECTERE_PASSUS spell (vanishing cabinet).
+     * Constructor for casting a new Harmonia Nectere Passus spell, pairing this cabinet with the one at {@code twin}.
      *
-     * <p>Creates a paired vanishing cabinet at the specified location that connects to another
-     * cabinet at the twin location. When players enter this cabinet, they are teleported to
-     * the twin cabinet with a cooldown to prevent infinite loops.</p>
-     *
-     * @param plugin   a callback to the MC plugin (not null)
-     * @param pid      the UUID of the player who cast the spell (not null)
-     * @param location the center location of this cabinet (not null)
-     * @param twin     the location of the paired cabinet (not null)
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the UUID of the player who cast the spell
+     * @param location the center location of this cabinet
+     * @param twin     the location of the paired cabinet
      */
     public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Location twin) {
         super(plugin, pid, location);
@@ -112,29 +98,17 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         this.twinCabinetLocation = twin;
     }
 
-    /**
-     * Initializes the radius and duration constraints for this spell.
-     *
-     * <p>Sets fixed radius and duration values (not configurable). The spell is always permanent.</p>
-     */
     @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig; // not used, harmonia is permanent
-        maxDuration = maxDurationConfig; // not used, harmonia is permanent
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**
-     * Ages the spell and validates cabinet integrity and twin connection.
-     *
-     * <p>Each tick, verifies:</p>
-     * <ul>
-     *   <li>The cabinet structure is intact and valid</li>
-     *   <li>The twin cabinet still exists</li>
-     *   <li>Cooldowns for players using the cabinet are properly decremented</li>
-     * </ul>
-     * <p>If any checks fail, both cabinets are destroyed.</p>
+     * Verify the twin cabinet still exists and this cabinet's structure is intact, killing both cabinets if not, then
+     * count down the per-player teleport cooldowns.
      */
     @Override
     public void upkeep() {
@@ -153,7 +127,6 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
             return;
         }
 
-        // upkeep on inUseBy
         HashMap<Player, Integer> temp = new HashMap<>(inUseBy);
 
         for (Map.Entry<Player, Integer> entry : temp.entrySet()) {
@@ -196,16 +169,13 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     }
 
     /**
-     * Checks the structural integrity of a vanishing cabinet.
-     *
-     * <p>Verifies the cabinet has the correct structure: a 3x3 space with solid walls on all sides,
-     * space for a player, a solid top, and either air inside or a sign + air inside.</p>
+     * Check that a vanishing cabinet is well-formed: solid blocks on all four sides at foot and head height, a solid
+     * top, air where the player stands, and air or a sign at the foot block.
      *
      * @param signBlock the block at the player's foot position in the cabinet
      * @return true if the cabinet structure is valid, false if not
      */
     private boolean cabinetCheck(@NotNull Block signBlock) {
-        // sign above foot block can either be air or a sign block
         if (signBlock.getType() != Material.AIR && !Ollivanders2Common.isSign(signBlock)) {
             common.printDebugMessage("Harmonia stationary: signBlock is not air or a sign. Block type is " + signBlock.getType(), null, null, false);
             return false;
@@ -219,11 +189,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     }
 
     /**
-     * Serializes the vanishing cabinet's twin location for persistence.
-     *
-     * <p>Saves the location of the paired cabinet so it can be restored on server restart.</p>
-     *
-     * @return a map containing the serialized twin cabinet location
+     * @return the serialized twin cabinet location; empty if it could not be serialized
      */
     @Override
     @NotNull
@@ -237,11 +203,9 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     }
 
     /**
-     * Deserializes the vanishing cabinet's twin location from saved state.
+     * Restore {@link #twinCabinetLocation} from saved data, leaving it unchanged if absent.
      *
-     * <p>Restores the location of the paired cabinet when the spell is loaded on server restart.</p>
-     *
-     * @param spellData a map containing the serialized cabinet data
+     * @param spellData the serialized spell data
      */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
@@ -252,17 +216,14 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     }
 
     /**
-     * Teleports players to the twin cabinet when they enter this one.
+     * Teleport a player who steps into this cabinet to the twin, putting them on cooldown. Kills this cabinet if the
+     * twin no longer exists; skips players who arrived via the twin and are still on its cooldown.
      *
-     * <p>When a player moves into this cabinet's location, they are teleported to the twin cabinet.
-     * A cooldown is applied to both cabinets to prevent immediate re-teleportation.</p>
-     *
-     * @param event the player move event (not null)
+     * @param event the player move event
      */
     @Override
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
-        Player player = event.getPlayer(); // will never be null
-        // make sure player is not already using this vanishing cabinet
+        Player player = event.getPlayer();
         if (isUsing(player))
             return;
 
@@ -270,18 +231,17 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         if (toLoc == null || !isLocationInside(toLoc))
             return;
 
-        // make sure they actually moved locations, not turned head, etc
+        // ignore head turns and other non-positional moves
         if (Ollivanders2Common.locationEquals(toLoc, event.getFrom()))
             return;
 
         HARMONIA_NECTERE_PASSUS twin = getTwin();
         if (twin == null) {
-            // we cannot teleport them because the other cabinet spell is gone
             kill();
             return;
         }
         else if (twin.isUsing(player)) {
-            // make sure they do not have a use cooldown on the twin, or we'll just teleport them right back as soon as they arrive and trigger a move event
+            // player just arrived from the twin; teleporting now would bounce them straight back
             return;
         }
 
@@ -297,21 +257,12 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
     }
 
-    /**
-     * Cleans up when the vanishing cabinet spell ends.
-     *
-     * <p>The spell requires no special cleanup on termination.</p>
-     */
     @Override
     void doCleanUp() {
     }
 
     /**
-     * Validates that the spell was properly deserialized with all required data.
-     *
-     * <p>Checks that the caster UUID, cabinet location, and twin cabinet location are all present.</p>
-     *
-     * @return true if all required data is present, false otherwise
+     * @return true if the caster UUID, cabinet location, and twin cabinet location are all present
      */
     @Override
     public boolean checkSpellDeserialization() {

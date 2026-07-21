@@ -37,7 +37,7 @@ public class SPONGIFY extends BlockTransfiguration {
     /**
      * Minimum effect radius for SPONGIFY (1 block).
      *
-     * <p>The spell's radius is clamped to not go below this value, ensuring a minimum
+     * <p>The spell's radius is limited to not go below this value, ensuring a minimum
      * area of effect even at low skill levels.</p>
      */
     private static final int minRadiusConfig = 1;
@@ -45,7 +45,7 @@ public class SPONGIFY extends BlockTransfiguration {
     /**
      * Maximum effect radius for SPONGIFY (15 blocks).
      *
-     * <p>The spell's radius is clamped to not exceed this value, establishing an upper
+     * <p>The spell's radius is limited to not exceed this value, establishing an upper
      * bound on the area of effect even at maximum skill levels.</p>
      */
     private static final int maxRadiusConfig = 15;
@@ -53,7 +53,7 @@ public class SPONGIFY extends BlockTransfiguration {
     /**
      * Minimum spell duration for SPONGIFY (15 seconds).
      *
-     * <p>The spell's duration is clamped to not go below this value, ensuring transformed
+     * <p>The spell's duration is limited to not go below this value, ensuring transformed
      * blocks remain sponge for at least a minimum time.</p>
      */
     private static final int minDurationConfig = 15 * Ollivanders2Common.ticksPerSecond;
@@ -61,7 +61,7 @@ public class SPONGIFY extends BlockTransfiguration {
     /**
      * Maximum spell duration for SPONGIFY (10 minutes).
      *
-     * <p>The spell's duration is clamped to not exceed this value, establishing an upper
+     * <p>The spell's duration is limited to not exceed this value, establishing an upper
      * bound on how long blocks remain as sponge.</p>
      */
     private static final int maxDurationConfig = 10 * Ollivanders2Common.ticksPerMinute;

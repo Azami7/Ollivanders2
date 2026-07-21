@@ -21,25 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the AQUA_ERUCTO_DUO fire-damaging spell.
- *
- * <p>Provides comprehensive test coverage for the spell's core functionality:</p>
- * <ul>
- * <li><strong>Target Detection:</strong> Verifies the spell finds fire-based mobs (Blazes, Magma Cubes)</li>
- * <li><strong>Damage Effect:</strong> Confirms damage is dealt to fire mobs based on caster skill</li>
- * <li><strong>Water Block Effect:</strong> Tests water block placement at the target's eye level</li>
- * <li><strong>Caster Protection:</strong> Ensures the spell doesn't damage the caster</li>
- * <li><strong>No Target Handling:</strong> Validates spell behavior when no fire mob target exists</li>
- * <li><strong>Water Block Lifespan:</strong> Tests water block TTL and cleanup</li>
- * <li><strong>Reversion:</strong> Verifies temporary water blocks are properly reverted</li>
- * </ul>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.AQUA_ERUCTO_DUO}. Extends {@link AquaEructoBaseTest} for
+ * the shared water-spell tests.
  */
 public class AquaEructoDuoTest extends AquaEructoBaseTest {
-    /**
-     * Returns the spell type being tested.
-     *
-     * @return AQUA_ERUCTO_DUO spell type
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -47,12 +32,8 @@ public class AquaEructoDuoTest extends AquaEructoBaseTest {
     }
 
     /**
-     * Creates a fire-based mob that is a valid target for AQUA_ERUCTO_DUO.
-     *
-     * <p>Returns a BLAZE, which is a fire-based entity that the spell should target and damage.</p>
-     *
      * @param location the location to spawn the entity at
-     * @return a BLAZE fire mob entity
+     * @return a blaze, a fire mob that is a valid target for AQUA_ERUCTO_DUO
      */
     @Override
     @NotNull
@@ -61,12 +42,8 @@ public class AquaEructoDuoTest extends AquaEructoBaseTest {
     }
 
     /**
-     * Creates a non-fire-based mob that is not a valid target for AQUA_ERUCTO_DUO.
-     *
-     * <p>Returns a CAMEL, which is not a fire-based entity that the spell should ignore.</p>
-     *
      * @param location the location to spawn the entity at
-     * @return a CAMEL entity (not a fire mob)
+     * @return a camel, not a fire mob and not a valid target for AQUA_ERUCTO_DUO
      */
     @Override
     @NotNull
@@ -74,14 +51,6 @@ public class AquaEructoDuoTest extends AquaEructoBaseTest {
         return location.getWorld().spawnEntity(location, EntityType.CAMEL);
     }
 
-    /**
-     * Verifies that AQUA_ERUCTO_DUO successfully damaged the target.
-     *
-     * <p>Checks that the entity's health is less than its maximum health, confirming the damage effect
-     * was applied.</p>
-     *
-     * @param affectedEntity the entity that was targeted by the spell
-     */
     void checkEffect(Entity affectedEntity) {
         AttributeInstance healthAttribute = ((LivingEntity)affectedEntity).getAttribute(Attribute.MAX_HEALTH);
         assertNotNull(healthAttribute);
@@ -91,14 +60,7 @@ public class AquaEructoDuoTest extends AquaEructoBaseTest {
     }
 
     /**
-     * Tests that the spell does not damage the caster.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>The spell hits a target (the block base)</li>
-     * <li>The caster's health remains unchanged</li>
-     * <li>The spell did not target the caster</li>
-     * </ul>
+     * Verify the spell does not damage the caster.
      */
     @Override
     @Test

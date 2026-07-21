@@ -4,15 +4,8 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for ENGORGIO, the Engorgement Charm.
- *
- * <p>Inherits all size-change tests from {@link ChangeEntitySizeTest} as the growing variant:</p>
- * <ul>
- * <li>Baby peaceful entities are made adults</li>
- * <li>Slimes grow larger</li>
- * <li>Hostile entities require skill level &ge; 100</li>
- * <li>Multiple entities can be targeted per cast</li>
- * </ul>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.ENGORGIO}, the Engorgement Charm. Extends
+ * {@link ChangeEntitySizeTest} for the shared size-change tests, as the growing variant.
  *
  * @author Azami7
  */

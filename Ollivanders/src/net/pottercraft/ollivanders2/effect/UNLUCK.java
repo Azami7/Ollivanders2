@@ -7,29 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Unluck potion effect that reduces the affected player's luck and loot quality.
- *
- * <p>UNLUCK applies Minecraft's UNLUCK potion effect to decrease the target player's fortune and luck.
- * The effect reduces item drop rates and lowers the quality of loot obtained from activities like
- * fishing, mining, and mob drops. The effect is powered by the Minecraft potion effect system with
- * strength (amplifier) set to 1. The effect is detectable by both mind-reading spells (Legilimens)
- * and information spells (Informous) which report the target "feels unlucky". The player receives a
- * notification of "You feel unlucky." when the effect is applied.</p>
+ * Applies Minecraft's UNLUCK potion effect (amplifier 1), lowering the player's luck and loot quality. Detectable via
+ * Informous and Legilimens.
  *
  * @author Azami7
  * @see PotionEffect for the potion effect application mechanism
  */
 public class UNLUCK extends PotionEffect {
     /**
-     * Constructor for creating an unluck effect.
-     *
-     * <p>Creates a potion effect that reduces the target player's luck and loot quality using Minecraft's
-     * UNLUCK potion effect type with strength 1. Sets detection text for both mind-reading spells
-     * (Legilimens) and information spells (Informous) to "feels unlucky", and notifies the player
-     * "You feel unlucky." when the effect is applied.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
-     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
+     * @param duration    the duration in ticks, clamped to min 2 minutes, max 10 minutes
      * @param isPermanent ignored - potion effects cannot be permanent
      * @param pid         the unique ID of the player to curse with unluck
      */
@@ -47,13 +36,6 @@ public class UNLUCK extends PotionEffect {
         affectedPlayerText = "You feel unlucky.";
     }
 
-    /**
-     * Perform cleanup when the unluck effect is removed.
-     *
-     * <p>The default implementation does nothing, as UNLUCK is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the player's luck returns to normal.</p>
-     */
     @Override
     public void doRemove() {
     }

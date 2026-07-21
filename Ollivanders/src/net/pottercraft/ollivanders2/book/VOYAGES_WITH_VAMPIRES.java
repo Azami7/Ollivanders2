@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Voyages_with_Vampires">https://harrypotter.fandom.com/wiki/Voyages_with_Vampires</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Voyages_with_Vampires">Voyages with Vampires</a>
  */
 public class VOYAGES_WITH_VAMPIRES extends O2Book {
     /**

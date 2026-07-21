@@ -14,22 +14,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Abstract base class for spells that apply one or more {@link net.pottercraft.ollivanders2.effect.O2Effect}
- * instances to a target player.
- *
- * <p>Spells extending this class fire a projectile toward a target and apply their configured effects
- * when the projectile reaches a player. Self-targeting spells ({@link #targetSelf} = true) apply
- * effects to the caster immediately; non-self-targeting spells apply effects to the first nearby
- * player found within {@link #defaultRadius} of the projectile.</p>
- *
- * <p>Effect duration is calculated from the caster's experience level via
- * {@link #calculateEffectDurationInSeconds()}, clamped to [{@link #minDurationInSeconds},
- * {@link #maxDurationInSeconds}]. Subclasses configure behavior by setting fields in their
- * constructors before calling {@link #initSpell()}.</p>
- *
- * <p><strong>Effect class contract:</strong> All {@link net.pottercraft.ollivanders2.effect.O2EffectType}
- * entries in {@link #effectsToAdd} must have an associated class with a constructor of the form
- * {@code (Ollivanders2, int, boolean, UUID)}.</p>
+ * Base class for spells that apply one or more {@link O2Effect}s to a target player — the caster when
+ * {@link #targetSelf} is set, otherwise nearby players. Effect duration scales with the caster's skill.
+ * <p>
+ * Each {@link O2EffectType} in {@link #effectsToAdd} must have an implementing class with a
+ * {@code (Ollivanders2, int, boolean, UUID)} constructor.
+ * </p>
  *
  * @author Azami7
  */
@@ -102,8 +92,6 @@ public abstract class AddO2Effect extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -115,13 +103,8 @@ public abstract class AddO2Effect extends O2Spell {
     }
 
     /**
-     * Checks for nearby targets and applies this spell's effects.
-     *
-     * <p>If the projectile has already hit a target (set by {@link #move()} hitting a solid block),
-     * {@link #kill()} is called to complete cleanup and the current location is still checked for
-     * nearby players. For self-targeting spells, effects are applied to the caster directly. For
-     * non-self-targeting spells, effects are applied to up to {@link #numberOfTargets} nearby players
-     * within {@link #defaultRadius}. The spell kills itself after successfully applying effects.</p>
+     * Apply this spell's effects to its target(s) and end the spell: the caster when {@link #targetSelf} is set, plus
+     * up to {@link #numberOfTargets} nearby players.
      */
     @Override
     protected void doCheckEffect() {
@@ -153,12 +136,8 @@ public abstract class AddO2Effect extends O2Spell {
     }
 
     /**
-     * Applies this spell's effects to a target player.
-     *
-     * <p>Calculates the effect duration from the caster's experience level, then instantiates and
-     * registers each effect in {@link #effectsToAdd} via reflection. Effects on the
-     * {@link #effectBlacklist} are skipped. Each effect class must provide a constructor of the
-     * form {@code (Ollivanders2, int, boolean, UUID)}.</p>
+     * Apply this spell's effects to the given player for the skill-scaled duration. Effects on the internal blacklist
+     * are skipped.
      *
      * @param target the player to apply effects to
      */
@@ -187,11 +166,8 @@ public abstract class AddO2Effect extends O2Spell {
     }
 
     /**
-     * Calculates and stores the effect duration in seconds based on the caster's experience level.
-     *
-     * <p>Duration is computed as {@code (int)(usesModifier * durationMultiplier) + durationModifier},
-     * then clamped to [{@link #minDurationInSeconds}, {@link #maxDurationInSeconds}]. The result is
-     * stored in {@link #durationInSeconds} and can be retrieved via {@link #getDurationInSeconds()}.</p>
+     * Set {@link #durationInSeconds} to {@code usesModifier * durationMultiplier}, limited to
+     * [{@link #minDurationInSeconds}, {@link #maxDurationInSeconds}].
      */
     public void calculateEffectDurationInSeconds() {
         durationInSeconds = (int) (usesModifier * durationMultiplier);
@@ -203,9 +179,7 @@ public abstract class AddO2Effect extends O2Spell {
     }
 
     /**
-     * Returns a copy of the list of effect types this spell will apply to its target.
-     *
-     * @return a new list containing the effect types configured for this spell
+     * @return a copy of the effect types this spell applies
      */
     public List<O2EffectType> getEffectsToAdd() {
         return new ArrayList<>() {{
@@ -214,48 +188,35 @@ public abstract class AddO2Effect extends O2Spell {
     }
 
     /**
-     * Returns whether this spell targets the caster rather than a nearby player.
-     *
-     * @return true if the spell applies its effects to the caster, false if it targets nearby players
+     * @return true if this spell applies its effects to the caster rather than nearby players
      */
     public boolean targetsSelf() {
         return targetSelf;
     }
 
     /**
-     * Returns the minimum effect duration in seconds.
-     *
-     * @return the minimum number of seconds the effect can last
+     * @return the minimum effect duration in seconds
      */
     public int getMinDurationInSeconds() {
         return minDurationInSeconds;
     }
 
     /**
-     * Returns the maximum effect duration in seconds.
-     *
-     * @return the maximum number of seconds the effect can last
+     * @return the maximum effect duration in seconds
      */
     public int getMaxDurationInSeconds() {
         return maxDurationInSeconds;
     }
 
     /**
-     * Returns whether this spell applies its effects permanently.
-     *
-     * @return true if the effects do not expire, false if they have a finite duration
+     * @return true if this spell's effects do not expire
      */
     public boolean isPermanent() {
         return permanent;
     }
 
     /**
-     * Returns the most recently calculated effect duration in seconds.
-     *
-     * <p>This value is set by {@link #calculateEffectDurationInSeconds()} and reflects the duration
-     * that will be applied to the target based on the caster's current experience level.</p>
-     *
-     * @return the calculated effect duration in seconds
+     * @return the effect duration in seconds most recently set by {@link #calculateEffectDurationInSeconds()}
      */
     public int getDurationInSeconds() {
         return durationInSeconds;

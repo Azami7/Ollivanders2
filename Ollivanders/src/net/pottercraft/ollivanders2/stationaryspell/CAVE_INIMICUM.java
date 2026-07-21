@@ -11,40 +11,37 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Cave Inimicum produces a boundary that keeps the caster hidden from view. Those who were on the other side of the
- * shield are not able to see, hear, or (if the spell was well cast) smell them.
- * <p>
- * {@link net.pottercraft.ollivanders2.spell.CAVE_INIMICUM}
+ * Cave Inimicum: a concealment shield that hides the players inside its radius from everyone outside, who cannot see
+ * or hear them. Cast by {@link net.pottercraft.ollivanders2.spell.CAVE_INIMICUM}.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Cave_inimicum">https://harrypotter.fandom.com/wiki/Cave_inimicum</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Cave_inimicum">Harry Potter Wiki - Cave inimicum</a>
  */
 public class CAVE_INIMICUM extends ConcealmentShieldSpell {
     /**
-     * min radius for this spell
+     * Minimum spell radius, in blocks.
      */
     public static final int minRadiusConfig = 5;
     /**
-     * max radius for this spell
+     * Maximum spell radius, in blocks.
      */
     public static final int maxRadiusConfig = 20;
     /**
-     * min duration for this spell
+     * Minimum spell duration: 30 seconds.
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
     /**
-     * max duration for this spell
+     * Maximum spell duration: 30 minutes.
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
-     * The proximity alarm message
+     * The message sent to players inside the area when the proximity alarm fires.
      */
     private final String proximityAlarmMessage = "A hostile entity approaches.";
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -55,7 +52,7 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
     }
 
     /**
-     * Constructor
+     * Constructor for casting a new Cave Inimicum spell.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the player who cast the spell
@@ -72,9 +69,6 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
         spellType = O2StationarySpellType.CAVE_INIMICUM;
     }
 
-    /**
-     * Set the min/max values for radius and duration.
-     */
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -83,20 +77,16 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
     }
 
     /**
-     * Can this entity see players inside the spell area? Assumes the entity being checked is outside the spell area.
-     *
-     * @param entity the entity looking inside the area
-     * @return false, this spell conceals players in the area from everyone
+     * @param entity the entity to check
+     * @return true only if the entity is itself inside the area; outsiders cannot see players concealed here
      */
     protected boolean canSee(@NotNull LivingEntity entity) {
         return isLocationInside(entity.getLocation());
     }
 
     /**
-     * Can this entity target players inside the spell area? Assumes the entity being checked is outside the spell area.
-     *
-     * @param entity the entity targeting inside the area
-     * @return true, this spell does not affect targeting
+     * @param entity the entity to check
+     * @return true; this spell does not affect targeting
      */
     @Override
     public boolean canTarget(@NotNull LivingEntity entity) {
@@ -104,47 +94,39 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
     }
 
     /**
-     * Can this entity enter the spell area? Assumes the entity being checked is outside the spell area.
-     *
-     * @param entity the entity entering the area
-     * @return true, this spell does not block entry in to the spell area
+     * @param entity the entity to check
+     * @return true; this spell does not block entry to the area
      */
     public boolean canEnter(@NotNull LivingEntity entity) {
         return true;
     }
 
     /**
-     * Can this entity "hear" sounds from inside the spell area? Assumes the entity being checked is outside the spell area.
-     *
-     * @param entity the entity entering the area
-     * @return false, this spell conceals players in the area from everyone
+     * @param entity the entity to check
+     * @return false; this spell conceals sound from everyone outside the area
      */
     protected boolean canHear(@NotNull LivingEntity entity) {
         return false;
     }
 
     /**
-     * Activate the proximity alarm if there is a player at the location. Assumes that a check to determine
-     * that a proximity alarm should go off for this location has happened and called this.
-     *
-     * @param player the player that triggered the alarm
+     * @param player the player near the boundary
+     * @return true; any player triggers this spell's alarm
      */
     protected boolean checkAlarm(@NotNull Player player) {
         return true;
     }
 
     /**
-     * Activate the proximity alarm if there is a player or hostile mob at the location. Assumes that a check to determine
-     * that a proximity alarm should go off for this location has happened and called this.
-     *
-     * @param entity the entity that triggered the alarm
+     * @param entity the entity near the boundary
+     * @return true if the entity is hostile
      */
     protected boolean checkAlarm(@NotNull LivingEntity entity) {
         return EntityCommon.isHostile(entity);
     }
 
     /**
-     * Do the proximity alarm action for this spell.
+     * Message the players inside the area that a hostile entity is near, then start the alarm cooldown.
      */
     protected void proximityAlarm() {
         if (proximityCooldownTimer > 0)

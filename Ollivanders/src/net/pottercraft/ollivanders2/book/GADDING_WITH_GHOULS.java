@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls">https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls">Gadding with Ghouls</a>
  */
 public class GADDING_WITH_GHOULS extends O2Book {
     /**

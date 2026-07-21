@@ -12,9 +12,6 @@ import java.util.ArrayList;
 /**
  * Colour Change Charm that recolors a sheep or colorable block to a random color.
  *
- * <p>Unlike the specific-color variants (e.g., {@link COLOVARIA_VERMICULO}), this spell selects a random
- * dyeable color each time it is cast.</p>
- *
  * @author lownes
  * @author Azami7
  * @see ChangeColorable

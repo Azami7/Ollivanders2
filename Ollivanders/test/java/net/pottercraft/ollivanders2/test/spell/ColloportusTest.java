@@ -31,14 +31,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS
  */
 public class ColloportusTest extends StationarySpellTest {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.COLLOPORTUS;
     }
 
-    /** {@inheritDoc} */
     @Override
     O2StationarySpellType getStationarySpellType() {
         return O2StationarySpellType.COLLOPORTUS;
@@ -59,14 +57,8 @@ public class ColloportusTest extends StationarySpellTest {
     }
 
     /**
-     * Verifies that COLLOPORTUS fails on non-door blocks and successfully locks open doors.
-     *
-     * <p>Tests:</p>
-     * <ul>
-     * <li>Casting at a sign block fails and sends a failure message</li>
-     * <li>Casting at a closed door fails</li>
-     * <li>Casting at an open door locks it and creates a stationary spell</li>
-     * </ul>
+     * Verify COLLOPORTUS fails with a message on a non-door block (sign), and that casting at an open door closes it,
+     * locks it, and creates the stationary spell.
      */
     @Test
     void createStationarySpellTest() {

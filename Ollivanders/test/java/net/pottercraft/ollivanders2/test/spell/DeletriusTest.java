@@ -13,13 +13,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for DELETRIUS spell functionality.
- *
- * <p>Tests the Eradication Spell including:</p>
- * <ul>
- * <li>Removing a single AreaEffectCloud within range</li>
- * <li>Removing multiple AreaEffectClouds within range</li>
- * </ul>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.DELETRIUS}.
  *
  * @author Azami7
  */
@@ -31,14 +25,7 @@ public class DeletriusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that doCheckEffect() removes an AreaEffectCloud within range and kills the spell.
-     *
-     * <p>Verifies that when DELETRIUS detects an AreaEffectCloud entity within the 4-block
-     * effect radius:</p>
-     * <ul>
-     * <li>The AreaEffectCloud entity is removed from the world</li>
-     * <li>The spell kills itself after removing the cloud</li>
-     * </ul>
+     * Verify DELETRIUS removes an area effect cloud within range and then kills itself.
      */
     @Override
     @Test
@@ -58,10 +45,7 @@ public class DeletriusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that doCheckEffect() removes all AreaEffectClouds within range, not just the first one.
-     *
-     * <p>Verifies that when DELETRIUS detects multiple AreaEffectCloud entities within the
-     * 4-block effect radius, all of them are removed from the world.</p>
+     * Verify DELETRIUS removes all area effect clouds within range, not just the first.
      */
     @Test
     void doCheckEffectRemovesMultipleCloudsTest() {

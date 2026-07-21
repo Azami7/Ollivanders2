@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class HerbivicusTest extends O2SpellTestSuper {
     /**
-     * Experience giving a usesModifier of 50 -> radius 12 (50/4) and growth 2 (50/25), so the growth clamp at a
+     * Experience giving a usesModifier of 50 -> radius 12 (50/4) and growth 2 (50/25), so the growth limit at a
      * crop's maximum age can be exercised.
      */
     private static final int experience = 50;
@@ -45,7 +45,7 @@ public class HerbivicusTest extends O2SpellTestSuper {
      * it within and outside the radius. With a single cast, verifies that:</p>
      * <ul>
      * <li>A young crop in range is advanced by exactly the spell's growth amount</li>
-     * <li>A near-mature crop is clamped to its maximum age rather than overshooting</li>
+     * <li>A near-mature crop is limited to its maximum age rather than overshooting</li>
      * <li>A fully grown crop is left unchanged</li>
      * <li>A crop outside the radius is left unchanged</li>
      * <li>The spell is killed after the effect resolves</li>
@@ -71,7 +71,7 @@ public class HerbivicusTest extends O2SpellTestSuper {
         Location youngCropLocation = new Location(testWorld, targetLocation.getX(), targetLocation.getY(), targetLocation.getZ() - 1);
         setWheatAge(youngCropLocation, 0);
 
-        // near-mature crop in range: growth would overshoot, so it should clamp to the maximum age
+        // near-mature crop in range: growth would overshoot, so it should limit to the maximum age
         Location nearMatureLocation = new Location(testWorld, targetLocation.getX(), targetLocation.getY(), targetLocation.getZ() + 1);
         int wheatMaxAge = wheatMaxAge(nearMatureLocation);
         setWheatAge(nearMatureLocation, wheatMaxAge - 1);
@@ -92,19 +92,19 @@ public class HerbivicusTest extends O2SpellTestSuper {
         assertTrue(herbivicus.getRadius() < outOfRangeDistance, "test setup invalid: far crop is not outside the spell radius");
 
         assertEquals(herbivicus.getGrowth(), cropAge(youngCropLocation), "young crop did not advance by the growth amount");
-        assertEquals(wheatMaxAge, cropAge(nearMatureLocation), "near-mature crop was not clamped to its maximum age");
+        assertEquals(wheatMaxAge, cropAge(nearMatureLocation), "near-mature crop was not limited to its maximum age");
         assertEquals(wheatMaxAge, cropAge(matureLocation), "already mature crop was changed");
         assertEquals(0, cropAge(farCropLocation), "crop outside the radius was grown");
     }
 
     /**
-     * Tests that the affected radius scales with the caster's skill and is clamped at both ends.
+     * Tests that the affected radius scales with the caster's skill and is limited at both ends.
      *
      * <p>Verifies that:</p>
      * <ul>
-     * <li>Zero skill clamps the radius to the minimum of 1</li>
+     * <li>Zero skill limits the radius to the minimum of 1</li>
      * <li>The radius increases as skill increases</li>
-     * <li>Very high skill is clamped to a fixed maximum (two different over-cap skill levels yield the same
+     * <li>Very high skill is limited to a fixed maximum (two different over-cap skill levels yield the same
      *     radius)</li>
      * </ul>
      */
@@ -120,20 +120,20 @@ public class HerbivicusTest extends O2SpellTestSuper {
         int highSkillRadius = castHerbivicus(caster, location, targetLocation, 1000).getRadius();
         int higherSkillRadius = castHerbivicus(caster, location, targetLocation, 5000).getRadius();
 
-        assertEquals(1, zeroSkillRadius, "radius was not clamped to the minimum of 1 at zero skill");
+        assertEquals(1, zeroSkillRadius, "radius was not limited to the minimum of 1 at zero skill");
         assertTrue(lowSkillRadius > zeroSkillRadius, "radius did not increase with skill");
         assertTrue(highSkillRadius > lowSkillRadius, "radius did not continue to increase with skill");
-        assertEquals(highSkillRadius, higherSkillRadius, "radius was not clamped to a fixed maximum at very high skill");
+        assertEquals(highSkillRadius, higherSkillRadius, "radius was not limited to a fixed maximum at very high skill");
     }
 
     /**
-     * Tests that the per-crop growth amount scales with the caster's skill and is clamped at both ends.
+     * Tests that the per-crop growth amount scales with the caster's skill and is limited at both ends.
      *
      * <p>Verifies that:</p>
      * <ul>
-     * <li>Zero skill clamps the growth to the minimum of 1</li>
+     * <li>Zero skill limits the growth to the minimum of 1</li>
      * <li>The growth increases as skill increases</li>
-     * <li>Very high skill is clamped to a fixed maximum (two different over-cap skill levels yield the same
+     * <li>Very high skill is limited to a fixed maximum (two different over-cap skill levels yield the same
      *     growth)</li>
      * </ul>
      */
@@ -149,10 +149,10 @@ public class HerbivicusTest extends O2SpellTestSuper {
         int highSkillGrowth = castHerbivicus(caster, location, targetLocation, 1000).getGrowth();
         int higherSkillGrowth = castHerbivicus(caster, location, targetLocation, 5000).getGrowth();
 
-        assertEquals(1, zeroSkillGrowth, "growth was not clamped to the minimum of 1 at zero skill");
+        assertEquals(1, zeroSkillGrowth, "growth was not limited to the minimum of 1 at zero skill");
         assertTrue(lowSkillGrowth > zeroSkillGrowth, "growth did not increase with skill");
         assertTrue(highSkillGrowth > lowSkillGrowth, "growth did not continue to increase with skill");
-        assertEquals(highSkillGrowth, higherSkillGrowth, "growth was not clamped to a fixed maximum at very high skill");
+        assertEquals(highSkillGrowth, higherSkillGrowth, "growth was not limited to a fixed maximum at very high skill");
     }
 
     /**

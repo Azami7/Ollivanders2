@@ -11,13 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the INVISIBILITY effect.
+ * Unit tests for {@link INVISIBILITY}.
  *
- * <p>Validates that the INVISIBILITY effect correctly hides the target player from all online
- * players, hides the target from newly joining players via the PlayerJoinEvent handler, and
- * restores visibility when the effect is removed.</p>
- *
- * @see INVISIBILITY
  * @see EffectTestSuper
  */
 public class InvisibilityTest extends EffectTestSuper {

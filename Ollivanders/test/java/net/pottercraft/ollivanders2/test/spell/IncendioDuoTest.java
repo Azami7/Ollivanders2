@@ -4,26 +4,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for the INCENDIO_DUO fire spell.
- *
- * <p>INCENDIO_DUO is a stronger variant of INCENDIO with the following characteristics:
- * <ul>
- * <li><strong>Radius:</strong> 2 blocks (double that of INCENDIO)</li>
- * <li><strong>Strafe:</strong> Yes - affects multiple blocks and entities in radius</li>
- * <li><strong>Duration:</strong> 2x modifier - burn duration is twice that of INCENDIO</li>
- * </ul>
- *
- * <p>This test class runs all inherited tests from {@link IncendioBaseTest} with INCENDIO_DUO
- * as the spell type, validating that the enhanced radius and strafe behavior work correctly.</p>
- *
- * @see IncendioBaseTest
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.INCENDIO_DUO}. Extends {@link IncendioBaseTest} for the
+ * shared fire-spell tests.
  */
 public class IncendioDuoTest extends IncendioBaseTest {
-    /**
-     * Returns the spell type being tested.
-     *
-     * @return INCENDIO_DUO spell type
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

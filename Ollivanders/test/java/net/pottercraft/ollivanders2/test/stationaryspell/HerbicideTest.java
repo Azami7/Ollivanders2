@@ -24,52 +24,24 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the HERBICIDE stationary spell.
- *
- * <p>Tests spell-specific behavior for the plant destruction effect that eliminates all plant
- * life within the protected area. Inherits common stationary spell tests from the base class
- * and adds tests for the plant killing mechanics including block replacement, item drops,
- * and crop aging.</p>
+ * Unit tests for {@link HERBICIDE}. Extends {@link O2StationarySpellTest} for the shared stationary-spell tests.
  *
  * @author Azami7
  */
 public class HerbicideTest extends O2StationarySpellTest {
-    /**
-     * Gets the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#HERBICIDE}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.HERBICIDE;
     }
 
-    /**
-     * Creates a HERBICIDE spell instance for testing.
-     *
-     * <p>Constructs a new spell at the specified location with the minimum radius and duration values.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new HERBICIDE spell instance (not null)
-     */
     @Override
     HERBICIDE createStationarySpell(Player caster, Location location) {
         return new HERBICIDE(testPlugin, caster.getUniqueId(), location, HERBICIDE.minRadiusConfig, HERBICIDE.minDurationConfig);
     }
 
     /**
-     * Tests the upkeep behavior and plant destruction mechanics.
-     *
-     * <p>Verifies that the spell correctly:
-     * <ul>
-     *   <li>Replaces plant blocks with dead alternatives (flowers to air, mossy blocks to non-mossy)</li>
-     *   <li>Drops items for saplings and bamboo</li>
-     *   <li>Resets crop age to 0</li>
-     *   <li>Leaves non-plant blocks unaffected (snow)</li>
-     *   <li>Does not affect blocks outside the spell radius</li>
-     * </ul>
-     * </p>
+     * Upkeep replaces plants inside the area with their dead equivalents, drops items for saplings and bamboo, and
+     * resets crops to age zero, while leaving non-plant blocks and blocks outside the area untouched.
      */
     @Override @Test
     void upkeepTest() {

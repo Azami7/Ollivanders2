@@ -4,20 +4,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for the BOTHYNUS spell.
- *
- * <p>BOTHYNUS launches yellow star-burst fireworks. Tests verify that the spell correctly
- * spawns fireworks with the expected yellow color and star effect type.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.BOTHYNUS for the spell implementation
- * @see PyrotechniaTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.BOTHYNUS}. Extends {@link PyrotechniaTest} for the shared
+ * fireworks tests.
  */
 public class BothynusTest extends PyrotechniaTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.BOTHYNUS
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

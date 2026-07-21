@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see FIANTO_DURI
  */
 public class FiantoDuriTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -30,11 +29,8 @@ public class FiantoDuriTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell increases the duration of the caster's own shield spell at their location.
-     *
-     * <p>Places a shield cast by the caster, casts the spell (with skill so the increase is non-zero), and confirms the
-     * shield's duration ends up higher than its starting value - the skill-based increase far exceeds the few ticks of
-     * aging that elapse, so a net increase proves the spell extended it.</p>
+     * Verify the spell raises the caster's own shield's duration above its starting value (the skill-based increase
+     * far exceeds the few ticks of aging that elapse, so a net increase proves it was extended).
      */
     @Override
     @Test
@@ -57,10 +53,8 @@ public class FiantoDuriTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell does not extend a shield cast by a different player and reports failure.
-     *
-     * <p>A shield owned by another player at the caster's location must only age (not be extended), and the caster must
-     * receive the spell's failure message because no eligible shield was found.</p>
+     * Verify a shield owned by another player is only aged (not extended) and the caster gets the failure message
+     * since no eligible shield was found.
      */
     @Test
     void notOwnShieldTest() {
@@ -89,7 +83,6 @@ public class FiantoDuriTest extends O2SpellTestSuper {
         assertTrue(TestCommon.cleanChatMessage(messages).contains(failureMessage), "caster did not receive the failure message");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

@@ -9,23 +9,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Baruffio's Brain Elixir - a potion that doubles the power of all spells cast.
- *
- * <p>When consumed, this potion applies the HIGHER_SKILL effect to the player, which
- * doubles the modifier used when calculating spell power and success rates. This makes
- * all spells cast during the effect duration significantly more effective and more likely
- * to succeed.</p>
+ * Baruffio's Brain Elixir applies the HIGHER_SKILL effect, doubling the power and success rate of all spells cast.
  *
  * @author Azami7
  * @author cakenggt
  */
 public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion {
     /**
-     * Constructor for Baruffio's Brain Elixir potion.
-     *
-     * <p>Initializes the potion with its ingredients (Runespoor Egg, Ginger Root, and Standard
-     * Potion Ingredients), description text, flavor text, and potion color. Sets up the recipe
-     * and the HIGHER_SKILL effect that will be applied when the potion is consumed.</p>
+     * Constructor.
      *
      * @param plugin a callback to the plugin instance
      */
@@ -46,11 +37,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion {
     }
 
     /**
-     * Drink Baruffio's Brain Elixir and gain temporary spell power enhancement.
-     *
-     * <p>Applies the HIGHER_SKILL effect to the player for the duration defined by the potion's
-     * duration field. The HIGHER_SKILL effect doubles the player's skill modifier, which increases
-     * the power of all spells cast and doubles their success rate during the effect's duration.</p>
+     * Apply the HIGHER_SKILL effect to the drinker and send the success message.
      *
      * @param player the player who drank the potion
      */

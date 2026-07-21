@@ -145,10 +145,10 @@ public class PartisTemporusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the path's width, depth, and length scale with the caster's skill and are clamped at the top end.
+     * Tests that the path's width, depth, and length scale with the caster's skill and are limited at the top end.
      *
      * <p>The dimensions are read immediately after each cast, before any block is carved. Verifies that they grow
-     * from low to high skill and that two very high skill levels yield the same (clamped) dimensions.</p>
+     * from low to high skill and that two very high skill levels yield the same (limited) dimensions.</p>
      */
     @Test
     void pathDimensionsScaleWithSkillTest() {
@@ -162,13 +162,13 @@ public class PartisTemporusTest extends O2SpellTestSuper {
         PARTIS_TEMPORUS higher = castPartis(caster, location, targetLocation, 5000);
 
         assertTrue(high.getWidth() > low.getWidth(), "width did not increase with skill");
-        assertEquals(high.getWidth(), higher.getWidth(), "width was not clamped at high skill");
+        assertEquals(high.getWidth(), higher.getWidth(), "width was not limited at high skill");
 
         assertTrue(high.getDepth() > low.getDepth(), "depth did not increase with skill");
-        assertEquals(high.getDepth(), higher.getDepth(), "depth was not clamped at high skill");
+        assertEquals(high.getDepth(), higher.getDepth(), "depth was not limited at high skill");
 
         assertTrue(high.getLength() > low.getLength(), "length did not increase with skill");
-        assertEquals(high.getLength(), higher.getLength(), "length was not clamped at high skill");
+        assertEquals(high.getLength(), higher.getLength(), "length was not limited at high skill");
     }
 
     /**

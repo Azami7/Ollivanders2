@@ -4,21 +4,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for the BOTHYNUS_TRIA spell.
- *
- * <p>BOTHYNUS_TRIA launches premium yellow and orange star-burst fireworks with trailing
- * and fade effects (fading to silver). Tests verify that the spell correctly spawns fireworks
- * with the expected dual colors, star effect type, trailing effects, and silver fade.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.BOTHYNUS_TRIA for the spell implementation
- * @see PyrotechniaTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.BOTHYNUS_TRIA}. Extends {@link PyrotechniaTest} for the
+ * shared fireworks tests.
  */
 public class BothynusTriaTest extends PyrotechniaTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.BOTHYNUS_TRIA
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

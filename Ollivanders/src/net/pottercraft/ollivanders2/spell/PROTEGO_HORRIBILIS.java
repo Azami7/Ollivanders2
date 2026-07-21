@@ -10,22 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Protego Horribilis is a powerful shield spell that blocks dark arts spells from entering a protected area.
- * However, extremely powerful spells like the Killing Curse may still penetrate the shield.
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Creates a stationary spell centered on the caster's location</li>
- * <li>Blocks most dark arts spells from crossing the shield boundary</li>
- * <li>Extremely powerful spells (like the Killing Curse) may bypass the shield</li>
- * <li>No projectile required - cast directly on the caster</li>
- * <li>Radius range: varies by configuration</li>
- * <li>Duration range: varies by configuration (scales with caster experience)</li>
- * </ul>
+ * Protego Horribilis: a stationary shield that blocks dark-arts spells from entering its area, though extremely
+ * powerful spells (such as the Killing Curse) may still penetrate it.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Protego_horribilis">Harry Potter Wiki - Protego Horribilis</a>
  * @see net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS
  */
 public final class PROTEGO_HORRIBILIS extends StationarySpell {
@@ -48,15 +37,11 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell {
     }
 
     /**
-     * Constructs a new PROTEGO_HORRIBILIS spell cast by a player.
+     * Constructor.
      *
-     * <p>Sets up the spell-specific parameters including duration modifier, radius modifier,
-     * and min/max values for radius and duration. The spell is cast centered on the caster
-     * with no projectile required.</p>
-     *
-     * @param plugin    a callback to the MC plugin (not null)
-     * @param player    the player who cast this spell (not null)
-     * @param rightWand the wand correctness factor (not null)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -76,13 +61,6 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell {
         initSpell();
     }
 
-    /**
-     * Creates the stationary spell instance.
-     *
-     * <p>Instantiates a new PROTEGO_HORRIBILIS stationary spell with the calculated radius and duration.</p>
-     *
-     * @return the created stationary spell instance
-     */
     @Override
     protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS(p, caster.getUniqueId(), location, radius, duration);

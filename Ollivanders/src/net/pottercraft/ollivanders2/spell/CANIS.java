@@ -52,13 +52,16 @@ public final class CANIS extends PlayerDisguise {
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
         if (rand < 9) {
-            watcher.isTamed();
+            watcher.setTamed(true);
             watcher.setCollarColor(O2Color.getRandomPrimaryDyeableColor().getDyeColor());
         }
 
         initSpell();
     }
 
+    /**
+     * Calculate the spell's success rate from the caster's skill level.
+     */
     @Override
     void doInitSpell() {
         calculateSuccessRate();

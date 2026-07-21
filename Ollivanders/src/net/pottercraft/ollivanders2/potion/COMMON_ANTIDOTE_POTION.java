@@ -8,34 +8,21 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Common Antidote Potion - counteracts ordinary poisons and toxins.
- *
- * <p>This potion removes the poison effect from a player when consumed. It is effective
- * against ordinary poisons such as creature bites and stings (Minecraft POISON effects).
- * If no poison is currently affecting the player, the potion has no mechanical effect
- * but provides flavor text feedback.</p>
+ * Common Antidote Potion — when drunk, removes the Minecraft POISON effect from the drinker.
  *
  * @see <a href="http://harrypotter.wikia.com/wiki/Antidote_to_Common_Poisons">Harry Potter Wiki - Antidote to Common Poisons</a>
  *
  * @author Azami7
- * @since 2.2.7
  */
 public final class COMMON_ANTIDOTE_POTION extends O2Potion {
     // todo lower strength so that we can also have the stronger antidote to uncommon poisons for longer duration poison
 
     /**
-     * Message sent to player when potion has no effect.
-     *
-     * <p>This message is displayed when the player drinks the potion but is not currently poisoned.
-     * It provides flavor text feedback while having no mechanical effect.</p>
+     * Message shown when the drinker was not poisoned, so the potion had no effect.
      */
     String potionDoNothingMessage = "You smell a faint odor that reminds you of winter, then it is gone.";
     /**
-     * Constructor for Common Antidote Potion.
-     *
-     * <p>Initializes the potion with its ingredients (Mistletoe Berries, Bezoar, Unicorn Hair,
-     * and Standard Potion Ingredients), description text, and potion color. Sets up the recipe
-     * for brewing this antidote potion.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -56,11 +43,7 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Common Antidote Potion and remove poison effects.
-     *
-     * <p>If the player is currently poisoned (has the POISON effect), it is immediately removed
-     * and the player receives confirmation feedback. If the player is not poisoned, the potion
-     * still consumes but provides only flavor text feedback with no mechanical effect.</p>
+     * On drink, remove the POISON effect from the player if present; otherwise send the no-effect message.
      *
      * @param player the player who drank the potion
      */
@@ -77,12 +60,9 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion {
     }
 
     /**
-     * Get the message displayed when the potion has no effect.
+     * Get the message shown when the drinker was not poisoned.
      *
-     * <p>Returns the flavor text message shown to the player when they drink this potion
-     * while not currently poisoned.</p>
-     *
-     * @return the no-effect message string
+     * @return the no-effect message
      */
     public String getPotionDoNothingMessage() {
         return potionDoNothingMessage;

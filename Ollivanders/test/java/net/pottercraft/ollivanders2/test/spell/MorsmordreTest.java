@@ -14,22 +14,10 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Unit tests for the MORSMORDRE spell.
- *
- * <p>MORSMORDRE conjures the Dark Mark in the sky, launching a green creeper-effect firework
- * and applying the BAD_OMEN potion effect to nearby players. Tests verify that the spell
- * correctly applies the potion effect within the configured radius and launches the
- * Dark Mark firework as a visual flair effect.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.MORSMORDRE for the spell implementation
- * @see AddPotionEffectTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.MORSMORDRE}. Extends {@link AddPotionEffectTest} for the
+ * shared potion-effect tests.
  */
 public class MorsmordreTest extends AddPotionEffectTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.MORSMORDRE
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -37,10 +25,7 @@ public class MorsmordreTest extends AddPotionEffectTest {
     }
 
     /**
-     * Test that the Dark Mark firework is spawned when the spell is cast.
-     *
-     * <p>Verifies that the spell launches the green creeper-effect firework at the
-     * spell location as the visual flair effect for the Dark Mark.</p>
+     * Verify casting launches the Dark Mark firework at the spell location.
      */
     @Test
     void flairTest() {

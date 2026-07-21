@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Super class for transfiguring friendly mobs.
+ * Base class for spells that disguise the caster as a friendly mob, with larger mobs unlocked at higher skill.
  *
- * @see <a href = "https://minecraft.fandom.com/wiki/Mob">https://minecraft.fandom.com/wiki/Mob</a>
+ * @see <a href="https://minecraft.fandom.com/wiki/Mob">Minecraft Wiki - Mob</a>
+ * @author Azami7
  */
 public abstract class FriendlyMobDisguise extends EntityDisguise
 {
@@ -23,14 +24,14 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
     public static final List<EntityType> smallFriendlyMobs = new ArrayList<>()
     {{
         add(EntityType.BAT);
+        add(EntityType.BEE);
         add(EntityType.CHICKEN);
-        add(EntityType.RABBIT);
-        add(EntityType.PARROT);
         add(EntityType.COD);
+        add(EntityType.PARROT);
+        add(EntityType.PUFFERFISH);
+        add(EntityType.RABBIT);
         add(EntityType.SALMON);
         add(EntityType.TROPICAL_FISH);
-        add(EntityType.PUFFERFISH);
-        add(EntityType.BEE);
     }};
 
     /**
@@ -38,14 +39,14 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
      */
     public static final List<EntityType> mediumFriendlyMobs = new ArrayList<>()
     {{
-        add(EntityType.SHEEP);
-        add(EntityType.PIG);
-        add(EntityType.OCELOT);
-        add(EntityType.WOLF);
+        add(EntityType.AXOLOTL);
         add(EntityType.CAT);
         add(EntityType.FOX);
+        add(EntityType.OCELOT);
+        add(EntityType.PIG);
+        add(EntityType.SHEEP);
         add(EntityType.TURTLE);
-        add(EntityType.AXOLOTL);
+        add(EntityType.WOLF);
     }};
 
     /**
@@ -54,26 +55,25 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
     public static final List<EntityType> largeFriendlyMobs = new ArrayList<>()
     {{
         add(EntityType.COW);
-        add(EntityType.DONKEY);
-        add(EntityType.HORSE);
-        add(EntityType.MOOSHROOM);
-        add(EntityType.IRON_GOLEM);
-        add(EntityType.SNOW_GOLEM);
-        add(EntityType.MULE);
-        add(EntityType.SQUID);
-        add(EntityType.GLOW_SQUID);
-        add(EntityType.POLAR_BEAR);
-        add(EntityType.LLAMA);
-        add(EntityType.SHULKER); // not large in size but complex
-        add(EntityType.PANDA);
         add(EntityType.DOLPHIN);
-        add(EntityType.TRADER_LLAMA);
+        add(EntityType.DONKEY);
+        add(EntityType.GLOW_SQUID);
+        add(EntityType.GOAT);
+        add(EntityType.HORSE);
+        add(EntityType.IRON_GOLEM);
+        add(EntityType.LLAMA);
+        add(EntityType.MOOSHROOM);
+        add(EntityType.MULE);
+        add(EntityType.PANDA);
+        add(EntityType.POLAR_BEAR);
+        add(EntityType.SHULKER); // not large in size but complex
         add(EntityType.SKELETON_HORSE);
+        add(EntityType.SNOW_GOLEM);
+        add(EntityType.SQUID);
         add(EntityType.STRIDER);
+        add(EntityType.TRADER_LLAMA);
         add(EntityType.VILLAGER);
         add(EntityType.WANDERING_TRADER);
-        add(EntityType.DOLPHIN);
-        add(EntityType.GOAT);
     }};
 
     /**
@@ -87,8 +87,6 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -104,9 +102,9 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
     }
 
     /**
-     * Populate the entity allowed list for this spell based on the caster's skill and level.
-     *
-     * <p>This must be called after initSpell() so that usesModifier is populated.</p>
+     * Add the mob types this caster may disguise as to the allowed list: small mobs always, medium above skill 50,
+     * large above skill 100 (each also gated by the caster's year when years are enabled). Must be called after
+     * {@link #initSpell()} populates {@code usesModifier}.
      */
     void populateEntityAllowedList()
     {

@@ -13,22 +13,21 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Abstract base class for stationary spells created by thrown potions.
- *
- * <p>Represents lingering potion effects that persist in the world after a potion is thrown. These spells
- * differ from other stationary spells in that they perform WorldGuard permission checks at the time of
- * creation, since the original O2Spell projectile may not perform these checks.</p>
+ * Base class for stationary spells created by thrown potions, representing a lingering potion effect left in the world.
+ * <p>
+ * Unlike other stationary spells, these run their own WorldGuard permission check ({@link #checkWorldGuard()}), because
+ * the thrown potion that spawns them does not perform that check the way a normal cast O2Spell would.
  *
  * @author Azami7
  */
 public abstract class ThrownPotionStationarySpell extends O2StationarySpell {
     /**
-     * A list of the worldguard permissions needed for this spell
+     * The WorldGuard state flags this spell requires at every block in its radius; checked by {@link #checkWorldGuard()}.
      */
     List<StateFlag> worldGuardFlags = new ArrayList<>();
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -37,7 +36,7 @@ public abstract class ThrownPotionStationarySpell extends O2StationarySpell {
     }
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for casting a new thrown-potion stationary spell.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the player who cast the spell
@@ -48,9 +47,8 @@ public abstract class ThrownPotionStationarySpell extends O2StationarySpell {
     }
 
     /**
-     * Checks world guard, if enabled, to determine if this spell can be cast here by this player. Normally stationary
-     * spells don't need to check this because they are cast by O2Spells which check this for them but this stationary
-     * spell is a thrown potion effect
+     * Kill this spell if WorldGuard is enabled and the caster lacks one of {@link #worldGuardFlags} anywhere within the
+     * spell's radius. No-op when WorldGuard is disabled.
      */
     protected void checkWorldGuard() {
         if (!Ollivanders2.worldGuardEnabled)
@@ -62,8 +60,8 @@ public abstract class ThrownPotionStationarySpell extends O2StationarySpell {
             return;
         }
 
-        for (StateFlag flag : worldGuardFlags) { // check every flag relevant to this spell
-            for (Block block : BlockCommon.getBlocksInRadius(location, radius)) { // check at every block location in the spell's radius
+        for (StateFlag flag : worldGuardFlags) {
+            for (Block block : BlockCommon.getBlocksInRadius(location, radius)) {
                 if (!Ollivanders2.worldGuardO2.checkWGFlag(caster, block.getLocation(), flag)) {
                     common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
 

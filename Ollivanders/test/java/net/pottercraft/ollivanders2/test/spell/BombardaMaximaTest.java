@@ -5,9 +5,8 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Tests for the BOMBARDA_MAXIMA spell.
- *
- * <p>Inherits all test scenarios from BombaraBaseTest with Bombarda Maxima-specific material thresholds.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.BOMBARDA_MAXIMA}. Extends {@link BombardaBaseTest} for the
+ * shared bombardment tests, with Bombarda Maxima-specific material thresholds.
  */
 public class BombardaMaximaTest extends BombardaBaseTest {
     @Override

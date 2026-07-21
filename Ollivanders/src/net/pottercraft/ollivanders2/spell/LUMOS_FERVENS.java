@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * without burning the holder.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Bluebell_Flames">https://harrypotter.fandom.com/wiki/Bluebell_Flames</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Bluebell_Flames">Harry Potter Wiki - Bluebell Flames</a>
  */
 public final class LUMOS_FERVENS extends StationarySpell {
     /**
@@ -48,7 +48,6 @@ public final class LUMOS_FERVENS extends StationarySpell {
         spellType = O2SpellType.LUMOS_FERVENS;
         branch = O2MagicBranch.CHARMS;
 
-        // Set spell-specific parameters
         minRadius = net.pottercraft.ollivanders2.stationaryspell.LUMOS_FERVENS.minRadiusConfig;
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.LUMOS_FERVENS.maxRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.LUMOS_FERVENS.minDurationConfig;
@@ -61,11 +60,6 @@ public final class LUMOS_FERVENS extends StationarySpell {
         initSpell();
     }
 
-    /**
-     * Create the stationary spell.
-     *
-     * @return the stationary spell
-     */
     @Override
     protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.LUMOS_FERVENS(p, caster.getUniqueId(), location, radius, duration);

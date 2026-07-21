@@ -28,22 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for O2Blocks functionality.
- *
- * <p>Tests block tracking, reversion, and query methods. Uses a single test method to avoid
- * parallel execution interference since all tests share the same O2Blocks instance.</p>
+ * Unit tests for {@link O2Blocks}. All cases run in one method so they don't interfere through the shared
+ * {@link O2Blocks} instance under MockBukkit's parallel execution.
  *
  * @author Azami7
  */
 public class O2BlocksTest {
-    /**
-     * Shared mock Bukkit server instance for all tests.
-     */
     static ServerMock mockServer;
 
-    /**
-     * The plugin instance being tested.
-     */
     static Ollivanders2 testPlugin;
 
     @BeforeAll
@@ -57,19 +49,8 @@ public class O2BlocksTest {
     }
 
     /**
-     * Tests all O2Blocks functionality in a single method to avoid parallel test interference.
-     *
-     * <p>Verifies:</p>
-     * <ul>
-     * <li>Adding temporarily changed blocks</li>
-     * <li>Duplicate block add returns false</li>
-     * <li>Querying changed blocks by spell</li>
-     * <li>Getting the spell that changed a block</li>
-     * <li>Reverting a single block restores original material</li>
-     * <li>Reverting all blocks changed by a spell</li>
-     * <li>Querying untracked blocks returns null/empty</li>
-     * <li>onDisable reverts all remaining blocks</li>
-     * </ul>
+     * Exercises the full track-query-revert lifecycle in one method: adding blocks, duplicate-add returning false,
+     * querying by spell, single/bulk/by-spell revert, untracked-block queries, and onDisable reverting what remains.
      */
     @Test
     void temporarilyChangedBlocksTest() {

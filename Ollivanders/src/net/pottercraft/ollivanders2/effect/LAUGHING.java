@@ -7,39 +7,15 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Uncontrollable laughing effect that forces a player to repeatedly laugh.
- *
- * <p>LAUGHING is a specialized variant of the {@link BABBLING} effect that forces the affected
- * player to laugh uncontrollably instead of speaking babbling nonsense. Like BABBLING, this effect
- * applies periodic damage and forces the player to speak messages at random intervals. However,
- * LAUGHING uses a custom dictionary of laugh exclamations (16 different laugh variations) instead of
- * generic babbling words, and is configured with a 50% probability threshold for triggering laughs.
- * The effect displays continuous uncontrollable laughter, creating a humorous but harmful status
- * condition.</p>
- *
- * <p>Mechanism (inherited from BABBLING):</p>
- * <ul>
- * <li>Periodic damage applied every 3 seconds with clamped magnitude (0.5-10 health)</li>
- * <li>Forced speech output at random intervals (1-5 custom laugh messages per damage cycle)</li>
- * <li>50% probability threshold for triggering laugh messages each cycle</li>
- * <li>Custom laugh dictionary with 16 humorous laugh variations</li>
- * <li>Detectable by information spells (Informous)</li>
- * <li>Detection text: "cannot stop laughing"</li>
- * </ul>
+ * Forces a player to laugh uncontrollably: a {@link BABBLING} variant that swaps the babble dictionary for laugh
+ * exclamations. Inherits BABBLING's periodic damage and forced speech. Detectable via Informous.
  *
  * @author Azami7
- * @see BABBLING for the base periodic speech and damage mechanism
+ * @see BABBLING
  */
 public class LAUGHING extends BABBLING {
     /**
-     * Constructor for creating an uncontrollable laughing effect.
-     *
-     * <p>Creates an effect that forces the target player to laugh uncontrollably by outputting
-     * laugh messages periodically. Extends the parent BABBLING class with a custom laugh dictionary
-     * (16 laugh variations ranging from simple "hahahaha" to elaborate Wizarding World references)
-     * and is configured with 50% probability threshold (affectPercent) and maximum of 1 laugh message
-     * (maxWords) per speech cycle. Inherits all damage mechanics from BABBLING: periodic damage
-     * every 3 seconds with clamped 0.5-10 damage range.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the laughing effect in game ticks

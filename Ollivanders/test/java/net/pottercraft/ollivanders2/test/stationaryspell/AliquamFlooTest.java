@@ -38,51 +38,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventClassMatcher.hasFiredEventInstance;
 
 /**
- * Comprehensive test suite for the {@link ALIQUAM_FLOO} stationary spell.
- *
- * <p>Tests all Floo Network functionality including:
- * <ul>
- *   <li>Fireplace registration and network management</li>
- *   <li>Floo powder item consumption and spell activation</li>
- *   <li>Player teleportation between registered floo locations</li>
- *   <li>Fire and combustion damage prevention within spell area</li>
- *   <li>Block type transformations (fire/soul fire, campfire/soul campfire)</li>
- *   <li>Floo network deactivation on spell termination</li>
- *   <li>Spell serialization and deserialization</li>
- * </ul>
- * </p>
- *
- * <p>Note: All floo functionality is tested in a single test method ({@link #aliquamFlooTest()})
- * because the static floo network list can cause test interference when tests run in parallel.
- * This prevents flaky test results while still providing comprehensive coverage.</p>
+ * Unit tests for {@link ALIQUAM_FLOO}.
+ * <p>
+ * All behavior is exercised in the single {@link #aliquamFlooTest()} method because the floo network is a static list;
+ * splitting it into separate parallel tests would let them interfere with each other.
  *
  * @author Azami7
  */
 @Isolated
 public class AliquamFlooTest {
-    /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
-     */
     static ServerMock mockServer;
 
-    /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
-     */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -90,31 +58,14 @@ public class AliquamFlooTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's initial 20-tick delay so it is running
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Comprehensive test of all ALIQUAM_FLOO spell functionality.
-     *
-     * <p>This test method exercises all aspects of the Floo Network spell including:
-     * <ul>
-     *   <li>Creating and registering floo fireplace locations</li>
-     *   <li>Verifying fireplace metadata (permanence, radius)</li>
-     *   <li>Testing floo powder consumption and fireplace activation</li>
-     *   <li>Verifying fire/combustion damage prevention within the spell area</li>
-     *   <li>Testing player teleportation between registered fireplace locations</li>
-     *   <li>Verifying location validation (preventing teleport outside spell area)</li>
-     *   <li>Testing spell deactivation and fireplace state restoration</li>
-     *   <li>Testing block type transformations (fire ↔ soul fire, campfire ↔ soul campfire)</li>
-     *   <li>Testing configuration option for soul fire visual effects</li>
-     *   <li>Testing floo network clearing and spell batch operations</li>
-     *   <li>Testing serialization and deserialization of spell state</li>
-     * </ul>
-     * </p>
-     *
-     * <p>All floo functionality is tested in this single method to avoid test interference
-     * caused by the static floo network list during parallel test execution.</p>
+     * Exercise the whole Floo Network lifecycle: registering fireplaces, activating one with floo powder, fire and
+     * combustion protection inside it, teleporting a player to a named fireplace, the location and cooldown guards, the
+     * soul-fire visual effect and its config toggle, clearing the network, and save/load round-tripping.
      */
     @Test
     void aliquamFlooTest() {
@@ -166,7 +117,7 @@ public class AliquamFlooTest {
 
         // damage from fire is canceled
         DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                .withDamageLocation(player.getLocation())  // location of the fire block
+                .withDamageLocation(player.getLocation())
                 .build();
         EntityDamageEvent damageEvent = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.FIRE, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(damageEvent);
@@ -175,7 +126,7 @@ public class AliquamFlooTest {
 
         // damage from other sources is not canceled
         damageSource = DamageSource.builder(DamageType.ARROW)
-                .withDamageLocation(player.getLocation())  // location of the fire block
+                .withDamageLocation(player.getLocation())
                 .build();
         damageEvent = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(damageEvent);
@@ -342,13 +293,6 @@ public class AliquamFlooTest {
         assertEquals(location2, player.getLocation(), "Player not teleported to deserialized floo2");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

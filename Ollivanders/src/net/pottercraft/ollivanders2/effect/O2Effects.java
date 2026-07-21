@@ -51,28 +51,19 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 /**
- * Central manager for all magical effects applied to players.
- *
- * <p>O2Effects manages the complete effect lifecycle: adding effects, processing them each game tick,
- * removing effects, and persisting effects across player logouts. This class implements Bukkit's Listener
- * interface to hook into server events and distribute them to active effects.</p>
- *
- * <p>Thread Safety: This class uses a Semaphore and EffectsData wrapper to ensure thread-safe access to
- * effect maps, preventing race conditions when multiple threads access player effects simultaneously.
- * All public methods are synchronized or use the internal EffectsData synchronization.</p>
- *
- * <p>Data Structure: Effects are stored in two separate maps:</p>
- * <ul>
- * <li><strong>Active Effects:</strong> O2Effect objects for online players, actively processed each tick</li>
- * <li><strong>Saved Effects:</strong> Effect type and duration pairs for offline players, restored on login</li>
- * </ul>
- *
- * <p>Effect Stacking: When an effect is added to a player who already has that effect type,
- * the durations are combined rather than replacing the effect, allowing effect stacking.</p>
+ * Central manager for all magical effects applied to players, handling their full lifecycle: adding, per-tick
+ * processing, removal, and persistence across logout. Registers as a Bukkit {@link Listener} and distributes server
+ * events to active effects.
+ * <p>
+ * Effects for online players are held as live {@link O2Effect} objects; when a player logs out they move to a saved
+ * map keyed by type and duration, restored on login. Adding an effect a player already has stacks the durations
+ * rather than replacing it. Access to both maps is guarded by a shared {@link Semaphore} via the inner
+ * {@code EffectsData} for thread-safe use from the scheduler and event handlers.
+ * </p>
  *
  * @author Azami7
- * @see O2Effect for the abstract base class of all effects
- * @see O2EffectType for available effect types
+ * @see O2Effect
+ * @see O2EffectType
  */
 public class O2Effects implements Listener {
     /**
@@ -86,19 +77,12 @@ public class O2Effects implements Listener {
     final Ollivanders2Common common;
 
     /**
-     * Shared semaphore for thread-safe access to effect data maps.
-     * Static and shared across all O2Effects instances to provide consistent locking
-     * for the EffectsData internal maps. Prevents race conditions when multiple threads
-     * read/write effect maps simultaneously.
+     * Guards access to the {@code EffectsData} maps; shared across all instances so locking is consistent.
      */
     final static Semaphore semaphore = new Semaphore(1);
 
     /**
-     * Labels for serializing effect data to JSON format.
-     *
-     * <p>String keys used when converting O2Effect objects to and from JSON representation for
-     * persistent storage. These constants are used in serialization and deserialization methods
-     * to maintain consistent field naming across saves and loads.</p>
+     * Serialization label for the target player id.
      */
     public static final String effectPIDLabel = "Effect_target_pid";
 
@@ -118,23 +102,7 @@ public class O2Effects implements Listener {
     public static final String effectTypeLabel = "Effect_type";
 
     /**
-     * Thread-safe storage container for active and saved player effects.
-     *
-     * <p>EffectsData encapsulates the effect data management for all players, both online and offline.
-     * All access to the internal effect maps is protected by a shared semaphore to ensure thread-safe
-     * read and write operations. This prevents race conditions when multiple threads (scheduler, event
-     * handlers) access player effect data simultaneously.</p>
-     *
-     * <p>Data Organization:</p>
-     * <ul>
-     * <li><strong>Active Effects:</strong> Currently applied O2Effect objects for online players,
-     * processed each game tick</li>
-     * <li><strong>Saved Effects:</strong> Effect types and remaining durations for offline players,
-     * restored on login</li>
-     * </ul>
-     *
-     * <p>All public methods are synchronized and acquire the semaphore before accessing maps, ensuring
-     * consistent state across concurrent access patterns.</p>
+     * Semaphore-guarded storage for active effects (online players) and saved effects (offline players).
      */
     private class EffectsData {
         /**
@@ -180,9 +148,9 @@ public class O2Effects implements Listener {
         }
 
         /**
-         * Get a list of all the active spells for all players.
+         * Get all active effects across all players.
          *
-         * @return the active spells for all players.
+         * @return the active effects for all players
          */
         @NotNull
         synchronized ArrayList<O2Effect> getAllActiveEffects() {
@@ -319,19 +287,10 @@ public class O2Effects implements Listener {
         }
 
         /**
-         * Terminate all active effects on all players and clear all saved effects.
-         *
-         * <p>Performs a complete global cleanup of the effects system by killing every active effect
-         * on every online player and clearing all saved effects for offline players. This is a destructive
-         * operation that should only be used in specific contexts: test cleanup to reset game state between
-         * test runs, or during server-wide resets. All effects are terminated via their kill() method,
-         * and all persistent effect data is discarded.</p>
-         *
-         * <p>Thread Safety: This method is synchronized and acquires the semaphore before accessing the
-         * effects maps to prevent concurrent modification issues.</p>
+         * Kill every active effect on every player and discard all saved effects. Destructive global reset, intended
+         * for test cleanup or server-wide resets.
          *
          * @see #resetEffects(UUID) for clearing effects for a single player
-         * @see #onDeath(UUID) for clearing effects when a single player dies
          */
         synchronized void killAllEffects() {
             try {
@@ -374,18 +333,11 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Initialize the effects system on plugin startup.
-     *
-     * <p>Reads configuration to determine which effects are enabled or disabled. Currently only
-     * lycanthropy configuration is loaded, as other effects are enabled by default. This allows
-     * servers to disable specific effects if they conflict with gameplay or other plugins.</p>
+     * Initialize the effects system on plugin startup: load saved effects and apply per-effect config toggles.
      */
     public void onEnable() {
         loadEffects();
 
-        //
-        // lycanthropy
-        //
         O2EffectType.LYCANTHROPY.setEnabled(p.getConfig().getBoolean("enableLycanthropy"));
         if (O2EffectType.LYCANTHROPY.isEnabled())
             p.getLogger().info("Enabling lycanthropy.");
@@ -394,27 +346,17 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute entity damage events to all active effects on the damaged player.
+     * Dispatch this event to the active effects of both the damaged entity and the damager. The damaged entity is
+     * processed first so a protective effect can cancel the damage before the damager's effects react.
      *
-     * <p>When a player takes damage from another entity, this event handler distributes the damage event
-     * to all active effects on that player. Effects can use this event to implement damage prevention,
-     * redirection, mitigation, or other protective mechanics. This handler processes at HIGHEST priority
-     * to ensure effects are evaluated before other plugins can modify the event.</p>
-     *
-     * <p>Only players who are the damage target are processed; damage from other entity types is ignored.
-     * Each active effect on the damaged player receives the event via its doOnEntityDamageByEntityEvent()
-     * callback method.</p>
-     *
-     * @param event the entity damage by entity event, containing damage amount, source entity, and target player
+     * @param event the entity damage by entity event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity damager = event.getDamager();
 
-        // did this event affect someone with an effect
-        // we check the affected player first so that if they have a protective effect that may change/cancel
-        // this damage event, it happens first.
+        // process the affected player first so a protective effect can cancel this damage before the damager reacts
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(entity.getUniqueId());
         for (O2Effect effect : activeEffects.values()) {
             effect.doOnEntityDamageByEntityEvent(event);
@@ -428,12 +370,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player interact events to all active effects on the interacting player.
-     *
-     * <p>When a player interacts with the world (right-click on blocks/entities, left-click, etc.),
-     * this handler distributes the interaction event to all active effects on that player. Effects can
-     * use this to intercept interactions, prevent certain actions, or trigger special behaviors based
-     * on what the player is interacting with.</p>
+     * Dispatch this event to the interacting player's active effects.
      *
      * @param event the player interact event
      */
@@ -448,11 +385,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute chat messages to all active effects on the chatting player.
-     *
-     * <p>When a player sends a chat message, this handler distributes it to all active effects.
-     * Effects can use this to modify chat messages, prevent chat, or respond to specific keywords.
-     * This uses the deprecated AsyncPlayerChatEvent which processes asynchronously.</p>
+     * Dispatch this event to the chatting player's active effects.
      *
      * @param event the async player chat event
      */
@@ -467,10 +400,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute bed enter events to all active effects on the player.
-     *
-     * <p>When a player attempts to enter a bed, this handler distributes the event to all active
-     * effects. Effects can use this to prevent sleeping or trigger special sleep-related mechanics.</p>
+     * Dispatch this event to the player's active effects.
      *
      * @param event the player bed enter event
      */
@@ -485,10 +415,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player flight toggle events to all active effects.
-     *
-     * <p>When a player attempts to toggle flight mode (if allowed), this handler distributes the
-     * event to all active effects. Effects can use this to prevent or modify flight behavior.</p>
+     * Dispatch this event to the player's active effects.
      *
      * @param event the player toggle flight event
      */
@@ -503,10 +430,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player sneak toggle events to all active effects.
-     *
-     * <p>When a player toggles sneak mode, this handler distributes the event to all active effects.
-     * Effects can use this to prevent sneaking or enforce sneaking behavior.</p>
+     * Dispatch this event to the player's active effects.
      *
      * @param event the player toggle sneak event
      */
@@ -521,10 +445,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player sprint toggle events to all active effects.
-     *
-     * <p>When a player toggles sprint mode, this handler distributes the event to all active effects.
-     * Effects can use this to prevent sprinting or enforce sprinting behavior.</p>
+     * Dispatch this event to the player's active effects.
      *
      * @param event the player toggle sprint event
      */
@@ -539,10 +460,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute velocity change events to all active effects on the affected player.
-     *
-     * <p>When a player's velocity is modified (knockback, launcher, etc.), this handler distributes
-     * the event to all active effects. Effects can use this to modify or negate velocity changes.</p>
+     * Dispatch this event to the affected player's active effects.
      *
      * @param event the player velocity event
      */
@@ -557,10 +475,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute item pickup events to all active effects on the player picking up the item.
-     *
-     * <p>When a player picks up an item, this handler distributes the event to all active effects.
-     * Effects can use this to prevent item pickup or trigger special behavior on pickup.</p>
+     * Dispatch this event to the picking-up player's active effects; ignored for non-player entities.
      *
      * @param event the entity pickup item event
      */
@@ -577,10 +492,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute item held change events to all active effects on the player.
-     *
-     * <p>When a player changes which hotbar slot is selected, this handler distributes the event to
-     * all active effects. Effects can use this to track item changes or prevent slot switching.</p>
+     * Dispatch this event to the player's active effects.
      *
      * @param event the player item held event
      */
@@ -595,10 +507,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute item consumption events to all active effects on the consuming player.
-     *
-     * <p>When a player consumes an item (food, potion, etc.), this handler distributes the event to
-     * all active effects. Effects can use this to prevent consumption or modify what happens when items are consumed.</p>
+     * Dispatch this event to the consuming player's active effects.
      *
      * @param event the player item consume event
      */
@@ -613,10 +522,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute item drop events to all active effects on the dropping player.
-     *
-     * <p>When a player drops an item from their inventory, this handler distributes the event to all
-     * active effects. Effects can use this to prevent item dropping or track dropped items.</p>
+     * Dispatch this event to the dropping player's active effects.
      *
      * @param event the player drop item event
      */
@@ -631,10 +537,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player move events to all active effects on the moving player.
-     *
-     * <p>When a player moves, this handler distributes the movement event to all active effects.
-     * Effects can use this to prevent movement, teleport the player, or trigger location-based behavior.</p>
+     * Dispatch this event to the moving player's active effects.
      *
      * @param event the player move event
      */
@@ -649,11 +552,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute spell projectile move events to all active effects on all players.
-     *
-     * <p>When a custom Ollivanders spell projectile moves, this handler distributes the event to all
-     * active effects on all online players. Effects can use this to interact with projectiles or
-     * trigger special mechanics when projectiles are nearby.</p>
+     * Dispatch this event to every active effect on all players.
      *
      * @param event the Ollivanders spell projectile move event
      */
@@ -667,11 +566,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute entity target events to all active effects on the targeted entity.
-     *
-     * <p>When an entity attempts to target another entity, this handler distributes the event to all
-     * active effects on the targeted entity. Effects can use this to prevent targeting or change what
-     * the entity is targeting.</p>
+     * Dispatch this event to the targeted entity's active effects; no-op if the target is null.
      *
      * @param event the entity target event
      */
@@ -691,10 +586,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player quit events to all active effects on the departing player.
-     *
-     * <p>When a player leaves the server, this handler distributes the quit event to all active
-     * effects on that player. Effects can use this to perform cleanup or save state information.</p>
+     * Dispatch this event to the departing player's active effects.
      *
      * @param event the player quit event
      */
@@ -709,10 +601,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute player join events to all active effects that care about a player joining.
-     *
-     * <p>When a player joins the server, this handler distributes the join event to all active
-     * effects.</p>
+     * Dispatch this event to every active effect on all players.
      *
      * @param event the player join event
      */
@@ -738,11 +627,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute projectile launch events to all active effects on all players.
-     *
-     * <p>When any projectile is launched in the world, this handler distributes the event to all
-     * active effects on all online players. Effects can use this to interact with projectiles,
-     * prevent launches, or trigger projectile-based mechanics.</p>
+     * Dispatch this event to every active effect on all players.
      *
      * @param event the projectile launch event
      */
@@ -754,11 +639,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Distribute projectile hit events to all active effects on all players.
-     *
-     * <p>When any projectile hits an entity or block, this handler distributes the event to all
-     * active effects on all online players. Effects can use this to intercept projectile impacts
-     * or trigger special mechanics when projectiles hit.</p>
+     * Dispatch this event to every active effect on all players.
      *
      * @param event the projectile hit event
      */
@@ -829,14 +710,10 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Get a list of all effect types currently active on a player.
-     *
-     * <p>Returns the effect type enumeration values for all active effects on the specified player.
-     * This returns only the effect types, not the actual O2Effect objects with their state and duration.
-     * Returns an empty list if the player has no active effects.</p>
+     * Get the types of all effects currently active on a player.
      *
      * @param pid the unique ID of the player
-     * @return a list of O2EffectType values for all active effects, empty if none
+     * @return the active effect types, empty if none
      */
     @NotNull
     public List<O2EffectType> getEffects(@NotNull UUID pid) {
@@ -846,15 +723,11 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Check if a player has a specific active effect.
-     *
-     * <p>Determines if a particular effect is currently active on the player. Only searches the
-     * player's active effects; saved effects for offline players are not checked. This method is
-     * useful for conditional logic that depends on specific magical effects being applied.</p>
+     * Check whether a player has a specific effect active. Saved effects for offline players are not checked.
      *
      * @param pid        the unique ID of the player to check
-     * @param effectType the specific effect type to look for
-     * @return true if the player has this effect active, false otherwise
+     * @param effectType the effect type to look for
+     * @return true if the player has this effect active
      */
     public boolean hasEffect(@NotNull UUID pid, @NotNull O2EffectType effectType) {
         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
@@ -863,54 +736,35 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Check if a player has any active effects.
-     *
-     * <p>Determines if a player currently has one or more active effects applied. This is a
-     * convenience method for checking if a player is affected by any magical effect without
-     * needing to check specific effect types. Only checks active effects; saved effects for
-     * offline players are not considered.</p>
+     * Check whether a player has any effect active. Saved effects for offline players are not considered.
      *
      * @param pid the unique ID of the player to check
-     * @return true if the player has any active effects, false if they have no active effects
+     * @return true if the player has any active effects
      */
     public boolean hasEffects(@NotNull UUID pid) {
         return !effectsData.getPlayerActiveEffects(pid).isEmpty();
     }
 
     /**
-     * Apply all saved effects when a player joins the server.
-     *
-     * <p>When a player logs back in, this method retrieves any effect objects that were saved
-     * when they logged out and re-adds them to the player via addEffect(). The saved effects
-     * are then cleared from persistent storage. Each saved effect retains its remaining duration
-     * from when it was saved, allowing players to have their effects restored exactly as they
-     * left them. This method is called by the player management system when a player enters
-     * the server.</p>
+     * Restore a joining player's saved effects (each keeping its remaining duration) and clear them from saved
+     * storage.
      *
      * @param pid the unique ID of the joining player
      */
     public synchronized void onJoin(@NotNull UUID pid) {
-        // find any saved effects for the player
         Map<O2EffectType, O2Effect> savedEffects = effectsData.getPlayerSavedEffects(pid);
         if (savedEffects.isEmpty())
             return;
 
-        // re-add them to the player
         for (O2Effect effect : savedEffects.values()) {
             addEffect(effect);
         }
 
-        // remove them from the saved effects list by updating saved effects with an empty list
         effectsData.updatePlayerSavedEffects(pid, new HashMap<>());
     }
 
     /**
-     * Save all active effects when a player quits the server.
-     *
-     * <p>When a player logs out, this method persists all their currently active effects to saved storage.
-     * Each active effect's type and remaining duration are recorded, allowing the effects to be
-     * restored when the player logs back in via the onJoin() method. Effects that have been killed will not be saved.
-     * This method is called by the player management system when a player leaves the server.</p>
+     * Save a departing player's active effects for restoration on rejoin.
      *
      * @param pid the unique ID of the departing player
      */
@@ -919,13 +773,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Move all active effects for a player to saved effects storage.
-     *
-     * <p>Transfers a player's currently active effects to the saved effects map, preserving their
-     * state and duration for offline storage. This is called during logout to persist effects that
-     * will be restored when the player rejoins. Only non-killed effects are saved; killed effects
-     * are filtered out to prevent restoring terminated effects. The active effects map is then cleared
-     * for the player, separating online and offline effect storage.</p>
+     * Move a player's active effects into saved storage, dropping any killed effects, and clear their active map.
      *
      * @param pid the unique ID of the player whose effects should be saved
      */
@@ -934,24 +782,18 @@ public class O2Effects implements Listener {
         if (activeEffects.isEmpty())
             return;
 
-        effectsData.updatePlayerSavedEffects(pid, activeEffects);
-
         HashMap<O2EffectType, O2Effect> savedEffects = new HashMap<>();
         for (Entry<O2EffectType, O2Effect> entry : activeEffects.entrySet()) {
             if (!entry.getValue().isKilled())
                 savedEffects.put(entry.getKey(), entry.getValue());
         }
 
-        effectsData.updatePlayerActiveEffects(pid, savedEffects);
+        effectsData.updatePlayerSavedEffects(pid, savedEffects);
+        effectsData.updatePlayerActiveEffects(pid, new HashMap<>());
     }
 
     /**
-     * Reset all effects when a player dies.
-     *
-     * <p>When a player dies, this method performs a complete cleanup of all their effects. All active
-     * effects are terminated by calling their kill() method, and both the active effects and saved effects
-     * are cleared. This ensures the player starts fresh with no lingering effects when they respawn.
-     * This method is called by the player management system when a player's death is processed.</p>
+     * Kill all of a dead player's active effects and discard their saved effects so they respawn clean.
      *
      * @param pid the unique ID of the deceased player
      */
@@ -960,13 +802,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Clean up the effects system when the plugin is disabled.
-     *
-     * <p>Called when the plugin is being shut down or unloaded by the server. This method persists
-     * all currently active effects to disk to ensure they are not lost if the server is restarted.
-     * All effects across all players (both online and offline) are serialized and saved to the effects
-     * JSON file via the saveEffects() method. This guarantees that the game state can be recovered
-     * when the plugin is re-enabled.</p>
+     * Persist all effects to disk when the plugin is disabled.
      */
     public void onDisable() {
         p.getLogger().info("Saving players effects.");
@@ -974,11 +810,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Persist all active and saved effects to disk in JSON format.
-     *
-     * <p>Serializes all magical effects currently active across all players (both online and offline)
-     * and writes them to the effects JSON file for persistent storage. This is typically called during
-     * server shutdown or periodic autosaves to ensure no effects are lost if the server crashes.</p>
+     * Serialize all active and saved effects across all players and write them to the effects JSON file.
      */
     public void saveEffects() {
         List<Map<String, String>> effects = serializeEffects();
@@ -988,12 +820,8 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Load all saved effects from disk on server startup.
-     *
-     * <p>Reads the effects JSON file and reconstructs all previously saved effects, restoring them to the
-     * game state. Each effect is deserialized and added back to its target player. If the file doesn't exist
-     * or is empty, logs an informational message and continues without error. This is called by onEnable()
-     * during server initialization.</p>
+     * Load saved effects from the effects JSON file and re-add them to their target players. No-op if the file is
+     * missing or empty.
      */
     public void loadEffects() {
         GsonDAO gsonLayer = new GsonDAO();
@@ -1019,22 +847,14 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Serialize all active and saved effects across all players in the game.
+     * Serialize every active and saved effect across all players into attribute maps for persistence.
      *
-     * <p>Converts all magical effects currently active on all online players and all saved effects
-     * for offline players into a serialized list format suitable for persistence and storage.
-     * Each effect is individually serialized into a map with its type and remaining duration as strings.
-     * This method iterates through all effect maps (both active and saved) and serializes each effect.
-     * This is typically called when saving global game state or during server shutdown to persist
-     * all active effects.</p>
-     *
-     * @return a list of serialized effect maps, where each map contains effect type and duration as strings
+     * @return one serialized attribute map per effect
      */
     @NotNull
     public List<Map<String, String>> serializeEffects() {
         List<Map<String, String>> serializedEffects = new ArrayList<>();
 
-        // get all effects
         List<Map<O2EffectType, O2Effect>> allEffects = getAllEffects();
         for (Map<O2EffectType, O2Effect> effectMap : allEffects) {
             for (O2Effect effect : effectMap.values()) {
@@ -1048,14 +868,10 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Get a list of all active and saved effects across all players.
+     * Get the effect map for every player: active effects if online, otherwise saved effects. A player never has
+     * both at once.
      *
-     * <p>Retrieves effect maps for all players in the game, returning either active effects
-     * for online players or saved effects for offline players. A player has either active
-     * or saved effects at any given time, never both. This is used for global serialization
-     * and persistence operations.</p>
-     *
-     * @return a list of effect maps, one per player, containing either active or saved effects
+     * @return one effect map per player
      */
     @NotNull
     private List<Map<O2EffectType, O2Effect>> getAllEffects() {
@@ -1077,19 +893,14 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Serialize a single effect to a string attribute map.
+     * Serialize a single effect to a string attribute map keyed by the effect serialization labels.
      *
-     * <p>Converts an O2Effect object into a map of string key-value pairs suitable for
-     * persistence. The map includes the effect type, target player ID, permanent status, and
-     * remaining duration. This is used during global serialization for saving effects to disk.</p>
-     *
-     * @param effect the O2Effect object to serialize (must not be null)
-     * @return a map of string attributes with keys: Effect_type, Effect_target_pid, Effect_is_permanent, Effect_duration
+     * @param effect the effect to serialize
+     * @return the effect's type, target id, permanent flag, and remaining duration as strings
      */
     private Map<String, String> serializeEffect(@NotNull O2Effect effect) {
         Map<String, String> effectAttributes = new HashMap<>();
 
-        // populate the map with all the effect data
         effectAttributes.put(effectTypeLabel, effect.effectType.toString());
         effectAttributes.put(effectPIDLabel, effect.getTargetID().toString());
         effectAttributes.put(effectPermanentLabel, Boolean.toString(effect.isPermanent()));
@@ -1099,15 +910,11 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Deserialize an effect from a string attribute map.
+     * Reconstruct an effect from a serialized attribute map. Returns null if any required field (type, target id,
+     * duration, permanent flag) is missing or invalid.
      *
-     * <p>Reconstructs an O2Effect object from its serialized string representation. Parses
-     * the effect type, target player ID, duration, and permanent status from the attribute map.
-     * All required fields must be present for successful deserialization; if any are missing or
-     * invalid, returns null. This is used when loading effects from persistent storage.</p>
-     *
-     * @param effectAttributes a map of effect attributes (type, PID, permanent flag, duration) expected keys: Effect_type, Effect_target_pid, Effect_is_permanent, Effect_duration
-     * @return the reconstructed O2Effect object, or null if deserialization fails due to missing or invalid fields
+     * @param effectAttributes the serialized effect attributes, keyed by the effect serialization labels
+     * @return the reconstructed effect, or null if deserialization fails
      */
     @Nullable
     public O2Effect deserializeEffect(@NotNull Map<String, String> effectAttributes) {
@@ -1144,18 +951,14 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Create an effect instance from saved data using reflection.
+     * Instantiate the effect class for the given type by reflection, invoking its standard constructor. Returns null
+     * if reflection fails.
      *
-     * <p>Dynamically instantiates an effect class using reflection based on the effect type.
-     * Calls the effect constructor with the provided parameters: plugin reference, duration in ticks,
-     * permanent flag, and target player ID. If instantiation fails due to missing constructor or
-     * other reflection errors, logs the error and returns null.</p>
-     *
-     * @param effectType  the O2EffectType enum value specifying which effect class to instantiate (must not be null)
-     * @param targetID    the unique ID of the player affected by this effect (must not be null)
-     * @param duration    the remaining duration of the effect in game ticks (must not be null)
-     * @param isPermanent true if the effect should not expire, false if it has a limited duration (must not be null)
-     * @return the instantiated O2Effect object, or null if creation fails due to reflection errors or invalid parameters
+     * @param effectType  the effect type to instantiate
+     * @param targetID    the unique ID of the affected player
+     * @param duration    the remaining duration in game ticks
+     * @param isPermanent whether the effect should not expire
+     * @return the instantiated effect, or null if creation fails
      */
     @Nullable
     private O2Effect createEffectFromSavedData(@NotNull O2EffectType effectType, @NotNull UUID targetID, @NotNull Integer duration, @NotNull Boolean isPermanent) {
@@ -1174,19 +977,12 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Add an effect to a player, applying effect stacking and configuration checks.
+     * Add an effect to its target player. Disabled effect types are silently rejected. If the target is offline the
+     * effect is saved for restoration on rejoin. A {@link ShapeShift} effect is rejected if the player already has
+     * one. Adding a type the player already has stacks the durations rather than replacing it. Any affected-player
+     * message is sent on a 5-tick delay.
      *
-     * <p>Applies a new effect to the player after verifying it is enabled via configuration. If the player
-     * already has the same effect type active, the durations are combined instead of replacing the effect,
-     * allowing effect stacking. Shape-shifting effects are mutually exclusive; if the player already has
-     * one shape-shifting effect, new shape-shifting effects are rejected. Once added, the effect is stored
-     * in the player's active effects map and processed on each game tick. If the effect has an affected player
-     * message, it is sent to the player with a 5-tick delay.</p>
-     *
-     * <p>This method is thread-safe and synchronized. Only enabled effects are added; disabled effects are
-     * silently rejected. Shape-shifting effects include transformations and other appearance-changing effects.</p>
-     *
-     * @param effect the O2Effect object to add to the player (must not be null)
+     * @param effect the effect to add
      */
     public synchronized void addEffect(@NotNull O2Effect effect) {
         if (!effect.effectType.isEnabled())
@@ -1205,25 +1001,22 @@ public class O2Effects implements Listener {
 
         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
 
-        // Prevent multiple shape-shifting effects: only one transformation allowed at a time
-        // Shape-shifting effects are mutually exclusive to prevent conflicting appearance changes
+        // shape-shift effects are mutually exclusive; reject a new one if the player already has any
         if (effect instanceof ShapeShift) {
             for (O2Effect ef : playerEffects.values()) {
                 if (ef instanceof ShapeShift) {
-                    return;  // Already has a shape-shift effect, reject this new one
+                    return;
                 }
             }
         }
 
         if (playerEffects.containsKey(effect.effectType)) {
-            // Effect stacking: if player already has this effect, combine durations
-            // This allows multiple casts of the same spell to extend the effect's duration
+            // stack durations rather than replacing an existing effect of the same type
             O2Effect ef = playerEffects.get(effect.effectType);
             effect.duration += ef.duration;
             playerEffects.replace(effect.effectType, effect);
         }
         else {
-            // New effect: add it to the player's active effects
             playerEffects.put(effect.effectType, effect);
         }
 
@@ -1249,13 +1042,9 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Add an effect to a player's saved effects for offline storage.
+     * Store an effect in an offline player's saved effects, to be restored on rejoin via {@link #onJoin(UUID)}.
      *
-     * <p>Stores an effect in the saved effects map for players who are currently offline.
-     * When the player rejoins the server, these saved effects will be restored via onJoin().
-     * This is called by addEffect() when a player is offline and an effect is applied to them.</p>
-     *
-     * @param effect the O2Effect object to save for the offline player (must not be null)
+     * @param effect the effect to save
      */
     private void addSavedEffect(@NotNull O2Effect effect) {
         UUID pid = effect.getTargetID();
@@ -1267,18 +1056,11 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Remove an effect from a player, cleaning up state and message handling.
-     *
-     * <p>Terminates an active effect on the player by calling its kill() method and executing its doRemove()
-     * cleanup logic. The effect is then removed from the player's active effects map. If the specified effect
-     * type is not found on the player, a debug message is logged but no error is thrown. This method is
-     * primarily called internally by the upkeep system when effects expire or are disabled via configuration.</p>
-     *
-     * <p>This method is thread-safe and synchronized. The effect's kill() and doRemove() methods handle any
-     * cleanup specific to that effect type (e.g., removing potion effects, restoring player appearance).</p>
+     * Remove an effect from a player: kill it, run its {@link O2Effect#doRemove()} cleanup, and drop it from the
+     * active map. No-op (with a debug log) if the player does not have the effect.
      *
      * @param pid        the unique ID of the player whose effect should be removed
-     * @param effectType the type of effect to remove from the player
+     * @param effectType the type of effect to remove
      */
     public synchronized void removeEffect(@NotNull UUID pid, @NotNull O2EffectType effectType) {
         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
@@ -1298,36 +1080,22 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Get an active effect object for a player by effect type.
+     * Get the active effect object of a given type on a player, for direct access to its state and duration.
      *
-     * <p>Retrieves the O2Effect object for a specific effect type that is currently active on the player.
-     * This allows direct access to the effect's state, duration, and other properties. Returns null if the
-     * player does not have the specified effect type active. This method is thread-safe and synchronized
-     * to prevent race conditions when accessing effect objects.</p>
-     *
-     * @param pid        the unique ID of the player whose effect should be retrieved
+     * @param pid        the unique ID of the player
      * @param effectType the type of effect to get
-     * @return the O2Effect object if the effect is active on the player, null if not found
-     * @see #hasEffect(UUID, O2EffectType) for checking if an effect exists without retrieving the object
+     * @return the active effect, or null if the player does not have it
+     * @see #hasEffect(UUID, O2EffectType) for a presence check without retrieving the object
      */
     public synchronized O2Effect getEffect(@NotNull UUID pid, @NotNull O2EffectType effectType) {
         return effectsData.getActiveEffect(pid, effectType);
     }
 
     /**
-     * Process game heartbeat upkeep for all effects on a player.
-     *
-     * <p>Runs the periodic game tick processing for all active effects on the specified player. This method
-     * calls checkEffect() on each active effect to allow them to perform their per-tick logic and update
-     * their state. After checking, any effects that have been killed or are no longer enabled are automatically
-     * removed via removeEffect(). This method is called once per game tick for each online player by the
-     * OllivandersScheduler to keep effects synchronized with the server heartbeat.</p>
-     *
-     * <p>Note: This method only processes online players; effects for offline players are stored and restored
-     * when the player rejoins via onJoin().</p>
+     * Run one tick of upkeep for a player's active effects: call {@link O2Effect#checkEffect()} on each, then
+     * remove any that are killed or whose type has been disabled.
      *
      * @param pid the unique ID of the player whose effects should be processed
-     * @see #removeEffect(UUID, O2EffectType) for effect removal during upkeep
      */
     public void upkeep(@NotNull UUID pid) {
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
@@ -1341,15 +1109,10 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Reduce the duration of all non-permanent effects on a player by a specified amount.
-     *
-     * <p>Decrements the duration of every non-permanent effect currently active on the player by the given
-     * amount. Permanent effects are skipped and remain unaffected. This is commonly used during the game
-     * heartbeat to age all effects by the number of ticks that have passed since the last update. If an
-     * effect's duration reaches zero or below, it will be removed during the next upkeep cycle.</p>
+     * Age every non-permanent effect on a player by the given number of ticks; permanent effects are skipped.
      *
      * @param pid    the unique ID of the player whose effects should be aged
-     * @param amount the number of ticks to subtract from all non-permanent effect durations
+     * @param amount the number of ticks to subtract from each non-permanent effect's duration
      * @see #ageEffect(UUID, O2EffectType, int) for aging a specific effect
      * @see #ageEffectByPercent(UUID, O2EffectType, int) for aging by percentage instead of absolute amount
      */
@@ -1366,17 +1129,12 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Reduce the duration of a specific effect on a player by a specified amount.
-     *
-     * <p>Decrements the duration of a specific effect currently active on the player by the given amount.
-     * The effect is located by its type, and if found, its duration is directly reduced. If the effect is not
-     * found, this method does nothing. The effect map is updated after the duration change. If the effect's
-     * duration reaches zero or below, it will be removed during the next upkeep cycle.</p>
+     * Age a specific effect on a player by the given number of ticks. No-op if the player does not have it.
+     * Unlike {@link #ageAllEffects(UUID, int)}, this does not skip permanent effects.
      *
      * @param pid        the unique ID of the player whose effect should be aged
      * @param effectType the type of effect to age
      * @param amount     the number of ticks to subtract from the effect's duration
-     * @see #ageAllEffects(UUID, int) for aging all effects at once
      * @see #ageEffectByPercent(UUID, O2EffectType, int) for aging by percentage instead of absolute amount
      */
     public void ageEffect(@NotNull UUID pid, @NotNull O2EffectType effectType, int amount) {
@@ -1391,28 +1149,16 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Reduce the duration of a specific effect on a player by a percentage of its current duration.
-     *
-     * <p>Decrements the duration of a specific effect by reducing it based on a percentage of its current
-     * value. The calculation works as follows:</p>
-     * <ul>
-     * <li>Reduction amount = current duration × (percent / 100)</li>
-     * <li>New duration = current duration - reduction amount</li>
-     * </ul>
-     *
-     * <p>The percent parameter is clamped to a minimum of 1; values less than 1 are set to 1.
-     * Values of 100 or greater completely set the duration to 0. Permanent effects are skipped and remain
-     * unaffected. If the effect is not found on the player, this method does nothing. If the effect's
-     * duration reaches zero or below after percentage reduction, it will be removed during the next upkeep cycle.</p>
+     * Age a specific effect on a player by a percentage of its current duration. Permanent effects are skipped, and
+     * a missing effect is a no-op. {@code percent} is clamped to a minimum of 1; a value of 100 or more sets the
+     * duration to 0.
      *
      * @param pid        the unique ID of the player whose effect should be aged
      * @param effectType the type of effect to age by percentage
-     * @param percent    the percentage of the effect's current duration to subtract (clamped to minimum 1,
-     *                   values ≥ 100 completely remove the effect)
+     * @param percent    the percentage of the current duration to subtract
      * @see #ageEffect(UUID, O2EffectType, int) for aging by absolute amount instead of percentage
      */
     public void ageEffectByPercent(@NotNull UUID pid, @NotNull O2EffectType effectType, int percent) {
-        // Setting minimum percent to 1 to ensure at least some reduction occurs
         if (percent < 1)
             percent = 1;
 
@@ -1422,12 +1168,9 @@ public class O2Effects implements Listener {
 
             if (!effect.isPermanent()) {
                 if (percent >= 100) {
-                    // Full reduction: completely remove the effect (percent >= 100 means at least 100% reduction)
                     effect.duration = 0;
                 }
                 else {
-                    // Partial reduction: calculate the percentage of duration to subtract
-                    // Example: duration=100, percent=25 => reduction = 100 * (25/100) = 25 ticks
                     double durationDouble = effect.duration;
                     double percentReduction = ((double) percent / 100);
 
@@ -1441,17 +1184,11 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Get the detection text for an active effect that can be detected by the Informous spell.
+     * Get the Informous detection text of the first Informous-detectable effect active on a player.
      *
-     * <p>Searches through all active effects on the player to find the first one that has detectable
-     * information for the Informous spell. Each effect can define informousText that describes what a
-     * caster would learn about it when using Informous. Only the first detectable effect found is returned.
-     * If no active effects have informousText configured, this method returns null. This is commonly used
-     * by the INFORMOUS spell to provide intelligence about what effects are on a target player.</p>
-     *
-     * @param pid the unique ID of the player to check for detectable effects
-     * @return the informousText of the first detectable effect found, or null if no detectable effects exist
-     * @see #detectEffectWithLegilimens(UUID) for mind-reading detection via Legilimens spell
+     * @param pid the unique ID of the player to check
+     * @return the informousText of the first detectable effect, or null if none is detectable
+     * @see #detectEffectWithLegilimens(UUID) for Legilimens detection
      * @see net.pottercraft.ollivanders2.spell.INFORMOUS for the spell that uses this method
      */
     @Nullable
@@ -1477,18 +1214,12 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Detect an active effect on the target player using mind-reading perception.
+     * Get the Legilimens detection text of the first Legilimens-detectable effect active on a player.
      *
-     * <p>Searches for detectable magical effects affecting the target player for the LEGILIMENS
-     * (mind-reading) spell. Returns the {@code legilimensText} property of the first active effect
-     * that has detectable mental traces. This method is used by the LEGILIMENS spell to provide
-     * intelligence about the target player's condition, revealing hidden effects that can be
-     * mentally perceived. Returns null if the target has no mentally-detectable effects.</p>
-     *
-     * @param pid the unique ID of the player to probe for detectable effects
-     * @return the mental perception text of the first detectable effect, or null if no mentally-detectable effects are found
-     * @see #detectEffectWithInformous(UUID) for information gathering detection via Informous spell
-     * @see net.pottercraft.ollivanders2.spell.LEGILIMENS for the mind-reading spell using this detection
+     * @param pid the unique ID of the player to probe
+     * @return the legilimensText of the first detectable effect, or null if none is detectable
+     * @see #detectEffectWithInformous(UUID) for Informous detection
+     * @see net.pottercraft.ollivanders2.spell.LEGILIMENS for the spell that uses this method
      */
     @Nullable
     public String detectEffectWithLegilimens(@NotNull UUID pid) {
@@ -1510,29 +1241,15 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handle the /ollivanders2 effect admin command for effect toggling.
+     * Handle the {@code /ollivanders2 effect <effect_name> [player_name]} admin command, toggling the named effect on
+     * the sender or the named player. Requires the {@code Ollivanders2.admin} permission.
      *
-     * <p>Processes the effect subcommand for administrative management of magical effects on players.
-     * The command requires admin permission (Ollivanders2.admin) and can be used to toggle effects
-     * on the command sender or a specified target player. The effect is toggled: if the effect is
-     * currently applied to the target player, it is removed; if not applied, a new effect instance
-     * is created and applied with a 60-second duration.</p>
-     *
-     * <p>Command Syntax and Behavior:</p>
-     * <ul>
-     * <li>/ollivanders2 effect effect_name - toggles the named effect on the command sender</li>
-     * <li>/ollivanders2 effect effect_name player_name - toggles the named effect on the specified player</li>
-     * <li>Effect names are case-insensitive and must match a valid O2EffectType enum constant</li>
-     * <li>Only enabled effects (configured in server config) can be applied</li>
-     * <li>Sends feedback messages confirming the action or explaining errors</li>
-     * </ul>
-     *
-     * @param sender the player issuing the command (must have Ollivanders2.admin permission)
+     * @param sender the player issuing the command
      * @param args   the command arguments: [effect_name] or [effect_name, player_name]
-     * @param p      a callback to the Ollivanders2 plugin for server access
-     * @return true if the command was processed successfully (even if effect toggle failed), false if sender lacks permission or wrong argument count
-     * @see #toggleEffect(CommandSender, Player, O2EffectType, Ollivanders2) for the effect toggle mechanism
-     * @see #commandUsage(CommandSender) for command syntax documentation
+     * @param p      a callback to the plugin
+     * @return false if the sender is not a player, lacks permission, or gave the wrong argument count; true otherwise,
+     *         including when the effect name or target player is invalid
+     * @see #toggleEffect(CommandSender, Player, O2EffectType, Ollivanders2)
      */
     public static boolean runCommand(@NotNull CommandSender sender, @NotNull String[] args, @NotNull Ollivanders2 p) {
         if (!(sender instanceof Player))
@@ -1573,23 +1290,13 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Toggle an effect on or off for a player via admin command.
+     * Toggle an effect on a player: remove it if present, otherwise apply a fresh instance with a 60-second (1200
+     * tick) duration. Disabled effect types are rejected. Status and error messages are sent to the admin.
      *
-     * <p>Performs the actual effect toggling logic for the effect admin command. If the player
-     * already has the specified effect active, it is removed and the admin is notified. If the
-     * player does not have the effect, a new effect instance is created with a 60-second duration
-     * (1200 ticks) and applied to the player. Only enabled effects can be added; disabled effects
-     * fail with an informative error message. Success and error messages are sent to the admin
-     * with color formatting.</p>
-     *
-     * <p>Effect Creation: Uses reflection to dynamically instantiate the appropriate effect class
-     * and applies it via the playerEffects system. Debug logging is performed if server debug mode
-     * is enabled.</p>
-     *
-     * @param sender     the admin that issued the command (receives status messages)
+     * @param sender     the admin that issued the command
      * @param player     the target player whose effect should be toggled
-     * @param effectType the effect type to toggle on or off
-     * @param p          a callback to the Ollivanders2 plugin for class instantiation and logging
+     * @param effectType the effect type to toggle
+     * @param p          a callback to the plugin
      * @see #runCommand(CommandSender, String[], Ollivanders2) for the command entry point
      */
     private static void toggleEffect(@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p) {
@@ -1624,16 +1331,10 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Display the effect command syntax and usage help to an admin.
+     * Send the effect subcommand usage help to the sender.
      *
-     * <p>Sends formatted help text to the command sender displaying the complete syntax for the
-     * effect subcommand. Two usage patterns are shown: toggling an effect on the command sender
-     * themselves, and toggling an effect on a specified target player. This is typically called
-     * when the command is invoked with invalid arguments.</p>
-     *
-     * @param sender the admin requesting the usage help or receiving syntax error feedback
-     * @return always true to indicate the command was processed
-     * @see #runCommand(CommandSender, String[], Ollivanders2) for the command that calls this method
+     * @param sender the recipient of the usage help
+     * @return always true, to indicate the command was handled
      */
     public static boolean commandUsage(@NotNull CommandSender sender) {
         sender.sendMessage(Ollivanders2.chatColor
@@ -1644,14 +1345,8 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Remove all active and saved effects from all players system-wide.
-     *
-     * <p>Clears all effects from both the active effects list (online players) and saved effects
-     * list (offline players), performing a complete global reset of the effects system. This is a
-     * destructive operation that should only be used in specific contexts: test cleanup to reset game
-     * state between test runs, or during server-wide game resets where all effects must be wiped.
-     * This method logs a debug message when invoked and delegates to the internal EffectsData.killAllEffects()
-     * method for the actual cleanup.</p>
+     * Kill all active effects and discard all saved effects for every player. Destructive global reset, intended for
+     * test cleanup or server-wide resets.
      */
     public void removeAllEffects() {
         common.printDebugMessage("Removing all effects from all players", null, null, false);

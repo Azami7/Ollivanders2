@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for O2Book.java
+ * Unit tests for {@link O2Book}.
  */
 public class O2BookTest {
     static World testWorld;
@@ -40,7 +40,6 @@ public class O2BookTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
 
-        // set up world
         testWorld = mockServer.addSimpleWorld("world");
     }
 
@@ -269,7 +268,6 @@ public class O2BookTest {
         BOOK_OF_POTIONS book = new BOOK_OF_POTIONS(testPlugin);
         BookMeta meta = (BookMeta) book.getBookItem().getItemMeta();
 
-        // Find page with opening text
         boolean found = false;
         for (int i = 1; i <= meta.getPageCount(); i++) {
             if (meta.getPage(i).contains("young potioneer")) {

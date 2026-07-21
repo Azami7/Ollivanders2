@@ -7,24 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Night vision potion effect that allows the player to see clearly in darkness.
- *
- * <p>NIGHT_VISION applies Minecraft's NIGHT_VISION potion effect to enhance the target player's
- * vision in dark environments. The effect allows the player to see clearly as if it were daytime,
- * even in complete darkness or underground. The effect is powered by the Minecraft potion effect
- * system with strength (amplifier) set to 1. The effect is detectable by both mind-reading spells
- * (Legilimens) and information spells (Informous) which report the target "can see in darkness".</p>
+ * Applies Minecraft's night vision potion effect so the player can see clearly in darkness. Detectable via Informous
+ * and Legilimens as "can see in darkness".
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
+ * @see PotionEffect
  */
 public class NIGHT_VISION extends PotionEffect {
     /**
-     * Constructor for creating a night vision potion effect.
-     *
-     * <p>Creates a potion effect that enhances the target player's vision in darkness using
-     * Minecraft's NIGHT_VISION potion effect type. Sets detection text for both mind-reading spells
-     * (Legilimens) and information spells (Informous) to "can see in darkness".</p>
+     * Constructor.
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -43,13 +34,6 @@ public class NIGHT_VISION extends PotionEffect {
         informousText = legilimensText = "can see in darkness";
     }
 
-    /**
-     * Perform cleanup when the night vision effect is removed.
-     *
-     * <p>The default implementation does nothing, as NIGHT_VISION is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the player's vision returns to normal.</p>
-     */
     @Override
     public void doRemove() {
     }

@@ -17,19 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for HARMONIA_NECTERE_PASSUS spell functionality.
- *
- * <p>Tests the vanishing cabinet creation spell including:
- * <ul>
- * <li>Successful creation of paired vanishing cabinets</li>
- * <li>Prevention of duplicate cabinets at the same location</li>
- * <li>Validation that target block is a sign</li>
- * <li>Validation that sign contains valid destination coordinates</li>
- * <li>Prevention of cabinets that point to themselves</li>
- * </ul>
- *
- * <p>Each test validates that the spell either succeeds in creating stationary spells
- * or correctly fails when requirements are not met.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.HARMONIA_NECTERE_PASSUS}, the vanishing cabinet charm.
  *
  * @author Azami7
  */
@@ -40,20 +28,9 @@ public class HarmoniaNecterePassusTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test vanishing cabinet creation and failure conditions.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Spell successfully creates paired vanishing cabinets when signs are properly configured</li>
-     * <li>Spell fails (no stationary spell created) when:
-     *   <ul>
-     *   <li>A vanishing cabinet already exists at the location</li>
-     *   <li>Target block is not a sign</li>
-     *   <li>Sign lacks valid destination coordinates</li>
-     *   <li>Sign points to the same location (from and to are identical)</li>
-     *   </ul>
-     * </li>
-     * </ul>
+     * Cover the success path and every failure gate: cabinets are created when both signs are configured, and no
+     * stationary spell is created when a cabinet already exists there, the target is not a sign, the sign lacks valid
+     * coordinates, or the sign points to its own location.
      */
     @Override
     @Test

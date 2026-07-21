@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed">https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed">Jinxes for the Jinxed</a>
  */
 public class JINXES_FOR_THE_JINXED extends O2Book {
     /**

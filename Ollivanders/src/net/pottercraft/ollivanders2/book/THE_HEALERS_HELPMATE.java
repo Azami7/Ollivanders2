@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate">https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate">The Healer's Helpmate</a>
  */
 public class THE_HEALERS_HELPMATE extends O2Book {
     /**

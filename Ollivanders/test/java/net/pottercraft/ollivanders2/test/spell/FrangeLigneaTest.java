@@ -106,7 +106,7 @@ public class FrangeLigneaTest extends O2SpellTestSuper {
     /**
      * Test that the number of coreless wands created scales with caster experience.
      * <p>
-     * The amount is calculated as usesModifier * 0.1, clamped between 1 and maxAmount.
+     * The amount is calculated as usesModifier * 0.1, limited between 1 and maxAmount.
      * </p>
      * <ul>
      *   <li>Experience 1: Creates 1 coreless wand (minimum)</li>

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://en.wikipedia.org/wiki/Tetrabiblos">https://en.wikipedia.org/wiki/Tetrabiblos</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Tetrabiblos">Tetrabiblos</a>
  */
 public class TETRABIBLIOS extends O2Book {
     /**

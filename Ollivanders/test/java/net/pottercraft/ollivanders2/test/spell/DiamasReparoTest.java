@@ -14,24 +14,19 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link DIAMAS_REPARO} spell, the stronger Mending Charm for diamond and netherite items.
- *
- * <p>Inherits the shared repair and skip-path coverage from {@link ReparoBaseTest}, supplying the
- * DIAMAS_REPARO spell type and a netherite tool as the repair target, and adds a check that the spell's
- * overridden repair bounds are stronger than the base {@link net.pottercraft.ollivanders2.spell.REPARO}.</p>
+ * Unit tests for {@link DIAMAS_REPARO}. Extends {@link ReparoBaseTest} for the shared repair and skip-path tests,
+ * supplying a netherite tool as the repair target, plus a check that its overridden repair bounds are stronger than
+ * base {@link net.pottercraft.ollivanders2.spell.REPARO}.
  *
  * @author Azami7
- * @see DIAMAS_REPARO
  */
 public class DiamasReparoTest extends ReparoBaseTest {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.DIAMAS_REPARO;
     }
 
-    /** {@inheritDoc} */
     @Override
     @NotNull
     Material getRepairableMaterial() {
@@ -39,12 +34,9 @@ public class DiamasReparoTest extends ReparoBaseTest {
     }
 
     /**
-     * Verifies that DIAMAS_REPARO repairs more than the base Mending Charm.
-     *
-     * <p>Confirms the field overrides in the casting constructor actually take effect by comparing this
-     * spell's repair bounds against a base REPARO cast under identical conditions - both the minimum and
-     * maximum repair amounts must be larger for the stronger variant. Comparing live instances avoids
-     * hard-coding the production bound values.</p>
+     * Verify DIAMAS_REPARO's min and max repair bounds are both larger than a base REPARO cast under identical
+     * conditions, confirming the constructor's field overrides take effect. Compares live instances rather than
+     * hard-coding the production bound values.
      */
     @Test
     void strongerThanReparoTest() {

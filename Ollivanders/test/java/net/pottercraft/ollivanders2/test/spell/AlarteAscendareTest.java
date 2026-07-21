@@ -14,16 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for ALARTE_ASCENDARE spell functionality.
- *
- * <p>Tests the winged-ascent charm including:</p>
- * <ul>
- * <li>Velocity calculation based on caster experience (up = usesModifier / 20)</li>
- * <li>Velocity clamping to min/max bounds</li>
- * <li>Only Y-axis velocity modification (X and Z remain 0)</li>
- * <li>Entity targeting and velocity addition</li>
- * <li>Projectile stopping on entity hit or solid block hit</li>
- * </ul>
+ * Unit tests for {@link ALARTE_ASCENDARE}. Extends {@link KnockbackTest} for the shared knockback tests.
  *
  * @author Azami7
  */

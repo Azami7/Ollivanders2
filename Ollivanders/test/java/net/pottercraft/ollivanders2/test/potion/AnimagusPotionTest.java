@@ -24,37 +24,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the Animagus Potion effect.
- *
- * <p>Verifies that the Animagus Potion correctly grants the ANIMAGUS_EFFECT to players who meet
- * specific conditions: they must have the ANIMAGUS_INCANTATION effect and the weather must be
- * thundering. Tests multiple scenarios including failure cases (missing incantation or wrong weather)
- * and success cases (all conditions met). Also tests behavior when a player is already an animagus.</p>
+ * Unit tests for {@link ANIMAGUS_POTION}.
  */
 public class AnimagusPotionTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded once before all tests with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -62,21 +44,13 @@ public class AnimagusPotionTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test the Animagus Potion's effect under various conditions.
-     *
-     * <p>This comprehensive test verifies four distinct scenarios:</p>
-     * <ol>
-     *   <li><b>No incantation:</b> Player without ANIMAGUS_INCANTATION receives failure message and no effect</li>
-     *   <li><b>Wrong weather:</b> Player with ANIMAGUS_INCANTATION but no thunder receives failure message and no effect</li>
-     *   <li><b>Success:</b> Player with ANIMAGUS_INCANTATION during thundering weather receives success message,
-     *       gains ANIMAGUS_EFFECT, and loses ANIMAGUS_INCANTATION</li>
-     *   <li><b>Already animagus:</b> Player who is already an animagus receives the already-animagus message</li>
-     * </ol>
+     * Drinking grants ANIMAGUS_EFFECT only with the ANIMAGUS_INCANTATION effect and thundering weather; otherwise the
+     * drinker gets a failure message, and an existing animagus gets the already-animagus message.
      */
     @Test
     void drinkTest() {
@@ -124,13 +98,6 @@ public class AnimagusPotionTest {
         assertEquals(potion.getAlreadyAnimagusMessage(), TestCommon.cleanChatMessage(potionMessage), "Player2 did not get already animagus message");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

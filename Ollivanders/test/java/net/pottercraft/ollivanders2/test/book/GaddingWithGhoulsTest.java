@@ -5,14 +5,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Unit tests for GADDING_WITH_GHOULS that focus on Minecraft book constraints.
- * <p>
- * Minecraft Book Limits:<br>
- * - Title: 32 characters max<br>
- * - Pages: 50 max<br>
- * - Characters per page: 256 max (newlines count as 2)<br>
- * - Lines per page: 14 max<br>
- * </p>
+ * Unit tests for {@link GADDING_WITH_GHOULS}.
  */
 public class GaddingWithGhoulsTest extends BookTestSuper {
     @Override @BeforeEach

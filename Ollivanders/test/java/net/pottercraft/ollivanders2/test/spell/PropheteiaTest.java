@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see net.pottercraft.ollivanders2.spell.PROPHETEIA
  */
 public class PropheteiaTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -47,10 +46,7 @@ public class PropheteiaTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell reveals a target's pending prophecy to nearby players.
-     *
-     * <p>Registers a prophecy about the target, casts the spell at the target, and confirms the prophecy text is
-     * broadcast to the caster (who is within the broadcast radius) and that the spell resolves.</p>
+     * Verify the spell broadcasts a target's pending prophecy to nearby players (including the caster) and resolves.
      */
     @Override
     @Test
@@ -77,10 +73,7 @@ public class PropheteiaTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell reports nothing found when the target has no pending prophecy.
-     *
-     * <p>With no prophecy registered for the target, the (test-forced) success roll still passes but
-     * {@code getProphecy} returns null, so the caster is told that nothing was discovered.</p>
+     * Verify that when the target has no pending prophecy the caster is told that nothing was discovered.
      */
     @Test
     void noProphecyTest() {
@@ -102,7 +95,6 @@ public class PropheteiaTest extends O2SpellTestSuper {
         assertTrue(TestCommon.cleanChatMessage(messages).contains("do not discover"), "caster was not told that nothing was discovered");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

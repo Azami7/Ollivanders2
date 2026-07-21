@@ -36,7 +36,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration {
     /**
      * Minimum effect radius for PYROSVESTIRAS (1 block).
      *
-     * <p>The spell's radius is clamped to not go below this value, ensuring a minimum
+     * <p>The spell's radius is limited to not go below this value, ensuring a minimum
      * area of effect even at low skill levels.</p>
      */
     private static final int minRadiusConfig = 1;
@@ -44,7 +44,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration {
     /**
      * Maximum effect radius for PYROSVESTIRAS (10 blocks).
      *
-     * <p>The spell's radius is clamped to not exceed this value, establishing an upper
+     * <p>The spell's radius is limited to not exceed this value, establishing an upper
      * bound on the area of effect even at maximum skill levels.</p>
      */
     private static final int maxRadiusConfig = 10;
@@ -136,7 +136,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration {
      * adjust the radius based on the caster's spell skill. The radius is calculated as:
      * <code>radius = usesModifier / 10</code></p>
      *
-     * <p>The calculated radius is clamped to [minEffectRadius, maxEffectRadius].</p>
+     * <p>The calculated radius is limited to [minEffectRadius, maxEffectRadius].</p>
      *
      * <p>Note: PYROSVESTIRAS does not use an effectRadiusModifier; the formula is always
      * (usesModifier / 10).</p>

@@ -457,7 +457,7 @@ public enum O2ItemType {
     }
 
     /**
-     * get the name of this item
+     * Get the name of this item.
      *
      * @return the name of this item
      */
@@ -467,9 +467,9 @@ public enum O2ItemType {
     }
 
     /**
-     * get the lore for this item
+     * Get the lore for this item, falling back to its name when it has none.
      *
-     * @return the lore for this item or its name if there is no lore
+     * @return the lore, or the item name if there is no lore
      */
     @NotNull
     public String getLore() {
@@ -480,7 +480,7 @@ public enum O2ItemType {
     }
 
     /**
-     * get the material for this item
+     * Get the material for this item.
      *
      * @return the material type for this item
      */
@@ -490,9 +490,9 @@ public enum O2ItemType {
     }
 
     /**
-     * get the enchantment on this item
+     * Get the enchantment on this item.
      *
-     * @return the enchantment for this item if there is one, null otherwise
+     * @return the enchantment for this item, or null if it has none
      */
     @Nullable
     public ItemEnchantmentType getItemEnchantment() {
@@ -580,17 +580,14 @@ public enum O2ItemType {
         if (meta == null)
             return null;
 
-        // set name
         meta.setDisplayName(name);
 
-        // set lore
         if (lore != null) {
             ArrayList<String> itemLore = new ArrayList<>();
             itemLore.add(getLore());
             meta.setLore(itemLore);
         }
 
-        // if potion, set potion meta
         if (material == Material.POTION) {
             meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
             if (color != null)
@@ -599,13 +596,12 @@ public enum O2ItemType {
                 ((PotionMeta) meta).setColor(Color.WHITE);
         }
 
-        // add custom NBT tag
+        // tag the item with its type so it can be identified later via NBT
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(O2Items.o2ItemTypeKey, PersistentDataType.STRING, name);
 
         o2Item.setItemMeta(meta);
 
-        // apply enchantment if this item type has one
         if (itemEnchantment != null) {
             String eid = TimeCommon.getCurrentTimestamp() + " " + name + " " + itemEnchantment.getName();
             Ollivanders2API.getItems().enchantedItems.addEnchantedItem(o2Item, itemEnchantment, 1, eid, "");

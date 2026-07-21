@@ -9,27 +9,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Wit-Sharpening Potion - enhances mental clarity and learning ability.
- *
- * <p>When consumed, this potion applies the IMPROVED_BOOK_LEARNING effect to the player,
- * significantly enhancing their ability to learn from books and magical instruction. The potion
- * allows the drinker to think more clearly and comprehend complex information more easily. This
- * makes it useful for studying spells, potions, and other magical knowledge from books.</p>
- *
- * <p>The enhanced clarity and learning ability serve as a counteragent to confusion effects, helping
- * players overcome mental fog and disorientation. This potion is particularly valuable for
- * accelerating learning and improving study effectiveness.</p>
+ * Wit-Sharpening Potion — applies the IMPROVED_BOOK_LEARNING effect, enhancing the drinker's learning ability.
  *
  * @author Azami7
  */
 public final class WIT_SHARPENING_POTION extends O2Potion {
     /**
-     * Constructor for Wit-Sharpening Potion.
-     *
-     * <p>Initializes the potion with its ingredients (Ginger Root, Ground Scarab Beetle, Armadillo
-     * Bile, and Standard Potion Ingredients), description text, flavor text, and potion color.
-     * Sets up the IMPROVED_BOOK_LEARNING effect that will be applied when the potion is consumed
-     * to enhance mental clarity and learning ability.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -52,12 +38,7 @@ public final class WIT_SHARPENING_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Wit-Sharpening Potion and enhance mental clarity.
-     *
-     * <p>Applies the IMPROVED_BOOK_LEARNING effect to the player for the default potion duration.
-     * This effect enhances the player's ability to learn from books and magical instruction,
-     * allowing them to understand complex concepts more easily and gain knowledge more quickly.
-     * The improved mental clarity helps overcome confusion and improves cognitive function.</p>
+     * Apply the IMPROVED_BOOK_LEARNING effect to the drinker and send the success message.
      *
      * @param player the player who drank the potion
      */

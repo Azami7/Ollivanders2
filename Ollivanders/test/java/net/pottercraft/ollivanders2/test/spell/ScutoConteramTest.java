@@ -19,17 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link SCUTO_CONTERAM} shield-penetration spell.
- *
- * <p>Verifies that the spell destroys shield stationary spells at or below its magic level (NEWT), leaves stronger
- * shields and non-shield stationary spells intact, resolves on first contact, and that the number of targets scales
- * with caster skill down to a floor of one.</p>
+ * Unit tests for {@link SCUTO_CONTERAM}, the shield-penetration spell.
  *
  * @author Azami7
- * @see SCUTO_CONTERAM
  */
 public class ScutoConteramTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -45,11 +39,8 @@ public class ScutoConteramTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell destroys a shield at or below its magic level that lies in its path.
-     *
-     * <p>MUFFLIATO is a NEWT-level shield in the {@code O2StationarySpellType} scale that SCUTO_CONTERAM's level is
-     * compared against, so it is eligible to be destroyed. After the projectile reaches the shield the shield must be
-     * killed and the spell resolved.</p>
+     * Verify the spell destroys a shield at or below its magic level in its path (MUFFLIATO, a NEWT-level shield) and
+     * resolves.
      */
     @Override
     @Test
@@ -70,10 +61,8 @@ public class ScutoConteramTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that a shield stronger than the spell's magic level is left intact.
-     *
-     * <p>PROTEGO_HORRIBILIS is an EXPERT-level {@code ShieldSpell}, above SCUTO_CONTERAM's NEWT level, so it must
-     * survive even though the spell still resolves (consuming its attempt) on contact.</p>
+     * Verify a shield above the spell's level (PROTEGO_HORRIBILIS, EXPERT) survives, while the spell still resolves,
+     * consuming its attempt.
      */
     @Test
     void higherLevelShieldNotDestroyedTest() {
@@ -93,10 +82,8 @@ public class ScutoConteramTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that a non-shield stationary spell is not destroyed.
-     *
-     * <p>COLLOPORTUS is not a {@code ShieldSpell}, so it must be left intact; the spell still resolves on contact (its
-     * attempt is spent, but nothing is destroyed).</p>
+     * Verify a non-ShieldSpell stationary spell (COLLOPORTUS) is left intact while the spell still resolves, spending
+     * its attempt without destroying anything.
      */
     @Test
     void nonShieldNotDestroyedTest() {
@@ -116,10 +103,8 @@ public class ScutoConteramTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that a high-skill cast destroys multiple eligible shields stacked at the same location.
-     *
-     * <p>With enough skill that more than one target is available, two overlapping eligible shields are both
-     * destroyed in the single contact tick.</p>
+     * Verify a high-skill cast (more than one target available) destroys two overlapping eligible shields in a single
+     * contact tick.
      */
     @Test
     void multipleShieldsTest() {
@@ -143,10 +128,8 @@ public class ScutoConteramTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the target count scales with caster skill and is floored at one.
-     *
-     * <p>The count is read from the spell immediately after creation (before it resolves). A very low experience must
-     * floor to a single target, and a high experience must yield more than one.</p>
+     * Verify the target count (read immediately after creation) floors to one at very low skill and exceeds one at
+     * high skill.
      */
     @Test
     void targetsRemainingTest() {
@@ -164,7 +147,6 @@ public class ScutoConteramTest extends O2SpellTestSuper {
         assertTrue(high.getTargetsRemaining() > 1, "high-skill cast should target more than one shield");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

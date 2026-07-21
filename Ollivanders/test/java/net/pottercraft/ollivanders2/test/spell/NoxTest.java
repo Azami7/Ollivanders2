@@ -16,10 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link NOX} spell (Wand-Extinguishing Charm).
- *
- * <p>Verifies NOX-specific behavior including Night Vision removal and effect radius
- * clamping to {@link LUMOS} bounds.</p>
+ * Unit tests for {@link NOX}. Extends {@link RemovePotionEffectTest} for the shared potion-removal tests.
  */
 public class NoxTest extends RemovePotionEffectTest {
     @Override
@@ -34,10 +31,7 @@ public class NoxTest extends RemovePotionEffectTest {
     }
 
     /**
-     * Test that NOX effect radius is clamped to LUMOS radius bounds.
-     *
-     * <p>Verifies the radius stays within [{@link LUMOS#minEffectRadiusConfig},
-     * {@link LUMOS#maxEffectRadiusConfig}] at low, mid, and mastery experience levels.</p>
+     * Verify NOX's effect radius stays within LUMOS's bounds across low, mid, and mastery experience levels.
      */
     @Test
     void effectRadiusTest() {

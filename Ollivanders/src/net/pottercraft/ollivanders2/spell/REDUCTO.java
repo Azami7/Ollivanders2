@@ -13,10 +13,10 @@ import java.util.ArrayList;
 /**
  * Creates an explosion of magnitude depending on the spell level which destroys blocks and sets fires.
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Reductor_Curse">https://harrypotter.fandom.com/wiki/Reductor_Curse</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Reductor_Curse">Harry Potter Wiki - Reductor Curse</a>
  */
 public final class REDUCTO extends O2Spell {
-    // todo rework what type of blocks this can target, make work with bombarda (prob can be a child class), 5th year dark arts spell - https://github.com/Azami7/Ollivanders2/issues/670
+    // TODO: rework which block types this can target; consider making it a child of BOMBARDA (5th-year dark arts spell)
     /**
      * The maximum possible strength, 4f is TNT
      */

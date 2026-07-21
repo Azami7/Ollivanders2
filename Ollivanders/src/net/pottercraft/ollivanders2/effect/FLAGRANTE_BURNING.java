@@ -6,33 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Permanent burning effect inflicted by a flagrante-cursed item.
- *
- * <p>FLAGRANTE_BURNING is a specialized variant of the {@link BURNING} effect that is applied by cursed
- * items bearing the Flagrante curse. Unlike regular burning effects which are temporary, flagrante burning
- * is always permanent and cannot be modified via setPermanent(). The effect applies periodic fire damage
- * at 3-second intervals with the same mechanisms as the parent BURNING class: damage clamping to 0.5-10,
- * death prevention, and visual fire effects (smoke and hurt sound).</p>
- *
- * <p>Differences from parent BURNING effect:</p>
- * <ul>
- * <li>Always permanent - duration parameter is ignored</li>
- * <li>Applied by flagrante-cursed items (e.g., cursed gloves, cursed book)</li>
- * <li>Cannot be modified to temporary status via setPermanent()</li>
- * <li>Inherits all other burning mechanics from parent BURNING class</li>
- * </ul>
+ * Permanent burning inflicted by a flagrante-cursed item. A {@link BURNING} variant that is always permanent and cannot
+ * be made temporary via {@link #setPermanent(boolean)}.
  *
  * @author Azami7
- * @see BURNING for the base burning effect mechanism
+ * @see BURNING
  */
 public class FLAGRANTE_BURNING extends BURNING {
     /**
-     * Constructor for creating a permanent flagrante burning effect.
-     *
-     * <p>Creates a permanent burning effect applied by a flagrante-cursed item. The duration parameter is
-     * accepted for API consistency with other effects but is ignored - flagrante burning is always permanent.
-     * All burning mechanics (damage calculation, visual effects, etc.) are inherited from the parent BURNING
-     * class and applied with permanent status.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    ignored - flagrante burning is always permanent
@@ -47,11 +29,7 @@ public class FLAGRANTE_BURNING extends BURNING {
     }
 
     /**
-     * Override permanent status modification to prevent changing flagrante burning permanence.
-     *
-     * <p>This method intentionally does nothing. Flagrante burning effects are always permanent
-     * and cannot be modified to temporary status. Any attempt to change the permanent flag is
-     * silently ignored to maintain the invariant that flagrante burning never expires.</p>
+     * No-op: flagrante burning is always permanent and cannot be made temporary.
      *
      * @param perm ignored - flagrante burning is always permanent
      */

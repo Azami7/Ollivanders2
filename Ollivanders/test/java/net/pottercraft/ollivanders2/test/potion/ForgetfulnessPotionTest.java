@@ -17,36 +17,19 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the Forgetfulness Potion effect.
- *
- * <p>Verifies that the Forgetfulness Potion correctly decreases the player's experience in
- * either spells or potions when consumed. Tests that at least one skill decreases to ensure
- * the potion's intended effect of causing memory loss in magical studies.</p>
+ * Unit tests for {@link FORGETFULNESS_POTION}.
  */
 public class ForgetfulnessPotionTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded once before all tests with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -54,17 +37,12 @@ public class ForgetfulnessPotionTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test the Forgetfulness Potion's effect on skill experience.
-     *
-     * <p>This test verifies that when a player with known spell and potion skills drinks the
-     * Forgetfulness Potion, at least one of their skill levels decreases as a result of the
-     * potion's memory loss effect. The test sets up both spell and potion experience at level 100,
-     * then verifies that at least one skill level has been reduced after drinking the potion.</p>
+     * Drinking the potion decreases the drinker's experience in at least one of spells or potions.
      */
     @Test
     void drinkTest() {
@@ -86,13 +64,6 @@ public class ForgetfulnessPotionTest {
         assertTrue((potionSkillLevel < skillLevel) || (spellSkillLevel < skillLevel), "Spell or potion skill did not decrease");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

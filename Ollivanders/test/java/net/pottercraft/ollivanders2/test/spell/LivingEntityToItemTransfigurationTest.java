@@ -15,7 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Base test class for {@link LivingEntityToItemTransfiguration} spells. Extends {@link EntityTransfigurationTest} for
+ * the shared transfiguration tests.
+ */
 abstract public class LivingEntityToItemTransfigurationTest extends EntityTransfigurationTest {
+    /**
+     * Verify the spell transfigures a living entity into a dropped item of the target material.
+     */
     @Override
     @Test
     void transfigureTest() {

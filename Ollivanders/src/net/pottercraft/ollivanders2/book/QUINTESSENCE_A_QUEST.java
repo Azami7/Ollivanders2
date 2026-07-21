@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest">https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest">Quintessence: A Quest</a>
  */
 public class QUINTESSENCE_A_QUEST extends O2Book {
     /**

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Travels_with_Trolls">https://harrypotter.fandom.com/wiki/Travels_with_Trolls</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Travels_with_Trolls">Travels with Trolls</a>
  */
 public class TRAVELS_WITH_TROLLS extends O2Book {
     /**

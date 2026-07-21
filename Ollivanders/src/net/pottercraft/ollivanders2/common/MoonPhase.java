@@ -4,11 +4,8 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Enumeration of the eight moon phases in Minecraft.
- *
- * <p>The moon phase cycles every 8 Minecraft days (8 * 24000 ticks). Each phase represents a different
- * point in the lunar cycle, from full moon through new moon and back. Moon phases can be used for
- * spell calculations and lunar-based mechanics.</p>
+ * The eight Minecraft moon phases, which cycle every 8 in-game days. Declared in the order Minecraft assigns to
+ * consecutive day indices, so {@link #getMoonPhase} can map a world's day count to a phase.
  *
  * @author Azami7
  */
@@ -31,16 +28,14 @@ public enum MoonPhase {
     WAXING_GIBBOUS;
 
     /**
-     * Get the current moon phase for a world.
-     *
-     * <p>Calculates the moon phase based on the world's full time, which cycles every 8 Minecraft days.
-     * The full time is divided by 24000 (ticks per day) and modulo 8 to get the phase.</p>
+     * Get the current moon phase for a world, derived from its day count within the 8-day lunar cycle.
      *
      * @param world the world to check
      * @return the current moon phase
      */
     @NotNull
     public static MoonPhase getMoonPhase(@NotNull World world) {
+        // 24000 ticks per Minecraft day; the phase repeats every 8 days
         int moonPhase = ((int)(world.getFullTime() / 24000)) % 8;
 
         if (moonPhase == 1)

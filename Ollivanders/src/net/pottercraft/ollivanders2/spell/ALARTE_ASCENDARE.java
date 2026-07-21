@@ -11,36 +11,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Winged-Ascent Charm that launches living entities high into the air.
- *
- * <p>When the projectile hits an entity, the spell adds an upward velocity based on the caster's skill level.
- * Horizontal velocity components (X and Z) remain unchanged.</p>
- *
- * <p>The spell targets entities within the projectile's detection radius and checks worldGuard permissions
- * before applying velocity. The projectile stops after hitting an entity or solid block.</p>
+ * Winged-Ascent Charm that launches living entities into the air with a skill-scaled upward velocity, leaving their
+ * horizontal motion unchanged.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Alarte_Ascendare">Alarte Ascendare</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Alarte_Ascendare">Harry Potter Wiki - Alarte Ascendare</a>
  */
 public final class ALARTE_ASCENDARE extends Knockback {
-    /**
-     * The min distance
-     */
     public static int minDistanceConfig = 0;
 
-    /**
-     * The max distance
-     */
     public static int maxDistanceConfig = 10;
 
-    /**
-     * The max radius
-     */
     public static double maxRadiusConfig = 10;
 
-    /**
-     * The max number of targets
-     */
     public static int maxTargetConfig = 5;
 
     /**
@@ -86,10 +69,8 @@ public final class ALARTE_ASCENDARE extends Knockback {
     }
 
     /**
-     * Can this spell target this entity?
-     *
      * @param entity the entity to check
-     * @return true if it can target the entity, false otherwise
+     * @return true if the entity is a living entity
      */
     boolean canTarget(Entity entity) {
         return entity instanceof LivingEntity;

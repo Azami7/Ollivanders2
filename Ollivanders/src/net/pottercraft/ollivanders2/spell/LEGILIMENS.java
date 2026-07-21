@@ -16,33 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Mind-reading spell that reveals information about a target player.
+ * The Legilimency Spell: reads the mind of a nearby player, revealing information about them.
  *
- * <p>The spell attempts to read the mind of a nearby player and reveal various information
- * depending on the caster's experience level and the target's resistance. Success depends on comparing
- * the caster's Legilimens skill against the target's skill.</p>
+ * <p>Targets one player within {@link #radius} blocks. Whether the reading succeeds,
+ * and how much it reveals, scales with the caster's Legilimens skill relative to the target's. A target in animagus
+ * form can only be read by a caster at spell mastery, and then only rarely.</p>
  *
- * <p><strong>Information Revealed (by Legilimens Level):</strong></p>
- * <ul>
- * <li><strong>Base (any level):</strong> Whether target is a muggle or witch/wizard, house and year (if sorted)</li>
- * <li><strong>Level 2+:</strong> Target's wand type (50% chance)</li>
- * <li><strong>Level 3+:</strong> Last spell cast by target (50% chance)</li>
- * <li><strong>Level 4+:</strong> Target's mastered spell for non-verbal casting (33% chance, if enabled)</li>
- * <li><strong>Level 6+:</strong> Active magical effects on target (40% chance)</li>
- * <li><strong>Level 10+:</strong> Whether target is an animagus and their form (10% chance)</li>
- * </ul>
- *
- * <p><strong>Success Rate by Skill Comparison:</strong></p>
- * <ul>
- * <li>80% success when caster's skill &gt; target's skill</li>
- * <li>66% success when skills are equal</li>
- * <li>10% success when caster's skill &lt; target's skill</li>
- * </ul>
- *
- * <p><strong>Animagus Form:</strong> When target is in animagus form, only level 10+ casters can attempt
- * mind reading, with a 10% success rate. Lower level casters cannot read an animagus's mind.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Legilimency_Spell">Legilimency Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Legilimency_Spell">Harry Potter Wiki - Legilimency Spell</a>
  */
 public final class LEGILIMENS extends O2Spell {
     /**
@@ -93,13 +73,10 @@ public final class LEGILIMENS extends O2Spell {
     }
 
     /**
-     * Attempt to read nearby (within 3 blocks) players' minds when spell is active.
-     *
-     * <p>Finds nearby players (excluding the caster) and determines success based on skill comparison.
-     * If successful, reveals information about the target. If unsuccessful, the target resists.
-     * The spell kills itself after attempting to read one target.</p>
-     *
-     * <p>Special handling for animagus form: only level 10+ casters can attempt reading, with 10% success.</p>
+     * Attempt to read the mind of one player within {@link #radius} blocks (the caster is skipped), then end the
+     * spell. Success scales with the caster's Legilimens skill relative to the target's; on success the target's
+     * details are revealed via {@link #readMind(Player)}, on failure the caster is sent a resist message. A target in
+     * animagus form can only be attempted by a caster at spell mastery, and rarely succeeds.
      */
     @Override
     protected void doCheckEffect() {
@@ -168,17 +145,9 @@ public final class LEGILIMENS extends O2Spell {
     }
 
     /**
-     * Reveal information about a target player based on caster's Legilimens skill.
-     *
-     * <p>Progressively reveals more information as the caster's Legilimens level increases:
-     * <ul>
-     * <li>Always reveals: muggle status, house and year</li>
-     * <li>Level 2+: wand type (50% chance)</li>
-     * <li>Level 3+: last spell cast (50% chance)</li>
-     * <li>Level 4+: mastered spell if non-verbal casting enabled (33% chance)</li>
-     * <li>Level 6+: active effects on target (40% chance)</li>
-     * <li>Level 10+: animagus status and form (10% chance)</li>
-     * </ul>
+     * Reveal information about the target to the caster, unlocking progressively more (muggle/house/year, then wand,
+     * last spell cast, mastered spell, active effects, and animagus form) as the caster's Legilimens skill rises,
+     * each higher tier gated behind its own chance.
      *
      * @param target the player whose mind is being read
      */

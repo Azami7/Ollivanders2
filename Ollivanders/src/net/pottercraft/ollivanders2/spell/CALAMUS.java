@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * Match to needle transfiguration spell. Turns sticks into arrows.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Match_to_needle_spell">https://harrypotter.fandom.com/wiki/Match_to_needle_spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Match_to_needle_spell">Harry Potter Wiki - Match to Needle Spell</a>
  */
 public final class CALAMUS extends ItemToItemTransfiguration {
     /**

@@ -14,36 +14,18 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the DANCING_FEET effect.
+ * Unit tests for {@link DANCING_FEET}.
  *
- * <p>DANCING_FEET is an effect that forces players to dance uncontrollably by repeatedly toggling their
- * sneak state and rotating them. This test validates effect creation, duration management, lifecycle behavior,
- * and event cancellation to prevent player control override.</p>
+ * @see EffectTestSuper
  */
 public class DancingFeetTest extends EffectTestSuper {
-    /**
-     * Create a DANCING_FEET effect for testing.
-     *
-     * <p>Instantiates a new DANCING_FEET effect with the specified parameters. This method is called
-     * by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new DANCING_FEET effect targeting the specified player
-     */
     @Override
     DANCING_FEET createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new DANCING_FEET(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
     /**
-     * Test basic DANCING_FEET effect behavior.
-     *
-     * <p>Validates that the DANCING_FEET effect correctly applies its involuntary movement mechanics:
-     * the sneak state toggles at the proper cooldown intervals, and the player's rotation changes
-     * as they dance. Tests verify both the initial sneak toggle and the subsequent unsneaking after
-     * the cooldown completes with a directional change.</p>
+     * The player sneaks immediately, then stops sneaking and changes facing once the dance cooldown elapses.
      */
     @Override
     void checkEffectTest() {
@@ -69,12 +51,6 @@ public class DancingFeetTest extends EffectTestSuper {
         assertNotEquals(targetYaw, target.getLocation().getYaw(), "Dancing feet did not change player's yaw");
     }
 
-    /**
-     * Run all event handler tests for the DANCING_FEET effect.
-     *
-     * <p>DANCING_FEET handles three player control events to prevent manual override. This test suite
-     * validates that all three event types are properly cancelled when the effect is active.</p>
-     */
     @Override
     void eventHandlerTests() {
         // PlayerToggleSneakEvent not yet implemented in MockBukkit and including this causes the whole test to be skipped
@@ -84,10 +60,7 @@ public class DancingFeetTest extends EffectTestSuper {
     }
 
     /**
-     * Test that sneak toggle events are cancelled by the DANCING_FEET effect.
-     *
-     * <p>Validates that players affected by DANCING_FEET cannot manually toggle sneak, ensuring
-     * the effect maintains complete control over the player's sneak state for dance movements.</p>
+     * A player affected by DANCING_FEET cannot manually toggle sneak.
      */
     void doOnPlayerToggleSneakEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -103,10 +76,7 @@ public class DancingFeetTest extends EffectTestSuper {
     }
 
     /**
-     * Test that sprint toggle events are cancelled by the DANCING_FEET effect.
-     *
-     * <p>Validates that players affected by DANCING_FEET cannot activate sprint, which would
-     * interfere with the controlled dance movement and teleportation cycles.</p>
+     * A player affected by DANCING_FEET cannot activate sprint.
      */
     void doOnPlayerToggleSprintEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -122,10 +92,7 @@ public class DancingFeetTest extends EffectTestSuper {
     }
 
     /**
-     * Test that movement events are cancelled by the DANCING_FEET effect.
-     *
-     * <p>Validates that players affected by DANCING_FEET cannot manually move, ensuring the effect
-     * maintains complete control over player movement through involuntary teleportation.</p>
+     * A player affected by DANCING_FEET cannot manually move.
      */
     void doOnPlayerMoveEventTest() {
         PlayerMock target = mockServer.addPlayer();

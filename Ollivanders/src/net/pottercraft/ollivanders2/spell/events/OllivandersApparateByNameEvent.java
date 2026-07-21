@@ -2,33 +2,19 @@ package net.pottercraft.ollivanders2.spell.events;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An event thrown whenever a player apparates by location name
+ * Fired when a player apparates to a named location.
  *
  * @author Azami7
  */
 public class OllivandersApparateByNameEvent extends ApparateEvent {
-    /**
-     * Event handlers
-     */
-    private static final HandlerList handlers = new HandlerList();
-
-    /**
-     * the name of the apparate destination
-     */
     String destinationName;
 
-    /**
-     * the Location the player is apparating to
-     */
     Location destination;
 
     /**
-     * Constructor
-     *
      * @param player   the player apparating
      * @param dest     the destination being apparated to
      * @param destName the name of the destination being apparated to
@@ -41,8 +27,6 @@ public class OllivandersApparateByNameEvent extends ApparateEvent {
     }
 
     /**
-     * Get the name of the apparate destination
-     *
      * @return the name of the destination being apparated to
      */
     public String getDestinationName() {
@@ -50,8 +34,6 @@ public class OllivandersApparateByNameEvent extends ApparateEvent {
     }
 
     /**
-     * Get the destination being apparated to
-     *
      * @return the destination being apparated to
      */
     public Location getDestination() {

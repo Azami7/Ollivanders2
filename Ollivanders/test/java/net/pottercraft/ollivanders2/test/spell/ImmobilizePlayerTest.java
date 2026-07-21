@@ -17,35 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for testing ImmobilizePlayer spell implementations.
- *
- * <p>ImmobilizePlayerTest provides a common testing framework for all spell subclasses that extend
- * ImmobilizePlayer, which are spells that target and immobilize a nearby player. This test class
- * validates that the spell correctly targets players, applies appropriate immobilization effects, and
- * respects duration and immobilization type (full vs. partial).</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Target detection - verifies the spell correctly identifies and targets nearby players</li>
- * <li>Effect application - verifies IMMOBILIZE or FULL_IMMOBILIZE effect is applied based on spell type</li>
- * <li>Duration calculation - verifies effect duration is within configured min/max bounds</li>
- * <li>Movement restriction - verifies location changes are prevented while rotation may be allowed</li>
- * <li>Full immobilization - verifies FULL_IMMOBILIZE prevents all movement including rotation</li>
- * <li>Partial immobilization - verifies IMMOBILIZE allows rotation but prevents location changes</li>
- * <li>Prison block creation and reversion (for spells with imprison = true)</li>
- * </ul>
+ * Base test class for {@link ImmobilizePlayer} spells, covering target detection, effect application (full vs
+ * partial), duration bounds, movement restriction, and prison block creation and reversion.
  *
  * @author Azami7
- * @see ImmobilizePlayer for the spell superclass being tested
- * @see O2SpellTestSuper for the base spell testing framework
+ * @see ImmobilizePlayer
+ * @see O2SpellTestSuper
  */
 abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     /**
-     * Test that the immobilize spell correctly targets and applies effects to nearby players.
-     *
-     * <p>Verifies that the spell detects a nearby player target and applies the appropriate immobilization
-     * effect (IMMOBILIZE or FULL_IMMOBILIZE depending on the spell type). The test creates a caster and
-     * a target player, casts the spell, and validates that the target has the correct effect applied.</p>
+     * Verify the spell applies the immobilization effect (full or partial) to a nearby target player.
      */
     @Override
     @Test
@@ -70,11 +51,7 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that the immobilization effect duration is within configured bounds.
-     *
-     * <p>Verifies that the spell calculates effect duration correctly and that the duration is clamped
-     * between the minimum and maximum duration limits. The test casts the spell and validates that the
-     * resulting immobilization effect has a duration within the expected range.</p>
+     * Verify the immobilization duration stays within its min and max bounds.
      */
     @Test
     void durationTest() {
@@ -96,12 +73,8 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that immobilization prevents movement and optionally prevents rotation.
-     *
-     * <p>Verifies the movement restriction behavior of the immobilization effect. The test validates that
-     * location-changing movement is always prevented. For full immobilization (FULL_IMMOBILIZE), rotation
-     * changes (pitch/yaw only) are also prevented. For partial immobilization (IMMOBILIZE), rotation changes
-     * are allowed while location changes remain blocked.</p>
+     * Verify immobilization always blocks a location change, and additionally blocks rotation only when the spell is
+     * full immobilize.
      */
     @Test
     void fullImmobilizeTest() {
@@ -138,22 +111,15 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that the spell correctly rejects invalid targets.
-     *
-     * <p>No-op by default. Subclasses may override to test spell-specific target validation logic,
-     * such as verifying that players with certain attributes or conditions cannot be targeted.</p>
+     * Hook for subclasses to test spell-specific target rejection. The default is a no-op.
      */
     @Test
     void invalidTargetTest() {
     }
 
     /**
-     * Test that prison blocks are created correctly when the spell imprisons the target.
-     *
-     * <p>For spells with imprison = true, verifies that the prison material is placed adjacent to the
-     * target's eye location and that the block is tracked as a temporarily changed block. For spells
-     * where prisonIsShell = false, also verifies that the block at the target's eye location itself
-     * is changed. For non-imprisoning spells, verifies that no blocks are changed.</p>
+     * Verify an imprisoning spell fills the blocks around the target with its prison material (and the block the
+     * target occupies unless it builds only a shell), and that a non-imprisoning spell changes nothing.
      */
     @Test
     void imprisonEffectTest() {
@@ -177,7 +143,7 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
             assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getRelative(BlockFace.EAST).getType(), "block next to eye location was not changed");
             assertTrue(Ollivanders2API.getBlocks().isTemporarilyChangedBlock(target.getEyeLocation().getBlock().getRelative(BlockFace.EAST)), "block not added to tracking");
             if (!immobilizePlayer.isPrisonShell()) {
-                assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getType(), "block at eye location not changed to Water");
+                assertEquals(prisonMaterial, target.getEyeLocation().getBlock().getType(), "block at eye location not changed to prison material");
             }
         }
         else
@@ -185,21 +151,14 @@ abstract public class ImmobilizePlayerTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that the spell applies any spell-specific additional effects to the target.
-     *
-     * <p>No-op by default. Subclasses may override to verify supplementary effects such as
-     * potion effects or environmental changes applied beyond the base immobilization.</p>
+     * Hook for subclasses to verify spell-specific extra effects. The default is a no-op.
      */
     @Test
     void additionalEffectsTest() {
     }
 
     /**
-     * Test that prison blocks are reverted after the effect duration expires.
-     *
-     * <p>Verifies that when the immobilization effect duration expires, all prison blocks
-     * are automatically reverted to their original state (AIR) and are no longer tracked
-     * as temporarily changed blocks.</p>
+     * Verify prison blocks are reverted to air and cleared from tracking once the effect duration expires.
      */
     @Override
     @Test
