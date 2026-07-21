@@ -7,28 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Water breathing potion effect that allows the affected player to breathe underwater.
- *
- * <p>WATER_BREATHING applies Minecraft's WATER_BREATHING potion effect to allow the target player
- * to breathe underwater without consuming their oxygen meter. The effect enables underwater respiration,
- * allowing the player to explore aquatic environments indefinitely without taking drowning damage.
- * The effect is powered by the Minecraft potion effect system with strength (amplifier) set to 1.
- * The effect is detectable by both mind-reading spells (Legilimens) and information spells (Informous)
- * which report the target "can breathe in water".</p>
+ * Grants the target Minecraft's WATER_BREATHING potion effect (amplifier 1) so they can breathe underwater.
+ * Detectable via Informous and Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
+ * @see PotionEffect
  */
 public class WATER_BREATHING extends PotionEffect {
     /**
-     * Constructor for creating a water breathing effect.
-     *
-     * <p>Creates a potion effect that allows the target player to breathe underwater using Minecraft's
-     * WATER_BREATHING potion effect type with strength 1. Sets detection text for both mind-reading
-     * spells (Legilimens) and information spells (Informous) to "can breathe in water".</p>
+     * Constructor.
      *
      * @param plugin      a callback to the MC plugin
-     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param duration    the duration in ticks, clamped to the effect type's 2-to-5-minute bounds
      * @param isPermanent ignored - potion effects cannot be permanent
      * @param pid         the unique ID of the player to grant water breathing
      */
@@ -44,13 +34,6 @@ public class WATER_BREATHING extends PotionEffect {
         informousText = legilimensText = "can breath in water";
     }
 
-    /**
-     * Perform cleanup when the water breathing effect is removed.
-     *
-     * <p>The default implementation does nothing, as WATER_BREATHING is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is manually
-     * removed, the player's normal underwater respiration behavior returns.</p>
-     */
     @Override
     public void doRemove() {
     }

@@ -11,12 +11,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bothynus Tria - Premium Yellow, Orange, and Silver Fireworks.
- *
- * <p>Launches one or more yellow and orange star-burst fireworks with trailing and fade effects.
- * The fireworks fade to silver, creating a premium visual effect. The number of fireworks spawned
- * depends on the caster's experience level, up to a maximum of 15. Each firework explodes in a
- * star pattern with dual colors and includes both trailing and silver fade effects.</p>
+ * Fireworks charm that launches yellow and orange star-burst fireworks with trails, fading to silver.
  */
 public final class BOTHYNUS_TRIA extends Pyrotechnia {
     /**

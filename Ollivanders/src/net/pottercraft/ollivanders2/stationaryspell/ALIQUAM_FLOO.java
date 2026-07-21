@@ -28,55 +28,41 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A stationary spell that transforms a fireplace into a Floo Network connection point.
- *
- * <p>The Aliquam Floo spell enables magical teleportation between registered floo network locations.
- * Players throw floo powder into the fireplace to activate it, then speak a destination name to teleport.
- * If the destination name is not recognized, the player is randomly sent to another floo location.</p>
- *
- * <p>Spell characteristics:</p>
- * <ul>
- *   <li>Fixed radius of 2 blocks (hardcoded, cannot be modified)</li>
- *   <li>Permanent spell (never expires unless killed)</li>
- *   <li>Activates when floo powder is thrown into the center fireplace block</li>
- *   <li>30-second active window for player to speak destination and teleport</li>
- *   <li>Visual effects: legacy mob spawner flames or soul fire (configurable)</li>
- *   <li>Prevents fire and combustion damage within the protected area</li>
- * </ul>
- *
- * <p>All active floo locations are registered in a static network list for teleportation discovery.</p>
+ * Aliquam Floo: a permanent stationary spell that makes a fireplace a Floo Network node. A player throws Floo powder
+ * into it to open a 30-second window, then speaks a destination name to be teleported to that node; an unrecognized
+ * name sends them to a random node instead. All active nodes are held in a static network registry.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Floo_Network">https://harrypotter.fandom.com/wiki/Floo_Network</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Floo_Network">Harry Potter Wiki - Floo Network</a>
  */
 public class ALIQUAM_FLOO extends O2StationarySpell {
     /**
-     * Minimum spell radius (2 blocks, hardcoded and cannot be changed).
+     * Minimum spell radius, in blocks.
      */
     public static final int minRadiusConfig = 2;
 
     /**
-     * Maximum spell radius (2 blocks, hardcoded and cannot be changed).
+     * Maximum spell radius, in blocks.
      */
     public static final int maxRadiusConfig = 2;
 
     /**
-     * Minimum spell duration in ticks (not used - ALIQUAM_FLOO is permanent).
+     * Duration bound, unused because Aliquam Floo is permanent.
      */
     public static final int minDurationConfig = 1000;
 
     /**
-     * Maximum spell duration in ticks (not used - ALIQUAM_FLOO is permanent).
+     * Duration bound, unused because Aliquam Floo is permanent.
      */
     public static final int maxDurationConfig = 1000;
 
     /**
-     * Message sent to player when the floo event happens successfully
+     * Message sent to the player when a floo teleport succeeds.
      */
     public static final String successMessage = "Fire swirls around you.";
 
     /**
-     * Message sent to player when the floo event is cancelled
+     * Message sent to the player when a floo teleport is cancelled.
      */
     public static final String cancelledMessage = "Nothing seems to happen.";
 
@@ -121,10 +107,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     private Material fireType = Material.FIRE;
 
     /**
-     * Constructs an ALIQUAM_FLOO spell from deserialized data at server startup.
-     *
-     * <p>Used only for loading saved spells from disk. Registers this floo location in the network
-     * and loads visual effect configuration. Do not use to cast new spells - use the full constructor instead.</p>
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -138,10 +121,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Constructs a new ALIQUAM_FLOO spell cast by a player.
-     *
-     * <p>Creates a new floo network location at the specified fireplace. Registers this spell in the
-     * network and loads visual effect configuration.</p>
+     * Constructor for casting a new Aliquam Floo spell, registering this fireplace as a floo node named {@code flooName}.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the UUID of the player who cast the spell
@@ -162,50 +142,35 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Loads floo network configuration from the plugin config file.
-     *
-     * <p>Reads the soulFireFlooEffect setting to determine whether to use soul fire
-     * or legacy mob spawner flames for visual effects. This is called during spell construction
-     * to initialize visual effect preferences.</p>
+     * Read the {@code soulFireFlooEffect} config setting that selects the visual effect (soul fire vs. mob-spawner
+     * flames).
      */
     void loadFlooConfig() {
         if (p.getConfig().isSet("soulFireFlooEffect"))
             soulFireFlooEffect = p.getConfig().getBoolean("soulFireFlooEffect");
     }
 
-    /**
-     * Initializes the radius and duration constraints for this spell.
-     *
-     * <p>Sets fixed values: radius is always 2 blocks, duration constraints are ignored
-     * since ALIQUAM_FLOO is permanent.</p>
-     */
     @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig; // not used - aliquam floo is permanent
-        maxDuration = maxDurationConfig; // not used - aliquam floo is permanent
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**
-     * Sets the location of this floo fireplace and captures the original block type.
+     * Set the location and capture the fireplace's current block type so it can be restored later.
      *
-     * <p>When a location is set (during spell initialization), captures the current block type
-     * at that location so it can be restored later when the spell deactivates or is destroyed.</p>
-     *
-     * @param location the center location of the fireplace (not null)
+     * @param location the center location of the fireplace
      */
     @Override
     void setLocation(@NotNull Location location) {
         super.setLocation(location);
-        fireType = location.getBlock().getType(); // get the block type in the location
+        fireType = location.getBlock().getType();
     }
 
     /**
-     * Kills this floo spell and removes it from the network.
-     *
-     * <p>Called when the spell is destroyed or at server shutdown. Removes this location from
-     * the global floo network list and performs standard spell cleanup.</p>
+     * Kill this spell and remove it from the floo network registry.
      */
     @Override
     public void kill() {
@@ -214,14 +179,11 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Performs per-tick upkeep for this floo spell.
-     *
-     * <p>When active, decrements the cooldown timer and periodically shows fire effects.
-     * When inactive, checks for floo powder being thrown into the fireplace to activate it.</p>
+     * While active, count down the window and refresh the fire effect; while inactive, watch for floo powder thrown
+     * into the fireplace and activate on it.
      */
     @Override
     public void upkeep() {
-        // if this fireplace is already active,
         if (isWorking()) {
             cooldown = cooldown - 1;
 
@@ -249,20 +211,17 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Displays the visual effect when the floo network becomes active.
-     *
-     * <p>If soul fire effect is enabled, transforms the fireplace blocks to soul fire.
-     * Otherwise, plays mob spawner flame particles at the fireplace location.</p>
+     * Show the active-floo visual effect: recolor the fireplace to soul fire if that effect is enabled, otherwise play
+     * mob-spawner flame particles.
      */
     private void turnOnFlooFireEffect() {
         if (soulFireFlooEffect) {
             Block block = location.getBlock();
-            // turn the flame in to blue flame
             if (fireType == Material.CAMPFIRE) {
                 block.setType(Material.SOUL_CAMPFIRE);
             }
             else {
-                // we have to change the block underneath or the fire won't stay lit
+                // the block below must become soul sand or the soul fire won't stay lit
                 Block fireBase = block.getRelative(BlockFace.DOWN);
 
                 fireBase.setType(Material.SOUL_SAND);
@@ -275,28 +234,25 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Get the name of this floo location
+     * Get the name of this floo location.
      *
-     * @return the name of this floo location
+     * @return the floo name
      */
     public String getFlooName() {
         return flooName;
     }
 
     /**
-     * Checks if this floo location is currently active and accepting teleportation requests.
+     * Whether this floo is currently active and accepting a spoken destination.
      *
-     * @return true if the floo is active (within the 30-second activation window), false otherwise
+     * @return true if within the activation window, false otherwise
      */
     public boolean isWorking() {
         return cooldown > 0;
     }
 
     /**
-     * Deactivates the floo network connection and restores the original fireplace appearance.
-     *
-     * <p>Resets the cooldown timer and reverses any visual effects (converts soul fire back to
-     * regular fire or removes particle effects).</p>
+     * Deactivate this floo and revert the soul-fire visual effect back to the original fire.
      */
     public void stopWorking() {
         cooldown = 0;
@@ -308,7 +264,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
                 block.setType(Material.CAMPFIRE);
             }
             else {
-                // we have to change the block underneath or the fire won't stay lit
+                // restore the block below so the ordinary fire will stay lit
                 Block fireBase = block.getRelative(BlockFace.DOWN);
 
                 fireBase.setType(Material.NETHERRACK);
@@ -318,9 +274,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Serializes the floo location name for persistence across server restarts.
-     *
-     * @return a map containing the serialized floo name
+     * @return the serialized spell data, holding this floo's name
      */
     @Override
     @NotNull
@@ -333,7 +287,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Deserializes and restores the floo location name from saved data.
+     * Restore this floo's name from saved data.
      *
      * @param spellData the map of saved spell data
      */
@@ -352,24 +306,19 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Handles player chat within an active floo network location.
-     *
-     * <p>When a player speaks while the floo is active, their message is interpreted as a floo
-     * network destination. Looks up the destination in the network and initiates a teleportation
-     * event. If the destination is not found, randomly selects another floo location.</p>
+     * When a player speaks inside an active floo, treat their message as a destination name: teleport them to the
+     * matching node, or to a random node if the name is unknown.
      *
      * @param event the async player chat event
      */
     @Override
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer(); // will never be null
-        String chat = event.getMessage(); // will never be null
+        Player player = event.getPlayer();
+        String chat = event.getMessage();
 
-        // player is not in the location or the fireplace is not currently activated
         if (flooNetworkLocations.size() <= 1 || !isLocationInside(player.getLocation()) || !isWorking())
             return;
 
-        // look for the destination in the registered floo network
         ALIQUAM_FLOO destination = null;
 
         for (ALIQUAM_FLOO floo : flooNetworkLocations) {
@@ -377,21 +326,17 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
                 destination = floo;
         }
 
-        // if that destination doesn't exist, pick a random destination
         if (destination == null) {
             int randomIndex = Math.abs(Ollivanders2Common.random.nextInt() % flooNetworkLocations.size());
             destination = flooNetworkLocations.get(randomIndex);
         }
 
-        // dropoff chat
         Ollivanders2Common.chatDropoff(event.getRecipients(), Ollivanders2.chatDropoff, player.getLocation());
 
-        // create and fire the floo network event
         FlooNetworkEvent flooNetworkEvent = new FlooNetworkEvent(player, destination);
         flooNetworkEvents.put(player.getUniqueId(), flooNetworkEvent);
 
-        // do the teleport if the event isn't canceled by something else
-        // run this at a delay to give all other event listeners time to react
+        // delayed so other listeners can cancel the FlooNetworkEvent before the teleport happens
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -404,12 +349,10 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Executes the floo network teleportation for a player.
+     * Fire the pending {@link FlooNetworkEvent} for a player, then teleport them (with a success message) unless a
+     * listener cancelled it, and deactivate this floo.
      *
-     * <p>Calls the FlooNetworkEvent for listeners to process, then schedules the actual teleportation.
-     * Sends appropriate messages to the player and deactivates the floo after teleportation.</p>
-     *
-     * @param player the player to teleport via the floo network
+     * @param player the player to teleport
      */
     private void doFlooTeleportEvent(Player player) {
         FlooNetworkEvent flooNetworkEvent = flooNetworkEvents.get(player.getUniqueId());
@@ -440,17 +383,14 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Prevents entities from combusting due to the fireplace.
-     *
-     * <p>Cancels combustion events for entities within the spell radius to prevent
-     * accidental damage in the magical floo network fireplace.</p>
+     * Cancel combustion of an entity inside the fireplace area.
      *
      * @param event the entity combust event
      */
     @Override
     void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {
-        Entity entity = event.getEntity(); // will never be null
-        Location entityLocation = entity.getLocation(); // will never be null
+        Entity entity = event.getEntity();
+        Location entityLocation = entity.getLocation();
 
         if (isLocationInside(entityLocation)) {
             event.setCancelled(true);
@@ -459,17 +399,14 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Prevents fire and combustion damage within the protected fireplace area.
-     *
-     * <p>Cancels fire-related damage events (CAMPFIRE, FIRE, FIRE_TICK) for entities
-     * inside the spell radius, ensuring players are protected while using the floo network.</p>
+     * Cancel fire damage (campfire, fire, fire tick) to an entity inside the fireplace area.
      *
      * @param event the entity damage event
      */
     @Override
     void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
-        Entity entity = event.getEntity(); // will never be null
-        Location entityLocation = entity.getLocation(); // will never be null
+        Entity entity = event.getEntity();
+        Location entityLocation = entity.getLocation();
 
         if (event.getCause() == EntityDamageEvent.DamageCause.CAMPFIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
             if (isLocationInside(entityLocation)) {
@@ -480,9 +417,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Cleans up when this floo spell ends.
-     *
-     * <p>Deactivates the floo network connection, restoring the fireplace to its normal state.</p>
+     * Deactivate this floo, restoring the fireplace to its normal state.
      */
     @Override
     void doCleanUp() {
@@ -490,12 +425,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Checks if this spell has been properly deserialized with required data.
-     *
-     * <p>Verifies that the spell has caster UUID, location, and a non-empty floo name set,
-     * which are all required for a floo network location to function.</p>
-     *
-     * @return true if all required data is present and valid, false otherwise
+     * @return true if the caster UUID, location, and a non-empty floo name are all present
      */
     @Override
     public boolean checkSpellDeserialization() {
@@ -503,12 +433,9 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Gets the names of all registered floo network locations.
+     * Get the names of every registered floo node, i.e. the valid teleport destinations.
      *
-     * <p>Returns a list of unique names for all active floo fireplace locations in the network.
-     * Used for displaying available teleportation destinations to players.</p>
-     *
-     * @return a list of all registered floo fireplace names (not null, may be empty)
+     * @return the floo node names; empty if none
      */
     @NotNull
     public static List<String> getFlooFireplaceNames() {
@@ -520,10 +447,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     }
 
     /**
-     * Clears all floo network locations and removes active floo spells from the world.
-     *
-     * <p>Called during server shutdown or plugin reload. Clears the network location list and
-     * removes all active ALIQUAM_FLOO spell instances from the spell manager.</p>
+     * Clear the floo network registry and remove every active Aliquam Floo spell, e.g. on shutdown or reload.
      */
     public static void clearFlooNetwork() {
         flooNetworkLocations.clear();

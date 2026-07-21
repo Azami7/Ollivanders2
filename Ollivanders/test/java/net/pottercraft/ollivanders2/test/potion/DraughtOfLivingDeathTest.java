@@ -16,21 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the Draught of Living Death potion effect.
+ * Unit tests for {@link DRAUGHT_OF_LIVING_DEATH}.
  *
- * <p>Verifies that the Draught of Living Death potion correctly applies the SLEEPING effect to players
- * when consumed. Tests both the player feedback message and the effect application. Additionally,
- * tests the special behavior where players with the AWAKE effect are protected from the sleep effect.</p>
- *
- * @see PotionTestSuper for the base test infrastructure
+ * @see PotionTestSuper
  */
 public class DraughtOfLivingDeathTest extends PotionTestSuper {
     /**
-     * Set up the test by specifying the potion type to test.
-     *
-     * <p>Initializes the test to use the DRAUGHT_OF_LIVING_DEATH potion type and the SLEEPING effect.
-     * This method is called before each test to ensure the correct potion is being tested by the
-     * inherited drinkTest() method.</p>
+     * Select the potion and effect under test.
      */
     @Override @BeforeEach
     void setUp() {
@@ -39,20 +31,8 @@ public class DraughtOfLivingDeathTest extends PotionTestSuper {
     }
 
     /**
-     * Test that the AWAKE effect prevents the Draught of Living Death from inducing sleep.
-     *
-     * <p>Verifies the special interaction between the Draught of Living Death and the AWAKE effect.
-     * When a player with the AWAKE effect (immunity to sleep) drinks the Draught, the potion should
-     * not apply the SLEEPING effect. Instead, the player should receive a special message indicating
-     * they are protected from the sleep effect due to their awake state.</p>
-     *
-     * <p>Test procedure:</p>
-     * <ol>
-     *   <li>Create a mock player and add the AWAKE effect to them</li>
-     *   <li>Have the player drink the Draught of Living Death</li>
-     *   <li>Verify the player receives the special AWAKE effect message</li>
-     *   <li>Verify that the SLEEPING effect was NOT applied to the player</li>
-     * </ol>
+     * A player with the AWAKE effect is protected: drinking the Draught sends the awake message and does not apply
+     * SLEEPING.
      */
     @Test
     void awakeEffectTest() {

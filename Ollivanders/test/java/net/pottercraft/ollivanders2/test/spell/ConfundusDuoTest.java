@@ -13,22 +13,10 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for the CONFUNDUS_DUO spell.
- *
- * <p>CONFUNDUS_DUO is the Confundus Duo, an enhanced version of the Confundus Charm that applies
- * a stronger Confusion effect to targets for 30-240 seconds depending on caster skill level. This
- * test class overrides the amplifier test to verify that the confusion effect uses a fixed amplifier
- * of 1 that does not scale with skill level.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO for the spell implementation
- * @see AddPotionEffectTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO}. Extends {@link AddPotionEffectTest} for
+ * the shared potion-effect tests.
  */
 public class ConfundusDuoTest extends AddPotionEffectTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.CONFUNDUS_DUO
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -36,11 +24,7 @@ public class ConfundusDuoTest extends AddPotionEffectTest {
     }
 
     /**
-     * Test that the amplifier is fixed at 1 and does not scale with skill level.
-     *
-     * <p>Verifies that the Confusion amplifier remains constant at 1 across all skill levels,
-     * demonstrating that this spell's effect strength is fixed and stronger than CONFUNDO (which has
-     * amplifier 0).</p>
+     * Verify the amplifier stays fixed at 1 regardless of skill level.
      */
     @Override
     @Test

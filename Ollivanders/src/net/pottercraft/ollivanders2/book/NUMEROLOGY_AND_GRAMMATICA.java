@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica">https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica">Numerology and Grammatica</a>
  */
 public class NUMEROLOGY_AND_GRAMMATICA extends O2Book {
     /**

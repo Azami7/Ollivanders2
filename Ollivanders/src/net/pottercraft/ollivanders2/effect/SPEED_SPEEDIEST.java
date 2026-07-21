@@ -7,28 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Maximum movement speed potion effect that grants the affected player extreme movement speed.
- *
- * <p>SPEED_SPEEDIEST is the maximum potency variant of the SPEED effect family, applying Minecraft's
- * SPEED potion effect with the highest available strength (strength 4). This effect produces the most
- * extreme speed boost, allowing the player to move at dramatically increased velocities far beyond the
- * base SPEED and intermediate SPEED_SPEEDIER effects. The maximum movement speed is optimal for rapid
- * traversal and extreme combat mobility scenarios. The effect is detectable by both mind-reading spells
- * (Legilimens) and information spells (Informous) which report the target "is moving extremely fast".</p>
+ * Applies Minecraft's SPEED potion effect at strength 4, the maximum-potency variant of the {@link SPEED} family
+ * (above {@link SPEED_SPEEDIER}). Detectable via Informous and Legilimens.
  *
  * @author Azami7
- * @see SPEED for the standard speed enhancement effect
- * @see SPEED_SPEEDIER for the intermediate enhanced speed effect
- * @see PotionEffect for the potion effect application mechanism
+ * @see PotionEffect
  */
 public class SPEED_SPEEDIEST extends PotionEffect {
     /**
-     * Constructor for creating a maximum movement speed effect.
-     *
-     * <p>Creates the maximum potency potion effect that grants the target player extreme movement speed
-     * using Minecraft's SPEED potion effect type with strength 4 (four times the potency of the standard
-     * SPEED effect). Sets detection text for both mind-reading spells (Legilimens) and information spells
-     * (Informous) to "is moving extremely fast".</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -48,13 +35,6 @@ public class SPEED_SPEEDIEST extends PotionEffect {
         informousText = legilimensText = "is moving extremely fast";
     }
 
-    /**
-     * Perform cleanup when the maximum speed effect is removed.
-     *
-     * <p>The default implementation does nothing, as SPEED_SPEEDIEST is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is manually
-     * removed, the player's movement speed returns to normal.</p>
-     */
     @Override
     public void doRemove() {
     }

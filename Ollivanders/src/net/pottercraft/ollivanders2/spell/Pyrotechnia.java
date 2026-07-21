@@ -14,17 +14,8 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Abstract base class for spells that launch fireworks into the air.
- *
- * <p>Pyrotechnia spells shoot one or more fireworks with customizable properties including
- * color, power, effects (burst, star, etc.), and special effects (flicker, trails, fade).
- * The number of fireworks fired is determined by the caster's experience level, up to a
- * spell-specific maximum. Fireworks are launched at the caster's location with a delay
- * between each launch.</p>
- *
- * <p>Subclasses configure behavior by setting fields in their constructors before calling
- * {@link #initSpell()}, including {@link #maxFireworks}, {@link #fireworkPower},
- * {@link #fireworkColors}, {@link #fireworkType}, and optional effects.</p>
+ * Base class for spells that launch fireworks at the caster's location. The number fired scales with the caster's
+ * skill up to a per-spell maximum; subclasses configure the color, power, effect type, and flags.
  *
  * @see <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/Firework.html">Bukkit Firework API</a>
  */
@@ -52,12 +43,12 @@ public abstract class Pyrotechnia extends O2Spell {
     /**
      * The color(s) for the fireworks
      */
-    List<Color> fireworkColors;
+    List<Color> fireworkColors = new ArrayList<>();
 
     /**
      * The fade color(s) for the fireworks
      */
-    List<Color> fadeColors = null;
+    List<Color> fadeColors = new ArrayList<>();
 
     /**
      * The firework effect type
@@ -84,6 +75,9 @@ public abstract class Pyrotechnia extends O2Spell {
      */
     boolean shuffleTypes = false;
 
+    /**
+     * Firework effect types picked from at random when {@link #shuffleTypes} is set.
+     */
     List<Type> randomTypes = new ArrayList<>() {{
         add(Type.STAR);
         add(Type.BALL_LARGE);
@@ -101,8 +95,6 @@ public abstract class Pyrotechnia extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -111,26 +103,14 @@ public abstract class Pyrotechnia extends O2Spell {
         super(plugin, player, rightWand);
         noProjectile = true;
 
-        fireworkColors = new ArrayList<>() {{
-            add(Color.WHITE);
-        }};
+        fireworkColors.add(Color.WHITE);
     }
 
     /**
-     * Spawn and launch the configured fireworks.
-     *
-     * <p>Called repeatedly by the spell system. On the first call, calculates the number of
-     * fireworks to launch based on caster experience. For each subsequent call where the age
-     * is a multiple of 10 ticks, spawns a firework with the configured properties until the
-     * target count is reached, then kills the spell.</p>
+     * Launch the configured fireworks, one every 10 ticks up to the skill-scaled count, then end the spell.
      */
     @Override
     protected void doCheckEffect() {
-        if (!isSpellAllowed()) {
-            kill();
-            return;
-        }
-
         if (fireworksCount == 0) // first time through, calculate the number of fireworks to create
             setNumberOfFireworks();
 
@@ -150,11 +130,7 @@ public abstract class Pyrotechnia extends O2Spell {
     }
 
     /**
-     * Calculate the number of fireworks to spawn based on caster experience.
-     *
-     * <p>The number of fireworks is calculated as (usesModifier / 10), then clamped to the
-     * range [1, maxFireworks]. This method is called once on the first execution of
-     * {@link #doCheckEffect()}.</p>
+     * Set {@link #numberOfFireworks} to {@code usesModifier / 10}, limited to [1, {@link #maxFireworks}].
      */
     void setNumberOfFireworks() {
         numberOfFireworks = (int) usesModifier / 10;
@@ -166,10 +142,7 @@ public abstract class Pyrotechnia extends O2Spell {
     }
 
     /**
-     * Randomly select a firework effect type if shuffleTypes is enabled.
-     *
-     * <p>If {@link #shuffleTypes} is true, this method selects a random type from
-     * {@link #randomTypes} and assigns it to {@link #fireworkType}.</p>
+     * Pick a random {@link #fireworkType} from {@link #randomTypes} when {@link #shuffleTypes} is set.
      */
     void setRandomFireworkType() {
         if (shuffleTypes) {

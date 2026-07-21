@@ -17,43 +17,25 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Herbicide Potion - a splash potion that damages plant-based entities and kills plants.
- *
- * <p>This is a splash potion designed to be thrown rather than consumed directly. When thrown,
- * it deals full damage to plant-based entities (Creepers and Creakings) and creates a plant-killing
- * effect in a 4-block radius splash area. The potion will also harm other living creatures
- * (including players), but at reduced intensity (10% of normal damage).</p>
- *
- * <p>Effects when splashed:</p>
- * <ul>
- * <li>Full Instant Damage II effect for Creepers and Creakings</li>
- * <li>Reduced intensity (10%) for all other entities including players</li>
- * <li>HERBICIDE stationary spell effect that kills plants in the 4-block radius</li>
- * </ul>
+ * Herbicide Potion — a splash potion that deals full Instant Damage to Creepers and Creakings, reduced damage to
+ * everything else, and spawns a HERBICIDE stationary spell that kills plants within its radius.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Herbicide_Potion">https://harrypotter.fandom.com/wiki/Herbicide_Potion</a>
- * @since 2.2.7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Herbicide_Potion">Harry Potter Wiki - Herbicide Potion</a>
  */
 public final class HERBICIDE_POTION extends O2SplashPotion {
     /**
-     * The minimum damage intensity for non-plant entities.
-     * Reduces damage to 10% for players and non-plant mobs when splashed.
+     * Splash damage intensity applied to non-plant entities: 10% of full.
      */
     private final double minimumEffect = 0.1;
 
     /**
-     * The radius of the splash potion's effect in blocks.
-     * The HERBICIDE stationary spell affects all plant blocks within this radius.
+     * Radius in blocks within which the HERBICIDE stationary spell kills plant blocks.
      */
     private final int radius = 4;
 
     /**
-     * Constructor for Herbicide Potion.
-     *
-     * <p>Initializes the splash potion with its ingredients (Lionfish Spines, Flobberworm Mucus,
-     * Horklump Juice, and Standard Potion Ingredients), description text, potion color, and the
-     * Instant Damage effect. Sets up the 30-second duration for the plant-killing effect.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -69,55 +51,35 @@ public final class HERBICIDE_POTION extends O2SplashPotion {
 
         text = "The Herbicide Potion damages plant-based entities and kills plants in a radius. It is minorly harmful to other living creatures.";
 
-        // potion color
         potionColor = Color.fromRGB(51, 102, 0);
 
-        // set duration of potion effect to 30 seconds
         duration = 30 * Ollivanders2Common.ticksPerSecond;
 
         minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, 1);
     }
 
-    /**
-     * Drink the Herbicide Potion - no effect when consumed directly.
-     *
-     * <p>This is a splash potion intended to be thrown, not consumed. Drinking it has no special
-     * effect. The potion's primary functionality is triggered through the splash event when thrown,
-     * which damages plant-based entities and kills plants in the affected area.</p>
-     *
-     * @param player the player who drank the potion
-     */
     @Override
     public void drink(@NotNull Player player) {
-        // No effect when drunk - this is a splash potion
+        // no effect when drunk - this is a splash potion
     }
 
     /**
-     * Handle the splash potion event and apply herbicide effects.
+     * On splash, reduce the potion's damage to {@link #minimumEffect} for everything except Creepers and Creakings,
+     * then spawn a HERBICIDE stationary spell at the splash location to kill plants within {@link #radius}.
      *
-     * <p>When the potion splashes:</p>
-     * <ul>
-     * <li>Creepers and Creakings receive full damage intensity from the potion effect</li>
-     * <li>All other entities (players, mobs, etc.) receive reduced damage (10% intensity)</li>
-     * <li>A HERBICIDE stationary spell is created at the splash location to kill plant blocks
-     *     in the affected radius (4 blocks) for the duration of the potion effect (30 seconds)</li>
-     * </ul>
-     *
-     * @param event the splash potion thrown event containing affected entities and location
+     * @param event the splash potion event
      */
     @Override
     public void doOnPotionSplashEvent(@NotNull PotionSplashEvent event) {
         Entity thrower = event.getEntity();
         Location eventLocation = event.getPotion().getLocation();
 
-        // minimize the effect on non-creeper or creaking
         for (LivingEntity e : event.getAffectedEntities()) {
             if (e.getType() != EntityType.CREEPER && e.getType() != EntityType.CREAKING) {
                 event.setIntensity(e, minimumEffect);
             }
         }
 
-        // affect all the plant blocks in the radius of the potion effect
         HERBICIDE herbicide = new HERBICIDE(p, thrower.getUniqueId(), eventLocation, radius, duration);
         Ollivanders2API.getStationarySpells().addStationarySpell(herbicide);
     }

@@ -39,9 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for Ollivanders2Common utility class.
- * Tests cover string parsing, location serialization/deserialization, player interactions,
- * message broadcasting, block operations, and coordinate conversions.
+ * Unit tests for {@link Ollivanders2Common}.
  */
 public class Ollivanders2CommonTest {
     static ServerMock mockServer;
@@ -66,8 +64,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests parsing a valid UUID string to a UUID object.
-     * Verifies that a correctly formatted UUID string is successfully converted.
+     * A correctly formatted UUID string parses to a non-null UUID.
      */
     @Test
     void uuidFromStringTest() {
@@ -77,8 +74,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests parsing an invalid UUID string.
-     * Verifies that parsing an invalid string returns null.
+     * An unparseable UUID string returns null rather than throwing.
      */
     @Test
     void uuidFromStringBadStringTest() {
@@ -88,8 +84,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests parsing a valid integer string to an Integer object.
-     * Verifies that a correctly formatted numeric string is successfully converted.
+     * A numeric string parses to a non-null Integer.
      */
     @Test
     void integerFromStringTest() {
@@ -99,8 +94,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests parsing an invalid integer string.
-     * Verifies that parsing a non-numeric string returns null.
+     * A non-numeric string returns null rather than throwing.
      */
     @Test
     void integerFromStringBadStringTest() {
@@ -110,8 +104,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests parsing a valid boolean string to a Boolean object.
-     * Verifies that a "true" string is successfully converted to a Boolean.
+     * A "true" string parses to a non-null Boolean.
      */
     @Test
     void booleanFromStringTest() {
@@ -121,8 +114,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests parsing an invalid boolean string.
-     * Verifies that parsing a non-boolean string returns false.
+     * A non-boolean string returns false rather than throwing.
      */
     @Test
     void booleanFromStringBadStringTest() {
@@ -132,8 +124,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests checking if a location is within a radius of another location.
-     * Verifies that a location 5 blocks away is within a 10 block radius.
+     * A location within the radius is reported as inside.
      */
     @Test
     void isInsideTest() {
@@ -143,8 +134,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests checking if a location is outside a radius.
-     * Verifies that a location 15 blocks away is outside a 10 block radius.
+     * A location beyond the radius is reported as outside.
      */
     @Test
     void isInsideOutsideTest() {
@@ -154,8 +144,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests converting enum names to human-readable format.
-     * Verifies that enum constants like "FUMOS_DUO" are converted to "fumos duo".
+     * An enum name is recoded to lowercase space-separated words, e.g. "FUMOS_DUO" -&gt; "fumos duo".
      */
     @Test
     void enumRecodeTest() {
@@ -167,8 +156,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests capitalizing the first letter of each word in a string.
-     * Verifies that "fumos duo" is converted to "Fumos Duo".
+     * The first letter of each word is capitalized, e.g. "fumos duo" -&gt; "Fumos Duo".
      */
     @Test
     void firstLetterCapitalizeTest() {
@@ -180,8 +168,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests serializing a Location to a Map of string key-value pairs.
-     * Verifies that location coordinates and world name are correctly mapped with a given label prefix.
+     * A Location serializes to a map whose keys are prefixed with the given label.
      */
     @Test
     void serializeLocationTest() {
@@ -194,8 +181,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests serializing a Location with a null world.
-     * Verifies that locations with null worlds are rejected and return null.
+     * A location with a null world is rejected and serializes to null.
      */
     @Test
     void serializeLocationBadLocationTest() {
@@ -205,8 +191,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests deserializing a Location from a Map of string key-value pairs.
-     * Verifies that a serialized location can be reconstructed with correct world name and coordinates.
+     * A serialized location round-trips back to a Location with the original world and coordinates.
      */
     @Test
     void deserializeLocationTest() {
@@ -222,8 +207,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests deserializing a Location from a Map with missing or invalid coordinates.
-     * Verifies that deserialization with null or missing coordinates returns null.
+     * Deserialization returns null when a coordinate is null or missing.
      */
     @Test
     void deserializeLocationNullTest() {
@@ -243,86 +227,72 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests checking if a player is facing a specific block type.
-     * Verifies that the correct block is returned when a player faces a matching block type.
+     * The faced block is returned when its type matches the requested type.
      */
     @Test
     void playerFacingBlockTypeTest() {
-        // get the block at origin
         Block block = testWorld.getBlockAt(origin);
 
-        // check if the player is facing a block of type stone
         Block facingBlock = playerFacingBlockTypeHelper(Material.STONE, Material.STONE);
         assertNotNull(facingBlock, "Ollivanders2Common.playerFacingBlockType() should return a block when facing STONE");
         assertEquals(block, facingBlock, "Should return the block at origin");
     }
 
     /**
-     * Tests checking for a specific block type when player faces a different block.
-     * Verifies that null is returned when the faced block type doesn't match the requested type.
+     * Null is returned when the faced block type does not match the requested type.
      */
     @Test
     void playerFacingBlockTypeFailureTest() {
-        // check if they are facing a block of type stone but actually make the type wood
         Block facingBlock = playerFacingBlockTypeHelper(Material.DARK_OAK_WOOD, Material.STONE);
         assertNull(facingBlock, "Ollivanders2Common.playerFacingBlockType() should return null facing WOOD");
     }
 
     /**
-     * Tests checking for a block type when the player is facing air.
-     * Verifies that null is returned when the player is not facing any blocks of the requested type.
+     * Null is returned when the player faces air and no block of the requested type is in line of sight.
      */
     @Test
     void playerFacingBlockTypeNothingTest() {
-        // check if the player is facing a block of type stone (there should be none in that direction)
         Block facingBlock = playerFacingBlockTypeHelper(Material.AIR, Material.STONE);
         assertNull(facingBlock, "Ollivanders2Common.playerFacingBlockType() should return null when not facing the block type");
     }
 
     Block playerFacingBlockTypeHelper(@NotNull Material originBlockType, @NotNull Material checkBlockType) {
-        // make the block at origin type STONE
         Block block = testWorld.getBlockAt(origin);
         block.setType(originBlockType);
 
-        // create a player and have them stand 3 blocks away facing the block at origin
         PlayerMock player = mockServer.addPlayer();
         Location playerLocation = new Location(testWorld, 0, 4, 3);
         player.setLocation(playerLocation);
 
-        // set the player's rotation to face the block at origin (yaw=180 to face negative Z, pitch=0 for horizontal)
+        // yaw=180 faces negative Z (toward origin), pitch=0 keeps the look horizontal
         player.setRotation(180, 0);
 
-        // advance the game ticks 5 for everything to settle
         mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
 
-        // check if the player is facing a block of type stone
         return Ollivanders2Common.playerFacingBlockType(player, checkBlockType);
     }
 
     /**
-     * Tests converting spherical coordinates to 3D vectors.
-     * Verifies that spherical coordinates are correctly converted with proper magnitude and direction.
-     * Tests both north pole and equator coordinates.
+     * A spherical coordinate converts to a vector whose magnitude equals the radius.
      */
     @Test
     void sphereToVectorTest() {
-        // test conversion of spherical coordinates to vector
         double radius = 10;
 
-        // test north pole (inclination = 0, azimuth = 0)
+        // Test 1: north pole (inclination = 0, azimuth = 0)
         Vector northPole = Ollivanders2Common.sphereToVector(new double[]{0, 0}, (int) radius);
         assertNotNull(northPole, "sphereToVector() should return a vector");
         assertEquals(radius, northPole.length(), 0.01, "Vector magnitude should equal radius");
 
-        // test equator (inclination = π/2, azimuth = 0)
+        // Test 2: equator (inclination = π/2, azimuth = 0)
         Vector equator = Ollivanders2Common.sphereToVector(new double[]{Math.PI / 2, 0}, (int) radius);
         assertNotNull(equator, "sphereToVector() should return a vector");
         assertEquals(radius, equator.length(), 0.01, "Vector magnitude should equal radius");
     }
 
     /**
-     * There is no effective way to test flair() since we cannot access the particle system to see if the effect worked
-     * as intended.
+     * flair() runs without error for its overloads and a null location. MockBukkit exposes no particle system, so the
+     * visual effect itself cannot be asserted.
      */
     @Test
     void flairTest() {
@@ -337,21 +307,17 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests sending title and subtitle messages to multiple players.
-     * Verifies that all players in the list receive the correct title and subtitle text.
+     * Every player in the list receives the title and subtitle.
      */
     @Test
     void sendTitleMessageTest() {
-        // create multiple mock players
         PlayerMock player1 = mockServer.addPlayer("Fred");
         PlayerMock player2 = mockServer.addPlayer("Joe");
 
-        // add players to a list
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
 
-        // call sendTitleMessage with title and subtitle
         String title = "Test Title";
         String subtitle = "Test Subtitle";
         Ollivanders2Common.sendTitleMessage("Test Title", "Test Subtitle", players);
@@ -373,12 +339,10 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests sending messages to players within a given radius.
-     * Verifies that players within the radius receive the message while those outside do not.
+     * Players within the radius receive the message; a player outside it does not.
      */
     @Test
     void sendMessageInRadius() {
-        // create multiple mock players
         PlayerMock player1 = mockServer.addPlayer();
         PlayerMock player2 = mockServer.addPlayer();
         PlayerMock player3 = mockServer.addPlayer();
@@ -421,8 +385,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests printing debug messages when debug mode is enabled.
-     * Verifies that debug messages are logged when Ollivanders2.debug is true.
+     * A debug message is logged when {@link Ollivanders2#debug} is true.
      */
     @Test
     void printDebugMessageTest() {
@@ -441,8 +404,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests that debug messages are suppressed when debug mode is disabled.
-     * Verifies that no debug messages are logged when Ollivanders2.debug is false.
+     * A debug message is suppressed when {@link Ollivanders2#debug} is false.
      */
     @Test
     void printDebugMessageNoDebugTest() {
@@ -457,8 +419,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests printing debug messages as warnings.
-     * Verifies that debug messages can be logged with a WARNING level when flagged.
+     * A debug message logs at WARNING level when the warning flag is set.
      */
     @Test
     void printDebugMessageWarningTest() {
@@ -476,8 +437,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests logging messages at INFO level.
-     * Verifies that log messages are properly recorded regardless of debug mode.
+     * A log message is recorded regardless of debug mode.
      */
     @Test
     void printLogMessage() {
@@ -494,8 +454,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests logging messages as warnings.
-     * Verifies that log messages can be recorded with a WARNING level when flagged.
+     * A log message logs at WARNING level when the warning flag is set.
      */
     @Test
     void printLogWarningMessage() {
@@ -511,8 +470,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests comparing two identical locations for equality.
-     * Verifies that identical locations are recognized as equal.
+     * Identical locations, whether the same instance or equal coordinates, compare as equal.
      */
     @Test
     void locationEqualsTest() {
@@ -524,8 +482,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests comparing different locations for inequality.
-     * Verifies that locations with different coordinates or worlds are recognized as unequal.
+     * Locations differing in coordinates or world compare as unequal.
      */
     @Test
     void locationEqualsFalseTest() {
@@ -539,12 +496,10 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests filtering recipients by distance with a standard radius.
-     * Verifies that players within the radius are kept and those outside are removed.
+     * A dropoff removes recipients beyond the radius and keeps those within it.
      */
     @Test
     void chatDropoffTest() {
-        // create players at different distances from origin
         PlayerMock player1 = mockServer.addPlayer("Close1");
         player1.setLocation(new Location(testWorld, 2, 4, 0));  // 2 blocks away
 
@@ -557,21 +512,17 @@ public class Ollivanders2CommonTest {
         PlayerMock player4 = mockServer.addPlayer("Far2");
         player4.setLocation(new Location(testWorld, 0, 4, 15));  // 15 blocks away
 
-        // create recipients set with all players
         Set<Player> recipients = new HashSet<>();
         recipients.add(player1);
         recipients.add(player2);
         recipients.add(player3);
         recipients.add(player4);
 
-        // test with dropoff of 5 blocks - should only keep close players
         Ollivanders2Common.chatDropoff(recipients, 5, origin);
 
-        // Verify close players are still in the set
         assertTrue(recipients.contains(player1), "Player at 2 blocks should be within 5 block dropoff");
         assertTrue(recipients.contains(player2), "Player at 3 blocks should be within 5 block dropoff");
 
-        // Verify far players were removed
         assertFalse(recipients.contains(player3), "Player at 10 blocks should be removed from 5 block dropoff");
         assertFalse(recipients.contains(player4), "Player at 15 blocks should be removed from 5 block dropoff");
 
@@ -579,12 +530,10 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests chat dropoff with a large radius.
-     * Verifies that all players are kept when the radius is sufficiently large.
+     * A radius larger than any player's distance keeps every recipient.
      */
     @Test
     void chatDropoffLargeRadiusTest() {
-        // create players at various distances
         PlayerMock player1 = mockServer.addPlayer("PlayA");
         player1.setLocation(new Location(testWorld, 5, 4, 5));  // ~7 blocks away
 
@@ -599,7 +548,6 @@ public class Ollivanders2CommonTest {
         recipients.add(player2);
         recipients.add(player3);
 
-        // test with large dropoff of 50 blocks - should keep all
         Ollivanders2Common.chatDropoff(recipients, 50, origin);
 
         assertTrue(recipients.contains(player1), "Player should be within 50 block dropoff");
@@ -609,12 +557,11 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests chat dropoff with a very small radius.
-     * Verifies that only players very close to the origin are kept with a small radius.
+     * A 1-block radius keeps only the player at the origin; the bound is exclusive, so a player exactly 1 block away is
+     * dropped.
      */
     @Test
     void chatDropoffSmallRadiusTest() {
-        // create players at close distances
         PlayerMock player1 = mockServer.addPlayer("X");
         player1.setLocation(new Location(testWorld, 0, 4, 0));  // 0 blocks away (at origin)
 
@@ -629,7 +576,6 @@ public class Ollivanders2CommonTest {
         recipients.add(player2);
         recipients.add(player3);
 
-        // test with small dropoff of 1 block - should only keep origin player
         Ollivanders2Common.chatDropoff(recipients, 1, origin);
 
         assertTrue(recipients.contains(player1), "Player at origin should be within 1 block dropoff");
@@ -639,12 +585,10 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests chat dropoff with an empty recipients set.
-     * Verifies that the method handles empty sets gracefully without errors.
+     * An empty recipients set is handled without error and stays empty.
      */
     @Test
     void chatDropoffEmptyRecipientsTest() {
-        // test with empty recipients set - should not throw
         Set<Player> recipients = new HashSet<>();
 
         Ollivanders2Common.chatDropoff(recipients, 10, origin);
@@ -653,8 +597,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests identifying door blocks.
-     * Verifies that standard door blocks are correctly identified.
+     * A standard door block is identified as a door.
      */
     @Test
     void isDoorTest() {
@@ -665,8 +608,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests identifying trapdoors as doors.
-     * Verifies that trapdoors are also recognized as door blocks.
+     * A trapdoor is identified as a door.
      */
     @Test
     void isDoorTrapdoorTest() {
@@ -676,29 +618,30 @@ public class Ollivanders2CommonTest {
         assertTrue(Ollivanders2Common.isDoor(trapdoorBlock), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_TRAPDOOR");
     }
 
+    /**
+     * A fence gate is identified as a door.
+     */
     @Test
     void isDoorGateTest() {
-        Block trapdoorBlock = testWorld.getBlockAt(new Location(testWorld, 201, 4, 500));
-        trapdoorBlock.setType(Material.DARK_OAK_TRAPDOOR);
+        Block gateBlock = testWorld.getBlockAt(new Location(testWorld, 201, 4, 500));
+        gateBlock.setType(Material.DARK_OAK_FENCE_GATE);
 
-        assertTrue(Ollivanders2Common.isDoor(trapdoorBlock), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_TRAPDOOR");
+        assertTrue(Ollivanders2Common.isDoor(gateBlock), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_FENCE_GATE");
     }
 
     /**
-     * Tests that non-door blocks are not identified as doors.
-     * Verifies that fences and other blocks are correctly distinguished from doors.
+     * A block that is not a door, trapdoor, or gate is not identified as a door.
      */
     @Test
     void isDoorNotDoorTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 202, 4, 600));
-        block.setType(Material.DARK_OAK_FENCE_GATE);
+        block.setType(Material.STONE);
 
-        assertTrue(Ollivanders2Common.isDoor(block), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_FENCE_GATE");
+        assertFalse(Ollivanders2Common.isDoor(block), "Ollivanders2Common.isDoor() returned true when block is Material.STONE");
     }
 
     /**
-     * Tests identifying chest blocks.
-     * Verifies that standard chest blocks are correctly identified.
+     * A standard chest block is identified as a chest.
      */
     @Test
     void isChestTest() {
@@ -709,8 +652,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests identifying shulker boxes as container blocks.
-     * Verifies that shulker boxes are recognized as valid storage containers.
+     * A shulker box is identified as a chest.
      */
     @Test
     void isChestShulkerBoxTest() {
@@ -721,8 +663,7 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Tests that non-container blocks are not identified as chests.
-     * Verifies that barrels and other blocks are correctly distinguished from chests.
+     * A barrel is not identified as a chest.
      */
     @Test
     void isChestNotChestTest() {
@@ -732,6 +673,9 @@ public class Ollivanders2CommonTest {
         assertFalse(Ollivanders2Common.isChest(notChestBlock), "Ollivanders2Common.isChest() returned true when block is Material.BARREL");
     }
 
+    /**
+     * A standing sign is identified as a sign.
+     */
     @Test
     void isSignStandingSignTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 400));
@@ -740,6 +684,9 @@ public class Ollivanders2CommonTest {
         assertTrue(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned false when block is Material.OAK_SIGN");
     }
 
+    /**
+     * A wall sign is identified as a sign.
+     */
     @Test
     void isSignWallSignTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 401));
@@ -748,6 +695,9 @@ public class Ollivanders2CommonTest {
         assertTrue(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned false when block is Material.OAK_WALL_SIGN");
     }
 
+    /**
+     * A hanging sign is identified as a sign.
+     */
     @Test
     void isSignHangingSignTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 402));
@@ -756,6 +706,9 @@ public class Ollivanders2CommonTest {
         assertTrue(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned false when block is Material.OAK_HANGING_SIGN");
     }
 
+    /**
+     * A barrel is not identified as a sign.
+     */
     @Test
     void isSignNotSignTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 403));
@@ -764,6 +717,9 @@ public class Ollivanders2CommonTest {
         assertFalse(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned true when block is Material.BARREL");
     }
 
+    /**
+     * A log block is identified as a natural log.
+     */
     @Test
     void isNaturalLogLogTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 404));
@@ -772,6 +728,9 @@ public class Ollivanders2CommonTest {
         assertTrue(Ollivanders2Common.isNaturalLog(block), "Ollivanders2Common.isNaturalLog() returned true when block is Material.OAK_LOG");
     }
 
+    /**
+     * A nether stem is identified as a natural log.
+     */
     @Test
     void isNaturalLogStemTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 405));
@@ -780,6 +739,9 @@ public class Ollivanders2CommonTest {
         assertTrue(Ollivanders2Common.isNaturalLog(block), "Ollivanders2Common.isNaturalLog() returned true when block is Material.WARPED_STEM");
     }
 
+    /**
+     * A barrel is not identified as a natural log.
+     */
     @Test
     void isNaturalLogNotLogTest() {
         Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 406));
@@ -789,7 +751,8 @@ public class Ollivanders2CommonTest {
     }
 
     /**
-     * Test to make sure we do not miss initializing materials lists
+     * Every chest and shulker box material is recognized by isChest, guarding against a material missed during list
+     * initialization.
      */
     @Test
     void chestMaterialsTest() {

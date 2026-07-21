@@ -18,12 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the LUMOS_DUO spell.
- *
- * <p>Tests spell initialization, duration configuration based on caster skill level, block creation,
- * and proper cleanup when the spell expires or is manually killed.</p>
- *
- * @author test
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.LUMOS_DUO}.
  */
 public class LumosDuoTest extends O2SpellTestSuper {
     @Override @NotNull
@@ -32,14 +27,8 @@ public class LumosDuoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies spell-specific initialization and configuration.
-     *
-     * <p>Tests that:</p>
-     * <ul>
-     * <li>Projectile pass-through materials are configured correctly (air only)</li>
-     * <li>Spell duration is set to minimum when caster has no experience</li>
-     * <li>Spell duration is set to maximum when caster has high skill level</li>
-     * </ul>
+     * Verify the projectile passes through air only and the duration is set to its min at no skill and its max at
+     * high skill.
      */
     @Override @Test
     void spellConstructionTest() {
@@ -64,16 +53,8 @@ public class LumosDuoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell behavior including block creation and duration countdown.
-     *
-     * <p>Verifies that:</p>
-     * <ul>
-     * <li>No blocks are created in the first 2 ticks</li>
-     * <li>One glowstone block is created at tick 3</li>
-     * <li>At most maxLineLength blocks are created</li>
-     * <li>Spell remains active until full duration expires</li>
-     * <li>Spell is killed when duration reaches spellDuration</li>
-     * </ul>
+     * Verify no blocks appear in the first 2 ticks, glowstone is laid from tick 3 up to maxLineLength, and the spell
+     * stays alive until its duration expires.
      */
     @Override @Test
     void doCheckEffectTest() {
@@ -106,14 +87,7 @@ public class LumosDuoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests proper cleanup when the spell is terminated.
-     *
-     * <p>Verifies that:</p>
-     * <ul>
-     * <li>Glowstone blocks created by the spell are reverted to air</li>
-     * <li>The spell is removed from the block change tracking</li>
-     * <li>Spell is properly marked as killed</li>
-     * </ul>
+     * Verify killing the spell reverts its glowstone blocks to air and clears them from block tracking.
      */
     @Override @Test
     void revertTest() {

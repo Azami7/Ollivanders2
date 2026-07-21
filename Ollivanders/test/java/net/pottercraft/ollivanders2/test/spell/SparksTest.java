@@ -18,31 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for Sparks spell variants.
- *
- * <p>Provides shared test infrastructure for testing Sparks spell implementations including:</p>
- * <ul>
- * <li><strong>Sound Verification:</strong> Verifies the spell plays a firework sound on impact</li>
- * <li><strong>Damage Testing:</strong> For damage-dealing spells, confirms the spell hits targets and deals damage</li>
- * <li><strong>Projectile Travel:</strong> Tests that projectiles travel to the target location</li>
- * </ul>
- *
- * <p>Subclasses must implement {@link #getSpellType()} to specify which Sparks variant to test.</p>
+ * Base test class for {@link Sparks} spells, covering the firework sound on launch and, for damaging spells, that the
+ * projectile reaches and damages the target.
  *
  * @author Azami7
  */
 abstract public class SparksTest extends O2SpellTestSuper {
     /**
-     * Tests core Sparks spell functionality.
-     *
-     * <p>Verifies the following:</p>
-     * <ul>
-     * <li>The spell plays a firework sound on impact using Mockito spy verification</li>
-     * <li>For damage-dealing spells, the projectile reaches the target and deals damage</li>
-     * </ul>
-     *
-     * <p>The test casts the spell at a target player 10 blocks away and allows sufficient ticks
-     * for the projectile to travel and impact.</p>
+     * Verify the spell plays the firework sound and, when it deals damage, hits and damages the target player.
      */
     @Test
     void doCheckEffectTest() {
@@ -75,10 +58,7 @@ abstract public class SparksTest extends O2SpellTestSuper {
     }
 
     /**
-     * Overridden to disable revert testing.
-     *
-     * <p>Sparks spells have no revert actions since they don't apply temporary effects
-     * or alter the world state in ways that need reverting.</p>
+     * No-op: Sparks spells have no revert action.
      */
     @Override
     @Test

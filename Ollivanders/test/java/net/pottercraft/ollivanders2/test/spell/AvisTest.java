@@ -64,10 +64,10 @@ public class AvisTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the bird count scales with caster skill and is clamped to [1, maxBirds].
+     * Verifies that the bird count scales with caster skill and is limited to [1, maxBirds].
      *
      * <p>The count is read from the spell immediately after creation (before any birds spawn). A very low experience
-     * must floor to a single bird, and a very high experience must clamp to {@link AVIS#getMaxBirds()}.</p>
+     * must floor to a single bird, and a very high experience must limit to {@link AVIS#getMaxBirds()}.</p>
      */
     @Test
     void birdCountTest() {
@@ -80,9 +80,9 @@ public class AvisTest extends O2SpellTestSuper {
         AVIS low = (AVIS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1);
         assertEquals(1, low.getBirdsRemaining(), "low-skill cast should floor to one bird");
 
-        // high experience clamps to the maximum
+        // high experience limits to the maximum
         AVIS high = (AVIS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1000);
-        assertEquals(high.getMaxBirds(), high.getBirdsRemaining(), "high-skill cast should clamp to maxBirds");
+        assertEquals(high.getMaxBirds(), high.getBirdsRemaining(), "high-skill cast should limit to maxBirds");
     }
 
     /** {@inheritDoc} */

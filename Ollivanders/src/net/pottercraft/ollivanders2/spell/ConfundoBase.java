@@ -6,11 +6,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Confundus Charm super class which causes confusion in the target.
+ * Base class for Confundus Charm spells, which confuse the target by applying nausea.
  */
 public abstract class ConfundoBase extends AddPotionEffect {
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -19,8 +19,6 @@ public abstract class ConfundoBase extends AddPotionEffect {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using

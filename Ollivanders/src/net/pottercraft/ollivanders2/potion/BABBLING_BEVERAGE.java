@@ -9,21 +9,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Babbling Beverage - a potion that causes the drinker to babble nonsense.
- *
- * <p>When consumed, this potion applies the BABBLING effect to the player, forcing them
- * to speak randomly selected nonsense phrases for the duration of the effect. This is
- * primarily a cosmetic/humorous effect with no mechanical disadvantage.</p>
+ * Babbling Beverage — applies the BABBLING effect, making the drinker speak random nonsense phrases.
  *
  * @author Azami7
- * @since 2.2.7
  */
 public class BABBLING_BEVERAGE extends O2Potion {
     /**
-     * Constructor for Babbling Beverage potion.
-     *
-     * <p>Initializes the potion with its ingredients, description text, flavor text, and
-     * potion color. Sets up the recipe and all effects that will be applied when consumed.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -45,11 +37,7 @@ public class BABBLING_BEVERAGE extends O2Potion {
     }
 
     /**
-     * Drink the Babbling Beverage and apply the babbling effect.
-     *
-     * <p>Applies the BABBLING effect to the player for the duration defined by the potion's
-     * duration field. The effect causes the player to speak random nonsense phrases at regular
-     * intervals while the effect is active.</p>
+     * Apply the BABBLING effect to the player.
      *
      * @param player the player who drank the potion
      */

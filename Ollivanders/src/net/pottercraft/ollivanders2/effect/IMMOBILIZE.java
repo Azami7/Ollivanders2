@@ -17,39 +17,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Partial immobilization effect that prevents player movement but allows rotation.
- *
- * <p>IMMOBILIZE prevents the affected player from moving or interacting with the environment while
- * still allowing them to look around (change pitch and yaw). The effect cancels all movement-related
- * events (location changes, velocity changes, flight toggling, sprinting, sneaking) as well as player
- * interaction events. Teleport and apparate attempts are evaluated based on distance: long-distance
- * teleports (> 100 blocks) remove this effect, allowing magical escape, while short-distance attempts
- * are blocked to prevent trivial escape.</p>
- *
- * <p>Mechanism:</p>
- * <ul>
- * <li>Location changes are cancelled but rotation (pitch/yaw) changes are allowed</li>
- * <li>Velocity changes are cancelled</li>
- * <li>Flight toggling is cancelled</li>
- * <li>Sneak toggling is cancelled</li>
- * <li>Sprint toggling is cancelled</li>
- * <li>Interaction events (block breaking, placing, etc.) are cancelled</li>
- * <li>Long-distance teleport/apparate (> 100 blocks) removes the effect</li>
- * <li>Short-distance teleport/apparate (≤ 100 blocks) is cancelled</li>
- * <li>Detectable by mind-reading spells (Legilimens)</li>
- * <li>Detection text: "is unable to move"</li>
- * </ul>
+ * Prevents the target from moving or interacting with the environment while still allowing them to look around
+ * (change pitch and yaw). Teleport or apparate attempts over 100 blocks remove this effect, allowing magical escape;
+ * shorter attempts are cancelled. Detectable via Informous and Legilimens.
  *
  * @author Azami7
  */
 public class IMMOBILIZE extends O2Effect {
+    /**
+     * Whether the target may still change pitch and yaw; subclasses set this false to freeze rotation too.
+     */
     boolean allowRotation = true;
 
     /**
-     * Constructor for creating a complete immobilization effect.
-     *
-     * <p>Creates an effect that completely paralyzes the target player, preventing all movement
-     * and interaction. Sets the detection text for mind-reading spells to "is unable to move".</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the immobilization effect in game ticks
@@ -65,34 +46,17 @@ public class IMMOBILIZE extends O2Effect {
         informousText = legilimensText = "is unable to move";
     }
 
-    /**
-     * Age the immobilize effect each game tick.
-     *
-     * <p>Called each game tick. This effect tracks its remaining duration. All movement prevention
-     * is handled through event cancellation in the various event handler methods. When the duration
-     * reaches zero, the effect is automatically killed and removed from the player.</p>
-     */
     @Override
     public void checkEffect() {
         age(1);
     }
 
-    /**
-     * Perform cleanup when the immobilization effect is removed.
-     *
-     * <p>The default implementation does nothing, as the immobilization effect has no persistent
-     * state to clean up. When removed, the player regains normal control over movement and
-     * interaction.</p>
-     */
     @Override
     public void doRemove() {
     }
 
     /**
      * Prevent player interaction (block breaking, placing, etc.) while immobilized.
-     *
-     * <p>Cancels all player interact events to ensure the immobilized player cannot interact
-     * with the environment.</p>
      *
      * @param event the player interact event to cancel
      */
@@ -108,9 +72,6 @@ public class IMMOBILIZE extends O2Effect {
     /**
      * Prevent the player from toggling flight while immobilized.
      *
-     * <p>Cancels flight toggle events to ensure the immobilized player cannot enable or disable
-     * flight.</p>
-     *
      * @param event the player toggle flight event to cancel
      */
     @Override
@@ -124,9 +85,6 @@ public class IMMOBILIZE extends O2Effect {
 
     /**
      * Prevent the player from toggling sneak while immobilized.
-     *
-     * <p>Cancels sneak toggle events to ensure the immobilized player cannot change their sneak
-     * state.</p>
      *
      * @param event the player toggle sneak event to cancel
      */
@@ -142,9 +100,6 @@ public class IMMOBILIZE extends O2Effect {
     /**
      * Prevent the player from toggling sprint while immobilized.
      *
-     * <p>Cancels sprint toggle events to ensure the immobilized player cannot activate or
-     * deactivate sprinting.</p>
-     *
      * @param event the player toggle sprint event to cancel
      */
     @Override
@@ -159,9 +114,6 @@ public class IMMOBILIZE extends O2Effect {
     /**
      * Prevent velocity changes to the immobilized player.
      *
-     * <p>Cancels velocity events to ensure the immobilized player cannot be moved by any
-     * velocity-changing mechanism.</p>
-     *
      * @param event the player velocity event to cancel
      */
     @Override
@@ -174,11 +126,8 @@ public class IMMOBILIZE extends O2Effect {
     }
 
     /**
-     * Prevent the player from moving location while immobilized.
-     *
-     * <p>Cancels player move events when location coordinates change (x, y, z). Rotation-only changes
-     * (pitch and yaw) are allowed unless allowRotation is false. This allows immobilized players to look
-     * around but prevents them from walking, jumping, or otherwise changing their position.</p>
+     * Prevent the player from moving location while immobilized. Rotation-only changes (pitch and yaw) are allowed
+     * unless {@link #allowRotation} is false.
      *
      * @param event the player move event to evaluate
      */
@@ -210,12 +159,8 @@ public class IMMOBILIZE extends O2Effect {
     }
 
     /**
-     * Handle teleportation attempts based on distance threshold.
-     *
-     * <p>When an immobilized player attempts to teleport via Bukkit's teleport system, the distance of
-     * the teleport is checked. If the distance is greater than 100 blocks, the effect is automatically
-     * removed, allowing long-distance magical escape from immobilization. For shorter distances (≤ 100
-     * blocks), the event is cancelled to prevent trivial escape attempts.</p>
+     * Handle a teleport attempt: a teleport over 100 blocks removes this effect (magical escape); a shorter one is
+     * cancelled.
      *
      * @param event the player teleport event
      */
@@ -236,12 +181,8 @@ public class IMMOBILIZE extends O2Effect {
     }
 
     /**
-     * Handle coordinate-based apparition attempts based on distance threshold.
-     *
-     * <p>When an immobilized player attempts to use the APPARATE spell with specific coordinates, the
-     * distance of the apparition is checked. If the distance is greater than 100 blocks, the effect is
-     * automatically removed, allowing long-distance magical escape from immobilization. For shorter
-     * distances (≤ 100 blocks), the event is cancelled to prevent trivial escape attempts.</p>
+     * Handle a coordinate-based apparition attempt: an apparition over 100 blocks removes this effect (magical
+     * escape); a shorter one is cancelled.
      *
      * @param event the apparate by coordinates event
      */
@@ -262,12 +203,8 @@ public class IMMOBILIZE extends O2Effect {
     }
 
     /**
-     * Handle name-based apparition attempts based on distance threshold.
-     *
-     * <p>When an immobilized player attempts to use the APPARATE spell with a player name destination,
-     * the distance of the apparition is checked. If the distance is greater than 100 blocks, the effect
-     * is automatically removed, allowing long-distance magical escape from immobilization. For shorter
-     * distances (≤ 100 blocks), the event is cancelled to prevent trivial escape attempts.</p>
+     * Handle a name-based apparition attempt: an apparition over 100 blocks removes this effect (magical escape); a
+     * shorter one is cancelled.
      *
      * @param event the apparate by name event
      */

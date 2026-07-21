@@ -42,50 +42,26 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Effect that transforms a player into their Animagus animal form.
- *
- * <p>ANIMAGUS_EFFECT is a permanent transformation that disguises a player as their pre-determined animal form
- * (retrieved from the player's O2Player data). The transformation includes:</p>
- * <ul>
- * <li>Visual disguise as the target animal form using LibDisguises</li>
- * <li>Appearance customization based on animal type (colors, variants, special states)</li>
- * <li>Restrictions preventing animal-like behaviors (flight, item interaction, etc.)</li>
- * <li>Age enforcement ensuring the animal appears as an adult</li>
- * </ul>
- *
- * <p>Supported Animal Forms: Cats, Rabbits, Wolves, Horses, Llamas, Pandas, Polar Bears, Creepers, Foxes, Pigs,
- * Sheep, Slimes, Spiders, Shulkers, and Turtles - each with form-specific appearance customization.</p>
- *
- * <p>Behavior Restrictions: While transformed, the player cannot interact with blocks, toggle flight, pick up items,
- * select items in hotbar, consume items, or drop items. These restrictions prevent behaviors inconsistent with animal
- * form and are enforced through event cancellation.</p>
- *
- * <p>This effect is permanent and cannot be modified via setPermanent(). Use kill() to revert the player to
- * human form.</p>
+ * Permanently disguises a player as their pre-determined Animagus animal form (from their {@link O2Player} data),
+ * customizing the form's appearance and blocking behaviors inconsistent with an animal (block interaction, flight,
+ * item pickup/hold/consume/drop). Always permanent; use {@link #kill()} to revert to human form.
  *
  * @author Azami7
- * @see ShapeShift for the parent class handling transformation mechanics
+ * @see ShapeShift
  */
 public class ANIMAGUS_EFFECT extends ShapeShift {
     /**
-     * The color or type variant for the animal form.
-     *
-     * <p>This value is retrieved from the player's O2Player data and specifies appearance variations for the
-     * animal form (e.g., Cat.Type, DyeColor for wool, Horse.Color, etc.). It is used during customizeWatcher()
-     * to set type-specific appearance properties. If parsing fails, a corrected variant is stored back to the
-     * player's O2Player data.</p>
+     * The color or type variant for the animal form (e.g. Cat.Type, DyeColor for wool, Horse.Color), from the
+     * player's {@link O2Player} data. If it fails to parse, a corrected variant is written back to that data.
      */
     String colorVariant;
 
     /**
-     * Constructor for creating an Animagus transformation effect.
-     *
-     * <p>Creates a permanent transformation effect that disguises the player as their pre-determined animal form.
-     * The constructor retrieves the animal form and color variant from the target player's O2Player data. If the
-     * O2Player cannot be found or the form is null, the effect is killed.</p>
+     * Constructor. Reads the animal form and color variant from the target's {@link O2Player} data; kills the effect
+     * if that data or the form is missing.
      *
      * @param plugin      a callback to the MC plugin
-     * @param duration    not used - animagus effect is always permanent
+     * @param duration    ignored - animagus effect is always permanent
      * @param isPermanent ignored - animagus effect is always permanent
      * @param pid         the unique ID of the player to transform
      */
@@ -115,11 +91,8 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Transform the player on first tick if not already transformed.
-     *
-     * <p>This template method defers the actual transformation to the first upkeep() call rather than executing
-     * in the constructor. This ensures the player entity is fully initialized before the LibDisguises disguise
-     * is applied.</p>
+     * Transform the player on the first tick, deferred from the constructor so the player entity is fully
+     * initialized before the LibDisguises disguise is applied.
      */
     @Override
     protected void doCheckEffect() {
@@ -129,17 +102,9 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Customize the animal form's appearance based on type and stored color variant.
-     *
-     * <p>This method applies type-specific appearance customizations:</p>
-     * <ul>
-     * <li>Color/Type Variants: Parses and applies the stored colorVariant to entity types that support variations
-     *     (Cat.Type, Rabbit.Type, DyeColor for wolves/sheep/shulkers, Horse.Color, Llama.Color, Fox.Type)</li>
-     * <li>Special Properties: Sets safe defaults for special entity states (e.g., creeper ignited=false, fox sitting=false,
-     *     panda main gene=normal)</li>
-     * <li>Age Enforcement: Sets all ageable animals to adult form</li>
-     * <li>Correction: If color variant parsing fails, stores the corrected variant back to the player's O2Player data</li>
-     * </ul>
+     * Apply type-specific appearance to the disguise watcher: the stored {@link #colorVariant} where the form
+     * supports variants, safe defaults for special states (e.g. creeper not ignited), and adult age for ageables.
+     * Writes back a corrected variant if the stored one fails to parse. No-op in test mode.
      */
     @Override
     void customizeWatcher() {
@@ -190,7 +155,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 correctedVariant = color.toString();
             }
 
-            ((WolfWatcher) watcher).isTamed();
+            ((WolfWatcher) watcher).setTamed(true);
             ((WolfWatcher) watcher).setCollarColor(color);
         }
         else if (watcher instanceof HorseWatcher) {
@@ -298,10 +263,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Override to prevent external modification of permanent status.
-     *
-     * <p>This effect must remain permanent throughout the player's session. Use kill() to revert the player to
-     * human form instead.</p>
+     * No-op; this effect is always permanent. Use {@link #kill()} to revert the player to human form.
      *
      * @param perm ignored - effect is always permanent
      */
@@ -309,23 +271,12 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     public void setPermanent(boolean perm) {
     }
 
-    /**
-     * Perform cleanup when this Animagus effect is removed.
-     *
-     * <p>The default implementation does nothing, as animal form cleanup is handled by the LibDisguises removal
-     * in the parent ShapeShiftSuper.restore() method.</p>
-     */
     @Override
     public void doRemove() {
     }
 
     /**
-     * Prevent block interaction while transformed into animal form.
-     *
-     * <p>Animals cannot interact with blocks, so block click events are cancelled to prevent unintended
-     * block manipulation while in animal form.</p>
-     *
-     * @param event the player interact event
+     * Cancel block interaction while transformed.
      */
     @Override
     void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
@@ -341,12 +292,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Prevent flight while transformed into an animal form.
-     *
-     * <p>Most animal forms cannot naturally fly, so flight toggle attempts are cancelled. This prevents the
-     * transformed player from using flight abilities that would be inconsistent with animal form.</p>
-     *
-     * @param event the player toggle flight event
+     * Cancel flight while transformed.
      */
     @Override
     void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {
@@ -360,11 +306,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Prevent item pickup while transformed into animal form.
-     *
-     * <p>Animals cannot interact with items in their inventory, so item pickup attempts are cancelled.</p>
-     *
-     * @param event the entity item pickup event
+     * Cancel item pickup while transformed.
      */
     @Override
     void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {
@@ -376,11 +318,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Prevent item selection while transformed into animal form.
-     *
-     * <p>Animals cannot hold or select items, so item held events are cancelled.</p>
-     *
-     * @param event the player item held event
+     * Cancel hotbar item selection while transformed.
      */
     @Override
     void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {
@@ -393,11 +331,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Prevent item consumption while transformed into animal form.
-     *
-     * <p>Animals cannot consume items, so item consumption attempts are cancelled.</p>
-     *
-     * @param event the player item consume event
+     * Cancel item consumption while transformed.
      */
     @Override
     void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {
@@ -409,11 +343,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
     }
 
     /**
-     * Prevent item dropping while transformed into animal form.
-     *
-     * <p>Animals cannot drop items, so item drop events are cancelled.</p>
-     *
-     * @param event the player drop item event
+     * Cancel item dropping while transformed.
      */
     @Override
     void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {

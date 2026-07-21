@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://en.wikipedia.org/wiki/Serenus_Sammonicus">https://en.wikipedia.org/wiki/Serenus_Sammonicus</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Serenus_Sammonicus">Serenus Sammonicus</a>
  */
 public class DE_MEDICINA_PRAECEPTA extends O2Book {
     /**

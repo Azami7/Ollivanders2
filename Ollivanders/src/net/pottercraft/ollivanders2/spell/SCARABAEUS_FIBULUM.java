@@ -27,22 +27,13 @@ import java.util.ArrayList;
  */
 public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
     /**
-     * Minimum per-tick success rate (as a percentage) for this spell, regardless of caster skill.
-     * <p>
-     * Scarabaeus Fibulum is intentionally easy to cast: even a caster with zero experience has at
-     * least a 25% chance per tick to successfully transfigure the targeted endermite. Used in
-     * {@link #doInitSpell()} as the floor when {@code usesModifier} is at or below this value.
-     * </p>
+     * Minimum per-tick success rate (percentage) regardless of caster skill; even a zero-experience caster has at
+     * least this chance per tick to transfigure the targeted endermite.
      */
     public static int minSuccessRate = 25;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
-     * <p>
-     * Populates {@link #flavorText} with the canon "Beetle into Button" excerpt and sets the
-     * descriptive {@link #text}. Does not initialize the {@link #transfigurationMap} or any
-     * cast-time state — the casting constructor handles that.
-     * </p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -59,12 +50,7 @@ public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
     }
 
     /**
-     * Constructor for casting Scarabaeus Fibulum.
-     * <p>
-     * Configures the endermite→polished blackstone button entry in the {@link #transfigurationMap},
-     * sets the projectile {@link #radius} and success message, then invokes {@link #initSpell()}
-     * which triggers {@link #doInitSpell()} to compute the success rate based on caster skill.
-     * </p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -83,13 +69,7 @@ public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
     }
 
     /**
-     * Calculate the per-tick success rate from the caster's skill, with a {@link #minSuccessRate} floor.
-     * <p>
-     * If {@code usesModifier} is at or below {@link #minSuccessRate}, the success rate is clamped
-     * to that floor; otherwise it equals {@code usesModifier} directly. Higher skill therefore
-     * produces a proportionally higher per-tick chance to transfigure the endermite while the spell
-     * projectile is active.
-     * </p>
+     * Calculate the per-tick success rate from the caster's skill, limited to a {@link #minSuccessRate} floor.
      */
     @Override
     void doInitSpell() {

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turn target player in to a chicken.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Pullus">https://harrypotter.fandom.com/wiki/Pullus</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Pullus">Harry Potter Wiki - Pullus</a>
  */
 public final class PULLUS extends PlayerDisguise {
     /**

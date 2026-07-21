@@ -23,14 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link BRACKIUM_EMENDO}, the Bone-Healing Spell.
- *
- * <p>The spell finds the first living entity within 1.5 blocks of its projectile (skipping the caster) and either
- * damages it (if it is a skeleton, with damage scaling with caster skill) or heals it (if it is a player, a fixed
- * instant-health effect). If no entity is hit, the spell ends when the projectile strikes a block.</p>
- *
- * <p>Because the player heal uses {@link PotionEffectType#INSTANT_HEALTH} - an instant effect that fires once and
- * is never stored in the active-effects list - it is observed via an {@link EntityPotionEffectEvent} listener
- * rather than {@code hasPotionEffect}.</p>
+ * <p>
+ * Because the player heal uses {@link PotionEffectType#INSTANT_HEALTH} — an instant effect that fires once and is
+ * never stored in the active-effects list — it is observed via an {@link EntityPotionEffectEvent} listener rather
+ * than {@code hasPotionEffect}.
+ * </p>
  *
  * @author Azami7
  */
@@ -53,12 +50,9 @@ public class BrackiumEmendoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies the spell's skeleton-damage path and that it ends on a block hit when there is no target.
-     *
-     * <p>First a skeleton is placed in the projectile's path: a default-skill cast should damage it by an amount
-     * strictly between the spell's min and max damage (so the scaling path, not a clamp, is exercised) and end the
-     * spell. Then, in a separate area with no entity, the projectile is fired into a solid block and the spell must
-     * end on the block hit.</p>
+     * Verify a default-skill cast damages a skeleton in its path by an amount strictly between the min and max (so
+     * the scaling path, not a limit, is exercised) and ends the spell, and that with no entity the spell ends on a
+     * block hit.
      */
     @Override
     @Test
@@ -68,7 +62,7 @@ public class BrackiumEmendoTest extends O2SpellTestSuper {
         Location targetLocation = new Location(testWorld, location.getX() + 5, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
-        // skeleton in range: default skill should damage it by a non-clamped amount
+        // skeleton in range: default skill should damage it by a non-limited amount
         Skeleton skeleton = spawnSkeleton(targetLocation);
         double healthBefore = skeleton.getHealth();
 
@@ -78,7 +72,7 @@ public class BrackiumEmendoTest extends O2SpellTestSuper {
         assertTrue(brackiumEmendo.isKilled(), "spell did not end after damaging the skeleton");
         double damageDealt = healthBefore - skeleton.getHealth();
         assertTrue(damageDealt > brackiumEmendo.getMinDamage() && damageDealt < brackiumEmendo.getMaxDamage(),
-                "default-skill damage was not within the unclamped range");
+                "default-skill damage was not strictly between the min and max limits");
 
         // no entity in range: projectile must end when it hits a block
         Location blockTargetLocation = new Location(testWorld, location.getX() + 5, location.getY(), location.getZ() + 20);
@@ -92,14 +86,12 @@ public class BrackiumEmendoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that skeleton damage scales with caster skill and is clamped at both ends.
-     *
-     * <p>A very low skill must floor the damage to the spell's minimum, and a very high skill must clamp it to the
-     * maximum. A fresh skeleton is used for each cast so accumulated damage does not skew the second assertion.</p>
+     * Verify skeleton damage floors to the minimum at very low skill and limits to the maximum at very high skill. A
+     * fresh skeleton is used per cast so accumulated damage does not skew the second assertion.
      */
     @Test
-    void damageClampTest() {
-        World testWorld = mockServer.addSimpleWorld("BrackiumEmendoDamageClamp");
+    void damageLimitTest() {
+        World testWorld = mockServer.addSimpleWorld("BrackiumEmendoDamageLimit");
         Location location = getNextLocation(testWorld);
         Location targetLocation = new Location(testWorld, location.getX() + 5, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
@@ -112,20 +104,18 @@ public class BrackiumEmendoTest extends O2SpellTestSuper {
         assertEquals(lowSkillCast.getMinDamage(), lowHealthBefore - lowSkillSkeleton.getHealth(), "low-skill damage was not floored to the minimum");
         lowSkillSkeleton.remove();
 
-        // high skill clamps damage to the maximum
+        // high skill limits damage to the maximum
         caster.setLocation(location);
         Skeleton highSkillSkeleton = spawnSkeleton(targetLocation);
         double highHealthBefore = highSkillSkeleton.getHealth();
         BRACKIUM_EMENDO highSkillCast = (BRACKIUM_EMENDO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1000);
         mockServer.getScheduler().performTicks(20);
-        assertEquals(highSkillCast.getMaxDamage(), highHealthBefore - highSkillSkeleton.getHealth(), "high-skill damage was not clamped to the maximum");
+        assertEquals(highSkillCast.getMaxDamage(), highHealthBefore - highSkillSkeleton.getHealth(), "high-skill damage was not limited to the maximum");
     }
 
     /**
-     * Verifies that the spell heals a player target.
-     *
-     * <p>An {@link EntityPotionEffectEvent} listener observes the instant-health effect (which cannot be seen via
-     * {@code hasPotionEffect} because it is consumed on application), and the spell must end after applying it.</p>
+     * Verify the spell heals a player target (the instant-health effect observed via the listener; see the class doc)
+     * and ends after applying it.
      */
     @Test
     void playerHealTest() {

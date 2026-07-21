@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Super class for all shield spells
+ * Base class for the protective shield stationary spells.
  */
 public abstract class ShieldSpell extends O2StationarySpell {
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -20,7 +20,7 @@ public abstract class ShieldSpell extends O2StationarySpell {
     }
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for casting a new shield spell.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the player who cast the spell

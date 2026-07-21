@@ -17,15 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the REPLETUS refilling spell.
+ * Unit tests for the {@link REPLETUS} refilling spell, which refills an empty container held in the caster's off
+ * hand: a bucket becomes a water bucket and a glass bottle becomes a water potion. See the individual test methods
+ * for the bucket, bottle, and invalid-item scenarios.
  *
- * <p>Provides comprehensive test coverage for the spell's core functionality:</p>
- * <ul>
- * <li><strong>Bucket Refilling:</strong> Verifies buckets are converted to water buckets</li>
- * <li><strong>Bottle Refilling:</strong> Verifies glass bottles are converted to water potions</li>
- * <li><strong>Invalid Item Handling:</strong> Validates spell behavior when holding unsupported items</li>
- * <li><strong>Spell Termination:</strong> Confirms spell is killed after refilling or failing</li>
- * </ul>
+ * @author Azami7
  */
 public class RepletusTest extends O2SpellTestSuper {
     /**

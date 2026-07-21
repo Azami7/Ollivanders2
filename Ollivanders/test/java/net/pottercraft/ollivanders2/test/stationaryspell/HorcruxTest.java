@@ -45,38 +45,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the HORCRUX stationary spell.
- *
- * <p>Tests spell-specific behavior for the resurrection anchor that allows players to respawn
- * at the horcrux location when killed. Verifies protection of the horcrux item, player
- * resurrection mechanics, debilitation effects on nearby players, and cooldown management.</p>
+ * Unit tests for {@link HORCRUX}.
  *
  * @author Azami7
  */
 public class HorcruxTest {
-    /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
-     */
     static ServerMock mockServer;
 
-    /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
-     */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -84,7 +61,7 @@ public class HorcruxTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's initial 20-tick delay so it is running
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
@@ -94,10 +71,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests horcrux item respawning on player join.
-     *
-     * <p>Verifies that when a player who owns a horcrux rejoins the server, the horcrux item
-     * is respawned at its original location if it had been removed or despawned.</p>
+     * A missing horcrux item is respawned at its location when the owner rejoins.
      */
     @Test
     void doOnPlayerJoinEventTest() {
@@ -135,10 +109,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests player death handling with horcrux resurrection.
-     *
-     * <p>Verifies that when the horcrux owner dies, they are respawned at the horcrux location
-     * and their spell level and experience are preserved despite death.</p>
+     * When the horcrux owner dies, their respawn is set to the horcrux and their level and experience are preserved.
      */
     @Test
     void doOnPlayerDeathEventTest() {
@@ -160,7 +131,7 @@ public class HorcruxTest {
         caster.setTotalExperience(expectedExperience);
 
         DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                .withDamageLocation(caster.getLocation())  // location of the fire block
+                .withDamageLocation(caster.getLocation())
                 .build();
 
         PlayerDeathEvent event = new PlayerDeathEvent(caster, damageSource, new ArrayList<>(), 10, 90, 90, 9, "you have died");
@@ -175,11 +146,8 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests player debilitation effects and cooldown mechanics.
-     *
-     * <p>Verifies that non-owner players entering the horcrux radius receive blindness and wither effects,
-     * the horcrux owner is immune to these effects, and the spell implements a cooldown preventing
-     * repeated effect applications. Also tests upkeep behavior for cooldown decrements.</p>
+     * A non-owner entering the area gets blindness and wither while the owner is immune, and the cooldown (counted down
+     * by upkeep) stops the effects being reapplied too soon.
      */
     @Test
     void doOnPlayerMoveEventTest() {
@@ -239,10 +207,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests horcrux item despawn protection.
-     *
-     * <p>Verifies that the horcrux item cannot be despawned naturally, preventing its loss
-     * during server cleanup of dropped items.</p>
+     * The horcrux item's despawn is cancelled so it is never lost to item cleanup.
      */
     @Test
     void doOnItemDespawnEventTest() {
@@ -264,10 +229,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests horcrux item entity pickup protection.
-     *
-     * <p>Verifies that the horcrux item cannot be picked up by any entity (players, mobs),
-     * keeping it protected at its location.</p>
+     * An entity's pickup of the horcrux item is cancelled.
      */
     @Test
     void doOnEntityPickupItemEventTest() {
@@ -289,10 +251,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests horcrux item inventory system pickup protection.
-     *
-     * <p>Verifies that the horcrux item cannot be collected by inventory systems like hoppers,
-     * minecarts with hoppers, or other automated item collectors.</p>
+     * A hopper's pickup of the horcrux item is cancelled.
      */
     @Test
     void doOnInventoryItemPickupEventTest() {
@@ -315,11 +274,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests serialization and deserialization of horcrux spell data.
-     *
-     * <p>Verifies that the horcrux material type and world name are correctly serialized to a map,
-     * and that deserializing valid data restores the spell state. Also verifies that deserializing
-     * with an invalid material name kills the spell, and that missing data kills the spell.</p>
+     * The material and world serialize and round-trip back, and deserializing an unknown material kills the spell.
      */
     @Test
     void serializeAndDeserializeSpellDataTest() {
@@ -351,11 +306,7 @@ public class HorcruxTest {
     }
 
     /**
-     * Tests spell deserialization validation.
-     *
-     * <p>Verifies that a horcrux created via the deserialization constructor fails
-     * checkSpellDeserialization() because it lacks required data (player UUID, location,
-     * and horcrux material), while a properly initialized spell passes validation.</p>
+     * A bare horcrux from createStationarySpellByType fails the deserialization check; a fully constructed one passes.
      */
     @Test
     void checkSpellDeserializationTest() {
@@ -371,13 +322,6 @@ public class HorcruxTest {
         assertTrue(horcrux.checkSpellDeserialization(), "Properly initialized horcrux failed deserialization check");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

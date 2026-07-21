@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * type.</p>
  *
  * @see RemoveO2Effect
- * @see O2SpellTestSuper for the inherited spell testing framework
+ * @see O2SpellTestSuper
  */
 abstract class RemoveO2EffectTest extends O2SpellTestSuper {
     /**
@@ -99,7 +99,6 @@ abstract class RemoveO2EffectTest extends O2SpellTestSuper {
         assertFalse(hasEffect(target, effectType), "effect was not removed from the target");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

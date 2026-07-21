@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Repairs a damageable item the caster aims at, the standard Mending Charm.
  * <p>
- * Restores durability to ordinary tools and equipment, scaled by the caster's skill and clamped to the repair bounds
+ * Restores durability to ordinary tools and equipment, scaled by the caster's skill and limited to the repair bounds
  * inherited from {@link ReparoBase}. For the stronger variant that mends diamond and netherite items, see
  * {@link DIAMAS_REPARO}.
  * </p>

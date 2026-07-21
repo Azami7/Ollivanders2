@@ -21,34 +21,25 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Abstract base class for item-to-item material type transfiguration spells.
- *
- * <p>Manages the transfiguration of dropped item entities by changing their material type. These
- * transfigurations are always permanent. The number of items changed in a stack scales with
- * the caster's skill level via {@link #calculateNumberOfItems()}.</p>
- *
- * <p>Subclasses configure the transformation by either populating {@link #transfigurationMap}
- * for specific material-to-material mappings, or setting {@link #targetType} for a catch-all
- * target material.</p>
+ * Base class for spells that permanently change the material type of a dropped item — into a single catch-all
+ * material or a per-source-material mapping. The number of items changed in a stack scales with the caster's skill.
  *
  * @author Azami7
- * @see Transfiguration for base transfiguration mechanics
- * @see EntityTransfiguration for entity transfiguration alternative
+ * @see Transfiguration
+ * @see EntityTransfiguration
  */
 public abstract class ItemToItemTransfiguration extends Transfiguration {
     /**
-     * If this is populated, any material type key will be changed to the value
+     * Per-source-material target overrides. An item whose type is a key is changed to the mapped value; any other
+     * item is changed to {@link #targetType}. Empty by default.
      */
     Map<Material, Material> transfigurationMap = new HashMap<>();
 
     /**
-     * If the transfigurationMap is not populated, any item will be changed to this type
+     * The default material items are changed into when not overridden by {@link #transfigurationMap}.
      */
     Material targetType = Material.BOWL;
 
-    /**
-     * Can this spell transfigure enchanted items?
-     */
     boolean transfigureEnchanted = false;
 
     /**
@@ -63,8 +54,6 @@ public abstract class ItemToItemTransfiguration extends Transfiguration {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -82,13 +71,8 @@ public abstract class ItemToItemTransfiguration extends Transfiguration {
     }
 
     /**
-     * Look for a targetable item and change its material type.
-     *
-     * <p>Finds the first valid item within range, determines the new material type from
-     * the {@link #transfigurationMap} or {@link #targetType}, and replaces up to
-     * {@link #calculateNumberOfItems()} items in the stack. If the entire stack is consumed,
-     * the original item is removed; otherwise the original stack is reduced and a new item
-     * with the transfigured material is dropped.</p>
+     * Find a targetable dropped item near the projectile and permanently convert up to
+     * {@link #calculateNumberOfItems()} items of its stack into the new material. Does nothing until a target is found.
      */
     @Override
     protected void transfigure() {
@@ -155,17 +139,10 @@ public abstract class ItemToItemTransfiguration extends Transfiguration {
     }
 
     /**
-     * Determine if this item can be transfigured by this spell.
-     *
-     * <p>Checks the following conditions in order:</p>
-     *
-     * <ul>
-     * <li>Entity must be an Item</li>
-     * <li>Item material must not be unbreakable</li>
-     * <li>Item must not be enchanted (unless {@link #transfigureEnchanted} is true and the enchantment level is within range)</li>
-     * <li>If {@link #transfigurationMap} is populated, the item material must be a key in the map</li>
-     * <li>Item must not already be the target of an active non-permanent transfiguration</li>
-     * </ul>
+     * Check whether an entity is an eligible target: a dropped item of a breakable material that this spell can turn
+     * into something (present in {@link #transfigurationMap} when that map is used). Enchanted items are eligible only
+     * when {@link #transfigureEnchanted} is set and their enchantment level does not exceed this spell's level. The
+     * result is also gated by the spell's success rate, so it may return false at random even for a valid item.
      *
      * @param entity the entity to check
      * @return true if the entity can be transfigured, false otherwise

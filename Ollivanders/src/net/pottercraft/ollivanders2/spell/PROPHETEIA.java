@@ -12,8 +12,8 @@ import java.util.ArrayList;
 /**
  * Reveal an unfulfilled prophecy made about a nearby target player.
  * <p>
- * Finds the first nearby player other than the caster and, on a skill-based success roll, broadcasts any unfulfilled
- * prophecy about them to everyone within {@link #messageRadius}. If the roll fails or the target has no prophecy, only
+ * On a skill-based success roll, an unfulfilled prophecy about the first nearby player other than the caster is
+ * broadcast to everyone within {@link #messageRadius} blocks. If the roll fails or the target has no prophecy, only
  * the caster is told that nothing was discovered.
  * </p>
  *
@@ -60,7 +60,11 @@ public class PROPHETEIA extends O2Spell {
     }
 
     /**
-     * Find a nearby player and reveal an unfulfilled prophecy about them.
+     * Reveal an unfulfilled prophecy about the first nearby player other than the caster, on a skill-based success
+     * roll, then end the spell.
+     * <p>
+     * On a failed roll, or when the target has no prophecy, the caster is told nothing was discovered.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {

@@ -9,23 +9,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Obscuro spell that blinds targets.
+ * Obscuro: applies Blindness to every target in range for a skill-scaled duration; its strength does not scale with
+ * skill.
  *
- * <p>Obscuro is a projectile charm that applies Blindness effect to targets, preventing them
- * from seeing. Duration ranges from 30 to 120 seconds and is calculated at 100% of the caster's
- * skill level modifier. The spell's amplifier does not scale with skill level, providing
- * consistent blindness strength.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Obscuro">Obscuro</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Obscuro">Harry Potter Wiki - Obscuro</a>
  */
 public final class OBSCURO extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 30;
     private static final int maxDurationInSecondsConfig = 120;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -43,11 +37,7 @@ public final class OBSCURO extends AddPotionEffect {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies Blindness effect to targets, preventing them from seeing.
-     * Duration ranges from 30 to 120 seconds based on caster skill level. The blindness effect
-     * strength is consistent and does not scale with skill.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell

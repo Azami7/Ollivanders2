@@ -17,25 +17,11 @@ import java.util.ArrayList;
 /**
  * Carcerem Aquaticum - The Water Orb Spell.
  *
- * <p>CARCEREM_AQUATICUM traps the target player in a protective orb of non-flowing water, immobilizing them
- * while preventing drowning damage. The spell expands the player's bounding box by 1 block in all directions
- * and fills all air blocks within that region with water, preventing movement while allowing the player to
- * breathe safely through the WATER_BREATHING effect. The spell only affects players at normal or reduced
- * size (scale ≤ 1.0).</p>
+ * <p>Traps the target player in an orb of non-flowing water that immobilizes them (rotation still allowed) while a
+ * {@link WATER_BREATHING} effect keeps them from drowning. Only players at normal or reduced size (scale ≤ 1.0) can
+ * be trapped.</p>
  *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Only targets players with scale attribute ≤ 1.0</li>
- * <li>Expands player's bounding box by 1 block in all directions</li>
- * <li>Converts all air blocks within the expanded region to non-flowing water</li>
- * <li>Preserves any non-air blocks that exist within the region</li>
- * <li>Applies WATER_BREATHING effect to prevent drowning during immobilization</li>
- * <li>Automatically reverts all water blocks after effect duration expires</li>
- * <li>Uses partial immobilization (allows rotation but prevents movement)</li>
- * <li>Minimum effect duration: 2 minutes (ensures water breathing lasts through cleanup)</li>
- * </ul>
- *
- * <p>Reference: <a href="https://harrypotter.fandom.com/wiki/Orb_of_Water">Harry Potter Wiki - Orb of Water</a></p>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Orb_of_Water">Harry Potter Wiki - Orb of Water</a>
  */
 public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
     /**
@@ -121,7 +107,6 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
      */
     @Override
     void addAdditionalEffects(Player target) {
-        // add water breathing with just over duration time to make sure it doesn't expire before we clean up the water blocks
         WATER_BREATHING waterBreathing = new WATER_BREATHING(p, effectDuration + 10, false, target.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(waterBreathing);
     }

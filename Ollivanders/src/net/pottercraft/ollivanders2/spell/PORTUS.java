@@ -13,32 +13,18 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * PORTUS - The Portkey spell.
+ * PORTUS - The Portkey spell: enchants the caster's off-hand item so that whoever later picks it up is teleported,
+ * along with nearby entities, to the caster's location at the time of casting.
  *
- * <p>Enchants an item to become a portkey that transports anyone who picks it up to the caster's
- * current location. The destination coordinates are stored in the enchantment arguments. When a
- * player picks up a PORTUS-enchanted item, the enchanted items system triggers the portkey effect,
- * teleporting the player and nearby entities to the destination.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Mode: Held-item (noProjectile = true) — enchants off-hand item instead of projectile target</li>
- * <li>Enchantment argument: Destination coordinates (world name and x, y, z)</li>
- * <li>Effect: Teleports holder and nearby entities to stored destination (see {@link net.pottercraft.ollivanders2.item.enchantment.PORTUS})</li>
- * <li>Classification: Charms</li>
- * <li>Target item type: Any (no restrictions)</li>
- * </ul>
+ * <p>The destination is stored in the item's enchantment args; the teleport is performed on pickup by the
+ * {@link net.pottercraft.ollivanders2.item.enchantment.PORTUS} enchantment.</p>
  *
  * @see net.pottercraft.ollivanders2.item.enchantment.PORTUS the enchantment that powers this spell
  * @see <a href="https://harrypotter.fandom.com/wiki/Portkey_Spell">Harry Potter Wiki - Portkey Spell</a>
  */
 public final class PORTUS extends ItemEnchant {
     /**
-     * Constructor for generating spell information.
-     *
-     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
-     * Use the full constructor with player and wand parameters instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -61,11 +47,8 @@ public final class PORTUS extends ItemEnchant {
     }
 
     /**
-     * Constructor for casting the PORTUS portkey spell.
-     *
-     * <p>Initializes the spell with the player and wand information needed to cast and track the spell.
-     * PORTUS uses held-item mode (noProjectile = true), enchanting the item held in the caster's
-     * off-hand. The caster's current location is stored as the portkey destination.</p>
+     * Constructor for casting PORTUS. Enchants the caster's off-hand item, storing the caster's current location as
+     * the portkey destination.
      *
      * @param plugin    the Ollivanders2 plugin
      * @param player    the player casting this spell
@@ -83,11 +66,8 @@ public final class PORTUS extends ItemEnchant {
     }
 
     /**
-     * Store the portkey destination coordinates as enchantment arguments.
-     *
-     * <p>Extracts the caster's current location at enchantment time and formats it as
-     * "world_name x y z" for storage. This destination is used when the portkey is activated
-     * to teleport the holder to the specified location.</p>
+     * Store the caster's current location as the portkey destination in the enchantment args, formatted as
+     * "world_name x y z". Kills the spell if the caster's world is null.
      *
      * @param portkey the item being enchanted as a portkey
      */

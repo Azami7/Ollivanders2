@@ -11,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Abstract base class for disguise-based entity transfigurations.
- *
- * <p>Uses the LibsDisguises plugin to transform entities into other entity types. Handles applying and
- * reverting disguises to entities when the spell duration expires.</p>
+ * Base class for transfiguration spells that disguise an entity as another entity type using the LibsDisguises plugin.
  *
  * @author Azami7
  * @see <a href="https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/">LibsDisguises Documentation</a>
@@ -40,8 +37,6 @@ public abstract class EntityDisguise extends EntityTransfiguration {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -51,9 +46,10 @@ public abstract class EntityDisguise extends EntityTransfiguration {
     }
 
     /**
-     * Transfigure the entity.
+     * Disguise the entity as {@link #disguiseType} using LibsDisguises.
      *
      * @param entity the entity to transfigure
+     * @return the same entity, now disguised
      */
     @Override
     @Nullable
@@ -64,15 +60,8 @@ public abstract class EntityDisguise extends EntityTransfiguration {
     }
 
     /**
-     * Determine if this entity can be transfigured by this spell.
-     *
-     * <p>Checks if LibsDisguises is enabled for spells that require it, then delegates to parent validation.
-     * Entity can be transfigured if:</p>
-     * <ul>
-     * <li>The entity is not already the target type</li>
-     * <li>It is not in the blocked list</li>
-     * <li>It is in the allowed list, if the allowed list exists</li>
-     * </ul>
+     * Check whether an entity is an eligible target: in addition to the base entity checks, LibsDisguises must be
+     * enabled when this spell requires it.
      *
      * @param entity the entity to check
      * @return true if the entity can be transfigured, false otherwise
@@ -88,7 +77,7 @@ public abstract class EntityDisguise extends EntityTransfiguration {
     }
 
     /**
-     * Revert the entity back to their original form.
+     * Remove the entity's disguise, restoring its original appearance.
      */
     @Override
     public void revert() {

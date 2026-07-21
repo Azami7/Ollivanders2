@@ -11,11 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Periculum Duo - The Red Ball Fireworks with Trails Spell.
- *
- * <p>Launches one or more large red ball-burst fireworks with trailing effects. The number
- * of fireworks spawned depends on the caster's experience level, up to a maximum of 10.
- * Each firework explodes in a large ball pattern with a red color and includes trailing effects.</p>
+ * Fireworks charm that launches large red ball fireworks with trails.
  */
 public final class PERICULUM_DUO extends Pyrotechnia {
     /**
@@ -56,10 +52,7 @@ public final class PERICULUM_DUO extends Pyrotechnia {
     }
 
     /**
-     * Calculate the number of fireworks to spawn on initialization.
-     *
-     * <p>Called during spell initialization to determine how many fireworks this spell
-     * will launch based on the caster's experience level.</p>
+     * Set the number of fireworks to launch based on the caster's experience.
      */
     @Override
     void doInitSpell() {

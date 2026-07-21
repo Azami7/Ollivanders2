@@ -27,49 +27,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for {@link net.pottercraft.ollivanders2.spell.BlockToEntityTransfiguration}
- * spell implementations.
- *
- * <p>Provides shared test infrastructure for all spells that transfigure blocks into entities.
- * Tests verify that:
- * <ul>
- * <li>The spell correctly targets and transfigures blocks into the expected entity types</li>
- * <li>Non-transfigurable blocks are rejected (e.g., unbreakable blocks)</li>
- * <li>Spawned entities are created at the correct location (the target block's position)</li>
- * <li>Entity tracking and spell lifecycle work correctly</li>
- * <li>Temporary transfigurations are reverted after duration expires</li>
- * <li>Entity death during transfiguration triggers spell termination</li>
- * <li>Permanent transfigurations persist indefinitely</li>
- * </ul></p>
- *
- * <p>Subclasses must implement {@link #getValidTargetType()} to specify which block material
- * can be transfigured by the spell under test. Subclasses may override {@link #customizeEntityTest()}
- * to test spell-specific entity customization behavior.</p>
+ * Base test class for {@link BlockToEntityTransfiguration} spells, covering block-to-entity targeting, invalid target
+ * rejection, reversion, permanence, and termination when the spawned entity dies. Subclasses supply the valid target
+ * material and may override {@link #customizeEntityTest()}.
  *
  * @author Azami7
- * @see BlockToEntityTransfiguration for the spell superclass being tested
- * @see O2SpellTestSuper for the base spell testing framework
+ * @see BlockToEntityTransfiguration
+ * @see O2SpellTestSuper
  */
 abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper {
     /**
-     * Get a valid target material that this spell can transfigure.
-     *
-     * @return a block material that the spell can transfigure
+     * @return a block material this spell can transfigure
      */
     @NotNull
     abstract Material getValidTargetType();
 
     /**
-     * Test that the spell correctly targets and transfigures blocks into entities.
-     *
-     * <p>Verifies:
-     * <ul>
-     * <li>The transfiguration map is populated</li>
-     * <li>The caster is not marked as transfigured</li>
-     * <li>The target block is converted to the expected entity type</li>
-     * <li>The target block becomes air after transfiguration</li>
-     * <li>The spawned entity is tracked as transfigured</li>
-     * </ul></p>
+     * Verify the spell replaces the target block with air and spawns the mapped entity type, tracked as transfigured.
      */
     @Override @Test
     void doCheckEffectTest() {
@@ -107,10 +81,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
     }
 
     /**
-     * Test that non-transfigurable blocks are rejected.
-     *
-     * <p>Verifies that the spell correctly rejects unbreakable and other invalid target blocks
-     * without transfiguring them.</p>
+     * Verify the spell leaves an unbreakable target block unchanged.
      */
     @Test
     void invalidTargetTest() {
@@ -132,24 +103,15 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
     }
 
     /**
-     * Test spell-specific entity customization.
-     *
-     * <p>No-op by default. Subclasses may override this method to verify that spawned entities
-     * are customized according to spell-specific requirements (e.g., equipment, attributes, names).</p>
+     * Hook for subclasses to verify spell-specific customization of the spawned entity. The default is a no-op.
      */
     @Test
     void customizeEntityTest() {
     }
 
     /**
-     * Test that temporary transfigurations are reverted and permanent ones persist.
-     *
-     * <p>Verifies:
-     * <ul>
-     * <li>Entity persists when the transfiguration is permanent</li>
-     * <li>Entity is removed when the transfiguration is temporary and duration expires</li>
-     * <li>Spell terminates immediately if the entity dies before the effect duration expires</li>
-     * </ul></p>
+     * Verify a temporary transfiguration removes its entity when the duration expires (a permanent one keeps it), and
+     * that the spell ends immediately if the entity dies first.
      */
     @Override
     @Test
@@ -185,7 +147,7 @@ abstract public class BlockToEntityTransfigurationTest extends O2SpellTestSuper 
             assertNotNull(entity);
 
             DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                    .withDamageLocation(caster.getLocation())  // location of the fire block
+                    .withDamageLocation(caster.getLocation())
                     .build();
             EntityDeathEvent event = new EntityDeathEvent(entity, damageSource, new ArrayList<>());
             mockServer.getPluginManager().callEvent(event);

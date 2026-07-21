@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Unit tests for the SKURGE spell, the Scouring Charm.
  *
  * <p>SKURGE is a projectile that, where it lands, turns every slime block within a radius to air. The radius
- * scales with the caster's experience and is clamped between 1 and the spell's maximum; there is no random
+ * scales with the caster's experience and is limited between 1 and the spell's maximum; there is no random
  * element, so these tests are deterministic from the cast experience alone.</p>
  *
  * @author Azami7
@@ -36,17 +36,8 @@ public class SkurgeTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests clearing slime blocks around the spell's landing point.
-     *
-     * <p>A solid block is placed at the target so the projectile stops there, and slime blocks are placed within
-     * and outside the radius, plus a non-slime block in range. With a single cast, verifies that:</p>
-     * <ul>
-     * <li>A slime block at the impact point is cleared to air</li>
-     * <li>A slime block in range is cleared to air</li>
-     * <li>A slime block outside the radius is left untouched</li>
-     * <li>A non-slime block in range is left untouched (only slime is scoured)</li>
-     * <li>The spell is killed after the effect resolves</li>
-     * </ul>
+     * Verify a cast clears slime blocks at and within the radius of the impact to air, leaves a slime block outside
+     * the radius and a non-slime block in range untouched (only slime is scoured), and ends the spell.
      */
     @Override
     @Test
@@ -89,15 +80,8 @@ public class SkurgeTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the affected radius scales with the caster's experience and is clamped at both ends.
-     *
-     * <p>Verifies that:</p>
-     * <ul>
-     * <li>Zero experience clamps the radius to the minimum of 1</li>
-     * <li>The radius increases as experience increases</li>
-     * <li>Very high experience is clamped to the spell's maximum (two different over-cap experience levels yield
-     *     the same radius, equal to the maximum)</li>
-     * </ul>
+     * Verify the radius limits to 1 at zero experience, increases with experience, and limits to the spell's maximum
+     * at very high experience (two different over-cap levels yield the same max radius).
      */
     @Test
     void radiusScalesWithSkillTest() {
@@ -112,11 +96,11 @@ public class SkurgeTest extends O2SpellTestSuper {
         int highSkillRadius = highSkillSpell.getRadius();
         int higherSkillRadius = castSkurge(caster, location, targetLocation, 5000).getRadius();
 
-        assertEquals(1, zeroSkillRadius, "radius was not clamped to the minimum of 1 at zero skill");
+        assertEquals(1, zeroSkillRadius, "radius was not limited to the minimum of 1 at zero skill");
         assertTrue(lowSkillRadius > zeroSkillRadius, "radius did not increase with skill");
         assertTrue(highSkillRadius > lowSkillRadius, "radius did not continue to increase with skill");
-        assertEquals(highSkillSpell.getMaxRadius(), highSkillRadius, "radius was not clamped to the spell's maximum at very high skill");
-        assertEquals(highSkillRadius, higherSkillRadius, "radius was not clamped to a fixed maximum at very high skill");
+        assertEquals(highSkillSpell.getMaxRadius(), highSkillRadius, "radius was not limited to the spell's maximum at very high skill");
+        assertEquals(highSkillRadius, higherSkillRadius, "radius was not limited to a fixed maximum at very high skill");
     }
 
     /**

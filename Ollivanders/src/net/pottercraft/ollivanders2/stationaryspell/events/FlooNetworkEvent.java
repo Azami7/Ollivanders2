@@ -9,27 +9,25 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A floo network events fire when a player attempts to use a floo fireplace to teleport.
+ * Fired when a player attempts to travel through a Floo fireplace to a destination.
  */
 public class FlooNetworkEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     boolean canceled = false;
 
     /**
-     * The name of the teleport destination
+     * The Floo name of the destination fireplace.
      */
     String destinationName;
 
     /**
-     * The location of the teleport destination
+     * The location of the destination fireplace.
      */
     Location destination;
 
     /**
-     * Constructor
-     *
      * @param player the player traveling
-     * @param dest   the destination floo fireplace being traveled to
+     * @param dest   the destination Floo fireplace being traveled to
      */
     public FlooNetworkEvent(@NotNull Player player, ALIQUAM_FLOO dest) {
         super(player);
@@ -39,25 +37,25 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * Get the name of the destination
+     * Get the Floo name of the destination.
      *
-     * @return the name of the destination being apparated to
+     * @return the destination name
      */
     public String getDestinationName() {
         return destinationName;
     }
 
     /**
-     * Get the destination location
+     * Get the location of the destination.
      *
-     * @return the destination being apparated to
+     * @return the destination location
      */
     public Location getDestination() {
         return destination;
     }
 
     /**
-     * Get the handlers for this Event
+     * Get the handler list for this event.
      *
      * @return the event handlers
      */
@@ -68,7 +66,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * Get the handlers for this Event
+     * Get the handler list for this event, for Bukkit's static registration.
      *
      * @return the event handlers
      */

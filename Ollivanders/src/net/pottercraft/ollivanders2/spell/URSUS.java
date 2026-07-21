@@ -46,7 +46,6 @@ public class URSUS extends PlayerDisguise {
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
 
-        // determine if they will be a panda or a polar bear
         if (rand < 1) // 5% chance
             targetType = EntityType.PANDA;
         else

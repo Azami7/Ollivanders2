@@ -10,29 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Strengthening Solution - enhances the drinker's physical strength significantly.
- *
- * <p>When consumed, this potion applies the STRENGTH effect to the player for 5 minutes,
- * greatly increasing their physical strength and power. The player will deal significantly more
- * damage with melee attacks and be able to perform stronger physical actions during the effect
- * duration.</p>
- *
- * <p>The 5-minute duration is longer than the standard Minecraft Strength II potion, providing
- * extended combat advantage. This potion is useful for offensive gameplay, combat scenarios, and
- * situations requiring physical power.</p>
+ * Strengthening Solution — applies the STRENGTH effect for 5 minutes, longer than a Minecraft Strength II potion.
  *
  * @author Azami7
- * @since 2.21
  * @see <a href="https://harrypotter.fandom.com/wiki/Strengthening_Solution">Strengthening Solution</a>
  */
 public class STRENGTHENING_SOLUTION extends O2Potion {
     /**
-     * Constructor for Strengthening Solution potion.
-     *
-     * <p>Initializes the potion with its ingredients (Salamander Blood, Powdered Griffin Claw,
-     * Ground Snake Fangs, and Standard Potion Ingredients), description text, flavor text, potion
-     * color, and the Strength effect. Sets up the 5-minute duration for the strength
-     * enhancement effect.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -46,9 +31,8 @@ public class STRENGTHENING_SOLUTION extends O2Potion {
         ingredients.put(O2ItemType.GROUND_SNAKE_FANGS, 1);
         ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
-        // potion color
         potionColor = Color.fromRGB(54, 224, 208); // turquoise
-        // last 5 minutes, which is longer than strength II lasts
+        // longer than a Minecraft Strength II potion
         duration = Ollivanders2Common.ticksPerMinute * 5;
         potionSuccessMessage = "You feel incredibly strong.";
 
@@ -58,12 +42,7 @@ public class STRENGTHENING_SOLUTION extends O2Potion {
     }
 
     /**
-     * Drink the Strengthening Solution and gain immense physical strength.
-     *
-     * <p>Applies the STRENGTH effect to the player for 5 minutes. This effect significantly
-     * increases the player's melee damage output and physical power, allowing them to deal much
-     * more damage with attacks. The strength bonus is particularly useful for combat scenarios and
-     * defeating enemies.</p>
+     * Apply the STRENGTH effect to the player for 5 minutes.
      *
      * @param player the player who drank the potion
      */

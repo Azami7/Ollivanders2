@@ -15,44 +15,21 @@ import org.jetbrains.annotations.Nullable;
  * @author Azami7
  */
 public class Cuboid {
-    /**
-     * The name of the world this cuboid is in
-     */
     String worldName;
 
-    /**
-     * First corner x-coordinate
-     */
+    // the two opposite corners; either corner may hold the higher value on any axis
     int x1 = 0;
-    /**
-     * First corner y-coordinate
-     */
     int y1 = 0;
-    /**
-     * First corner z-coordinate
-     */
     int z1 = 0;
-    /**
-     * Second corner x-coordinate
-     */
     int x2 = 0;
-    /**
-     * Second corner y-coordinate
-     */
     int y2 = 0;
-    /**
-     * Second corner z-coordinate
-     */
     int z2 = 0;
 
     /**
-     * Constructor that creates a cuboid from coordinates.
-     * <p>
-     * If the area array length is not exactly 6, all coordinates remain at their default value of 0.
-     * </p>
+     * Build a cuboid from two opposite corners. If {@code area} is not exactly length 6, all coordinates stay 0.
      *
      * @param world the name of the world this cuboid is in
-     * @param area  an array of 6 integers in format: [x1, y1, z1, x2, y2, z2] representing two opposite corners
+     * @param area  the two corners as [x1, y1, z1, x2, y2, z2]
      */
     public Cuboid(@NotNull String world, int[] area) {
         worldName = world;
@@ -68,10 +45,10 @@ public class Cuboid {
     }
 
     /**
-     * Checks if a location is inside this cuboid.
+     * Check whether a location is inside this cuboid. A location with no world is treated as outside.
      *
      * @param location the location to check
-     * @return true if the location is inside this cuboid, false otherwise
+     * @return true if the location is inside this cuboid
      */
     public boolean isInside(@NotNull Location location) {
         World world = location.getWorld();

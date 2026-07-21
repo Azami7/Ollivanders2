@@ -6,21 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test suite for the TERGEO spell (water siphoning spell).
- *
- * <p>Tests verify that TERGEO correctly targets and transfigures water blocks while rejecting
- * invalid target types. TERGEO transforms WATER blocks to AIR with a radius determined by
- * player skill level.</p>
- *
- * <p>Test coverage includes:</p>
- * <ul>
- * <li>Valid target material: WATER</li>
- * <li>Invalid target material: STONE (and other non-water materials)</li>
- * <li>Effect radius scaling based on player skill</li>
- * <li>Spell duration based on skill level</li>
- * <li>Success and failure messaging</li>
- * <li>Temporary transfiguration with automatic reversion</li>
- * </ul>
+ * Test suite for the {@link net.pottercraft.ollivanders2.spell.TERGEO} spell (water siphoning spell), which
+ * temporarily transfigures WATER blocks to AIR within a skill-scaled radius. Inherits the shared block
+ * transfiguration tests from {@link BlockTransfigurationTest}, supplying WATER as the valid target and STONE as a
+ * representative invalid target.
  *
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.TERGEO
@@ -38,9 +27,7 @@ public class TergeoTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns the valid target material for TERGEO tests.
-     *
-     * <p>TERGEO only transfigures water blocks, so WATER is the only valid target.</p>
+     * Returns the valid target material for TERGEO tests: WATER, the only block it transfigures.
      *
      * @return WATER material type
      */
@@ -51,12 +38,10 @@ public class TergeoTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns an invalid target material for TERGEO tests.
+     * Returns an invalid target material for TERGEO tests: STONE, a representative material outside TERGEO's
+     * WATER-only allow list.
      *
-     * <p>TERGEO's allow list contains only WATER, so all other materials are invalid targets.
-     * STONE is used here as a representative non-water material.</p>
-     *
-     * @return STONE material type (or any non-water material)
+     * @return STONE material type
      */
     @Override
     @NotNull
@@ -65,14 +50,8 @@ public class TergeoTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Overrides sameMaterialTest because it is not applicable to TERGEO.
-     *
-     * <p>TERGEO transfigures WATER to AIR. Since AIR is not in the allow list (only WATER is
-     * allowed), this spell can never encounter a situation where it tries to transfigure a block
-     * that is already the target material type. The target will always be WATER, which is never
-     * equal to the transfigure type (AIR).</p>
-     *
-     * <p>Therefore, this test is not applicable and remains empty.</p>
+     * No-op override: TERGEO transfigures WATER to AIR, and AIR is not in its allow list, so it can never target a
+     * block that is already its output type. The inherited same-material case therefore does not apply.
      */
     @Test
     void sameMaterialTest() {

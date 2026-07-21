@@ -37,8 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventClassMatcher.hasFiredEventInstance;
 
 /**
- * Unit tests for O2Books.java.
- * Tests book retrieval, book learning mechanics, and book-related commands.
+ * Unit tests for {@link O2Books}: book retrieval, book learning mechanics, and book-related commands.
  */
 public class O2BooksTest {
     static Ollivanders2 testPlugin;
@@ -53,16 +52,13 @@ public class O2BooksTest {
     static void globalSetUp () {
         mockServer = MockBukkit.mock();
 
-        // load dependency plugins first
+        // dependency plugins must load before the main plugin
         MockBukkit.loadWith(LibsDisguisesMock.class, new File("Ollivanders/test/resources/mocks/LibsDisguises/plugin.yml"));
 
-        // load plugin
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
-        // Get the books instance from the plugin (initialized in onEnable)
         books = Ollivanders2API.getBooks();
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // the scheduler has an initial 20-tick delay before it starts running tasks
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
@@ -84,34 +80,22 @@ public class O2BooksTest {
      */
     @Test
     void onBookReadTest() {
-        // make sure bookLearning is on in the config
         assertTrue(Ollivanders2.bookLearning, "bookLearning is not enabled.");
 
-        // create a book
         ItemStack book = books.getBookByType(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
-
-        // get an O2Player
         PlayerMock player = mockServer.addPlayer();
-
-        // set the book in the player's inventory
         player.getInventory().setItemInMainHand(book);
 
-        // get the player's spell level before
         O2Player o2p = testPlugin.getO2Player(player);
         int spellLevel = o2p.getSpellCount(O2SpellType.LUMOS);
 
-        // create a player interact event and fire it
         PlayerInteractEvent event = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, book, null, BlockFace.UP, EquipmentSlot.HAND);
         mockServer.getPluginManager().callEvent(event);
 
-        // fast-forward time so the readBook runnable will execute (2 seconds)
-        // then the incrementSpell runnable will execute (another 2 seconds)
-        // total of 4 seconds of scheduled delays
+        // the read and the level increment are each deferred ~2s, so advance well past both
         mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
-        // check player spell level
         assertNotEquals(spellLevel, o2p.getSpellCount(O2SpellType.LUMOS), "Spell level did not change after book was read.");
 
-        // make sure the OllivandersBookLearningSpellEvent event fired
         assertThat(mockServer.getPluginManager(), hasFiredEventInstance(OllivandersBookLearningSpellEvent.class));
     }
 
@@ -170,7 +154,7 @@ public class O2BooksTest {
 
         // try case-insensitive
         String lowercaseTitle = "the essential defence against the dark arts";
-        bookType = books.getBookTypeByTitle(partialTitle);
+        bookType = books.getBookTypeByTitle(lowercaseTitle);
         assertNotNull(bookType, "getBookTypeByTitle() returned null for case-insensitive search");
         assertNotNull(bookType.getTitle(testPlugin), "bookType.getTitle() returned null for case-insensitive search");
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
@@ -210,7 +194,6 @@ public class O2BooksTest {
         PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
-        // admin should get a usage message running the subcommand with no args
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books", mockServer);
         assertNotNull(commandResponse, "command response was null");
         assertTrue(TestCommon.messageStartsWith("Usage:", commandResponse), "Expected usage message but got: " + commandResponse);
@@ -224,7 +207,6 @@ public class O2BooksTest {
         PlayerMock player = mockServer.addPlayer();
         player.setOp(false);
 
-        // a non-admin should get a usage message if they try to run the /olli books command
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books", mockServer);
         assertNotNull(commandResponse, "command response was null");
         assertTrue(TestCommon.messageStartsWith("Usage: /olli summary", commandResponse), "Expected usage message but got: " + commandResponse);
@@ -335,13 +317,11 @@ public class O2BooksTest {
      */
     @Test
     void improvedBookLearningTest() {
-        // make sure bookLearning is on in the config
         assertTrue(Ollivanders2.bookLearning, "bookLearning is not enabled.");
 
-        // create a book
         ItemStack book = books.getBookByType(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
 
-        // Test 1: Read book without IMPROVED_BOOK_LEARNING effect
+        // Test 1: read the book without the IMPROVED_BOOK_LEARNING effect
         PlayerMock player1 = mockServer.addPlayer();
         player1.getInventory().setItemInMainHand(book);
         O2Player o2p1 = testPlugin.getO2Player(player1);
@@ -354,12 +334,11 @@ public class O2BooksTest {
         int spellLevelAfter1 = o2p1.getSpellCount(O2SpellType.LUMOS);
         int gainWithout = spellLevelAfter1 - spellLevelBefore1;
 
-        // Test 2: Read book with IMPROVED_BOOK_LEARNING effect
+        // Test 2: read the book with the IMPROVED_BOOK_LEARNING effect
         PlayerMock player2 = mockServer.addPlayer();
         player2.getInventory().setItemInMainHand(book);
         O2Player o2p2 = testPlugin.getO2Player(player2);
 
-        // Add IMPROVED_BOOK_LEARNING effect
         IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(testPlugin, 6000, false, player2.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
@@ -372,7 +351,6 @@ public class O2BooksTest {
         int spellLevelAfter2 = o2p2.getSpellCount(O2SpellType.LUMOS);
         int gainWith = spellLevelAfter2 - spellLevelBefore2;
 
-        // Verify that skill gain with effect is greater than without
         assertTrue(gainWithout > 0, "Player without effect gained no skill from book");
         assertTrue(gainWith > gainWithout, "IMPROVED_BOOK_LEARNING effect did not increase skill gain. Gain without: " + gainWithout + ", Gain with: " + gainWith);
     }

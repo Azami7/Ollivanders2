@@ -17,12 +17,8 @@ import java.util.ArrayList;
 /**
  * Transfigures a dropped cauldron item into a cat.
  * <p>
- * The Harry Potter canon for the Felifors Spell is inconsistent, describing it as turning a cat into a cauldron.
- * </p>
- * <p>
- * At low caster skill the transfiguration is temporary and the cauldron is restored when the spell expires. Once
- * {@code usesModifier} exceeds 100 the transfiguration becomes permanent and the original cauldron is consumed.
- * The spawned cat is given a random type and dyed collar color outside of test mode.
+ * The Harry Potter canon for the Felifors Spell is inconsistent, describing it instead as turning a cat into a
+ * cauldron.
  * </p>
  *
  * @author Azami7

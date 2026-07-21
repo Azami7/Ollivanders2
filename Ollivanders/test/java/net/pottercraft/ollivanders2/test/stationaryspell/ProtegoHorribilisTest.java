@@ -17,68 +17,30 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link PROTEGO_HORRIBILIS} stationary spell.
- *
- * <p>Tests the protego horribilis shield spell, which blocks Dark Arts spells from entering the protected area
- * while allowing the Killing Curse (Avada Kedavra) and non-Dark Arts spells to pass through. Inherits common
- * spell tests from {@link O2StationarySpellTest} and provides spell-specific factory methods for test setup.</p>
- *
- * <p>The test verifies:
- * <ul>
- *   <li>Dark Arts spells are blocked when crossing into the protected area</li>
- *   <li>Avada Kedavra (Killing Curse) bypasses the shield</li>
- *   <li>Non-Dark Arts spells are allowed to cross the shield boundary</li>
- * </ul>
- * </p>
+ * Unit tests for {@link PROTEGO_HORRIBILIS}. Extends {@link O2StationarySpellTest} for the shared stationary-spell
+ * tests.
  *
  * @author Azami7
  */
 public class ProtegoHorribilisTest extends O2StationarySpellTest {
-    /**
-     * Gets the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#PROTEGO_HORRIBILIS}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.PROTEGO_HORRIBILIS;
     }
 
-    /**
-     * Creates a PROTEGO_HORRIBILIS spell instance for testing.
-     *
-     * <p>Constructs a new protego horribilis spell at the specified location with the minimum radius and duration values.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new PROTEGO_HORRIBILIS spell instance (not null)
-     */
     @Override
     PROTEGO_HORRIBILIS createStationarySpell(Player caster, Location location) {
         return new PROTEGO_HORRIBILIS(testPlugin, caster.getUniqueId(), location, PROTEGO_HORRIBILIS.minRadiusConfig, PROTEGO_HORRIBILIS.minDurationConfig);
     }
 
-    /**
-     * Tests upkeep behavior (skipped - covered by base class tests).
-     *
-     * <p>The upkeep method only performs aging, which is already tested comprehensively by the inherited
-     * ageAndKillTest() from the base test class.</p>
-     */
     @Override @Test
     void upkeepTest() {
         // upkeep just calls age(), which is tested by ageAndKillTest()
     }
 
     /**
-     * Tests spell projectile blocking behavior at the shield boundary.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Dark Arts spells (Fiendfyre) are cancelled when moving from outside to inside the protected area</li>
-     *   <li>Avada Kedavra (Killing Curse) is allowed to cross the shield boundary</li>
-     *   <li>Non-Dark Arts spells (Accio) are allowed to cross the shield boundary</li>
-     * </ul>
-     * </p>
+     * A Dark Arts spell (Fiendfyre) is cancelled crossing into the area, while Avada Kedavra and a non-Dark-Arts spell
+     * (Accio) pass through.
      */
     @Test
     void doOnSpellProjectileMoveEventTest() {

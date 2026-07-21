@@ -26,16 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for {@link PACK}, the Packing Charm.
- *
- * <p>Provides test coverage for the spell's container-packing mechanics including:
- * <ul>
- * <li><strong>Target validation:</strong> Verifies the spell only fires on chest-family blocks</li>
- * <li><strong>Item collection:</strong> Tests that nearby item entities are scooped into the target container</li>
- * <li><strong>Container routing:</strong> Validates correct destination for chests, ender chests, and shulker boxes</li>
- * <li><strong>Overflow handling:</strong> Confirms items that exceed container capacity remain in the world with the leftover stack</li>
- * <li><strong>Non-item entities:</strong> Verifies non-item entities within radius are not affected</li>
- * </ul>
+ * Unit tests for {@link PACK}, the Packing Charm, which collects nearby dropped items into a targeted chest-family
+ * container. Coverage spans target validation, item collection, routing to chests, ender chests, and shulker boxes,
+ * overflow handling, and leaving non-item entities untouched; see the individual test methods for the scenarios.
  *
  * @author Azami7
  */

@@ -26,89 +26,77 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A stationary spell that creates a horcrux - an anchor point for player resurrection with preserved power.
- *
- * <p>Horcrux creates a permanent magical anchor that allows the spell's caster to respawn at the
- * horcrux location when killed, while retaining all spell levels and experience. The spell:</p>
- * <ul>
- *   <li>Creates an anchor point as a physical item in the world</li>
- *   <li>Prevents the player from losing spell levels on death</li>
- *   <li>Prevents the player from losing experience on death</li>
- *   <li>Respawns the player at the horcrux location</li>
- *   <li>Applies debilitative effects (blindness, wither) to players near the horcrux</li>
- *   <li>Protects the horcrux item from being picked up or despawning</li>
- *   <li>Can only be destroyed by fiendfyre</li>
- * </ul>
- *
- * <p>The spell is permanent and persists across server restarts.</p>
+ * Horcrux: a permanent stationary spell anchored to an item in the world. Its caster keeps their inventory,
+ * experience, and level on death and respawns at the horcrux; other players who enter its radius are struck with
+ * blindness and wither. The horcrux item is protected from pickup and despawning.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Horcrux-making_spell">Harry Potter Wiki - Horcrux-making spell</a>
  */
 public class HORCRUX extends O2StationarySpell {
     /**
-     * The message players see on death
+     * The death message shown to the caster when the horcrux protects them.
      */
     public static final String deathMessage = "Death approaches but cannot claim your soul.";
 
     /**
-     * Minimum spell radius (3 blocks) - effect range for debilitation effects.
+     * Minimum spell radius, in blocks.
      */
     public static final int minRadiusConfig = 3;
 
     /**
-     * Maximum spell radius (3 blocks) - effect range for debilitation effects.
+     * Maximum spell radius, in blocks.
      */
     public static final int maxRadiusConfig = 3;
 
     /**
-     * Minimum spell duration (1000 ticks) - not used, horcrux is permanent.
+     * Duration bound, unused because Horcrux is permanent.
      */
     public static final int minDurationConfig = 1000;
 
     /**
-     * Maximum spell duration (1000 ticks) - not used, horcrux is permanent.
+     * Duration bound, unused because Horcrux is permanent.
      */
     public static final int maxDurationConfig = 1000;
 
     /**
-     * The material type of the horcrux item
+     * The material of the horcrux item.
      */
     private Material horcruxMaterial;
 
     /**
-     * The item at this location that is the horcrux
+     * The item entity in the world that is this horcrux.
      */
     private Item horcruxItem;
 
     /**
-     * The name of the world this horcrux is in
+     * The name of the world this horcrux is in.
      */
     private String worldName;
 
     /**
-     * Keep track of the affected players
+     * Players currently under this horcrux's effects, mapped to their remaining effect ticks; prevents reapplying the
+     * effects every move.
      */
     private final Map<UUID, Integer> affectedPlayers = new HashMap<>();
 
     /**
-     * How long to affect someone who gets too close to the horcrux
+     * How long, in ticks, the blindness and wither effects last on a player who enters the area.
      */
     public static final int effectDuration = Ollivanders2Common.ticksPerSecond * 15;
 
     /**
-     * The serialization label for the item material
+     * Serialization key for {@link #horcruxMaterial}.
      */
     private final String materialLabel = "itemType";
 
     /**
-     * The serialization label for the item location world
+     * Serialization key for {@link #worldName}.
      */
     private final String worldLabel = "world";
 
     /**
-     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -121,15 +109,12 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Constructs a new HORCRUX spell cast by a player.
+     * Constructor for casting a new Horcrux spell anchored to the given item.
      *
-     * <p>Creates a permanent horcrux anchor at the specified location using the provided item.
-     * The player will respawn at this location when killed, retaining all spell levels and experience.</p>
-     *
-     * @param plugin   a callback to the MC plugin (not null)
-     * @param pid      the UUID of the player who cast the spell (not null)
-     * @param location the center location of the horcrux anchor (not null)
-     * @param item     the item representing the horcrux in the world (not null)
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the UUID of the player who cast the spell
+     * @param location the center location of the horcrux anchor
+     * @param item     the item representing the horcrux in the world
      */
     public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Item item) {
         super(plugin);
@@ -149,28 +134,19 @@ public class HORCRUX extends O2StationarySpell {
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
-    /**
-     * Initializes the radius and duration constraints for this spell.
-     *
-     * <p>Sets fixed radius and duration values (not configurable). The spell is always permanent.</p>
-     */
     @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig; // not used - horcrux floo is permanent
-        maxDuration = maxDurationConfig; // not used - horcrux floo is permanent
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**
-     * Ages the spell and manages player debilitation effects.
-     *
-     * <p>Decrements the duration timers for affected players, removing them from the affected list
-     * when their duration expires.</p>
+     * Count down the remaining effect time for each affected player, dropping those whose effects have expired.
      */
     @Override
     public void upkeep() {
-        // decrement all the affected cooldowns by a tick
         ArrayList<UUID> iterator = new ArrayList<>(affectedPlayers.keySet());
 
         for (UUID playerID : iterator) {
@@ -184,12 +160,7 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Serializes the horcrux's persistent data for server restart recovery.
-     *
-     * <p>Saves the material type and world name so the horcrux item can be properly respawned
-     * when the server restarts. This ensures the horcrux persists across server restarts.</p>
-     *
-     * @return a map containing the horcrux material type and world name
+     * @return the serialized spell data, holding the horcrux material and world name
      */
     @Override
     @NotNull
@@ -203,13 +174,10 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Deserializes the horcrux's persistent data when loading from server restart.
+     * Restore the horcrux material and world name from saved data. Kills the spell if the material no longer exists
+     * (e.g. removed in a Minecraft update) or if either value is missing.
      *
-     * <p>Restores the material type and world name that were saved. If the material type
-     * is no longer valid (removed in a Minecraft update) or if required data is missing,
-     * the spell is destroyed.</p>
-     *
-     * @param spellData a map containing the saved horcrux material and world name
+     * @param spellData the serialized spell data
      */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
@@ -235,41 +203,26 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Respawns the horcrux item on server restart when a player joins.
+     * Respawn the horcrux item when its caster joins, if it is missing. This runs on join rather than world load
+     * because world load fires before the plugin's listeners are registered.
      *
-     * <p>After a server restart, the horcrux item needs to be restored. Since the WorldLoadEvent
-     * fires before plugin listeners are registered, the horcrux item is respawned the first time
-     * any player joins the server. This method:
-     * <ul>
-     *   <li>Checks if the horcrux item already respawned naturally (by the game)</li>
-     *   <li>If not found, manually respawns the horcrux item at its original location</li>
-     *   <li>Marks the item as loaded so this process only happens once per restart</li>
-     * </ul>
-     * </p>
-     *
-     * @param event the player join event (not null)
+     * @param event the player join event
      */
     @Override
     void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
         if (!event.getPlayer().getUniqueId().equals(playerUUID))
             return;
 
-        // is the player's horcrux item spawned?
         Item horcrux = EntityCommon.getItemAtLocation(location);
 
-        // there is no item here or some other item is here
+        // no item here, or a different item is here
         if (horcrux == null || (horcrux.getItemStack().getType() != horcruxMaterial)) {
             respawnHorcruxItem();
         }
     }
 
     /**
-     * Creates and spawns the horcrux item at the spell location.
-     *
-     * <p>Spawns a new item entity at the horcrux location using the saved material type.
-     * The item will be protected from pickup and despawning by the spell's event handlers.</p>
-     *
-     * <p>If the world is invalid, logs an error and destroys the spell.</p>
+     * Drop a fresh horcrux item of the saved material at the spell location. Kills the spell if its world is unloaded.
      */
     private void respawnHorcruxItem() {
         World world = p.getServer().getWorld(worldName);
@@ -287,25 +240,18 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Protects the horcrux caster from losing progress on death.
+     * On the caster's death, set their respawn point to this horcrux, keep their inventory, level, and experience, and
+     * show a custom death message. Other players' deaths are unaffected.
      *
-     * <p>When the player who created the horcrux dies, they are protected from the normal
-     * consequences of death:
-     * <ul>
-     *   <li>Inventory items are preserved (not dropped)</li>
-     *   <li>Experience level is preserved</li>
-     *   <li>Total experience points are preserved</li>
-     * </ul>
-     * The death message is customized to reflect the magical protection of the horcrux.</p>
-     *
-     * @param event the player death event (not null)
+     * @param event the player death event
      */
     @Override
     void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
         Player player = event.getEntity();
-        player.setRespawnLocation(location, true);
 
         if (player.getUniqueId().equals(playerUUID)) {
+            player.setRespawnLocation(location, true);
+
             event.setDeathMessage(deathMessage);
             event.setKeepInventory(true);
             event.setKeepLevel(true);
@@ -314,17 +260,10 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Applies debilitative effects to players who enter the horcrux area.
+     * Apply blindness (amplifier 2) and wither (amplifier 1) to a non-caster player who enters the area, unless they
+     * are already affected. The caster is immune.
      *
-     * <p>When a player (other than the horcrux caster) enters the spell radius:
-     * <ul>
-     *   <li>Applies blindness effect (amplifier level 2) for 200 ticks</li>
-     *   <li>Applies wither effect (amplifier level 1) for 200 ticks</li>
-     *   <li>Tracks the player to avoid reapplying effects until the cooldown expires</li>
-     * </ul>
-     * The horcrux caster is immune to these effects.</p>
-     *
-     * @param event the player move event (not null)
+     * @param event the player move event
      */
     @Override
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
@@ -334,35 +273,28 @@ public class HORCRUX extends O2StationarySpell {
 
         Player target = event.getPlayer();
 
-        // don't affect the creator of the horcrux
         if (target.getUniqueId().equals(playerUUID)) {
             common.printDebugMessage("HORCRUX: " + target.getName() + " enter their own horcrux area", null, null, false);
             return;
         }
 
-        // don't affect players already affected
         if (affectedPlayers.containsKey(target.getUniqueId()))
             return;
 
-        // add blindness and wither effects to player
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, effectDuration, 2));
         target.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, effectDuration, 1));
 
-        // add affected player to list so we don't keep re-adding these effects every time they move
         affectedPlayers.put(target.getUniqueId(), effectDuration);
     }
 
     /**
-     * Prevents the horcrux item from despawning naturally.
+     * Stop the horcrux item from despawning.
      *
-     * <p>Minecraft normally despawns dropped items after 5 minutes. This event handler
-     * ensures the horcrux item never despawns, protecting it from natural cleanup.</p>
-     *
-     * @param event the item despawn event (not null)
+     * @param event the item despawn event
      */
     @Override
     void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {
-        if (horcruxItem == null) //this can happen on restart when things are not fully loaded yet
+        if (horcruxItem == null) // can be null on restart before the item is loaded
             return;
 
         Item eventItem = event.getEntity();
@@ -372,16 +304,13 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Prevents entities from picking up the horcrux item.
+     * Stop an entity picking up the horcrux item.
      *
-     * <p>Protects the horcrux item from being collected by mobs or players. The item
-     * remains untouchable at its location.</p>
-     *
-     * @param event the entity pickup item event (not null)
+     * @param event the entity pickup item event
      */
     @Override
     void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {
-        if (horcruxItem == null) //this can happen on restart when things are not fully loaded yet
+        if (horcruxItem == null) // can be null on restart before the item is loaded
             return;
 
         Item eventItem = event.getItem();
@@ -391,16 +320,13 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Prevents hoppers and other inventory collectors from picking up the horcrux item.
+     * Stop a hopper or other inventory collector picking up the horcrux item.
      *
-     * <p>Protects the horcrux item from being collected by hoppers, minecarts with hoppers,
-     * or other block inventory systems. The item cannot be moved or collected by any means.</p>
-     *
-     * @param event the inventory pickup item event (not null)
+     * @param event the inventory pickup item event
      */
     @Override
     void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event) {
-        if (horcruxItem == null) //this can happen on restart when things are not fully loaded yet
+        if (horcruxItem == null) // can be null on restart before the item is loaded
             return;
 
         Item eventItem = event.getItem();
@@ -409,28 +335,12 @@ public class HORCRUX extends O2StationarySpell {
             event.setCancelled(true);
     }
 
-    /**
-     * Cleans up when the horcrux spell ends.
-     *
-     * <p>The horcrux spell requires no special cleanup on termination. The spell is permanent
-     * and only ends if explicitly destroyed through other means.</p>
-     */
     @Override
     void doCleanUp() {
     }
 
     /**
-     * Validates that the spell was properly deserialized with all required data.
-     *
-     * <p>Checks that the following essential data was restored from the saved state:</p>
-     * <ul>
-     *   <li>Player UUID (caster identification)</li>
-     *   <li>Location (horcrux position)</li>
-     *   <li>Horcrux material (item type)</li>
-     * </ul>
-     * <p>If any required data is missing, the spell is invalid and should be destroyed.</p>
-     *
-     * @return true if all required data is present, false otherwise
+     * @return true if the caster UUID, location, and horcrux material are all present
      */
     @Override
     public boolean checkSpellDeserialization() {
@@ -438,7 +348,7 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     /**
-     * Is this player currently affected by the horcrux?
+     * Whether a player is currently under this horcrux's effects.
      *
      * @param player the player to check
      * @return true if they are affected, false otherwise

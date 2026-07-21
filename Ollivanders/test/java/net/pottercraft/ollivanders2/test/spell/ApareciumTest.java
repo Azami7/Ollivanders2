@@ -25,16 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link APARECIUM} spell, which reveals text concealed by {@link CELATUM}.
- *
- * <p>Verifies spell functionality for revealing hidden book text and proper handling of invalid targets.</p>
+ * Unit tests for {@link APARECIUM}, which reveals text concealed by {@link CELATUM}.
  *
  * @author Azami7
- * @see APARECIUM
- * @see CELATUM
  */
 public class ApareciumTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -42,15 +37,8 @@ public class ApareciumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that APARECIUM correctly reveals a CELATUM-concealed book.
-     *
-     * <p>Tests the complete reveal workflow:</p>
-     * <ul>
-     * <li>Casts CELATUM to conceal a written book's text</li>
-     * <li>Casts APARECIUM at the enchanted book</li>
-     * <li>Confirms the revealed book has the original author, title, and page count</li>
-     * <li>Confirms the revealed book is no longer enchanted</li>
-     * </ul>
+     * Verify APARECIUM reveals a CELATUM-concealed book: the revealed book keeps the original author, title, and page
+     * count, and is no longer enchanted.
      */
     @Override
     @Test
@@ -96,13 +84,7 @@ public class ApareciumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that APARECIUM correctly ignores non-CELATUM items.
-     *
-     * <p>Tests two scenarios:</p>
-     * <ul>
-     * <li>Non-enchanted written book: APARECIUM should not affect the item</li>
-     * <li>CELATUM-enchanted non-book item (broomstick): APARECIUM should not attempt to reveal it</li>
-     * </ul>
+     * Verify APARECIUM ignores a non-enchanted written book and a CELATUM-enchanted non-book item (broomstick).
      */
     @Test
     void invalidTargetTest() {
@@ -134,7 +116,6 @@ public class ApareciumTest extends O2SpellTestSuper {
         assertTrue(Ollivanders2API.getItems().enchantedItems.isEnchanted(broomstick), "aparecium removed enchantment from item that is not a book");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions">https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions">Magical Drafts and Potions</a>
  */
 public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
     /**

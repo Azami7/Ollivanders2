@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * This jinx is more powerful than Depulso and can target any entity type.</p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Knockback_Jinx">Knockback Jinx</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Knockback_Jinx">Harry Potter Wiki - Knockback Jinx</a>
  */
 public final class FLIPENDO extends Knockback {
     /**

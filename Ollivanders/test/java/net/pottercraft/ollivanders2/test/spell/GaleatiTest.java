@@ -18,34 +18,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test for {@link Galeati} helmet-replacement spells.
- *
- * <p>Provides shared test coverage for the helmet-placement mechanics that all Galeati
- * subclasses ({@link net.pottercraft.ollivanders2.spell.HERBIFORS},
- * {@link net.pottercraft.ollivanders2.spell.MELOFORS}) inherit. Subclasses override
- * {@link #getSpellType()} to specify which spell to test; the same test logic validates
- * both spell variants.
- *
- * <p>Tests cover:
- * <ul>
- * <li><strong>No target:</strong> Spell hits a block with no nearby players and is killed</li>
- * <li><strong>Bare-headed player:</strong> Spell places the correct helmet type on a player with no helmet</li>
- * <li><strong>Helmeted player:</strong> Spell drops the existing helmet as an item and replaces it</li>
- * </ul>
+ * Base test class for {@link Galeati} helmet-replacement spells, covering the no-target, bare-headed, and
+ * already-helmeted cases.
  *
  * @author Azami7
  */
 abstract public class GaleatiTest extends O2SpellTestSuper {
     /**
-     * Tests the full progression of Galeati helmet-replacement scenarios.
-     *
-     * <p>Sub-tests run in order against the same world and target player:
-     * <ul>
-     * <li>Spell cast with no nearby player — killed on block hit, no side effects</li>
-     * <li>Spell cast at a bare-headed player — helmet of {@link Galeati#getHelmetType()} placed</li>
-     * <li>Spell cast at a player wearing an iron helmet — existing helmet dropped at eye location,
-     *     new helmet of {@link Galeati#getHelmetType()} placed</li>
-     * </ul>
+     * Verify the spell is killed with no effect when it finds no player, places the correct helmet on a bare-headed
+     * player, and replaces an existing helmet (dropping the old one) on a helmeted player.
      */
     @Override
     @Test

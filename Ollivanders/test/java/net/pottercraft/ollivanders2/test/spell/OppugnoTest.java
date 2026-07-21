@@ -21,27 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the {@link OPPUGNO} spell, which makes a nearby living entity attack the caster's target.
- *
- * <p>OPPUGNO finds the first living entity (other than the caster) near the projectile as the target,
- * then a second living entity within its attacker radius as the attacker. The attacker is launched at
- * the target and the target takes skill-scaled damage credited to the attacker.</p>
- *
- * <p>Tests verify:
- * <ul>
- * <li>Construction sets the correct spell type and magic branch</li>
- * <li>A cast with a valid target and a distinct attacker damages the target, launches the attacker,
- * and kills the spell</li>
- * <li>A cast with a target but no available attacker kills the spell without dealing damage</li>
- * <li>Damage scales with caster skill and is clamped to the spell's min/max bounds</li>
- * </ul>
- *
- * <p>To keep target/attacker selection deterministic, the target is spawned at the projectile's
- * arrival point (within {@code defaultRadius}) and the attacker is spawned farther away — outside
- * {@code defaultRadius} but inside the attacker radius — so the target loop can only pick the target
- * and the attacker loop can only pick the attacker. Most tests use a non-monster entity (cow) as the
- * attacker; {@link #monsterAttackerTargetsVictimTest()} uses a monster (zombie) to cover the spell's
- * {@code Monster}-only targeting branch.</p>
+ * Unit tests for {@link OPPUGNO}, which makes a nearby living entity attack the caster's target.
+ * <p>
+ * To keep target/attacker selection deterministic, the target is spawned at the projectile's arrival point (within
+ * {@code defaultRadius}) and the attacker is spawned farther away — outside {@code defaultRadius} but inside the
+ * attacker radius — so the target loop can only pick the target and the attacker loop can only pick the attacker.
+ * Most tests use a non-monster entity (cow) as the attacker; {@link #monsterAttackerTargetsVictimTest()} uses a
+ * monster (zombie) to cover the spell's {@code Monster}-only targeting branch.
+ * </p>
  *
  * @author Azami7
  */
@@ -70,11 +57,8 @@ public class OppugnoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the spell damages the target, launches the attacker, and kills itself.
-     *
-     * <p>Casts at {@code spellMasteryLevel} skill with a target at the projectile arrival point and a
-     * distinct attacker 4 blocks away. Verifies the target lost health, the attacker received a non-zero
-     * velocity (it was launched toward the target), and the spell killed itself after resolving.</p>
+     * Verify a cast with a target and a distinct attacker damages the target, launches the attacker, and kills the
+     * spell.
      */
     @Override
     @Test
@@ -101,11 +85,7 @@ public class OppugnoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the spell deals no damage and kills itself when no attacker is available.
-     *
-     * <p>Spawns only the target near the projectile, so the attacker search finds no eligible entity
-     * (the caster and the target are both excluded). Verifies the spell killed itself and the target's
-     * health is unchanged.</p>
+     * Verify that with a target but no eligible attacker the spell kills itself and deals no damage.
      */
     @Test
     void noAttackerTest() {
@@ -128,12 +108,8 @@ public class OppugnoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that an entity beyond the attacker radius is not used as an attacker.
-     *
-     * <p>Spawns the target near the projectile and a second eligible entity 15 blocks away — beyond the
-     * spell's attacker radius (10). The attacker search should reject the out-of-range entity, leaving no
-     * attacker, so the spell kills itself and the target takes no damage. This verifies the radius bound
-     * actually filters candidates rather than the spell finding any entity anywhere.</p>
+     * Verify an eligible entity beyond the attacker radius (15 blocks, radius 10) is rejected, so no attacker is
+     * found and the target takes no damage — proving the radius bound actually filters candidates.
      */
     @Test
     void attackerOutOfRangeTest() {
@@ -159,11 +135,7 @@ public class OppugnoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that a monster attacker is set to actively target the victim.
-     *
-     * <p>Uses a zombie (a {@link org.bukkit.entity.Monster}) as the attacker so the spell's
-     * monster-only branch runs, setting the zombie's target to the victim. Verifies the zombie's target
-     * is the spell's target, the target took damage, and the spell killed itself.</p>
+     * Verify a monster attacker (zombie) has its target set to the victim, covering the spell's Monster-only branch.
      */
     @Test
     void monsterAttackerTargetsVictimTest() {
@@ -190,13 +162,8 @@ public class OppugnoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that exactly one attacker is launched when several eligible candidates are in range.
-     *
-     * <p>Spawns the target plus two eligible attacker candidates, both within the attacker radius and
-     * outside {@code defaultRadius}. The spell should pick a single attacker (the loop breaks on the
-     * first match), so exactly one of the two candidates is launched (has a non-zero velocity) and the
-     * target is damaged once. Which specific candidate is chosen depends on iteration order, so the test
-     * only asserts that precisely one was launched.</p>
+     * Verify that with two eligible candidates in range exactly one is launched (the loop breaks on the first match);
+     * which one depends on iteration order, so the test only asserts that precisely one was launched.
      */
     @Test
     void singleAttackerTest() {
@@ -231,18 +198,9 @@ public class OppugnoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the damage scales with caster skill and is clamped to the spell's min/max bounds.
-     *
-     * <p>With the destined wand the {@code usesModifier} equals the spell experience, driving the
-     * damage formula in {@code doInitSpell()}. Verifies all three branches:
-     * <ul>
-     * <li>Very low skill clamps up to {@link OPPUGNO#getMinDamage()}</li>
-     * <li>Very high skill clamps down to {@link OPPUGNO#getMaxDamage()}</li>
-     * <li>Mid skill produces an un-clamped value strictly between the two bounds</li>
-     * </ul>
-     *
-     * <p>The casts only read each freshly-constructed spell's computed damage with no scheduler
-     * advancement, so they are kept in a single method per the parallel-execution model.</p>
+     * Verify damage scales with skill and is limited to [{@link OPPUGNO#getMinDamage()}, {@link OPPUGNO#getMaxDamage()}]:
+     * very low skill hits the min, very high skill hits the max, mid skill lands strictly between. Kept in one method
+     * because the casts only read each fresh spell's computed damage with no scheduler advancement.
      */
     @Test
     void damageScalingTest() {
@@ -251,15 +209,15 @@ public class OppugnoTest extends O2SpellTestSuper {
         Location targetLocation = new Location(testWorld, location.getX() + 5, location.getY(), location.getZ());
         PlayerMock caster = mockServer.addPlayer();
 
-        // experience 1 -> usesModifier 1 -> 0.05 damage, clamped up to the minimum
+        // experience 1 -> usesModifier 1 -> 0.05 damage, limited up to the minimum
         OPPUGNO lowSkill = (OPPUGNO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1);
-        assertEquals(lowSkill.getMinDamage(), lowSkill.getDamage(), "low skill damage not clamped to minimum");
+        assertEquals(lowSkill.getMinDamage(), lowSkill.getDamage(), "low skill damage not limited to minimum");
 
-        // experience mastery * 2 -> usesModifier 200 -> 10 damage, clamped down to the maximum
+        // experience mastery * 2 -> usesModifier 200 -> 10 damage, limited down to the maximum
         OPPUGNO highSkill = (OPPUGNO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel * 2);
-        assertEquals(highSkill.getMaxDamage(), highSkill.getDamage(), "high skill damage not clamped to maximum");
+        assertEquals(highSkill.getMaxDamage(), highSkill.getDamage(), "high skill damage not limited to maximum");
 
-        // mastery skill -> usesModifier 100 -> 5 damage, between the bounds and not clamped
+        // mastery skill -> usesModifier 100 -> 5 damage, between the bounds and not limited
         OPPUGNO midSkill = (OPPUGNO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         assertTrue(midSkill.getDamage() > midSkill.getMinDamage(), "mid skill damage not above minimum");
         assertTrue(midSkill.getDamage() < midSkill.getMaxDamage(), "mid skill damage not below maximum");

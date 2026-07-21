@@ -182,7 +182,7 @@ public final class PARTIS_TEMPORUS extends O2Spell implements Listener {
     /**
      * Set the path's width, depth, length, and hold duration from the caster's skill.
      * <p>
-     * All four scale with {@code usesModifier} and are clamped: width steps up to 3 at higher skill, depth runs from
+     * All four scale with {@code usesModifier} and are limited: width steps up to 3 at higher skill, depth runs from
      * {@link #minDepth} to {@link #maxDepth}, length runs from {@link #minLength} to {@link #maxLength}, and the hold
      * duration runs from {@link #minDuration} to {@link #maxDuration}.
      * </p>

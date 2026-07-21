@@ -9,24 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Bombardment spell that creates an explosion and breaks nearby blocks.
- *
- * <p>A standard bombing spell with moderate blast radius and block-breaking power.
- * Can break blocks with blast resistance up to 1.5 and hardness up to 1.0.
- * Does not break doors.</p>
+ * The Bombardment Spell: a moderate explosion that breaks weaker blocks around the impact, but not doors.
  *
  * @author Azami7
- * @version Ollivanders2
- * @see <a href="https://harrypotter.fandom.com/wiki/Bombardment_Spell">Bombardment Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Bombardment_Spell">Harry Potter Wiki - Bombardment Spell</a>
  */
 public final class BOMBARDA extends BombardaBase {
     static final double minEffectRadiusConfig = 2;
     static final double maxEffectRadiusConfig = 5;
 
     /**
-     * Constructor for spell info generation. Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
-     * @param plugin the Ollivanders2 plugin instance
+     * @param plugin the Ollivanders2 plugin
      */
     public BOMBARDA(Ollivanders2 plugin) {
         super(plugin);
@@ -43,11 +38,11 @@ public final class BOMBARDA extends BombardaBase {
     }
 
     /**
-     * Constructor to cast the Bombarda spell.
+     * Constructor.
      *
-     * @param plugin    the Ollivanders2 plugin instance
-     * @param player    the player casting the spell
-     * @param rightWand the wand being used
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public BOMBARDA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

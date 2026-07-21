@@ -14,14 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for CARPE_RETRACTUM spell functionality.
- *
- * <p>Tests the seize and pull charm including:</p>
- * <ul>
- * <li>Spell configuration (pull, min/max distance, strength reducer)</li>
- * <li>Entity targeting (non-living entities only)</li>
- * <li>Pull velocity application</li>
- * </ul>
+ * Unit tests for {@link CARPE_RETRACTUM}. Extends {@link KnockbackTest} for the shared knockback tests.
  *
  * @author Azami7
  */
@@ -32,7 +25,7 @@ public class CarpeRetractumTest extends KnockbackTest {
     }
 
     /**
-     * Carpe retractcum only works on non-living entities
+     * Carpe Retractum only works on non-living entities
      *
      * @return a living entity
      */
@@ -51,9 +44,6 @@ public class CarpeRetractumTest extends KnockbackTest {
         return EntityType.MINECART;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override @Test
     void spellConstructionTest() {
         World testWorld = mockServer.addSimpleWorld("world");

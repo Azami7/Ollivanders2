@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves">https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves">Wanderings with Werewolves</a>
  */
 public class WANDERINGS_WITH_WEREWOLVES extends O2Book {
     /**

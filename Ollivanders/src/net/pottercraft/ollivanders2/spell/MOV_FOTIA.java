@@ -17,27 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Mov Fotia - The Purple Firecracker Attention Spell with Tranquility Zone.
+ * Mov Fotia - The Purple Firecracker charm: launches a purple firecracker and creates a zone of tranquility centered
+ * on the caster.
  *
- * <p>Creates a stationary zone of tranquility centered on the caster that prevents hostile mob
- * targeting and projectile launches. A purple firecracker (low-power ball firework) is launched
- * from the caster's location as a visual signal. The zone's radius and duration scale with the
- * caster's experience level.</p>
+ * <p>Inside the zone — a {@link TRANQUILLUS} stationary spell — entities cannot target one another and projectiles
+ * cannot be launched. Its radius and duration scale with the caster's skill.</p>
  *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Shoots a single purple firecracker from the caster's location</li>
- * <li>Creates a TRANQUILLUS stationary spell (zone of tranquility) centered on the caster</li>
- * <li>Radius range: 5-20 blocks (same as TRANQUILLUS)</li>
- * <li>Duration range: 30 seconds to 5 minutes (same as TRANQUILLUS)</li>
- * <li>Within the zone: entities cannot target other entities, and projectiles cannot be launched</li>
- * </ul>
- *
- * <p>Seen/Mentioned: On 31 October 1991, Albus Dumbledore used this spell to get the attention
- * of panicking diners in the Great Hall when a troll was loose in the castle.</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Purple_Firecrackers">https://harrypotter.fandom.com/wiki/Purple_Firecrackers</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Purple_Firecrackers">Harry Potter Wiki - Purple Firecrackers</a>
  */
 public final class MOV_FOTIA extends StationarySpell {
     /**
@@ -100,6 +86,11 @@ public final class MOV_FOTIA extends StationarySpell {
         initSpell();
     }
 
+    /**
+     * Launch the purple firecracker as a visual signal, then create the tranquility zone.
+     *
+     * @return a new TRANQUILLUS stationary spell with this cast's radius and duration
+     */
     @Override
     @Nullable
     protected O2StationarySpell createStationarySpell() {

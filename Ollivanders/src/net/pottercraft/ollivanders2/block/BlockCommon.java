@@ -23,7 +23,6 @@ public class BlockCommon {
      * @return true if the blocks are adjacent, false otherwise
      */
     static public boolean isAdjacentTo(@NotNull Block block1, @NotNull Block block2) {
-        // Check all six faces
         return block1.getRelative(BlockFace.UP).equals(block2) ||
                 block1.getRelative(BlockFace.DOWN).equals(block2) ||
                 block1.getRelative(BlockFace.NORTH).equals(block2) ||
@@ -48,7 +47,8 @@ public class BlockCommon {
             for (int y = -blockRadius; y <= blockRadius; y++) {
                 for (int z = -blockRadius; z <= blockRadius; z++) {
                     Block block = center.getRelative(x, y, z);
-                    if (block.getLocation().distance(center.getLocation()) < radius && !blockList.contains(block)) { // make sure we aee still in the radius since we're rounding a square
+                    // iterate a bounding cube but keep only blocks actually within the spherical radius
+                    if (block.getLocation().distance(center.getLocation()) < radius && !blockList.contains(block)) {
                         blockList.add(block);
                     }
                 }
@@ -80,9 +80,7 @@ public class BlockCommon {
     }
 
     /**
-     * Is this block an air block?
-     *
-     * <p>Moving this to a common function since there are now multiple air blocks.</p>
+     * Is this block air? Covers both regular and cave air.
      *
      * @param block the block to check
      * @return true if it is an air block, false otherwise

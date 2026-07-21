@@ -12,9 +12,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Spider-Repelling Charm that blasts spiders away from the caster.
  *
- * <p>When the projectile hits a spider or cave spider, the spell pushes it away with force based on the caster's
- * skill level. This spell has no effect on other entities.</p>
- *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Arania_Exumai">Arania Exumai</a>
  */

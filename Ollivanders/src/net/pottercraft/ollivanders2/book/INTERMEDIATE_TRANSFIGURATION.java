@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration">https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration">Intermediate Transfiguration</a>
  */
 public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
     /**

@@ -4,23 +4,13 @@ import net.pottercraft.ollivanders2.effect.ANIMAGUS_INCANTATION;
 import org.bukkit.entity.Player;
 
 /**
- * Test suite for the ANIMAGUS_INCANTATION effect.
+ * Unit tests for {@link ANIMAGUS_INCANTATION}, a passive marker with no tick behavior or event handlers.
  *
- * <p>Tests the incantation marker effect that temporarily flags a player as actively reciting
- * the Animagus spell. Verifies that the effect cannot be set to permanent status and that
- * it properly functions as a passive state marker without active tick processing or event handling.</p>
+ * @see NotPermanentEffectTestSuper
  */
 public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
     /**
-     * Create an ANIMAGUS_INCANTATION effect for testing.
-     *
-     * <p>Instantiates a new ANIMAGUS_INCANTATION effect with the specified parameters. This method
-     * is called by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new ANIMAGUS_INCANTATION effect targeting the specified player
+     * {@inheritDoc}
      */
     @Override
     ANIMAGUS_INCANTATION createEffect(Player target, int durationInTicks, boolean isPermanent) {
@@ -28,27 +18,20 @@ public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
     }
 
     /**
-     * ANIMAGUS_INCANTATION effect does not have special checkEffect behavior.
-     *
-     * <p>The ANIMAGUS_INCANTATION effect has no unique behavior to test in checkEffectTest(). Aging and duration
-     * management are tested in the base ageAndKillTest() method.</p>
+     * ANIMAGUS_INCANTATION has no tick behavior to test.
      */
     @Override
     void checkEffectTest() {
     }
 
     /**
-     * Run all event handler tests for the ANIMAGUS_INCANTATION effect.
-     *
-     * <p>ANIMAGUS_INCANTATION has no event handlers to test.</p>
+     * ANIMAGUS_INCANTATION has no event handlers to test.
      */
     @Override
     void eventHandlerTests() {}
 
     /**
-     * Test ANIMAGUS_INCANTATION effect cleanup.
-     *
-     * <p>doRemove for ANIMAGUS_INCANTATION doesn't do anything.</p>
+     * ANIMAGUS_INCANTATION has no doRemove() cleanup to test.
      */
     @Override
     void doRemoveTest() {}

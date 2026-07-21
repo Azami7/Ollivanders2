@@ -15,23 +15,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Opening charm that unlocks and opens doors and trapdoors.
- *
- * <p>When cast at a door or trapdoor, the spell sets the block's Openable state to open. The spell fails if:</p>
- * <ul>
- * <li>The target block is not a door or trapdoor</li>
- * <li>The door is protected by a COLLOPORTUS stationary spell (magical lock)</li>
- * </ul>
- *
- * <p><strong>Note:</strong> Doors requiring continuous power to remain open (such as iron doors) will
- * open momentarily but close again immediately when the redstone power applies. This is Minecraft's
- * standard behavior, not a limitation of the spell.</p>
- *
- * <p><strong>World Guard:</strong> Requires the INTERACT flag when WorldGuard is enabled.</p>
+ * Opening charm that opens a targeted door or trapdoor. Fails if the target is not a door or trapdoor, or if it is
+ * protected by a COLLOPORTUS magical lock.
+ * <p>
+ * Doors that need continuous power to stay open (such as iron doors) open momentarily and then close again as the
+ * redstone state reasserts — that is standard Minecraft behavior, not a limitation of the spell.
+ * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Opening_Charm">Opening Charm</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Opening_Charm">Harry Potter Wiki - Opening Charm</a>
  */
 public class ABERTO extends O2Spell {
     /**
@@ -72,11 +64,8 @@ public class ABERTO extends O2Spell {
     }
 
     /**
-     * Open the target door or trapdoor when the spell hits.
-     *
-     * <p>Validates that the target is a door, checks for COLLOPORTUS protection, and if all checks pass,
-     * sets the door's Openable state to true. Sends a failure message if the target is not a door or if
-     * a COLLOPORTUS stationary spell protects the door.</p>
+     * Open the struck door or trapdoor. Sends a failure message if the target is not a door or is protected by a
+     * COLLOPORTUS lock.
      */
     @Override
     protected void doCheckEffect() {

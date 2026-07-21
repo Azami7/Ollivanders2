@@ -65,24 +65,9 @@ public final class MULTICORFORS extends O2Spell {
     }
 
     /**
-     * Scan for nearby living entities and recolor the first one's leather armor.
-     * <p>
-     * Each tick, the method scans within {@link #defaultRadius} of the projectile for living
-     * entities. The caster is always skipped. When a non-caster entity is found, the spell is
-     * killed and the entity's armor is inspected:
-     * </p>
-     * <ul>
-     * <li>If any piece is leather armor, all leather pieces are recolored to the same random
-     *     dyeable color, the modified armor array is written back via
-     *     {@link org.bukkit.inventory.EntityEquipment#setArmorContents(ItemStack[])}, and the
-     *     loop breaks (single-target).</li>
-     * <li>If no leather armor is found on any non-caster entity in the scan, a failure message
-     *     is sent to the caster.</li>
-     * </ul>
-     * <p>
-     * If the projectile hits a block before finding an entity, the spell is killed and returns
-     * silently (no failure message).
-     * </p>
+     * Scan within {@link #defaultRadius} for the first non-caster living entity and recolor all of its leather armor
+     * to one random dyeable color. The spell is killed on the first non-caster entity found; a failure message is
+     * sent if that entity has no leather armor. Killed silently if the projectile hits a block first.
      */
     @Override
     protected void doCheckEffect() {

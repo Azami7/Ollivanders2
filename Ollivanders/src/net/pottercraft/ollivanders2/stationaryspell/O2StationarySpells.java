@@ -44,44 +44,20 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Manager for all active and inactive stationary spells in the game.
- *
- * <p>This class handles lifecycle management of stationary spells, including creation, activation,
- * deactivation, and persistence. It acts as an event listener that broadcasts Bukkit events to all
- * active stationary spells, allowing them to respond to world events. Stationary spells are
- * area-of-effect spells that persist at specific locations and affect players and entities within
- * their radius.</p>
- *
- * <p>Key responsibilities:</p>
- * <ul>
- * <li>Managing the collection of all stationary spells</li>
- * <li>Broadcasting Bukkit events to active spells for custom behavior</li>
- * <li>Serialization and persistence of spell data to disk</li>
- * <li>Spell lifecycle management (loading, upkeep, removal)</li>
- * </ul>
+ * Manages the lifecycle of all stationary spells: creation, upkeep, removal, and persistence to disk. As a Bukkit
+ * {@link Listener}, it forwards world events to every active stationary spell so they can react within their area.
  *
  * @author Azami7
  * @version Ollivanders2
  */
 public class O2StationarySpells implements Listener {
     /**
-     * The list of all stationary spells currently in the game.
-     *
-     * <p>Contains both active and inactive spells. Inactive spells are marked for removal but may
-     * still be in the list until the next upkeep() cycle.</p>
+     * All stationary spells, active and killed. Killed spells linger here until the next {@link #upkeep()} removes them.
      */
     private List<O2StationarySpell> stationarySpells = new ArrayList<>();
 
-    /**
-     * Reference to the plugin instance.
-     *
-     * <p>Used for accessing plugin services, scheduler, logger, and other plugin functionality.</p>
-     */
     final Ollivanders2 p;
 
-    /**
-     * Common utility functions for logging and data manipulation.
-     */
     Ollivanders2Common common;
 
     /**
@@ -110,9 +86,7 @@ public class O2StationarySpells implements Listener {
     private final String spellLocLabel = "Spell_Loc";
 
     /**
-     * Constructs a new O2StationarySpells manager.
-     *
-     * @param plugin the Ollivanders2 plugin instance (not null)
+     * @param plugin the Ollivanders2 plugin instance
      */
     public O2StationarySpells(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -120,10 +94,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Initializes the stationary spells system when the plugin enables.
-     *
-     * <p>Loads previously saved stationary spells from disk and registers this manager as a
-     * Bukkit event listener to receive world events for distribution to active spells.</p>
+     * Load saved stationary spells from disk and register this manager as a Bukkit event listener.
      */
     public void onEnable() {
         loadO2StationarySpells();
@@ -132,23 +103,10 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Cleanup when the plugin disables.
+     * Persist all stationary spells to disk so they can be restored on the next server start.
      *
-     * <p>Called when the Ollivanders2 plugin is being shut down. The O2StationarySpells manager persists all active
-     * stationary spell data to disk. Stationary spells (such as enchanted areas or persistent magical effects) are
-     * serialized and saved so they can be restored when the server restarts, maintaining long-term magical effects
-     * in the world.</p>
-     *
-     * <p>Saved Data:</p>
-     * <ul>
-     * <li>All active stationary spells in their current state</li>
-     * <li>Spell location, duration, and radius information</li>
-     * <li>Caster UUID and spell-specific properties</li>
-     * <li>Data is persisted as JSON via GsonDAO for restoration on server startup</li>
-     * </ul>
-     *
-     * @see #saveO2StationarySpells() for stationary spell persistence implementation
-     * @see #loadO2StationarySpells() for restoring stationary spells on plugin startup
+     * @see #saveO2StationarySpells()
+     * @see #loadO2StationarySpells()
      */
     public void onDisable() {
         p.getLogger().info("Saving " + stationarySpells.size() + " stationary spells.");
@@ -157,7 +115,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Iterates over all active stationary spells and applies the given action to each.
+     * Apply an action to every active stationary spell. The shared dispatch used by all the event handlers below.
      *
      * @param action the action to perform on each active stationary spell
      */
@@ -169,10 +127,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Broadcasts a player move event to all active stationary spells.
-     *
-     * <p>Fired when a player moves to a new block. Stationary spells can use this to detect
-     * player movement within their area of effect.</p>
+     * Forward a player move event to every active stationary spell.
      *
      * @param event the player move event
      */
@@ -232,7 +187,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Handle entity break door event
+     * Handle entity change block event
      *
      * @param event the event
      */
@@ -262,7 +217,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Handle entity damage event
+     * Handle player interact event
      *
      * @param event the event
      */
@@ -332,7 +287,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Handle world load events
+     * Handle player join event
      *
      * @param event the event
      */
@@ -372,7 +327,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Handle player deal events
+     * Handle player death event
      *
      * @param event the player death event
      */
@@ -422,12 +377,9 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Adds a new stationary spell to the manager.
+     * Add a stationary spell to the manager; it starts receiving events immediately if active.
      *
-     * <p>The spell is added to the internal list and will immediately be eligible to receive
-     * Bukkit events if it is marked as active.</p>
-     *
-     * @param spell the stationary spell to add (not null)
+     * @param spell the stationary spell to add
      */
     public void addStationarySpell(@NotNull O2StationarySpell spell) {
         common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
@@ -435,12 +387,10 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Marks a stationary spell for removal.
+     * Mark a stationary spell for removal by killing it. The next {@link #upkeep()} drops it from the list; removing it
+     * here would corrupt iteration during an event broadcast.
      *
-     * <p>Instead of immediately removing the spell, this marks it as killed and allows the next
-     * upkeep() cycle to clean it up. This prevents iterator corruption during event broadcasts.</p>
-     *
-     * @param spell the stationary spell to remove (not null)
+     * @param spell the stationary spell to remove
      */
     public void removeStationarySpell(@NotNull O2StationarySpell spell) {
         common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType(), null, null, false);
@@ -448,9 +398,9 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Return a list of active stationary spells
+     * Get the active (not killed) stationary spells.
      *
-     * @return a list of active stationary spells
+     * @return the active stationary spells; empty if none
      */
     @NotNull
     public List<O2StationarySpell> getActiveStationarySpells() {
@@ -465,13 +415,10 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Finds all stationary spells (active or inactive) at a specific location.
+     * Get every stationary spell whose radius contains a location, including inactive and killed spells.
      *
-     * <p>Checks all spells in the manager to see if the given location falls within their radius
-     * of effect, regardless of whether the spells are currently active or marked for removal.</p>
-     *
-     * @param targetLoc the location to check (not null)
-     * @return a list of all stationary spells containing this location, empty if none found
+     * @param targetLoc the location to check
+     * @return the stationary spells containing this location; empty if none
      */
     @NotNull
     public List<O2StationarySpell> getStationarySpellsAtLocation(@NotNull Location targetLoc) {
@@ -486,14 +433,11 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Finds all active stationary spells of a specific type at a location.
+     * Get the active stationary spells of a given type whose radius contains a location.
      *
-     * <p>Returns only spells that are both active and of the specified type, located at the
-     * given position. Useful for checking if a specific spell effect is active at a location.</p>
-     *
-     * @param location  the location to check (not null)
-     * @param spellType the type of spell to search for (not null)
-     * @return a list of active spells of that type at the location, empty if none found
+     * @param location  the location to check
+     * @param spellType the type of spell to search for
+     * @return the matching active spells; empty if none
      */
     @NotNull
     public List<O2StationarySpell> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType) {
@@ -544,11 +488,8 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Runs the upkeep cycle for all active spells and removes killed spells.
-     *
-     * <p>Called periodically (e.g., each server tick) to allow spells to update their state
-     * (decrement duration, apply effects, etc.) and to clean up spells marked for removal.
-     * Uses a copy of the spell list to safely remove spells during iteration.</p>
+     * Run each active spell's upkeep and drop any that were killed. Iterates over a copy so spells can remove
+     * themselves during the pass.
      */
     public void upkeep() {
         List<O2StationarySpell> stationarySpells = new ArrayList<>(this.stationarySpells);
@@ -562,10 +503,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Persists all stationary spells to disk as JSON.
-     *
-     * <p>Called when the server shuts down to save the current state of all spells. Spells can
-     * be restored on the next server start via loadO2StationarySpells().</p>
+     * Persist all stationary spells to disk as JSON. Restore them with {@link #loadO2StationarySpells()}.
      */
     public void saveO2StationarySpells() {
         List<Map<String, String>> serializedList = serializeO2StationarySpells();
@@ -575,10 +513,8 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Loads saved stationary spells from disk.
-     *
-     * <p>Called on plugin startup to restore spells that were persisted during the previous
-     * shutdown. If no saved spell data exists, an empty list is created.</p>
+     * Load saved stationary spells from disk, replacing the current list. Leaves the list unchanged if no save data
+     * exists.
      */
     public void loadO2StationarySpells() {
         GsonDAO gsonLayer = new GsonDAO();
@@ -594,12 +530,10 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Converts all active stationary spells to a JSON-serializable format.
+     * Serialize every stationary spell to a list of string maps for {@link #saveO2StationarySpells()}. Each map holds
+     * the spell's type, caster UUID, location, duration, radius, and any spell-specific data.
      *
-     * <p>Each spell is converted to a map containing its type, caster UUID, location,
-     * duration, radius, and spell-specific data. Used by saveO2StationarySpells().</p>
-     *
-     * @return a list of maps containing serialized spell data
+     * @return the serialized spell data
      */
     @NotNull
     private List<Map<String, String>> serializeO2StationarySpells() {
@@ -610,37 +544,17 @@ public class O2StationarySpells implements Listener {
         for (O2StationarySpell spell : stationarySpells) {
             Map<String, String> spellData = new HashMap<>();
 
-            //
-            // Spell type
-            //
             spellData.put(spellLabel, spell.getSpellType().toString());
-
-            //
-            // Player UUID
-            //
             spellData.put(playerUUIDLabel, spell.playerUUID.toString());
 
-            //
-            // Location
-            //
             Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
             if (locData != null) {
                 spellData.putAll(locData);
             }
 
-            //
-            // Duration
-            //
             spellData.put(durationLabel, Integer.toString(spell.duration));
-
-            //
-            // Radius
-            //
             spellData.put(radiusLabel, Integer.toString(spell.radius));
 
-            //
-            // get spell-specific data
-            //
             Map<String, String> uniqueData = spell.serializeSpellData();
             spellData.putAll(uniqueData);
 
@@ -651,23 +565,17 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Converts serialized spell data from JSON maps into O2StationarySpell instances.
+     * Reconstruct stationary spells from serialized string maps for {@link #loadO2StationarySpells()}. Any entry that
+     * is missing a required field or fails validation is skipped. Reconstructed spells are set active.
      *
-     * <p>Each map in the input list is processed to reconstruct a stationary spell with its
-     * original properties (location, duration, radius, caster UUID, type). Spells that fail
-     * validation are silently skipped. Used by loadO2StationarySpells().</p>
-     *
-     * @param serializedSpells a list of spell data maps from JSON
-     * @return a list of reconstructed O2StationarySpell objects ready to be activated
+     * @param serializedSpells the serialized spell data maps
+     * @return the reconstructed spells
      */
     @NotNull
     private List<O2StationarySpell> deserializeO2StationarySpells(@NotNull List<Map<String, String>> serializedSpells) {
         List<O2StationarySpell> statSpells = new ArrayList<>();
 
         for (Map<String, String> spellData : serializedSpells) {
-            //
-            // spell name
-            //
             if (!spellData.containsKey(spellLabel))
                 continue;
             String name = spellData.get(spellLabel);
@@ -679,9 +587,6 @@ public class O2StationarySpells implements Listener {
             if (statSpell == null)
                 continue;
 
-            //
-            // caster uuid
-            //
             if (!spellData.containsKey(playerUUIDLabel))
                 continue;
             UUID pid = Ollivanders2API.common.uuidFromString(spellData.get(playerUUIDLabel));
@@ -689,9 +594,6 @@ public class O2StationarySpells implements Listener {
                 continue;
             statSpell.setPlayerID(pid);
 
-            //
-            // spell radius
-            //
             if (!spellData.containsKey(radiusLabel))
                 continue;
             Integer radius = Ollivanders2API.common.integerFromString(spellData.get(radiusLabel));
@@ -699,27 +601,18 @@ public class O2StationarySpells implements Listener {
                 continue;
             statSpell.setRadius(radius);
 
-            //
-            // spell duration
-            //
             if (!spellData.containsKey(durationLabel))
                 continue;
             Integer duration = Ollivanders2API.common.integerFromString(spellData.get(durationLabel));
             if (duration == null)
                 continue;
-            statSpell.setDuration(duration);
+            statSpell.setDuration(duration, true);
 
-            //
-            // spell location
-            //
             Location location = Ollivanders2API.common.deserializeLocation(spellData, spellLocLabel);
             if (location == null)
                 continue;
             statSpell.setLocation(location);
 
-            //
-            // spell unique data
-            //
             statSpell.deserializeSpellData(spellData);
 
             if (statSpell.checkSpellDeserialization()) {
@@ -732,14 +625,11 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Creates a new instance of a stationary spell by its type using reflection.
+     * Create a new, inactive instance of the given spell type via reflection. The caller must populate its location,
+     * duration, radius, and caster before activating it.
      *
-     * <p>Instantiates the spell class associated with the given spell type. The spell is created
-     * with default/uninitialized properties and will be inactive by default. Additional properties
-     * (location, duration, radius, caster) must be set after creation via setter methods.</p>
-     *
-     * @param spellType the type of spell to create (not null)
-     * @return a new spell instance, or null if instantiation fails
+     * @param spellType the type of spell to create
+     * @return a new inactive spell instance, or null if instantiation fails
      */
     @Nullable
     public O2StationarySpell createStationarySpellByType(@NotNull O2StationarySpellType spellType) {
@@ -754,7 +644,6 @@ public class O2StationarySpells implements Listener {
             return null;
         }
 
-        // spell is incomplete until all data is loaded, so set inactive
         statSpell.setActive(false);
 
         return statSpell;

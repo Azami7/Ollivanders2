@@ -62,7 +62,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
     }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -84,19 +84,15 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
     }
 
     /**
-     * Search for a nearby item to levitate, or move the currently levitated item.
+     * Search for a nearby item to levitate, or move the already-levitated item.
      *
-     * <p>Two phases:</p>
+     * <p>Before an item is acquired: while the projectile is in flight it searches for nearby items. If one is
+     * found and the caster is sneaking, its gravity is disabled and levitation begins; if the caster is not
+     * sneaking, the spell fails. If the projectile stops without finding an item, the spell ends.</p>
      *
-     * <ul>
-     * <li><strong>Targeting:</strong> While the projectile is in flight, searches for nearby items.
-     *     If an item is found and the caster is sneaking, disables its gravity and begins levitation.
-     *     If the caster is not sneaking, the spell fails. If no item is found and the projectile has
-     *     stopped, the spell is killed.</li>
-     * <li><strong>Moving:</strong> Each tick while the caster is sneaking, sets the item's velocity
-     *     toward the point along the caster's gaze at the item's current distance, creating smooth
-     *     flight. When the caster stops sneaking, restores gravity and kills the spell.</li>
-     * </ul>
+     * <p>Once levitating: each tick the item follows the caster's gaze while the caster keeps sneaking, for up to
+     * {@link #calculateMoveTicks()} ticks. The spell ends when the caster stops sneaking or that time runs out,
+     * restoring the item's gravity.</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -162,10 +158,20 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
             target.setGravity(true);
     }
 
+    /**
+     * Get the remaining ticks the caster can keep the item levitated.
+     *
+     * @return the remaining levitation time in ticks
+     */
     public int getMoveTicks() {
         return moveTicks;
     }
 
+    /**
+     * Get whether the spell has acquired an item and is actively moving it.
+     *
+     * @return true if an item is being levitated
+     */
     public boolean isMoving() {
         return moving;
     }

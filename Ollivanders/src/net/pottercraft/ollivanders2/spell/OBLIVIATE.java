@@ -15,45 +15,25 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Reduces a target player's known spell and potion levels — Ollivanders2's adaptation of the canon
- * Memory Charm.
- * <p>
- * On hitting another player, OBLIVIATE iterates up to {@link #maxImpact} times, each iteration
- * randomly removing skill from one of the target's known spells or potions. The reduction amount
- * per iteration scales with the caster's {@code usesModifier} (capped at {@link #maxReduction}),
- * and {@code canContinue()} probabilistically ends the loop early so low-skill casters typically
- * forget fewer things than high-skill casters.
- * </p>
- * <p>
- * The spell is killed on first impact (one target per cast), and is also killed if the projectile
- * hits a block — though the loop still runs once after a block hit so a player standing at the
- * impact point can still be affected. The caster is always skipped.
- * </p>
+ * The Memory Charm: reduces a target player's known spell and potion levels. Higher caster skill removes more — both
+ * per hit and by lowering more of the target's spells/potions.
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Memory_Charm">Harry Potter Wiki - Memory Charm</a>
  */
 public final class OBLIVIATE extends O2Spell {
     /**
-     * Hard cap on how many skill levels a single iteration of {@link #forgetSomething(O2Player)}
-     * can subtract. Even at extreme {@code usesModifier} values, no single forget event removes
-     * more than this.
+     * Hard cap on how many skill levels a single {@link #forgetSomething(O2Player)} iteration can subtract.
      */
     private static final int maxReduction = O2Spell.spellMasteryLevel * 2;
 
     /**
-     * Maximum number of forget iterations per cast. The loop in {@link #doCheckEffect()} will run
-     * at most this many times against the impacted player; {@link #canContinue()} may terminate
-     * earlier based on caster skill.
+     * Maximum number of forget iterations per cast; {@link #canContinue()} may end the loop earlier.
      */
     private static final int maxImpact = 20;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
-     * <p>
-     * Populates {@link #flavorText} with the canon Memory Charm excerpts and sets the descriptive
-     * {@link #text}. Does not configure cast-time state — the casting constructor handles that.
-     * </p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -73,11 +53,7 @@ public final class OBLIVIATE extends O2Spell {
     }
 
     /**
-     * Constructor for casting Obliviate.
-     * <p>
-     * Adds the {@link Flags#PVP} WorldGuard flag if WorldGuard is enabled (since OBLIVIATE
-     * affects another player), then invokes {@link #initSpell()}.
-     * </p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -97,14 +73,10 @@ public final class OBLIVIATE extends O2Spell {
     }
 
     /**
-     * Tick handler: locate a non-caster player within range and reduce their spell/potion knowledge.
-     * <p>
-     * If the projectile has hit a block, kills the spell — but does not return immediately, so a
-     * player at the impact point still gets a chance to be hit on this final tick. Iterates the
-     * caster's nearby-player list, skips the caster themselves, and on the first valid target runs
-     * up to {@link #maxImpact} iterations of {@link #forgetSomething(O2Player)}, breaking early
-     * when {@link #canContinue()} rolls false. Always kills the spell after impacting one target.
-     * </p>
+     * Reduce the spell/potion knowledge of the first non-caster player in range by running up to {@link #maxImpact}
+     * {@link #forgetSomething(O2Player)} iterations (stopping early when {@link #canContinue()} rolls false), then end
+     * the spell (one target per cast). A block hit ends the spell but still runs this once, so a player at the impact
+     * point is affected.
      */
     @Override
     protected void doCheckEffect() {
@@ -135,15 +107,11 @@ public final class OBLIVIATE extends O2Spell {
     }
 
     /**
-     * Decide whether to run another forget iteration against the current target.
-     * <p>
-     * Higher caster skill (larger {@code usesModifier}) increases the chance of continuing. There
-     * is also a base 10% short-circuit failure regardless of skill, suppressed under
-     * {@link Ollivanders2#testMode} so unit tests can rely on deterministic continuation when
-     * skill warrants it.
-     * </p>
+     * Decide whether to run another forget iteration; higher caster skill makes continuing more likely. A base 10%
+     * chance to stop applies regardless of skill, suppressed under {@link Ollivanders2#testMode} for deterministic
+     * tests.
      *
-     * @return true if the spell should run another forget iteration, false to stop
+     * @return true to run another forget iteration, false to stop
      */
     private boolean canContinue() {
         int chance = Ollivanders2Common.random.nextInt(100); // 0-99
@@ -155,16 +123,11 @@ public final class OBLIVIATE extends O2Spell {
     }
 
     /**
-     * Reduce the target's skill in one randomly chosen known spell or potion.
-     * <p>
-     * Computes a per-iteration reduction amount: 1 if {@code usesModifier < 1}, otherwise a
-     * uniform random value in {@code [0, floor(usesModifier))}, capped at {@link #maxReduction}.
-     * Under {@link Ollivanders2#testMode} a cast at or above {@link O2Spell#spellMasteryLevel} instead
-     * forces the maximum reduction, so the random roll cannot come up 0 and tests are deterministic.
-     * Then a 50/50 coin flip decides whether to attempt to forget a spell or a potion first; if
-     * the chosen category is empty for this target, falls back to the other category so a single
-     * iteration always reduces something when at least one of the two maps is non-empty.
-     * </p>
+     * Reduce the target's skill in one randomly chosen known spell or potion by a skill-scaled amount (limited to
+     * {@link #maxReduction}). A coin flip picks spell vs. potion first, falling back to the other category if the
+     * chosen one is empty, so an iteration always reduces something when either map is non-empty. Under
+     * {@link Ollivanders2#testMode} a cast at or above {@link O2Spell#spellMasteryLevel} forces the maximum reduction
+     * so the roll cannot be 0 and tests are deterministic.
      *
      * @param target the player whose knowledge will be reduced
      */
@@ -196,12 +159,8 @@ public final class OBLIVIATE extends O2Spell {
     }
 
     /**
-     * Reduce the level of one randomly selected known spell on the target by the given amount.
-     * <p>
-     * If the resulting level falls below 1, the spell is removed from the target's known-spells
-     * map by {@link O2Player#setSpellCount(O2SpellType, int)}. No-op if the target has no known
-     * spells.
-     * </p>
+     * Reduce one randomly selected known spell on the target by {@code reduction} levels (removing it if the result
+     * falls below 1). No-op if the target has no known spells.
      *
      * @param target    the player whose spell knowledge will be reduced
      * @param reduction the number of skill levels to subtract from the chosen spell
@@ -223,12 +182,8 @@ public final class OBLIVIATE extends O2Spell {
     }
 
     /**
-     * Reduce the level of one randomly selected known potion on the target by the given amount.
-     * <p>
-     * If the resulting level falls below 1, the potion is removed from the target's known-potions
-     * map by {@link O2Player#setPotionCount(O2PotionType, int)}. No-op if the target has no known
-     * potions.
-     * </p>
+     * Reduce one randomly selected known potion on the target by {@code reduction} levels (removing it if the result
+     * falls below 1). No-op if the target has no known potions.
      *
      * @param target    the player whose potion knowledge will be reduced
      * @param reduction the number of skill levels to subtract from the chosen potion

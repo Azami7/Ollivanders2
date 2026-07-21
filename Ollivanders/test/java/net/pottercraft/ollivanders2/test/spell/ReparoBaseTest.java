@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * (via {@link #getRepairableMaterial()}).</p>
  *
  * @see ReparoBase
- * @see O2SpellTestSuper for the inherited spell testing framework
+ * @see O2SpellTestSuper
  */
 abstract class ReparoBaseTest extends O2SpellTestSuper {
     /**
@@ -130,7 +130,6 @@ abstract class ReparoBaseTest extends O2SpellTestSuper {
         assertFalse(nonDamageable.isDead(), "non-damageable item was removed");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

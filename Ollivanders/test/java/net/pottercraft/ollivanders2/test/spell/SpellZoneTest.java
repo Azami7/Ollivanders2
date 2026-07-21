@@ -24,56 +24,34 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for {@link SpellZone}.
- *
- * <p>SpellZone is a value-object configuration class with no game-state side effects, so each
- * scenario is independent and lives in its own {@code @Test} method. Tests cover:
- * <ul>
- * <li><strong>Construction:</strong> Each zone type stores name, world, type, and spell lists correctly</li>
- * <li><strong>Cuboid wiring:</strong> CUBOID zones receive a working cuboid built from the area array</li>
- * <li><strong>Defensive copies:</strong> Caller-supplied lists cannot be mutated through the SpellZone</li>
- * <li><strong>Empty lists:</strong> Zones constructed with empty allow/disallow lists work without error</li>
- * </ul>
+ * Unit tests for {@link SpellZone}. It is a side-effect-free value object, so each scenario is independent and lives
+ * in its own {@code @Test} method.
  *
  * @author Azami7
  */
 public class SpellZoneTest {
     /**
-     * Name of the shared test world. Passed to {@link SpellZone}'s {@code world} parameter and to
-     * {@link org.mockbukkit.mockbukkit.ServerMock#addSimpleWorld(String)}.
+     * Name of the shared test world, used for both the zone's world parameter and the MockBukkit world.
      */
     static final String worldName = "SpellZone";
 
     /**
-     * The shared MockBukkit world used by tests that need a {@link Location} for cuboid
-     * containment checks.
+     * The shared MockBukkit world used by tests that need a {@link Location} for cuboid containment checks.
      */
     static World testWorld;
 
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, created once for all tests in the class.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded before all test methods with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin under test, loaded once with the default config.
      */
     static Ollivanders2 testPlugin;
 
     /**
-     * Initialize the mock Bukkit server, plugin, and shared test world before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server, loads the Ollivanders2 plugin with the default test config, adds the
-     * shared {@link #testWorld}, and advances the scheduler past the plugin's startup delay.
-     * The same server, plugin, and world instances are reused across all test methods to
-     * avoid expensive setup/teardown per method.</p>
+     * Start the shared MockBukkit server, load the plugin, and add the shared test world before any tests run.
      */
     @BeforeAll
     static void globalSetUp() {
@@ -88,15 +66,8 @@ public class SpellZoneTest {
     }
 
     /**
-     * Tests construction of a CUBOID zone.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Name, type, world name, allowed list, and disallowed list are stored as provided</li>
-     * <li>The backing {@link net.pottercraft.ollivanders2.common.Cuboid} reports points inside
-     *     the supplied area as inside</li>
-     * <li>The backing cuboid reports points outside the supplied area as outside</li>
-     * </ul>
+     * Verify a CUBOID zone stores its fields as provided and builds a working cuboid that reports points inside and
+     * outside the supplied area correctly.
      */
     @Test
     void cuboidZoneConstructorTest() {
@@ -122,11 +93,8 @@ public class SpellZoneTest {
     }
 
     /**
-     * Tests construction of a WORLD zone.
-     *
-     * <p>Verifies that name, type, world name, and spell lists are stored as provided. The cuboid
-     * field is constructed as a stub for non-CUBOID zones (current implementation detail) but is
-     * not queried — the consumer filters by {@link SpellZoneType} before touching it.
+     * Verify a WORLD zone stores its fields as provided. Its cuboid is only a stub, but the consumer filters by
+     * {@link SpellZoneType} before touching it.
      */
     @Test
     void worldZoneConstructorTest() {
@@ -147,10 +115,7 @@ public class SpellZoneTest {
     }
 
     /**
-     * Tests construction of a WORLD_GUARD zone.
-     *
-     * <p>Verifies that name, type, world name, and spell lists are stored as provided. As with
-     * WORLD zones, the cuboid field is a stub and is not queried.
+     * Verify a WORLD_GUARD zone stores its fields as provided. As with WORLD zones its cuboid is only a stub.
      */
     @Test
     void worldGuardZoneConstructorTest() {
@@ -169,17 +134,9 @@ public class SpellZoneTest {
     }
 
     /**
-     * Tests that the constructor makes defensive copies of the allowed and disallowed lists.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Mutating the caller's allowed list after construction does not affect the zone's stored list</li>
-     * <li>Mutating the caller's disallowed list after construction does not affect the zone's stored list</li>
-     * <li>The getters also return copies — mutating a returned list does not affect the next call</li>
-     * </ul>
-     *
-     * <p>Without defensive copies, a caller (or a buggy test) could silently corrupt zone state
-     * after construction.
+     * Verify the zone defends its spell lists both ways: mutating the caller's lists after construction does not
+     * change the zone, and the getters each return a fresh copy. Without this a caller could silently corrupt zone
+     * state.
      */
     @Test
     void defensiveCopyTest() {
@@ -208,10 +165,8 @@ public class SpellZoneTest {
     }
 
     /**
-     * Tests construction with empty allow and disallow lists.
-     *
-     * <p>Verifies that a zone can be constructed with no spell restrictions and the getters
-     * return empty (not null) lists.
+     * Verify a zone built with empty allow and disallow lists constructs cleanly and its getters return empty,
+     * non-null lists.
      */
     @Test
     void emptySpellListsTest() {
@@ -225,11 +180,7 @@ public class SpellZoneTest {
     }
 
     /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
+     * Stop the MockBukkit server after all tests in the class complete.
      */
     @AfterAll
     static void globalTearDown() {

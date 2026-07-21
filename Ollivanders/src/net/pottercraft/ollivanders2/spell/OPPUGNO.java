@@ -24,23 +24,14 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Oppugno_Jinx">Harry Potter Wiki - Oppugno Jinx</a>
  */
 public final class OPPUGNO extends O2Spell {
-    /**
-     * The amount of damage to do
-     */
     double damage;
 
-    /**
-     * The max damage this spell can do
-     */
     static final double maxDamage = 6.0;
 
-    /**
-     * The min damage this spell will do
-     */
     static final double minDamage = 0.5;
 
     /**
-     * The radius this spell will look for attackers
+     * The radius, in blocks, this spell searches for an attacker to launch at the target.
      */
     private final int radius = 10;
 
@@ -101,7 +92,7 @@ public final class OPPUGNO extends O2Spell {
     /**
      * Get the amount of damage this cast will do to the target.
      * <p>
-     * Set by {@link #doInitSpell()} from the caster's skill and clamped to
+     * Set by {@link #doInitSpell()} from the caster's skill and limited to
      * {@link #getMinDamage()}..{@link #getMaxDamage()}, so the value is only meaningful after the
      * spell has been initialized for casting.
      * </p>

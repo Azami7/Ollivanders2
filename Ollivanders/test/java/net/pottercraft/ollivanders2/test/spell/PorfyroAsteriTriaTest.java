@@ -4,21 +4,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for the PORFYRO_ASTERI_TRIA spell.
- *
- * <p>PORFYRO_ASTERI_TRIA launches premium purple and blue star-burst fireworks with trailing
- * and fade effects (fading to silver). Tests verify that the spell correctly spawns fireworks
- * with the expected dual colors, star effect type, trailing effects, and silver fade.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.PORFYRO_ASTERI_TRIA for the spell implementation
- * @see PyrotechniaTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.PORFYRO_ASTERI_TRIA}. Extends {@link PyrotechniaTest} for
+ * the shared fireworks tests.
  */
 public class PorfyroAsteriTriaTest extends PyrotechniaTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.PORFYRO_ASTERI_TRIA
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

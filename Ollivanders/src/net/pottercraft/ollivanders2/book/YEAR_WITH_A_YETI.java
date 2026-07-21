@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Year_with_the_Yeti">https://harrypotter.fandom.com/wiki/Year_with_the_Yeti</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Year_with_the_Yeti">Year with the Yeti</a>
  */
 public class YEAR_WITH_A_YETI extends O2Book {
     /**

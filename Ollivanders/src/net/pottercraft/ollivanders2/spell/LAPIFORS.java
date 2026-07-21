@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * original item is consumed.</p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lapifors_Spell">Harry Potter Wiki - Lapifors Spell</a>
  */
 public class LAPIFORS extends ItemToEntityTransfiguration {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;

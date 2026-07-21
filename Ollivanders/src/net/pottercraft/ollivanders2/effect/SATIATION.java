@@ -7,24 +7,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * SATIATION effect - keeps a player's hunger bar full.
- *
- * <p>When applied to a player, this effect fills and maintains the player's hunger bar (food level),
- * preventing starvation. It is a beneficial potion effect that provides continuous sustenance.
- * The effect uses the Minecraft SATURATION potion effect with strength level 1.</p>
- *
- * <p>The effect displays "feels full" in informous and legilimency spell text, indicating the
- * satiation provided by this effect.</p>
+ * Applies Minecraft's SATURATION potion effect (amplifier 1), keeping the player's hunger bar full. Detectable via
+ * Informous and Legilimens.
  *
  * @author Azami7
  */
 public class SATIATION extends PotionEffect {
     /**
-     * Constructor for SATIATION effect.
-     *
-     * <p>Initializes the effect with the specified duration and permanent flag. Sets up the effect
-     * type as SATIATION, applies strength level 1, and configures the informous and legilimency
-     * spell text to "feels full".</p>
+     * Constructor
      *
      * @param plugin the plugin instance
      * @param duration the duration of the effect in server ticks
@@ -43,12 +33,6 @@ public class SATIATION extends PotionEffect {
         strength = 1;
     }
 
-    /**
-     * Clean up the SATIATION effect when removed.
-     *
-     * <p>Called when the effect is removed from a player. This effect has no special cleanup
-     * required beyond the standard effect removal handled by the parent class.</p>
-     */
     @Override
     public void doRemove() {
     }

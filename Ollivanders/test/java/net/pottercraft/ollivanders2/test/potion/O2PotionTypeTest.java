@@ -21,35 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for {@link O2PotionType} enum.
- * <p>
- * Verifies potion type lookup methods and ensures all potion types have unique names.
- * </p>
+ * Unit tests for {@link O2PotionType}.
  */
 public class O2PotionTypeTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -57,15 +41,12 @@ public class O2PotionTypeTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Test getClassName returns the implementation class.
-     * <p>
-     * Simple getter - basic functionality verified by potion instantiation tests.
-     * </p>
+     * getClassName() is a simple getter, verified by potion instantiation tests.
      */
     @Test
     void getClassNameTest() {
@@ -73,10 +54,7 @@ public class O2PotionTypeTest {
     }
 
     /**
-     * Test getLevel returns the magic difficulty level.
-     * <p>
-     * Simple getter - basic functionality verified by potion brewing tests.
-     * </p>
+     * getLevel() is a simple getter, verified by potion brewing tests.
      */
     @Test
     void getLevelTest() {
@@ -84,10 +62,7 @@ public class O2PotionTypeTest {
     }
 
     /**
-     * Test getPotionName returns the display name.
-     * <p>
-     * Simple getter - basic functionality verified by getPotionTypeByName tests.
-     * </p>
+     * getPotionName() is a simple getter, verified by getPotionTypeByName tests.
      */
     @Test
     void getPotionNameTest() {
@@ -95,7 +70,7 @@ public class O2PotionTypeTest {
     }
 
     /**
-     * Test getPotionTypeFromString parses enum name strings correctly.
+     * getPotionTypeFromString() parses enum name strings and returns null for an unknown name.
      */
     @Test
     void getPotionTypeFromStringTest() {
@@ -110,11 +85,8 @@ public class O2PotionTypeTest {
     }
 
     /**
-     * Test getPotionTypeByName finds potions by their display name.
-     * <p>
-     * This is distinct from getPotionTypeFromString which uses enum names.
-     * Display names may include punctuation (e.g., "Baruffio's Brain Elixir").
-     * </p>
+     * getPotionTypeByName() finds potions by display name, case-insensitively, including names with punctuation such as
+     * "Baruffio's Brain Elixir"; unlike getPotionTypeFromString() which matches enum names.
      */
     @Test
     void getPotionTypeByNameTest() {
@@ -140,11 +112,7 @@ public class O2PotionTypeTest {
     }
 
     /**
-     * Verify every potion type has a unique display name.
-     * <p>
-     * Duplicate names would cause getPotionTypeByName to return incorrect results,
-     * so all potion names must be unique.
-     * </p>
+     * Every potion type has a unique display name; duplicates would make getPotionTypeByName() ambiguous.
      */
     @Test
     void uniquePotionNamesTest() {
@@ -159,13 +127,6 @@ public class O2PotionTypeTest {
         assertTrue(duplicates.isEmpty(), "Found duplicate potion names: " + duplicates);
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

@@ -16,33 +16,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * VOLATUS flight enchantment for broomsticks.
- * <p>
- * VOLATUS is an expert-level beneficial enchantment that grants the {@link O2EffectType#BROOM_FLYING}
- * effect to players holding volatus-enchanted broomsticks. The enchantment actively monitors whether
- * the player is holding a volatus item and applies or removes the flying effect accordingly. Flight
- * is only enabled when the player has a volatus-enchanted broomstick in their main hand or off-hand.</p>
- * <p>
- * Enchantment behavior:</p>
- * <ul>
- * <li>When a volatus item is picked up, the flying effect is applied if the player is now holding one</li>
- * <li>When a volatus item is dropped, the flying effect is removed if the player is no longer holding one</li>
- * <li>When the player switches hotbar slots, flying status is re-evaluated based on current item</li>
- * <li>Hoppers cannot pick up volatus items (broomsticks persist in the world)</li>
- * <li>Requires broomsticks to be enabled in the plugin configuration</li>
- * </ul>
+ * Flight enchantment for broomsticks: grants {@link O2EffectType#BROOM_FLYING} to a player while they hold a
+ * volatus-enchanted broom in either hand, and removes it once they no longer do. Only active when broomsticks are
+ * enabled in the plugin configuration.
  *
- * @see net.pottercraft.ollivanders2.spell.VOLATUS the spell that casts this enchantment
- * @see <a href="https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
+ * @see net.pottercraft.ollivanders2.spell.VOLATUS
+ * @see <a href="https://harrypotter.fandom.com/wiki/Broomstick">Harry Potter Wiki - Broomstick</a>
  */
 public class VOLATUS extends Enchantment {
     /**
-     * Constructor for creating a VOLATUS flight enchantment instance.
+     * Constructor
      *
      * @param plugin   the Ollivanders2 plugin instance
      * @param mag      the magnitude (power level) of this enchantment
-     * @param args     optional configuration arguments specific to this enchantment instance
-     * @param itemLore optional custom lore to display on the enchanted broomstick
+     * @param args     optional configuration arguments for this enchantment
+     * @param itemLore optional custom lore for the enchanted broomstick
      */
     public VOLATUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         super(plugin, mag, args, itemLore);
@@ -50,17 +38,9 @@ public class VOLATUS extends Enchantment {
     }
 
     /**
-     * Handle player pickup of a volatus-enchanted item (broomstick).
-     * <p>
-     * When a player picks up an item, this method schedules a deferred check to see if they're now
-     * holding a volatus-enchanted broomstick. If so, the {@link O2EffectType#BROOM_FLYING} effect
-     * is applied via {@link #checkBroomStatus(Player)}.
-     * </p>
-     * <p>
-     * The check is scheduled with a 1-second (20-tick) delay to allow the inventory update to complete
-     * before evaluating the player's current items. Does nothing if the entity picking up the item is
-     * not a player, or if broomsticks are disabled in the configuration.
-     * </p>
+     * Re-evaluate the player's flight after they pick up an item, applying {@link O2EffectType#BROOM_FLYING} if they
+     * now hold a volatus broom. Deferred a tick so the inventory update settles first. No-op if brooms are disabled
+     * or the entity is not a player.
      *
      * @param event the entity item pickup event
      */
@@ -84,14 +64,9 @@ public class VOLATUS extends Enchantment {
     }
 
     /**
-     * Prevent hoppers and block inventories from picking up volatus-enchanted items.
-     * <p>
-     * Volatus items (broomsticks) cannot be picked up by hoppers or other automated inventory systems.
-     * This prevents broomsticks from being moved into storage systems and ensures they remain available
-     * for players to find and use as intended.
-     * </p>
+     * Prevent block inventories (e.g. hoppers) from collecting the volatus-enchanted broom.
      *
-     * @param event the inventory pickup item event (not used, but required by interface)
+     * @param event the inventory pickup item event
      */
     @Override
     public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
@@ -99,17 +74,9 @@ public class VOLATUS extends Enchantment {
     }
 
     /**
-     * Re-evaluate flying status when a player drops an item.
-     * <p>
-     * When a player drops an item, this method schedules a deferred check to see if they're still
-     * holding a volatus-enchanted broomstick. If they no longer have a volatus item in either hand,
-     * the {@link O2EffectType#BROOM_FLYING} effect is removed.
-     * </p>
-     * <p>
-     * The check is scheduled with a 1-second (20-tick) delay to allow the inventory update to complete
-     * before evaluating the player's current items. Does nothing if broomsticks are disabled in the
-     * configuration.
-     * </p>
+     * Re-evaluate the player's flight after they drop an item, removing {@link O2EffectType#BROOM_FLYING} if they no
+     * longer hold a volatus broom. Deferred a tick so the inventory update settles first. No-op if brooms are
+     * disabled.
      *
      * @param event the player drop item event
      */
@@ -129,19 +96,11 @@ public class VOLATUS extends Enchantment {
     }
 
     /**
-     * Re-evaluate flying status when a player changes which item slot is held.
-     * <p>
-     * When a player switches between hotbar slots, this method schedules a deferred check to see
-     * if they're now holding a volatus-enchanted broomstick. If they are, the
-     * {@link O2EffectType#BROOM_FLYING} effect is applied; otherwise it is removed.
-     * </p>
-     * <p>
-     * The check is scheduled with a 1-second (20-tick) delay to allow the slot change to complete
-     * before evaluating what item is now in the player's hand. Does nothing if broomsticks are
-     * disabled in the configuration.
-     * </p>
+     * Re-evaluate the player's flight when they switch hotbar slots, applying or removing
+     * {@link O2EffectType#BROOM_FLYING} to match whether they now hold a volatus broom. Deferred a tick so the slot
+     * change settles first. No-op if brooms are disabled.
      *
-     * @param event the player item held event (slot switching event)
+     * @param event the player item held event
      */
     @Override
     public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
@@ -161,19 +120,10 @@ public class VOLATUS extends Enchantment {
     }
 
     /**
-     * Re-evaluate the player's flying status based on whether they're holding a volatus broomstick.
-     * <p>
-     * This method checks if the player is holding a volatus-enchanted item in either their main hand
-     * or off-hand. If they are, the {@link O2EffectType#BROOM_FLYING} flying effect is applied.
-     * If they are not, any existing flying effect is removed.
-     * </p>
-     * <p>
-     * The flying effect is permanent (lasts until explicitly removed). This method is called
-     * whenever item-related events occur (pickup, drop, slot switch) to keep flying status in sync
-     * with the player's current inventory.
-     * </p>
+     * Apply {@link O2EffectType#BROOM_FLYING} if the player is holding a volatus broom in either hand, otherwise
+     * remove it, keeping flight in sync with the player's current inventory. No-op if brooms are disabled.
      *
-     * @param player the player whose flying status should be checked and updated
+     * @param player the player whose flight status to update
      */
     void checkBroomStatus(Player player) {
         if (!EnchantedItems.areBroomsEnabled()) {

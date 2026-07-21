@@ -13,14 +13,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for ARANIA_EXUMAI spell functionality.
- *
- * <p>Tests the spider-repelling charm including:</p>
- * <ul>
- * <li>Spell configuration (min/max distance, strength reducer)</li>
- * <li>Entity targeting (spiders and cave spiders only)</li>
- * <li>Push velocity application</li>
- * </ul>
+ * Unit tests for {@link ARANIA_EXUMAI}. Extends {@link KnockbackTest} for the shared knockback tests.
  *
  * @author Azami7
  */

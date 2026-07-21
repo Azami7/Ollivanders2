@@ -21,30 +21,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the {@link HORREAT_PROTEGAT} spell, which shrinks a stationary shield spell's radius.
- *
- * <p>This class is also the base test for {@link CrescereProtegatTest}: {@code CRESCERE_PROTEGAT}
- * extends {@code HORREAT_PROTEGAT} and only flips the change direction, so the subclass reuses these
- * tests, overriding {@link #getSpellType()} and {@link #expectShrink()}.</p>
- *
- * <p>Tests verify:
- * <ul>
- * <li>Construction sets the correct spell type and magic branch</li>
- * <li>A cast on the caster's own shield changes its radius by the skill-based amount, in the expected
- * direction, and kills the spell</li>
- * <li>A shield cast by a different player is not affected</li>
- * <li>A non-shield stationary spell is not affected</li>
- * </ul>
- *
- * <p>Each test centers a shield at the projectile's impact point and places a solid block there so the
- * no-projectile-stop logic in {@code doCheckEffect} fires with the impact location inside the shield.</p>
+ * Unit tests for {@link HORREAT_PROTEGAT}, which shrinks a stationary shield spell's radius. Also the base test for
+ * {@link CrescereProtegatTest}: {@code CRESCERE_PROTEGAT} only flips the change direction, so it reuses these tests,
+ * overriding {@link #getSpellType()} and {@link #expectShrink()}.
+ * <p>
+ * Each test centers a shield at the projectile's impact point and places a solid block there so the projectile stops
+ * with the impact location inside the shield.
+ * </p>
  *
  * @author Azami7
  */
 public class HorreatProtegatTest extends O2SpellTestSuper {
     /**
      * The radius a test shield is created with. Chosen comfortably between PROTEGO_TOTALUM's min (5) and
-     * max (40) so a single shrink or grow stays in range and does not destroy the shield or hit a clamp.
+     * max (40) so a single shrink or grow stays in range and does not destroy the shield or hit a limit.
      */
     private static final int testShieldRadius = 20;
 
@@ -95,11 +85,8 @@ public class HorreatProtegatTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the spell changes the radius of the caster's own shield by the skill-based amount and kills itself.
-     *
-     * <p>Casts at {@code spellMasteryLevel} skill onto a shield centered at the impact point. Verifies the
-     * shield's radius changed by exactly {@link HORREAT_PROTEGAT#getSizeChange()} in the expected direction
-     * (down for the shrink charm, up for the grow charm) and that the spell killed itself.</p>
+     * Verify the spell changes the caster's own shield radius by exactly {@link HORREAT_PROTEGAT#getSizeChange()} in
+     * the expected direction (down to shrink, up to grow) and kills itself.
      */
     @Override
     @Test
@@ -128,10 +115,7 @@ public class HorreatProtegatTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that a shield cast by a different player is not affected.
-     *
-     * <p>The shield is owned by another player, so the caster-ownership filter in {@code getShieldSpells}
-     * should exclude it and its radius should be unchanged.</p>
+     * Verify a shield owned by another player is excluded by the caster-ownership filter and its radius is unchanged.
      */
     @Test
     void notCastersShieldTest() {
@@ -153,11 +137,8 @@ public class HorreatProtegatTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that a non-shield stationary spell is not affected.
-     *
-     * <p>A MOLLIARE (not a {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}) is centered at
-     * the impact point. The {@code instanceof ShieldSpell} filter should exclude it, leaving its radius
-     * unchanged — this is what protects things like the floo network and vanishing cabinets.</p>
+     * Verify a non-ShieldSpell stationary spell (MOLLIARE) is excluded by the {@code instanceof ShieldSpell} filter —
+     * this is what protects things like the floo network and vanishing cabinets.
      */
     @Test
     void nonShieldSpellIgnoredTest() {

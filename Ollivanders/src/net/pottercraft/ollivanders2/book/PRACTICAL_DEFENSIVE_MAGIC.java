@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts">Practical Defensive Magic and Its Use Against the Dark Arts</a>
  */
 public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book {
     /**

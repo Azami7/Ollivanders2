@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration">https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration">A Beginner's Guide to Transfiguration</a>
  */
 public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
     /**

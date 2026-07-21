@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Tasseomancy divination spell, reading tea leaves to predict future events.
  * <p>
  * The caster must be facing a cauldron and holding tea leaves, which are consumed. This spell produces a
- * {@link O2DivinationType#TASSEOMANCY} prophecy about its target.
+ * {@link O2DivinationType#TASSOMANCY} prophecy about its target.
  * </p>
  *
  * @author Azami7
@@ -30,7 +30,7 @@ public final class BAO_ZHONG_CHA extends Divination {
         super(plugin);
 
         spellType = O2SpellType.BAO_ZHONG_CHA;
-        divinationType = O2DivinationType.TASSEOMANCY;
+        divinationType = O2DivinationType.TASSOMANCY;
 
         flavorText = new ArrayList<>() {{
             add("\"Now, I want you all to divide into pairs. Collect a teacup from the shelf, come to me, and I will fill it. Then sit down and drink; drink until only the dregs remain. Swirl these around the cup three times with the left hand, then turn the cup upside-down on its saucer; wait for the last of the tea to drain away, then give your cup to your partner to read.\" -Sybill Trelawney");
@@ -51,7 +51,7 @@ public final class BAO_ZHONG_CHA extends Divination {
     public BAO_ZHONG_CHA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.BAO_ZHONG_CHA;
-        divinationType = O2DivinationType.TASSEOMANCY;
+        divinationType = O2DivinationType.TASSOMANCY;
 
         facingBlock = Material.CAULDRON;
         facingBlockString = "a cauldron";

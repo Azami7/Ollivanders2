@@ -53,27 +53,17 @@ public class O2Potions {
     final private Ollivanders2Common common;
 
     /**
-     * Cache of loaded potion types indexed by name (lowercase).
-     * <p>
-     * Maps potion display names to their corresponding O2PotionType enum values for fast lookup.
-     * Only includes potion types that are currently loaded (not disabled by missing dependencies).
-     * </p>
+     * Loaded potion types indexed by lowercase display name. Excludes types disabled by missing dependencies.
      */
     final static private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
     /**
-     * Namespace key for storing potion type in item NBT tags.
-     * <p>
-     * Used to store the potion type name on potion ItemStack metadata to identify potions when retrieved from player inventory.
-     * </p>
+     * NBT key storing the potion type name on a potion ItemStack, used to identify potions from a player's inventory.
      */
     static public NamespacedKey potionTypeKey;
 
     /**
-     * List of all valid potion ingredients.
-     * <p>
-     * These are the O2ItemType values that can be used in cauldron recipes to brew potions.
-     * </p>
+     * The O2ItemType values that can be used as ingredients in cauldron recipes.
      */
     public static final List<O2ItemType> ingredients = new ArrayList<>() {{
         add(O2ItemType.ACONITE);
@@ -139,11 +129,8 @@ public class O2Potions {
     }};
 
     /**
-     * Magic difficulty levels for each Minecraft potion effect type.
-     * <p>
-     * Used primarily by FINITE_INCANTATEM counter-spell to determine if a spell can dispel an effect
-     * based on the caster's magic level. Maps each Minecraft PotionEffectType to its corresponding MagicLevel.
-     * </p>
+     * Magic difficulty level for each Minecraft potion effect type, used by FINITE_INCANTATEM to decide whether a
+     * caster can dispel an effect.
      *
      * @see net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM
      */
@@ -190,11 +177,7 @@ public class O2Potions {
     }};
 
     /**
-     * Constructor for initializing the O2Potions manager.
-     * <p>
-     * Creates the NamespacedKey used for storing potion type information in item NBT tags.
-     * Call {@link #onEnable()} during plugin startup to load all available potions.
-     * </p>
+     * Constructor. Call {@link #onEnable()} during plugin startup to load all available potions.
      *
      * @param plugin the Ollivanders2 plugin instance
      */
@@ -206,11 +189,8 @@ public class O2Potions {
     }
 
     /**
-     * Load all potions when the plugin enables.
-     * <p>
-     * Populates the potion cache with all available potion types from O2PotionType enum,
-     * excluding any that depend on optional plugins (e.g., LibsDisguises) that are not loaded except in test mode.
-     * </p>
+     * Populate the potion cache with all potion types, excluding any whose optional dependency (e.g. LibsDisguises)
+     * is not loaded (unless in test mode).
      */
     public void onEnable() {
         for (O2PotionType potionType : O2PotionType.values()) {
@@ -222,34 +202,22 @@ public class O2Potions {
     }
 
     /**
-     * Cleanup when the plugin disables.
-     *
-     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Potions manager
-     * performs no cleanup on disable because potion data is read-only and loaded from
-     * configuration on startup. No persistent state needs to be saved.</p>
+     * No-op; potion data is read-only, so there is no state to persist on disable.
      */
     public void onDisable() {
     }
 
     /**
      * Get all currently loaded potion types.
-     * <p>
-     * Returns the potion types that are active in the O2PotionMap (may exclude potions
-     * that depend on unavailable optional plugins).
-     * </p>
      *
-     * @return a list of all currently loaded potion types
+     * @return the loaded potion types; may exclude potions whose optional dependency is unavailable
      */
     public static List<O2PotionType> getAllPotionTypes() {
         return new ArrayList<>(O2PotionMap.values());
     }
 
     /**
-     * Get instances of all currently loaded potions.
-     * <p>
-     * Creates one instance of each O2Potion subclass for all loaded potion types.
-     * Excludes potions that depend on optional plugins that are not loaded.
-     * </p>
+     * Create one instance of each loaded potion, excluding potions whose optional dependency is not loaded.
      *
      * @return a collection containing one instance of each loaded potion
      */
@@ -273,11 +241,7 @@ public class O2Potions {
     }
 
     /**
-     * Get the display names of all potion types.
-     * <p>
-     * Returns the display names for all potion types defined in the O2PotionType enum,
-     * including those that may be disabled due to missing optional dependencies.
-     * </p>
+     * Get the display names of all potion types, including any disabled due to missing optional dependencies.
      *
      * @return a list of all potion display names
      */
@@ -293,35 +257,26 @@ public class O2Potions {
     }
 
     /**
-     * Brew a potion in a cauldron.
-     * <p>
-     * Attempts to match cauldron ingredients to a known potion recipe. Returns null if the
-     * cauldron is not a water cauldron or contains no ingredients. If ingredients don't match
-     * any known recipe, returns a bad potion and sends a message to the brewer.
-     * </p>
+     * Brew a potion from a cauldron's ingredients. Sends the brewer a message and returns a bad potion if the
+     * ingredients match no known recipe.
      *
      * @param cauldron the cauldron block containing the ingredients
      * @param brewer   the player brewing this potion
-     * @return a potion ItemStack if successful, a bad potion if recipe unknown, or null if cauldron is invalid/empty
+     * @return a potion ItemStack if successful, a bad potion if recipe unknown, or null if the cauldron is not a
+     * water cauldron or is empty
      */
     @Nullable
     public ItemStack brewPotion(@NotNull Block cauldron, @NotNull Player brewer) {
-        // make sure the block passed to us is a cauldron with water
         if (cauldron.getType() != Material.WATER_CAULDRON)
             return null;
 
-        // get ingredients from the cauldron
         Map<O2ItemType, Integer> ingredientsInCauldron = getIngredientsInCauldron(cauldron);
-
-        // make sure cauldron has ingredients in it
         if (ingredientsInCauldron.isEmpty())
             return null;
 
-        // match the ingredients in this potion to a known potion
         O2Potion potion = findPotionByIngredients(ingredientsInCauldron);
         if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(potion.getPotionType()))) {
             brewer.sendMessage(Ollivanders2.chatColor + "You feel somewhat uncertain about this recipe.");
-            // make them a bad potion
             return O2Potion.brewBadPotion();
         }
 
@@ -329,18 +284,13 @@ public class O2Potions {
     }
 
     /**
-     * Match ingredient amounts to a known potion recipe.
-     * <p>
-     * Compares the provided ingredients against all known potion recipes to find an exact match.
-     * Both ingredient types and amounts must match a recipe exactly for the match to succeed.
-     * </p>
+     * Match ingredient amounts to a known potion recipe. Both ingredient types and amounts must match exactly.
      *
      * @param ingredientsInCauldron a map of ingredient types to their amounts
      * @return the matching potion if found, null if no recipe matches
      */
     @Nullable
     public O2Potion findPotionByIngredients(@NotNull Map<O2ItemType, Integer> ingredientsInCauldron) {
-        // compare ingredients in the cauldron to the recipe for each potion
         for (O2PotionType potionType : O2PotionType.values()) {
             O2Potion potion = getPotionFromType(potionType);
 
@@ -352,12 +302,8 @@ public class O2Potions {
     }
 
     /**
-     * Get all O2Item ingredients near a cauldron.
-     * <p>
-     * Searches for O2Items in a 1-block radius around the cauldron. Only counts items that are
-     * valid potion ingredients (items in the ingredients list). Non-O2Items are ignored.
-     * Aggregates multiple stacks of the same ingredient by amount.
-     * </p>
+     * Get all O2Item ingredients within a 1-block radius of the cauldron. Non-O2Items are ignored; multiple stacks of
+     * the same ingredient are summed.
      *
      * @param cauldron the brewing cauldron block
      * @return a map of ingredient types to their total amounts
@@ -396,12 +342,7 @@ public class O2Potions {
     }
 
     /**
-     * Find an O2Potion by looking up an ItemStack's NBT metadata.
-     * <p>
-     * Extracts the ItemMeta from the ItemStack and looks up the potion type from its
-     * persistent data container. This is a convenience method that delegates to
-     * {@link #findPotionByItemMeta(ItemMeta)}.
-     * </p>
+     * Find an O2Potion from an ItemStack's NBT metadata. Delegates to {@link #findPotionByItemMeta(ItemMeta)}.
      *
      * @param itemStack the ItemStack to look up
      * @return the O2Potion if found and loaded, null otherwise
@@ -416,11 +357,8 @@ public class O2Potions {
     }
 
     /**
-     * Find an O2Potion by looking up its type in item NBT tags.
-     * <p>
-     * Retrieves the potion type from the item's persistent data container, handling both current
-     * (display name) and legacy (enum name) potion type formats.
-     * </p>
+     * Find an O2Potion by its type in item NBT tags, handling both current (display name) and legacy (enum name)
+     * potion type formats.
      *
      * @param meta the ItemMeta containing the potion type NBT tag
      * @return the O2Potion instance if the type is found and currently loaded, null otherwise
@@ -464,11 +402,7 @@ public class O2Potions {
     }
 
     /**
-     * Create an O2Potion instance from its type using reflection.
-     * <p>
-     * Instantiates the potion class defined in the O2PotionType enum using reflection,
-     * calling the constructor that takes an Ollivanders2 plugin parameter.
-     * </p>
+     * Create an O2Potion instance from its type via reflection.
      *
      * @param potionType the potion type to instantiate
      * @return the O2Potion instance if created successfully, null if instantiation fails
@@ -508,11 +442,8 @@ public class O2Potions {
     }
 
     /**
-     * Check if a potion type is currently loaded.
-     * <p>
-     * A potion may not be loaded if it depends on an optional plugin (e.g., LibsDisguises)
-     * that is not installed on the server.
-     * </p>
+     * Check if a potion type is currently loaded. A potion is not loaded if its optional dependency (e.g.
+     * LibsDisguises) is not installed.
      *
      * @param potionType the potion type to check
      * @return true if the potion type is loaded, false if disabled due to missing dependencies
@@ -522,11 +453,8 @@ public class O2Potions {
     }
 
     /**
-     * Get the magic difficulty level for a Minecraft potion effect type.
-     * <p>
-     * Used by FINITE_INCANTATEM counter-spell to determine if a potion effect can be dispelled.
-     * If an effect is not explicitly defined, defaults to OWL level.
-     * </p>
+     * Get the magic difficulty level for a Minecraft potion effect type, used by FINITE_INCANTATEM to decide whether
+     * an effect can be dispelled.
      *
      * @param potionEffectType the Minecraft potion effect type to get the level of
      * @return the magic difficulty level (defaults to OWL if not explicitly defined)
@@ -540,12 +468,8 @@ public class O2Potions {
     }
 
     /**
-     * Create an ItemStack for a potion type without brewing checks.
-     * <p>
-     * Creates a potion ItemStack of the specified amount. This bypasses all brewing requirements
-     * and experience checks. For player-initiated brewing, use {@link #brewPotion(Block, Player)}
-     * instead, which validates player experience levels and handles bad potions.
-     * </p>
+     * Create a potion ItemStack directly, bypassing all brewing and experience checks. For player-initiated brewing
+     * use {@link #brewPotion(Block, Player)} instead.
      *
      * @param potionType the type of potion to create
      * @param amount the number of potions in the ItemStack

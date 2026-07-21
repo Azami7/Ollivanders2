@@ -16,59 +16,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the {@link TRANQUILLUS} stationary spell.
- *
- * <p>TRANQUILLUS creates a zone of tranquility that prevents hostile mob targeting and projectile
- * launches within its radius. Tests verify that the spell correctly cancels entity target events
- * and projectile launch events for entities inside the spell area, while allowing normal behavior
- * for entities outside the area.</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Duration and radius management (inherited from O2StationarySpellTest)</li>
- * <li>Spell aging and expiration (inherited)</li>
- * <li>Location-based area detection (inherited)</li>
- * <li>Entity target event cancellation inside spell area</li>
- * <li>Entity target event allowed outside spell area</li>
- * <li>Projectile launch event cancellation inside spell area</li>
- * <li>Projectile launch event allowed outside spell area</li>
- * </ul>
- *
- * @see TRANQUILLUS for the spell implementation
- * @see O2StationarySpellTest for inherited test framework
+ * Unit tests for {@link TRANQUILLUS}. Extends {@link O2StationarySpellTest} for the shared stationary-spell tests.
  */
 public class TranquillusTest extends O2StationarySpellTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#TRANQUILLUS}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.TRANQUILLUS;
     }
 
-    /**
-     * Creates a TRANQUILLUS spell instance for testing.
-     *
-     * <p>Constructs a new tranquillus spell at the specified location with minimum radius
-     * and duration values.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new TRANQUILLUS spell instance (not null)
-     */
     @Override
     TRANQUILLUS createStationarySpell(Player caster, Location location) {
         return new TRANQUILLUS(testPlugin, caster.getUniqueId(), location, TRANQUILLUS.minRadiusConfig, TRANQUILLUS.minDurationConfig);
     }
 
-    /**
-     * Tests tranquillus upkeep behavior.
-     *
-     * <p>The tranquillus spell's upkeep method only performs aging, which is already tested
-     * comprehensively by the inherited ageAndKillTest() from the base test class.</p>
-     */
     @Override
     @Test
     void upkeepTest() {
@@ -76,13 +36,7 @@ public class TranquillusTest extends O2StationarySpellTest {
     }
 
     /**
-     * Test that entity targeting is cancelled inside the spell area and allowed outside.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Entities inside the spell area cannot target other entities</li>
-     * <li>Entities outside the spell area can target normally</li>
-     * </ul></p>
+     * Target acquisition is cancelled for an entity inside the area and allowed for one outside.
      */
     @Test
     void doOnEntityTargetEventTest() {
@@ -115,13 +69,7 @@ public class TranquillusTest extends O2StationarySpellTest {
     }
 
     /**
-     * Test that projectile launches are cancelled inside the spell area and allowed outside.
-     *
-     * <p>Verifies that:
-     * <ul>
-     * <li>Projectiles launched from inside the spell area are cancelled</li>
-     * <li>Projectiles launched from outside the spell area are allowed</li>
-     * </ul></p>
+     * A projectile launched from inside the area is cancelled and one launched from outside is allowed.
      */
     @Test
     void doOnProjectileLaunchEventTest() {

@@ -15,48 +15,31 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Caches and manages the text content for all Ollivanders2 spells and potions.
- * <p>
- * This class loads spell and potion text once during plugin initialization and maintains a map
- * of all spell/potion enum names to their corresponding book page content. This caching prevents
- * regenerating the same text repeatedly, since many spells and potions can appear in multiple books.
- * </p>
+ * Caches the book page content for every Ollivanders2 spell and potion. The text is generated once at plugin
+ * enable and reused, since the same spell or potion can appear in many books.
  *
  * @author Azami7
  */
 public final class BookTexts {
-    /**
-     * Utility class for common operations and debug message printing
-     */
     Ollivanders2Common common;
 
     /**
-     * The text for a "page" of a book. This may actually be longer than a real page in an MC book (and will be split
-     * accordingly to multiple pages).
+     * The content for one spell or potion. May exceed a single Minecraft book page; it is split across pages when the
+     * book is assembled.
      */
     private static class BookPage {
         /**
-         * The heading of the page - spell or potion name.
+         * The spell or potion name.
          */
         String heading;
 
-        /**
-         * The primary text for this page.
-         */
         String text;
 
         /**
-         * The optional flavor text - this is usually a quote or some other tie-in to the game or the HP universe to make the book more fun to read.
+         * Optional quote or tie-in to the game or HP universe, shown before the main text.
          */
         String flavorText;
 
-        /**
-         * Constructor
-         *
-         * @param heading    the title for this page
-         * @param text       the primary text for the page
-         * @param flavorText the optional flavor text for this page
-         */
         BookPage(@NotNull String heading, @NotNull String text, @Nullable String flavorText) {
             this.heading = heading;
             this.text = text;
@@ -96,22 +79,14 @@ public final class BookTexts {
     }
 
     /**
-     * A map of pages and the spell/potion each covers.
-     *
-     * <p>This is a master list of the text for every spell or potion loaded so that we do not have to generate this text
-     * every time a book is created, since many spells/potions exist in more than one book.</p>
+     * The cached page for each spell or potion, keyed by its enum name.
      */
     private final Map<String, BookPage> O2MagicTextMap = new HashMap<>();
 
-    /**
-     * A reference to the plugin
-     */
     private final Ollivanders2 p;
 
     /**
-     * Constructor that initializes the BookTexts manager.
-     *
-     * @param plugin the Ollivanders2 plugin instance
+     * @param plugin a callback to the plugin
      */
     BookTexts(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -125,9 +100,7 @@ public final class BookTexts {
      * be empty.</p>
      */
     public void onEnable() {
-        // add all spells' texts
         addSpells();
-        // add all potions' texts
         addPotions();
     }
 

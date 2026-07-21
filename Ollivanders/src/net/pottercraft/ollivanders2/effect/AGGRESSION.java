@@ -15,82 +15,44 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Effect that causes a player to impulsively harm nearby entities and provoke mob aggression.
- *
- * <p>The AGGRESSION effect causes a player to periodically (every 10 seconds / 200 ticks) attack nearby entities
- * and provoke creatures to target them. The effect has an aggressionLevel (1-10) that acts as a probability threshold:
- * on each trigger, a random value (0-9) is compared against aggressionLevel. If random &lt; aggressionLevel, the effect
- * activates.
- * </p>
- *
- * <p>Attack Mechanism:
- * When activated, the effect:
- * </p>
- * <ul>
- * <li>Selects a random living entity within 3 blocks</li>
- * <li>Applies damage equal to: currentHealth / randomDivisor where randomDivisor is 2, 3, or 4</li>
- * <li>Respects WorldGuard PVP and damage animal flags</li>
- * <li>Provokes all creatures within 6 blocks to target the aggressed player</li>
- * </ul>
- *
- * <p>This effect is permanent and cannot be modified via setPermanent(). Use kill() to remove it.</p>
+ * Makes the target periodically damage a nearby entity and provoke nearby creatures to attack them. The chance of
+ * acting on each cooldown scales with the aggression level (1-10). Always permanent; use {@link #kill()} to remove.
+ * Detectable via Legilimens.
  *
  * @author Azami7
  */
 public class AGGRESSION extends O2Effect {
     /**
-     * The aggression level of this player, representing attack probability.
-     *
-     * <p>Range: 1-10, where higher values increase the probability of attacks. On each trigger (every 10 seconds),
-     * a random value (0-9) is generated. If random < aggressionLevel, the effect activates. For example:
-     * <ul>
-     * <li>aggressionLevel = 1: ~10% chance to attack per trigger</li>
-     * <li>aggressionLevel = 5: ~50% chance to attack per trigger</li>
-     * <li>aggressionLevel = 10: 100% chance to attack per trigger</li>
-     * </ul>
-     * This value is also stored in the duration field for serialization purposes.</p>
+     * Attack probability threshold, 1-10; each trigger acts if a random value 0-9 is less than this. Mirrored into
+     * {@link #duration} for serialization.
      */
     int aggressionLevel = 5;
 
     /**
-     * The minimum aggression level supported (1).
-     *
-     * <p>Prevents the aggressionLevel from being set below this threshold.</p>
+     * The minimum aggression level supported.
      */
     static int minAggression = 1;
 
     /**
-     * The maximum aggression level supported (10).
-     *
-     * <p>Prevents the aggressionLevel from being set above this threshold.</p>
+     * The maximum aggression level supported.
      */
     static int maxAggression = 10;
 
     /**
-     * The cooldown period between aggression checks in game ticks (120 ticks = 6 seconds).
-     *
-     * <p>The aggression effect checks for activation every 120 ticks (6 seconds). When the cooldown
-     * reaches 0, an attack probability check is performed, then the cooldown is reset.</p>
+     * Ticks between aggression checks; the counter resets to this after each check.
      */
     static public final int cooldownLimit = 120;
 
     /**
-     * Tick counter for the aggression attack cooldown.
-     *
-     * <p>Counts down from cooldownLimit (120 ticks) to 0 each cycle. When it reaches 0 or below,
-     * an aggression attack check is performed and the counter is reset. Decrements by 1 each tick.</p>
+     * Ticks remaining until the next aggression check; decremented each tick.
      */
     int cooldown;
 
     /**
-     * Constructor for creating an aggression effect.
-     *
-     * <p>Creates a permanent aggression effect that causes the player to periodically attack nearby entities
-     * and provoke mobs. The aggressionLevel is set from the duration parameter and controls the probability
-     * of attacks (1-10 range).</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
-     * @param duration    the aggression level (1-10), which will be clamped to valid range
+     * @param duration    the aggression level (1-10), clamped to valid range
      * @param isPermanent ignored - aggression is always permanent
      * @param pid         the unique ID of the affected player
      */
@@ -107,25 +69,13 @@ public class AGGRESSION extends O2Effect {
     }
 
     /**
-     * Check the effect and periodically attack nearby entities and provoke creatures.
-     *
-     * <p>This method executes once per tick and performs the following:</p>
-     * <ol>
-     * <li>Ages the effect by 1 tick (note: effect is permanent, so this doesn't cause expiration)</li>
-     * <li>Every 200 ticks (10 seconds), performs an action check:
-     *     <ul>
-     *     <li>Generates random value 0-9</li>
-     *     <li>If random &lt; aggressionLevel: damages a random nearby entity (within 3 blocks) and provokes
-     *         all creatures within 6 blocks to target the player</li>
-     *     </ul>
-     * </li>
-     * </ol>
+     * Once per cooldown, with probability set by the aggression level, damage a random living entity within 3 blocks
+     * and provoke every creature within 6 blocks to target the player.
      */
     @Override
     public void checkEffect() {
         cooldown = cooldown - 1;
 
-        // only take action once per 10 seconds, which is every 120 ticks
         if (cooldown <= 0) {
             int rand = Math.abs(Ollivanders2Common.random.nextInt()) % maxAggression;
 
@@ -144,21 +94,11 @@ public class AGGRESSION extends O2Effect {
     }
 
     /**
-     * Damage a random nearby entity with probability-based damage.
+     * Damage the first non-target entity in the collection for a random 1/2, 1/3, or 1/4 of its current health.
+     * No-ops if the collection has no eligible entity, or if WorldGuard denies the hit (PVP flag for players,
+     * DAMAGE_ANIMALS flag for non-hostile creatures).
      *
-     * <p>Selects a random entity from the nearby collection and applies damage equal to:
-     * currentHealth / randomDivisor, where randomDivisor is randomly chosen as 2, 3, or 4.
-     * This ensures damage is 25-50% of the target's current health.
-     * </p>
-     *
-     * <p>Respects WorldGuard protection flags:
-     * <ul>
-     * <li>For players: requires PVP flag to be enabled</li>
-     * <li>For non-hostile creatures: requires DAMAGE_ANIMALS flag to be enabled</li>
-     * </ul>
-     * </p>
-     *
-     * @param nearby a collection of nearby living entities to choose from
+     * @param nearby the nearby living entities to choose from
      */
     private void damageRandomEntity(@NotNull Collection<LivingEntity> nearby) {
         if (!nearby.isEmpty()) {
@@ -206,12 +146,9 @@ public class AGGRESSION extends O2Effect {
     }
 
     /**
-     * Set the aggression level and update the effect's probability.
+     * Set the aggression level, clamped to 1-10. Also mirrors the value into {@link #duration} for serialization.
      *
-     * <p>Sets the aggressionLevel (1-10) which controls the probability of attacks on each trigger.
-     * The duration field is automatically updated to match, maintaining synchronization for serialization.</p>
-     *
-     * @param level the aggression level, will be clamped to range 1-10
+     * @param level the aggression level, clamped to range 1-10
      */
     public void setAggressionLevel(int level) {
         aggressionLevel = level;
@@ -225,24 +162,14 @@ public class AGGRESSION extends O2Effect {
     }
 
     /**
-     * Override to prevent external modification of permanent status.
+     * No-op: AGGRESSION is always permanent and cannot be toggled. Use {@link #kill()} to remove it.
      *
-     * <p>This effect is always permanent and cannot be modified via this method. The override is necessary
-     * because AGGRESSION must always remain permanent during the player's session. Use kill() to remove the effect
-     * instead.</p>
-     *
-     * @param perm ignored - effect is always permanent
+     * @param perm ignored
      */
     @Override
     public void setPermanent(boolean perm) {
     }
 
-    /**
-     * Perform cleanup when this aggression effect is removed.
-     *
-     * <p>The default implementation does nothing, as aggression effects do not require special cleanup.
-     * The effect is removed from the player's effect list when kill() is called.</p>
-     */
     @Override
     public void doRemove() {
     }

@@ -109,12 +109,12 @@ public class EntityCommon {
     }};
 
     /**
-     * All minecart entity types.
+     * All minecart entity types. Populated lazily by {@link #initEntityLists()}.
      */
     private static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>();
 
     /**
-     * All boat entity types.
+     * All boat entity types. Populated lazily by {@link #initEntityLists()}.
      */
     private static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>();
 
@@ -128,6 +128,10 @@ public class EntityCommon {
      */
     final private Ollivanders2Common common;
 
+    /**
+     * Populate the static boat and minecart type lists. Idempotent: each list is filled only if still empty, so
+     * repeated calls are harmless. Must run before {@link #getBoats()} or {@link #getMinecarts()} return any data.
+     */
     public static void initEntityLists() {
         if (boats.isEmpty()) {
             boats.addAll(getallEntitiesThatEndWith("_BOAT"));
@@ -139,6 +143,13 @@ public class EntityCommon {
         }
     }
 
+    /**
+     * Get all entity types whose enum name ends with the given suffix.
+     *
+     * @param endsWith the suffix to match, e.g. "_BOAT"; matched against the entity type's enum name
+     * @return the matching entity types; empty if none match
+     */
+    @NotNull
     public static List<EntityType> getallEntitiesThatEndWith(@NotNull String endsWith) {
         ArrayList<EntityType> entityTypes = new ArrayList<>();
 
@@ -152,7 +163,7 @@ public class EntityCommon {
     }
 
     /**
-     * Constructor
+     * Create an entity utility bound to the given plugin.
      *
      * @param plugin a reference to the plugin using this common
      */
@@ -259,6 +270,9 @@ public class EntityCommon {
      */
     @Nullable
     public static Item getItemAtLocation(@NotNull Location location) {
+        if (location.getWorld() == null)
+            return null;
+
         for (Entity entity : location.getWorld().getEntities()) {
             if (entity instanceof Item && entity.getLocation().equals(location)) {
                 return (Item) entity;
@@ -276,6 +290,9 @@ public class EntityCommon {
      */
     @Nullable
     public static LivingEntity getLivingEntityAtLocation(@NotNull Location location) {
+        if (location.getWorld() == null)
+            return null;
+
         for (Entity entity : location.getWorld().getEntities()) {
             if (entity instanceof LivingEntity && entity.getLocation().equals(location)) {
                 return (LivingEntity) entity;
@@ -387,8 +404,7 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType(int seed) {
-        // Ensure seed is positive. nextInt() cannot accept 0 as an argument, so convert 0 to 1.
-        // Use Math.abs() to handle negative seed values.
+        // nextInt() rejects zero and negative bounds, so force seed to a positive, non-zero value
         seed = Math.abs(seed);
         if (seed == 0)
             seed = 1;
@@ -542,7 +558,6 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
-        // Mod 4 because there are 4 different llama colors
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Llama.Color.values().length;
 
         return Llama.Color.values()[rand];
@@ -625,14 +640,13 @@ public class EntityCommon {
      *
      * @param livingEntity the entity to check
      * @return true if it is a hostile or angry mob, false otherwise
-     * @see <a href="https://minecraft.fandom.com/wiki/Mob#Hostile_mobs">https://minecraft.fandom.com/wiki/Mob#Hostile_mobs</a>
+     * @see <a href="https://minecraft.fandom.com/wiki/Mob#Hostile_mobs">Minecraft Wiki - Hostile mobs</a>
      */
     static public boolean isHostile(@NotNull LivingEntity livingEntity) {
-        // are they an inherently hostile mob?
         if (livingEntity instanceof Enemy)
             return true;
 
-        // are they a mob with a target set?
+        // a neutral mob that has picked a target is currently hostile
         if (livingEntity instanceof Mob && ((Mob) livingEntity).getTarget() != null)
             return true;
 
@@ -642,9 +656,9 @@ public class EntityCommon {
     /**
      * Get the distance to the water surface if an entity is underwater.
      *
-     * @param entity the player to measure
-     * @return the distance from the player to the surface of the water, to a max of 100 blocks
-     * @see <a href="https://minecraft.wiki/w/Altitude">https://minecraft.wiki/w/Altitude</a>
+     * @param entity the entity to measure
+     * @return the distance in blocks from the entity to the water surface, capped at 128; 0 if not underwater
+     * @see <a href="https://minecraft.wiki/w/Altitude">Minecraft Wiki - Altitude</a>
      */
     public static int distanceToSurface(Entity entity) {
         if (!entity.isUnderWater())
@@ -735,7 +749,7 @@ public class EntityCommon {
      * @param hasFlicker does this firework have flicker
      * @param fireworkPower the power for the firework, power of 1 or 2 is a normal firework
      * @param fireworkColors the list of colors for the firework
-     * @param fadeColors the list of colors the firework fades to, if it fades. This can be null.
+     * @param fadeColors the colors the firework fades to; applied only when hasFade is true
      * @param fireworkType the firework shape
      */
     public static void shootFirework(Location location, boolean hasTrails, boolean hasFade, boolean hasFlicker, int fireworkPower, @NotNull List<Color> fireworkColors, @Nullable List<Color> fadeColors, @NotNull FireworkEffect.Type fireworkType) {

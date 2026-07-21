@@ -7,33 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Effect that applies the Minecraft nausea potion effect to simulate disorientation and confusion.
- *
- * <p>The CONFUSION effect applies Minecraft's native NAUSEA potion effect to the target player, causing
- * visual disorientation that simulates magical confusion. This effect inherits from PotionEffectSuper and
- * uses the randomized duration mechanism where the actual duration applied is calculated as: baseTime × random
- * multiplier (between 1-5).</p>
- *
- * <p>Mechanism:</p>
- * <ul>
- * <li>Applies Minecraft PotionEffectType.NAUSEA to the player</li>
- * <li>Strength set to 1 (full nausea effect amplifier)</li>
- * <li>Duration randomized: baseTime × (random 1-5 multiplier)</li>
- * <li>Detectable by both information spells (Informous) and mind-reading spells (Legilimens)</li>
- * <li>Detection text: "feels confused"</li>
- * </ul>
+ * Applies Minecraft's NAUSEA potion effect to the target to simulate magical confusion. Detectable via Informous and
+ * Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism and randomized duration
+ * @see PotionEffect
  */
 public class CONFUSION extends PotionEffect {
     /**
-     * Constructor for creating a confusion (nausea) potion effect.
-     *
-     * <p>Creates an effect that applies the Minecraft NAUSEA potion effect to the target player. The duration
-     * parameter is used as the base time; the actual duration applied will be randomized by the parent class
-     * (baseTime × random multiplier between 1-5). Sets strength to 1 for full nausea effect amplification and
-     * detection text to "feels confused".</p>
+     * Constructor
      *
      * @param plugin      a callback to the plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -52,13 +34,6 @@ public class CONFUSION extends PotionEffect {
         strength = 1;
     }
 
-    /**
-     * Perform cleanup when the confusion effect is removed.
-     *
-     * <p>The default implementation does nothing, as potion effect removal is handled by the parent
-     * class (PotionEffectSuper). When this effect is removed, the NAUSEA potion effect is
-     * automatically stripped from the player by the parent class.</p>
-     */
     @Override
     public void doRemove() {
     }

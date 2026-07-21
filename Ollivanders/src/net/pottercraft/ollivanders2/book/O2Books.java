@@ -38,42 +38,32 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Manages all Ollivanders2 magic books and handles book learning mechanics.
  *
- * <p>When bookLearning is enabled, reading a book will increase the reader's spell level by 1 to a maximum of 10. This can
- * be used for classes, creating lessons, or other in-game magic learning.</p>
+ * <p>When bookLearning is enabled, reading a book raises the reader's level in each of its spells and potions by 1,
+ * up to a maximum of 25. This can be used for classes, creating lessons, or other in-game magic learning.</p>
  *
  * <p>When bookLearning is enabled, every Ollivanders2 spell must be in a WrittenBook with lore or NBT set up correctly
  * or players will not be able to learn them.</p>
  *
  * @author Azami7
- * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning</a>
+ * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">Ollivanders2 Wiki - Book Learning</a>
  */
 public final class O2Books implements Listener {
     /**
-     * Map of all available books with their titles as keys and book types as values
+     * All books, keyed by title.
      */
     private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
-    /**
-     * Reference to the Ollivanders2 plugin instance
-     */
     Ollivanders2 p;
 
-    /**
-     * Utility class for common operations and message printing
-     */
     Ollivanders2Common common;
 
     /**
-     * The book text for each spell and potion
+     * The book text for each spell and potion.
      */
     BookTexts spellText;
 
     /**
-     * Constructor that initializes the O2Books manager.
-     * <p>
-     * Initializes book text management, common utilities, and registers this class as a Bukkit event listener
-     * to handle book learning events.
-     * </p>
+     * Registers this manager as a listener so it can handle book-learning events.
      *
      * @param plugin the Ollivanders2 plugin instance
      */
@@ -92,23 +82,17 @@ public final class O2Books implements Listener {
      * This needs to be run after spells and potions are loaded or the text for these will not be loaded.
      */
     public void onEnable() {
-        // in case the plugin was disabled and then re-enabled, reset the book map
+        // reset in case the plugin was disabled and re-enabled
         O2BookMap.clear();
 
-        // add all books
         addBooks();
         common.printLogMessage("Added " + O2BookMap.keySet().size() + " books.", null, null, false);
 
-        // add all spell texts for quick book item creation
         spellText.onEnable();
     }
 
     /**
-     * Cleanup when the plugin disables.
-     *
-     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Books manager performs
-     * no cleanup on disable because book data is read-only and does not require persistence.
-     * The book map will be repopulated when the plugin is re-enabled via onEnable().</p>
+     * Plugin disable hook; no cleanup needed since book data is read-only.
      */
     public void onDisable() {}
 
@@ -117,10 +101,8 @@ public final class O2Books implements Listener {
      *
      * @param event the player interact event
      */
-    // Using LOWEST priority so other plugins (at NORMAL, HIGH, HIGHEST) can potentially modify or cancel it before we process book learning
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBookRead(@NotNull PlayerInteractEvent event) {
-        // only run this if bookLearning is enabled
         if (!Ollivanders2.bookLearning)
             return;
 
@@ -130,12 +112,11 @@ public final class O2Books implements Listener {
 
             ItemStack heldItem = player.getInventory().getItemInMainHand();
             if (heldItem.getType() == Material.WRITTEN_BOOK) {
-                // Delay processing to allow the game to handle the right-click event and any immediate effects
-                // before we trigger the book learning event
+                // defer the read so the game and other plugins finish handling the interaction first, then only learn
+                // from it if it wasn't cancelled
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        // Only read the book if the event wasn't denied by another plugin
                         if (event.useItemInHand() != Event.Result.DENY) {
                             readBook(player, heldItem);
                         }
@@ -154,7 +135,6 @@ public final class O2Books implements Listener {
     private void readBook(@NotNull Player player, @NotNull ItemStack book) {
         common.printDebugMessage("O2Books: " + player.getDisplayName() + " reading a book and book learning is enabled.", null, null, false);
 
-        // reading a book, if it is a spell book we want to let the player "learn" the spell.
         ItemMeta meta = book.getItemMeta();
         if (meta == null)
             return;
@@ -163,10 +143,7 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Adds all books from the O2BookType enum to the book map.
-     * <p>
-     * Instantiates each book type and registers it in the map using the book's title as the key.
-     * </p>
+     * Populate the book map from all book types, keyed by title.
      */
     private void addBooks() {
         common.printDebugMessage("O2Books: adding all books...", null, null, false);
@@ -180,14 +157,10 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Creates and returns an O2Book instance for the given book type.
-     * <p>
-     * Uses reflection to instantiate the book class associated with the book type.
-     * Returns null if instantiation fails.
-     * </p>
+     * Create an O2Book instance for the given book type.
      *
      * @param bookType the book type to instantiate
-     * @return an O2Book instance for the given type, or null if creation failed
+     * @return the book instance, or null if it could not be created
      */
     @Nullable
     private O2Book getO2BookByType(@NotNull O2BookType bookType) {
@@ -238,26 +211,20 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Retrieves a book type by its title using case-insensitive, partial matching.
-     * <p>
-     * Supports case-insensitive lookup and allows partial title matching to accommodate
-     * users not typing the full title.
-     * </p>
+     * Find a book type by title, matching case-insensitively on any title that starts with the given text.
      *
-     * @param title the book title or partial title to search for
-     * @return the book type if a match is found, null otherwise
+     * @param title the book title or a leading portion of it
+     * @return the first matching book type, or null if none matches
      */
     @Nullable
-    public O2BookType getBookTypeByTitle(String title) {
+    public O2BookType getBookTypeByTitle(@NotNull String title) {
         if (title.isEmpty())
             return null;
 
         String searchFor = title.toLowerCase();
         O2BookType match = null;
 
-        // Iterate through all keys rather than a direct lookup so that we can:
-        // - allow case-insensitive lookup
-        // - allow partial match for lazy typing
+        // iterate rather than a direct map lookup to support case-insensitive, prefix matching
         for (String key : O2BookMap.keySet()) {
             String bookTitle = key.toLowerCase();
 
@@ -291,13 +258,9 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Extracts spells and potions from NBT tags and triggers book learning events.
-     * <p>
-     * Reads the persistent data container for spell and potion NBT keys and triggers
-     * learning for each found spell and potion type.
-     * </p>
+     * Learn every spell and potion recorded in the book's NBT tags.
      *
-     * @param itemMeta the item metadata containing the NBT tags
+     * @param itemMeta the book's item metadata
      * @param player   the player reading the book
      */
     private void readNBT(@NotNull ItemMeta itemMeta, @NotNull Player player) {
@@ -305,7 +268,6 @@ public final class O2Books implements Listener {
             return;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        // read spells
         if (container.has(O2Book.o2BookSpellsKey, PersistentDataType.STRING)) {
             String spells = container.get(O2Book.o2BookSpellsKey, PersistentDataType.STRING);
             if (spells != null) {
@@ -315,7 +277,6 @@ public final class O2Books implements Listener {
             }
         }
 
-        // read potions
         if (container.has(O2Book.o2BookPotionsKey, PersistentDataType.STRING)) {
             String potions = container.get(O2Book.o2BookPotionsKey, PersistentDataType.STRING);
             if (potions != null) {
@@ -340,8 +301,7 @@ public final class O2Books implements Listener {
         OllivandersBookLearningSpellEvent event = new OllivandersBookLearningSpellEvent(player, spellType);
         p.getServer().getPluginManager().callEvent(event);
 
-        // Delay the increment to allow other plugins to react to the event before it's marked as processed.
-        // Also allows the game to handle any immediate effects. Only increment if the event wasn't canceled.
+        // defer so other plugins can cancel the event first; only increment if it wasn't cancelled
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -366,8 +326,7 @@ public final class O2Books implements Listener {
         OllivandersBookLearningPotionEvent event = new OllivandersBookLearningPotionEvent(player, potionType);
         p.getServer().getPluginManager().callEvent(event);
 
-        // Delay the increment to allow other plugins to react to the event before it's marked as processed.
-        // Also allows the game to handle any immediate effects. Only increment if the event wasn't canceled.
+        // defer so other plugins can cancel the event first; only increment if it wasn't cancelled
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -394,8 +353,7 @@ public final class O2Books implements Listener {
                 spellType = O2SpellType.valueOf(s);
             }
             catch (Exception e) {
-                // Silently skip if spell no longer exists or has been renamed.
-                // This handles backwards compatibility for older book items with outdated NBT tags.
+                // skip unknown names (spell removed or renamed) so old book items still parse
                 continue;
             }
 
@@ -406,7 +364,7 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Increment the experience level of a spell for a player
+     * Raise the player's level in a spell by one, up to a max of 25; by two if they have IMPROVED_BOOK_LEARNING.
      *
      * @param o2p       the player
      * @param spellType the spell
@@ -414,11 +372,10 @@ public final class O2Books implements Listener {
     private static void incrementSpell(@NotNull O2Player o2p, @NotNull O2SpellType spellType) {
         int spellLevel = o2p.getSpellCount(spellType);
 
-        // if spell count is less than 25, learn this spell
         if (spellLevel < 25) {
             o2p.incrementSpellCount(spellType);
 
-            // if they have the improved learning effect, increment it again
+            // IMPROVED_BOOK_LEARNING grants a second level per read
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING)) {
                 o2p.incrementSpellCount(spellType);
             }
@@ -441,8 +398,7 @@ public final class O2Books implements Listener {
                 potionType = O2PotionType.valueOf(s);
             }
             catch (Exception e) {
-                // Silently skip if potion no longer exists or has been renamed.
-                // This handles backwards compatibility for older book items with outdated NBT tags.
+                // skip unknown names (potion removed or renamed) so old book items still parse
                 continue;
             }
 
@@ -453,23 +409,18 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Increments the experience level of a potion for a player.
-     * <p>
-     * Increments the potion count up to a max of 25. If the player has the IMPROVED_BOOK_LEARNING
-     * effect, the potion count is incremented twice instead of once.
-     * </p>
+     * Raise the player's level in a potion by one, up to a max of 25; by two if they have IMPROVED_BOOK_LEARNING.
      *
-     * @param o2p        the player to increment for
-     * @param potionType the potion to increment
+     * @param o2p        the player
+     * @param potionType the potion
      */
     private static void incrementPotion(@NotNull O2Player o2p, @NotNull O2PotionType potionType) {
         int potionLevel = o2p.getPotionCount(potionType);
 
-        // if potion count is less than 25, learn this potion
         if (potionLevel < 25) {
             o2p.incrementPotionCount(potionType);
 
-            // if they have the improved learning effect, increment it again
+            // IMPROVED_BOOK_LEARNING grants a second level per read
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING)) {
                 o2p.incrementPotionCount(potionType);
             }

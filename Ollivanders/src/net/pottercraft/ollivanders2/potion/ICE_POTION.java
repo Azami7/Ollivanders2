@@ -10,28 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Ice Potion (Fire-Protection Potion) - grants immunity to fire damage.
- *
- * <p>When consumed, this potion applies the FIRE_RESISTANCE II effect to the player for 5 minutes,
- * allowing them to move through flames and lava unscathed without taking any fire damage. This is
- * particularly useful for navigating dangerous fire-filled environments or combat scenarios where
- * fire damage is a threat.</p>
- *
- * <p>The 5-minute duration is longer than the standard Minecraft Fire Resistance II potion,
- * providing extended protection for the drinker.</p>
+ * Ice Potion (Fire-Protection Potion) — applies FIRE_RESISTANCE for 5 minutes, longer than the vanilla effect.
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Fire_Protection_Potion">Fire Protection Potion</a>
- * @since 2.21
  */
 public class ICE_POTION extends O2Potion {
     /**
-     * Constructor for Ice Potion (Fire-Protection Potion).
-     *
-     * <p>Initializes the potion with its ingredients (Salamander Blood, Wartcap Powder, Bursting
-     * Mushroom, and Standard Potion Ingredients), description text, flavor text, and potion color.
-     * Sets up the Fire Resistance II potion effect with a 5-minute duration for protection against
-     * fire and lava damage.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -57,11 +43,7 @@ public class ICE_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Ice Potion and gain fire immunity.
-     *
-     * <p>Applies the FIRE_RESISTANCE II effect to the player for 5 minutes. This effect grants
-     * complete immunity to fire damage, allowing the player to walk through lava and fire blocks
-     * without taking damage. The effect also prevents damage from being in the burning status.</p>
+     * Apply the FIRE_RESISTANCE effect to the drinker and send the success message.
      *
      * @param player the player who drank the potion
      */

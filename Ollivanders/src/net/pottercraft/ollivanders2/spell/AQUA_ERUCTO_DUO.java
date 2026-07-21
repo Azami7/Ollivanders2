@@ -9,22 +9,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Aqua Eructo Duo — an enhanced water-based spell that damages fire-based mobs.
+ * A variant of {@link AQUA_ERUCTO} that damages fire-based mobs (such as blazes and magma cubes) instead of
+ * extinguishing burning targets. Damage scales with the caster's skill, limited to [{@link #minDamage},
+ * {@link #maxDamage}].
  *
- * <p>AQUA_ERUCTO_DUO is a variant of AQUA_ERUCTO that targets fire-based entities (such as Blazes
- * and Magma Cubes) rather than burning entities. Instead of extinguishing fire, this spell shoots
- * water at fire mobs to deal damage. The damage scales with the caster's skill level, ranging
- * from a minimum of 5 to a maximum of 20 health points.</p>
- *
- * <p>Spell behavior:</p>
- * <ul>
- * <li><strong>Target Detection:</strong> Searches for fire-based mobs as the projectile travels</li>
- * <li><strong>Damage Effect:</strong> Deals scaled damage to targeted fire mobs based on caster skill</li>
- * <li><strong>Water Block Effect:</strong> Places a temporary water block at the target's eye level</li>
- * <li><strong>Damage Range:</strong> Minimum {@link #minDamage} (5), maximum {@link #maxDamage} (20)</li>
- * </ul>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Aqua_Eructo">Aqua Eructo on Harry Potter Wiki</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Aqua_Eructo">Harry Potter Wiki - Aqua Eructo</a>
  */
 public final class AQUA_ERUCTO_DUO extends AQUA_ERUCTO {
     /**
@@ -66,13 +55,8 @@ public final class AQUA_ERUCTO_DUO extends AQUA_ERUCTO {
     }
 
     /**
-     * Determines whether this spell can target a given entity.
-     *
-     * <p>An entity is a valid target if it is a fire-based mob (such as Blaze or Magma Cube).
-     * This overrides the parent class targeting logic which checks for burning entities.</p>
-     *
      * @param entity the entity to check
-     * @return true if the entity is a fire mob, false otherwise
+     * @return true if the entity is a fire-based mob
      */
     @Override
     boolean canTarget(Entity entity) {
@@ -82,11 +66,8 @@ public final class AQUA_ERUCTO_DUO extends AQUA_ERUCTO {
     }
 
     /**
-     * Applies damage to a target fire mob based on caster skill.
-     *
-     * <p>Calculates damage as a fraction of the caster's uses modifier (skill level),
-     * clamped between {@link #minDamage} and {@link #maxDamage}. Only living entities
-     * can receive damage; non-living entities are skipped.</p>
+     * Damage a target fire mob by the caster's skill, limited to [{@link #minDamage}, {@link #maxDamage}]. Non-living
+     * entities are skipped.
      *
      * @param entity the fire mob to damage
      */

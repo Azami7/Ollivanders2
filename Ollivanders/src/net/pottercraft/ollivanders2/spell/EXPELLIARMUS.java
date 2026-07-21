@@ -34,7 +34,7 @@ public final class EXPELLIARMUS extends O2Spell {
 
     /**
      * The speed at which the expelled item flies out of the target's hand, set from caster skill in
-     * {@link #doInitSpell()} and clamped to [{@link #minVelocity}, {@link #maxVelocity}].
+     * {@link #doInitSpell()} and limited to [{@link #minVelocity}, {@link #maxVelocity}].
      */
     private double velocity = 0.25;
 
@@ -79,7 +79,7 @@ public final class EXPELLIARMUS extends O2Spell {
     }
 
     /**
-     * Set the item launch speed based on the caster's skill, clamped to [{@link #minVelocity}, {@link #maxVelocity}].
+     * Set the item launch speed based on the caster's skill, limited to [{@link #minVelocity}, {@link #maxVelocity}].
      */
     @Override
     void doInitSpell() {

@@ -259,7 +259,7 @@ public enum O2BookType {
      *
      * @param className  the implementing class that defines the book's spells/potions
      * @param title      the full book title
-     * @param shortTitle the short title for display in item lore (truncated to 32 characters if needed)
+     * @param shortTitle the short title for item lore; truncated if it exceeds 32 characters
      * @param author     the author of the book
      * @param branch     the magic branch this book covers
      */
@@ -268,7 +268,7 @@ public enum O2BookType {
         this.title = title;
 
         if (shortTitle.length() > 32)
-            this.shortTitle = shortTitle.substring(0, 31);
+            this.shortTitle = shortTitle.substring(0, 32);
         else
             this.shortTitle = shortTitle;
 
@@ -297,9 +297,7 @@ public enum O2BookType {
      * @return the short title of the book
      */
     public String getShortTitle(@NotNull Ollivanders2 p) {
-        // Check for a custom short title in the configuration (via translations feature).
-        // The configuration key is formed by concatenating the enum name with "_shortTitle"
-        // (e.g., "STANDARD_BOOK_OF_SPELLS_GRADE_1_shortTitle")
+        // config key is the enum name plus the label suffix
         if (Ollivanders2.useTranslations && p.getConfig().isSet(this + shortTitleLabel)) {
             String s = p.getConfig().getString(this + shortTitleLabel);
             if (s != null && !(s.isEmpty()))
@@ -319,9 +317,7 @@ public enum O2BookType {
      * @return the full title of the book
      */
     public String getTitle(@NotNull Ollivanders2 p) {
-        // Check for a custom full title in the configuration (via translations feature).
-        // The configuration key is formed by concatenating the enum name with "_title"
-        // (e.g., "STANDARD_BOOK_OF_SPELLS_GRADE_1_title")
+        // config key is the enum name plus the label suffix
         String identifier = this + titleLabel;
 
         if (Ollivanders2.useTranslations && p.getConfig().isSet(identifier)) {

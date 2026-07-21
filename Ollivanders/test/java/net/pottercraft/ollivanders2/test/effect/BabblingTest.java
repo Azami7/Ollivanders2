@@ -10,59 +10,28 @@ import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Test suite for the BABBLING effect.
+ * Unit tests for {@link BABBLING}.
  *
- * <p>Tests that the BABBLING effect correctly replaces player chat messages with nonsense words
- * from its internal dictionary. Verifies probabilistic message replacement based on affectPercent
- * (default 100%) and that the replaced messages contain valid dictionary words.</p>
- *
- * <p>The event handler test runs multiple chat events to account for the probabilistic nature
- * of the effect and ensures at least one message is modified.</p>
+ * @see EffectTestSuper
  */
 public class BabblingTest extends EffectTestSuper {
-    /**
-     * Create a BABBLING effect for testing.
-     *
-     * <p>Instantiates a new BABBLING effect with the specified parameters. This method is called
-     * by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new BABBLING effect targeting the specified player
-     */
     @Override
     BABBLING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BABBLING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
-    /**
-     * BABBLING effect does not have special checkEffect behavior.
-     *
-     * <p>The BABBLING effect has no unique behavior to test in checkEffectTest(). Aging and duration
-     * management are tested in the base ageAndKillTest() method.</p>
-     */
     @Override
     void checkEffectTest() {
     }
 
-    /**
-     * Run all event handler tests for the BABBLING effect.
-     *
-     * <p>Executes the chat event test to verify that the effect correctly intercepts and
-     * modifies player chat messages with dictionary words.</p>
-     */
     @Override
     void eventHandlerTests() {
         doOnAsyncPlayerChatEventTest();
     }
 
     /**
-     * Test that BABBLING effect replaces chat messages with dictionary words.
-     *
-     * <p>Creates a player with the BABBLING effect, simulates multiple chat events, and verifies
-     * that at least one message is replaced with a word from the effect's dictionary. The test runs
-     * 10 iterations to account for the probabilistic nature of the effect (affectPercent).</p>
+     * The effect replaces chat messages with words from its dictionary. Runs 10 chats since replacement is
+     * probabilistic (affectPercent) and asserts at least one was changed.
      */
     void doOnAsyncPlayerChatEventTest() {
         Player target = mockServer.addPlayer();

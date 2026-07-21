@@ -4,15 +4,12 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Tests for the {@link net.pottercraft.ollivanders2.spell.CARTOMANCIE} tarot cartomancy divination spell.
- *
- * <p>Inherits the shared divination coverage from {@link DivinationBaseTest}; this spell requires the caster to be
- * holding tarot cards (not consumed).</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CARTOMANCIE}. Extends {@link DivinationBaseTest} for the
+ * shared divination tests; this spell requires the caster to be holding (unconsumed) tarot cards.
  *
  * @author Azami7
  */
 public class CartomancieTest extends DivinationBaseTest {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {

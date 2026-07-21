@@ -7,41 +7,19 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Effect that grants temporary flight ability to a player.
- *
- * <p>The FLYING effect enables the target player to fly for the specified duration. Each game tick,
- * the effect checks the remaining duration and maintains flight state: while duration > 1 tick remains,
- * the player can fly; on the final tick (duration ≤ 1), flight is disabled. Optional smoke particle
- * effects can be displayed during flight by setting doSmokeEffect to true (default is false).</p>
- *
- * <p>Mechanism:</p>
- * <ul>
- * <li>Flight enabled each tick while duration > 1</li>
- * <li>Flight disabled on final tick (duration ≤ 1) before effect expires</li>
- * <li>Optional smoke particle effects each tick (disabled by default)</li>
- * <li>On removal: flight revoked unless player has Ollivanders2.admin permission</li>
- * <li>Admin players retain flight ability through spell/effect removal</li>
- * </ul>
+ * Grants the target flight for the effect's duration. On removal, flight is revoked unless the player has the
+ * {@code Ollivanders2.admin} permission. Subclasses may enable a smoke particle trail via {@link #doSmokeEffect}.
  *
  * @author Azami7
  */
 public class FLYING extends O2Effect {
     /**
-     * Flag controlling whether to display smoke particle effects during flight.
-     *
-     * <p>When true, SMOKE particle effects (intensity 4) are played at the player's location each tick
-     * while the player is flying (duration > 1). This creates a visual trail during flight. Default is false
-     * to avoid excessive particle effects. Subclasses can set this to true for visually distinctive flight.</p>
+     * When true, a smoke particle trail is played at the player's location each tick during flight.
      */
     boolean doSmokeEffect = false;
 
     /**
-     * Constructor for creating a flight effect.
-     *
-     * <p>Creates an effect that grants temporary flight ability to the target player. The effect will enable
-     * flight each tick while the duration remains above 1 tick, then disable flight on the final tick before
-     * expiring. Smoke effects are disabled by default (doSmokeEffect = false) but can be enabled by subclasses
-     * for visually distinctive flight mechanics.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the effect in game ticks
@@ -60,10 +38,9 @@ public class FLYING extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        // age the effect
         age(1);
 
-        if (!target.getAllowFlight()) { // if player does not have allowFlight, enable it
+        if (!target.getAllowFlight()) {
             common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
             target.setAllowFlight(true);
         }
@@ -76,7 +53,6 @@ public class FLYING extends O2Effect {
      */
     @Override
     public void doRemove() {
-        // if target is not an admin, remove flight ability
         if (!target.hasPermission("Ollivanders2.admin")) {
             common.printDebugMessage("Removing flight for " + target.getDisplayName(), null, null, false);
             target.setAllowFlight(false);

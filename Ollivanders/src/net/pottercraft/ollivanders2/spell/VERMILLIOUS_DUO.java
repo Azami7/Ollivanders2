@@ -6,26 +6,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The enhanced Red Sparks charm that damages entities with a large effect radius.
- *
- * <p>VERMILLIOUS_DUO is a more powerful variant of VERMILLIOUS that shoots red sparks
- * from the caster's wand and deals damage to nearby entities upon impact.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Visual Effect: RED_STAINED_GLASS projectile trail</li>
- * <li>Damage: Enabled with 0.125 modifier (scales with player skill)</li>
- * <li>Radius: 4 blocks for entity detection</li>
- * <li>Purpose: Damaging charm with larger effect radius</li>
- * </ul>
+ * A stronger {@link VERMILLIOUS} that shoots red sparks and damages nearby entities.
  *
  * @author Azami7
- * @see VERMILLIOUS for the basic non-damaging variant
- * @since 2.21
+ * @see VERMILLIOUS
  */
 public class VERMILLIOUS_DUO extends Sparks {
     /**
-     * Default constructor for use in generating spell book text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -38,14 +26,11 @@ public class VERMILLIOUS_DUO extends Sparks {
     }
 
     /**
-     * Constructor for casting VERMILLIOUS_DUO spells.
+     * Constructor.
      *
-     * <p>Initializes the spell with RED_STAINED_GLASS visual effect, damage enabled,
-     * 0.125 damage modifier, and a 4-block entity detection radius.</p>
-     *
-     * @param plugin    the Ollivanders2 plugin
-     * @param player    the player casting this spell
-     * @param rightWand the wand correctness factor (1.0 = correct wand)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public VERMILLIOUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

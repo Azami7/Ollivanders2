@@ -7,25 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Poison potion effect that causes periodic damage to the affected player.
- *
- * <p>POISON applies Minecraft's POISON potion effect to inflict periodic damage to the target
- * player. The poison damage diminishes the player's health over time but stops before killing them
- * (damage is reduced when the player reaches critical health). The effect is powered by the
- * Minecraft potion effect system with strength (amplifier) set to 1, determining the poison
- * intensity. The effect is detectable by both mind-reading spells (Legilimens) and information
- * spells (Informous) which report the target "feels sick".</p>
+ * Applies Minecraft's POISON potion effect to inflict periodic damage on the target; the poison damage stops before
+ * killing them. Detectable via Informous and Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
+ * @see PotionEffect
  */
 public class POISON extends PotionEffect {
     /**
-     * Constructor for creating a poison potion effect.
-     *
-     * <p>Creates a potion effect that inflicts poison damage to the target player using Minecraft's
-     * POISON potion effect type. Sets detection text for both mind-reading spells (Legilimens) and
-     * information spells (Informous) to "feels sick".</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -44,13 +34,6 @@ public class POISON extends PotionEffect {
         informousText = legilimensText = "feels sick";
     }
 
-    /**
-     * Perform cleanup when the poison effect is removed.
-     *
-     * <p>The default implementation does nothing, as POISON is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the poison damage stops and the player's health remains at its current value.</p>
-     */
     @Override
     public void doRemove() {
     }

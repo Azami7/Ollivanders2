@@ -36,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Isolated
 public class AliquamFlooTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -170,7 +169,6 @@ public class AliquamFlooTest extends O2SpellTestSuper {
         assertTrue(net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO.getFlooFireplaceNames().contains(floo2Name), "floo 2 not in network");
     }
 
-    /** {@inheritDoc} */
     @Override
     @Test
     void revertTest() {

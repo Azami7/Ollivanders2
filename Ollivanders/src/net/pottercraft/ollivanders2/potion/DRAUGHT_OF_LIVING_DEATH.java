@@ -10,29 +10,19 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Draught of Living Death - an extremely powerful sleeping potion that induces permanent magical sleep.
- *
- * <p>This is one of the most dangerous potions in existence. When consumed, it puts the drinker
- * into a permanent magical sleep (SLEEPING effect). The sleep can only be broken by a player
- * who has the AWAKE effect active, which will render the potion's effects harmless.</p>
- *
- * <p>This potion requires a complex recipe with rare ingredients including Powdered Asphodel Root
- * and Infusion of Wormwood, making it a high-level potion to brew. It should be handled with
- * extreme caution.</p>
+ * Draught of Living Death — puts the drinker into permanent magical sleep, unless they have the AWAKE effect, which
+ * renders it harmless.
  *
  * @author Azami7
- * @since 2.2.8
  */
 public class DRAUGHT_OF_LIVING_DEATH extends O2Potion {
+    /**
+     * Message shown to a drinker who has the AWAKE effect and so shrugs off the sleep.
+     */
     String awakeEffectMessage = "You yawn, close your eyes for a moment, then feel fine.";
 
     /**
-     * Constructor for Draught of Living Death potion.
-     *
-     * <p>Initializes the potion with its complex recipe of rare ingredients (Powdered Asphodel Root,
-     * Infusion of Wormwood, Valerian Root, Sopophorus Bean Juice, Sloth Brain, and Standard Potion
-     * Ingredients), description text, flavor text, and potion color. Sets up the permanent SLEEPING
-     * effect that will be applied when the potion is consumed.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -58,16 +48,8 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion {
     }
 
     /**
-     * Drink the Draught of Living Death and enter permanent magical sleep.
-     *
-     * <p>The effect of this potion depends on whether the player has the AWAKE effect active:</p>
-     * <ul>
-     * <li>If the player has the AWAKE effect, the potion is harmless and the player returns to
-     *     normal consciousness with a brief yawn</li>
-     * <li>If the player does not have the AWAKE effect, they are put into permanent magical sleep
-     *     (SLEEPING effect). The only way to break this sleep is for another player with the AWAKE
-     *     effect to use a counter-potion or spell</li>
-     * </ul>
+     * If the player has the AWAKE effect, does nothing but show a message; otherwise applies a permanent SLEEPING
+     * effect that only another player's AWAKE counter can break.
      *
      * @param player the player who drank the potion
      */
@@ -81,18 +63,14 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion {
             effect.setPermanent(true);
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            player.sendMessage(Ollivanders2.chatColor + "You fall into a powerful magic sleep.");
+            player.sendMessage(Ollivanders2.chatColor + potionSuccessMessage);
         }
     }
 
     /**
-     * Get the message shown to players with the AWAKE effect when drinking this potion.
+     * Get the message shown to a drinker with the AWAKE effect.
      *
-     * <p>Returns the special message that is displayed to players who have the AWAKE effect active
-     * when they drink the Draught of Living Death. This message indicates that the potion's sleep
-     * effect is harmless to them due to their immunity to sleep.</p>
-     *
-     * @return the message displayed to awakened players ("You yawn, close your eyes for a moment, then feel fine.")
+     * @return the awake-effect message
      */
     public String getAwakeEffectMessage() {
         return awakeEffectMessage;

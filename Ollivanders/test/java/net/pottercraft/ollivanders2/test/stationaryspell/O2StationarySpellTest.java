@@ -26,58 +26,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for stationary spell implementations.
- *
- * <p>Provides common test suite for all concrete stationary spell types, testing core spell
- * functionality that applies across all spell implementations. Concrete test classes extend
- * this class and implement abstract methods to provide spell-specific setup and testing.</p>
- *
- * <p>Tests cover:
+ * Base test class for stationary spells, holding the tests common to every spell type. Concrete subclasses implement:
  * <ul>
- *   <li>Duration management (clamping to min/max, increase/decrease operations)</li>
- *   <li>Radius management (clamping to min/max, increase/decrease operations)</li>
- *   <li>Spell aging and expiration (including permanent spell handling)</li>
- *   <li>Location-based area detection and entity radius queries</li>
- *   <li>Spell state management (active/killed status)</li>
- *   <li>Spell deserialization validation</li>
- *   <li>Spell-specific upkeep mechanics (implemented by subclasses)</li>
+ *   <li>{@link #getSpellType()} - the spell type under test</li>
+ *   <li>{@link #createStationarySpell(Player, Location)} - build a spell instance to test</li>
+ *   <li>{@link #upkeepTest()} - test the spell's own upkeep behavior</li>
  * </ul>
- * </p>
- *
- * <p>Subclasses must implement:
- * <ul>
- *   <li>{@link #getSpellType()} - return the spell type to test</li>
- *   <li>{@link #createStationarySpell(Player, Location)} - create a spell instance for testing</li>
- *   <li>{@link #upkeepTest()} - test spell-specific upkeep behavior</li>
- * </ul>
- * </p>
  *
  * @author Azami7
  */
 abstract public class O2StationarySpellTest {
-    /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
-     */
     static ServerMock mockServer;
 
-    /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
-     */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -85,37 +47,26 @@ abstract public class O2StationarySpellTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's initial 20-tick delay so it is running
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Gets the spell type being tested by this test class.
-     *
-     * <p>Subclasses must override this to specify which spell type they test.</p>
-     *
-     * @return the O2StationarySpellType to test (not null)
+     * @return the spell type under test
      */
     abstract O2StationarySpellType getSpellType();
 
     /**
-     * Creates a spell instance for testing.
+     * Build a spell instance to test.
      *
-     * <p>Subclasses must override this to instantiate their specific spell type with
-     * the given caster and location. The spell should be fully initialized and ready to test.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new spell instance (not null)
+     * @param caster   the player casting the spell
+     * @param location the center location of the spell
+     * @return a new spell instance
      */
     abstract O2StationarySpell createStationarySpell(Player caster, Location location);
 
     /**
-     * Tests duration management for spells with variable lifetimes.
-     *
-     * <p>Verifies that spell duration is properly constrained between minimum and maximum values,
-     * and that duration increases are clamped to the maximum allowed value. Skips testing for
-     * permanent spells which ignore duration settings.</p>
+     * Duration stays within the min/max bounds and an increase is clamped to the maximum. Skipped for permanent spells.
      */
     @Test
     void durationTest() {
@@ -144,11 +95,8 @@ abstract public class O2StationarySpellTest {
     }
 
     /**
-     * Tests radius management and spell destruction when radius falls below minimum.
-     *
-     * <p>Verifies that spell radius is properly constrained between minimum and maximum values,
-     * that radius increases are clamped to maximum, radius decreases are clamped to minimum,
-     * and that the spell is killed if the radius is decreased below the minimum threshold.</p>
+     * Radius is clamped to the max when increased and to the min when decreased, and the spell is killed if decreased
+     * below the minimum.
      */
     @Test
     void radiusTest() {
@@ -176,34 +124,19 @@ abstract public class O2StationarySpellTest {
         assertTrue(stationarySpell.isKilled(), "Spell not killed when radius decreased below minimum");
     }
 
-    /**
-     * Tests spell type getter (skipped - simple getter functionality).
-     *
-     * <p>The getSpellType() method is a trivial getter and is not tested here.
-     * Correctness is verified by other tests that verify spell type assignments.</p>
-     */
     @Test
     void getSpellTypeTest() {
         // simple getter, skipping
     }
 
-    /**
-     * Tests spell active state setter (skipped - simple setter functionality).
-     *
-     * <p>The setActive() method is a trivial setter and is not tested here.
-     * Correctness is verified by other tests that depend on spell active state.</p>
-     */
     @Test
     void setActiveTest() {
-        // simple getter, skipping
+        // simple setter, skipping
     }
 
     /**
-     * Tests spell aging mechanics and spell expiration leading to termination.
-     *
-     * <p>Verifies that the age() method properly decrements spell duration for non-permanent spells,
-     * has no effect on permanent spells, and that spells are killed when their duration reaches zero.
-     * Tests both single-tick aging and aging by multiple ticks.</p>
+     * Aging decrements a non-permanent spell's duration (by one tick and by many) and kills it at zero; a permanent
+     * spell is unaffected.
      */
     @Test
     void ageAndKillTest() {
@@ -234,10 +167,7 @@ abstract public class O2StationarySpellTest {
     }
 
     /**
-     * Tests percentage-based spell aging.
-     *
-     * <p>Verifies that the ageByPercent() method correctly reduces spell duration by the specified
-     * percentage. Permanent spells should remain unaffected by percentage-based aging.</p>
+     * Aging by a percent reduces duration by that fraction; a permanent spell is unaffected.
      */
     @Test
     void ageByPercentTest() {
@@ -258,10 +188,7 @@ abstract public class O2StationarySpellTest {
     }
 
     /**
-     * Tests location-based area detection.
-     *
-     * <p>Verifies that isLocationInside() correctly identifies locations within the spell's
-     * radius and correctly identifies locations outside the spell's radius.</p>
+     * A location within the radius reads as inside and one beyond it as outside.
      */
     @Test
     void isLocationInsideTest() {
@@ -274,23 +201,14 @@ abstract public class O2StationarySpellTest {
         assertFalse(stationarySpell.isLocationInside(new Location(location.getWorld(), location.getX(), location.getY() + stationarySpell.getMaxRadius() + 1, location.getZ())), "Location outside spell radius incorrectly detected as inside");
     }
 
-    /**
-     * Tests block retrieval getter (skipped - simple getter functionality).
-     *
-     * <p>The getBlock() method is a trivial getter and is not tested here.
-     * Correctness is verified by other tests that depend on block queries.</p>
-     */
     @Test
     void getBlockTest() {
         // simple getter, skipping
     }
 
     /**
-     * Tests entity and player radius queries.
-     *
-     * <p>Verifies that getLivingEntitiesInsideSpellRadius() and getPlayersInsideSpellRadius() correctly
-     * identify all entities and players within the spell's radius, and correctly exclude those outside the radius.
-     * Tests with players and non-player entities to ensure proper filtering.</p>
+     * The entity and player radius queries count only those inside the radius, distinguishing players from other
+     * living entities.
      */
     @Test
     void entitiesRadiusTest() {
@@ -324,76 +242,40 @@ abstract public class O2StationarySpellTest {
         assertEquals(1, playersInRadius.size(), "Should still have only 1 player in radius (player2 is outside)");
     }
 
-    /**
-     * Tests spell flair/flavor effects (skipped - covered by common tests).
-     *
-     * <p>Flair functionality is tested comprehensively in Ollivanders2Common.flair tests
-     * and is not duplicated here.</p>
-     */
     @Test
     void flairTest() {
         // test covered by Ollivanders2Common.flair tests
     }
 
-    /**
-     * Tests caster ID getter (skipped - simple getter functionality).
-     *
-     * <p>The getCasterID() method is a trivial getter and is not tested here.
-     * Correctness is verified by other tests that depend on caster identification.</p>
-     */
     @Test
     void getCasterIDTest() {
         // simple getter, skipping
     }
 
-    /**
-     * Tests spell active state getter (skipped - simple getter functionality).
-     *
-     * <p>The isActive() method is a trivial getter and is not tested here.
-     * Correctness is verified by other tests that depend on spell active status.</p>
-     */
     @Test
     void isActiveTest() {
         // simple getter, skipping
     }
 
-    /**
-     * Tests spell killed state getter (skipped - simple getter functionality).
-     *
-     * <p>The isKilled() method is a trivial getter and is not tested here.
-     * Correctness is verified by other tests that depend on spell kill status.</p>
-     */
     @Test
     void isKilledTest() {
         // simple getter, skipping
     }
 
-    /**
-     * Tests spell location getter (skipped - simple getter functionality).
-     *
-     * <p>The getLocation() method is a trivial getter and is not tested here.
-     * Correctness is verified by other tests that depend on spell location queries.</p>
-     */
     @Test
     void getLocationTest() {
         // simple getter, skipping
     }
 
     /**
-     * Tests spell-specific upkeep mechanics (implemented by subclasses).
-     *
-     * <p>Each spell type has unique upkeep behavior. Subclasses must implement this test
-     * to verify their spell-specific per-tick processing and state updates.</p>
+     * Test this spell's own per-tick upkeep behavior.
      */
     @Test
     abstract void upkeepTest();
 
     /**
-     * Tests spell deserialization validation.
-     *
-     * <p>Verifies that a spell created via createStationarySpellByType() (simulating deserialization)
-     * fails checkSpellDeserialization() because it lacks required data like location and caster,
-     * while a properly initialized spell passes deserialization validation.</p>
+     * A spell built bare via createStationarySpellByType fails the deserialization check (no location or caster); a
+     * fully constructed spell passes.
      */
     @Test
     void checkSpellDeserializationTest() {
@@ -409,13 +291,6 @@ abstract public class O2StationarySpellTest {
         assertTrue(stationarySpell.checkSpellDeserialization(), "Failed to deserialize spell");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

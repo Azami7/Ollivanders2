@@ -34,66 +34,48 @@ import java.util.Collections;
  */
 public abstract class O2Book {
     /**
-     * The type of book defining its author, title, and magic branch
+     * The type of book, which supplies its title, author, and magic branch.
      */
     protected O2BookType bookType;
 
-    /**
-     * The book item object.
-     */
     private ItemStack bookItem;
 
     /**
-     * Optional opening page content displayed at the start of the book (max 256 characters).
-     * Can be customized through configuration file settings.
+     * Optional opening page (max 256 characters), overridable via config.
      */
     String openingPage;
     final private static String openingPageLabel = "_openingPage";
 
     /**
-     * Optional closing page content displayed at the end of the book (max 256 characters).
-     * Can be customized through configuration file settings.
+     * Optional closing page (max 256 characters), overridable via config.
      */
     String closingPage;
     final private static String closingPageLabel = "_closingPage";
 
     /**
-     * Namespace key for NBT tag - book type
+     * NBT key for the book type.
      */
     public static NamespacedKey o2BookTypeKey;
 
     /**
-     * Namespace key for NBT tag - spells
+     * NBT key for the book's spells.
      */
     public static NamespacedKey o2BookSpellsKey;
 
     /**
-     * Namespace key for NBT tag - potions
+     * NBT key for the book's potions.
      */
     public static NamespacedKey o2BookPotionsKey;
 
-    /**
-     * Callback to the plugin
-     */
     protected Ollivanders2 p;
 
-    /**
-     * Spells in book
-     */
     protected ArrayList<O2SpellType> spells;
 
-    /**
-     * Potions in book
-     */
     protected ArrayList<O2PotionType> potions;
 
     /**
-     * Constructor that initializes a new book instance.
-     * <p>
-     * Initializes the book type to STANDARD_BOOK_OF_SPELLS_GRADE_1, empty opening and closing pages,
-     * empty spell and potion lists, and creates the required NamespacedKeys for NBT data storage.
-     * The actual book item is created lazily on the first call to {@link #getBookItem()}.
-     * </p>
+     * Create an empty book. Subclasses set the book type and add their spells and potions; the book item itself is
+     * built lazily on the first {@link #getBookItem()} so all text is loaded before it is assembled.
      *
      * @param plugin a callback to the Ollivanders2 plugin instance
      */
@@ -103,7 +85,6 @@ public abstract class O2Book {
         openingPage = "";
         closingPage = "";
 
-        // create the book on first request to ensure texts, etc. are loaded before trying to create it
         bookItem = null;
 
         spells = new ArrayList<>();
@@ -116,18 +97,8 @@ public abstract class O2Book {
     }
 
     /**
-     * Composes and writes all metadata for the book item.
-     * <p>
-     * This method constructs the complete book content including:
-     * <ul>
-     * <li>Title page with book name and author</li>
-     * <li>Table of contents listing all spells and potions</li>
-     * <li>Formatted pages for each spell/potion with name, flavor text, and description</li>
-     * <li>Optional opening and closing pages from configuration</li>
-     * <li>NBT tags storing book type, spells, and potions for retrieval</li>
-     * </ul>
-     * Text is automatically split and formatted to fit within Minecraft book page limits.
-     * </p>
+     * Compose the book item's metadata: title page, table of contents, a page per spell/potion, optional config
+     * opening/closing pages, and the NBT tags used to identify the book and its contents.
      */
     private void writeSpellBookMeta() {
         Ollivanders2Common common = new Ollivanders2Common(p);
@@ -146,31 +117,23 @@ public abstract class O2Book {
         bookMeta.setAuthor(bookType.getAuthor());
         bookMeta.setTitle(shortTitle);
 
-        // write title page
         String titlePage = title + "\n\nby " + author;
         bookMeta.addPage(titlePage);
 
-        // table of contents
         StringBuilder toc = new StringBuilder();
         toc.append("Contents:\n\n");
 
-        // main book content
         ArrayList<String> mainContent = new ArrayList<>();
 
-        // Collect all spell and potion enum names. These enum names serve as keys to look up:
-        // - display names for the table of contents (line 174)
-        // - main text and flavor text for content pages (lines 182-184)
+        // enum names double as the lookup keys for each entry's display name, main text, and flavor text
         ArrayList<String> bookContents = new ArrayList<>();
         for (O2SpellType spell : spells) {
             bookContents.add(spell.toString());
         }
-
-        // add the name of all the potions in the book
         for (O2PotionType potionType : potions) {
             bookContents.add(potionType.toString());
         }
 
-        // Build table of contents and content pages for each spell/potion in a single pass
         for (String content : bookContents) {
             String name = Ollivanders2API.getBooks().spellText.getName(content);
             if (name == null) {
@@ -184,30 +147,23 @@ public abstract class O2Book {
             String mainText = Ollivanders2API.getBooks().spellText.getText(content);
             String flavorText = Ollivanders2API.getBooks().spellText.getFlavorText(content);
 
-            // Format the spell/potion entry with flavor text if available.
-            // With flavor text: name, flavor text, then description.
-            // Without flavor text: name, then description (more space for main text).
             if (flavorText == null) {
                 text = name + "\n\n" + mainText;
             }
             else
                 text = name + "\n\n" + flavorText + "\n\n" + mainText;
 
-            // create the pages for this spell
             ArrayList<String> pages = createPages(text);
 
             mainContent.addAll(pages);
         }
 
-        // add TOC page(s)
         ArrayList<String> tocPages = createPages(toc.toString());
         for (String tocPage : tocPages) {
             bookMeta.addPage(tocPage);
         }
 
-        // add opening page
-        // Configuration keys are constructed by appending the label to the book type enum name
-        // (e.g., "STANDARD_BOOK_OF_SPELLS_GRADE_1_openingPage")
+        // opening/closing page config keys are the book-type enum name plus the label suffix
         if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + openingPageLabel)) {
             String s = p.getConfig().getString(bookType.toString() + openingPageLabel);
             if (s != null && !(s.isEmpty()))
@@ -216,14 +172,10 @@ public abstract class O2Book {
         if (!(openingPage.isEmpty()))
             bookMeta.addPage(openingPage);
 
-        // add spell pages
         for (String page : mainContent) {
             bookMeta.addPage(page);
         }
 
-        // add closing page
-        // Configuration keys are constructed by appending the label to the book type enum name
-        // (e.g., "STANDARD_BOOK_OF_SPELLS_GRADE_1_closingPage")
         if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + closingPageLabel)) {
             String s = p.getConfig().getString(bookType.toString() + closingPageLabel);
             if (s != null && !(s.isEmpty()))
@@ -232,12 +184,8 @@ public abstract class O2Book {
         if (!(closingPage.isEmpty()))
             bookMeta.addPage(closingPage);
 
-        // add NBT tags
-        // Build space-separated spell and potion names, then trim trailing whitespace.
-        // The trim() is critical because the for loop appends a space after each item,
-        // resulting in a trailing space. When parsing this NBT string later, we split by space
-        // and try to convert each part to an enum. A trailing space would create an empty string
-        // that fails to match any enum value.
+        // trim the trailing space each append adds; when this tag is parsed later it is split on spaces, and a
+        // trailing space would yield an empty token that matches no enum
         StringBuilder spellsTag = new StringBuilder();
         for (O2SpellType spellType : spells) {
             spellsTag.append(spellType.toString()).append(" ");
@@ -253,12 +201,9 @@ public abstract class O2Book {
         container.set(o2BookSpellsKey, PersistentDataType.STRING, spellsTag.toString().trim());
         container.set(o2BookPotionsKey, PersistentDataType.STRING, potionsTag.toString().trim());
 
-        // Set book generation to ORIGINAL.
-        // This marks the book as written by the plugin (as opposed to generated/copied).
-        // Minecraft uses this to prevent further editing of the book's pages.
+        // ORIGINAL marks the book as plugin-written so Minecraft won't let players edit its pages
         bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
 
-        // set book meta
         bookItem.setItemMeta(bookMeta);
     }
 
@@ -274,10 +219,7 @@ public abstract class O2Book {
      */
     @NotNull
     private ArrayList<String> createPages(@NotNull String text) {
-        //get the words in a spell text
         ArrayList<String> words = getWords(text);
-
-        // turn the word list in to pages
         return makePages(words);
     }
 
@@ -298,26 +240,19 @@ public abstract class O2Book {
     }
 
     /**
-     * Formats a list of words into properly-sized pages for Minecraft books.
+     * Word-wrap a word list into Minecraft book pages, marking continued pages with "(cont.)". Assumes no single word
+     * exceeds a page's capacity.
      *
-     * <p>This method implements word-wrapping to accommodate Minecraft book page limits (max 256 characters per page).
-     * The first page has a smaller capacity (~150 characters) to account for the title and spacing, while
-     * subsequent pages use the full available space (~180 characters). Pages are marked with "(cont.)" if content continues.
-     * </p>
-     *
-     * <p>Note: This implementation assumes no individual word exceeds the page capacity.</p>
-     *
-     * @param words a list of words to format into pages
-     * @return a list of formatted page strings
+     * @param words the words to format; emptied as they are consumed
+     * @return the formatted pages
      */
     @NotNull
     private ArrayList<String> makePages(@NotNull ArrayList<String> words) {
         ArrayList<String> pages = new ArrayList<>();
 
-        // First page has reduced capacity to accommodate title/spacing
+        // first page is smaller to leave room for the title and spacing; later pages use the full capacity
         pages.add(buildPage(words, 150));
 
-        // Remaining pages use full capacity
         while (!words.isEmpty()) {
             pages.add(buildPage(words, 180));
         }
@@ -352,7 +287,6 @@ public abstract class O2Book {
 
             page.append(word).append(" ");
 
-            // decrement remaining, remove word from list
             remaining = remaining - word.length() - 1;
             words.removeFirst();
         }
@@ -399,7 +333,7 @@ public abstract class O2Book {
     }
 
     /**
-     * The author for this book.
+     * Get the author for this book.
      *
      * @return author
      */
@@ -409,7 +343,7 @@ public abstract class O2Book {
     }
 
     /**
-     * The branch for this book.
+     * Get the magic branch for this book.
      *
      * @return branch
      */

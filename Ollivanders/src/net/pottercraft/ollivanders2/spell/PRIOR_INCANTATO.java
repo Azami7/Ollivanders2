@@ -14,17 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Forces a target player's wand to reveal an "echo" of the most recent spell it cast.
+ * Reveal the last spell cast by a nearby target player's wand — the "Reverse Spell".
  * <p>
- * Prior Incantato (the "Reverse Spell") is a charm cast as a projectile. When it reaches the first non-caster
- * player within {@link O2Spell#defaultRadius} of where it stops, it attempts to force that player's wand to
- * reveal its last-cast spell. Success is a percentage chance scaled by the caster's experience with this spell
- * ({@code usesModifier}); on failure the caster is told the target's wand resisted.
- * </p>
- * <p>
- * On success the prior spell is broadcast as a visible echo: the target, plus every other player within
- * {@link #visibleRadius} blocks of the target, is messaged. If the target's wand has never cast a spell, only the
- * caster is notified.
+ * On a skill-based success roll the echoed spell is announced to the target and every player within
+ * {@link #visibleRadius} blocks of them; on failure only the caster is told the wand resisted. If the target's wand
+ * has never cast a spell, only the caster is notified.
  * </p>
  *
  * @author Azami7
@@ -32,11 +26,7 @@ import java.util.List;
  */
 public class PRIOR_INCANTATO extends O2Spell {
     /**
-     * The radius, in blocks, around the target within which other players will "see" the echoed spell.
-     * <p>
-     * Used by {@link #doPriorIncantato(Player)} to determine which nearby players are messaged when the echo is
-     * revealed, in addition to the target.
-     * </p>
+     * The radius, in blocks, around the target within which other players witness the echoed spell.
      */
     private static final int visibleRadius = 10;
 
@@ -107,13 +97,11 @@ public class PRIOR_INCANTATO extends O2Spell {
     }
 
     /**
-     * Attempt to force the echo of the last spell from the first nearby non-caster player.
+     * Reveal the prior incantation of the first nearby player other than the caster, on a skill-based success roll,
+     * then end the spell.
      * <p>
-     * Runs once per projectile tick. If the projectile has hit a block the spell is killed, but it still scans for
-     * a player near where it stopped so that slightly-off aim can still find a target. The first player within
-     * {@link O2Spell#defaultRadius} other than the caster is targeted: a percentage roll against the caster's
-     * {@code usesModifier} decides whether the echo is revealed via {@link #doPriorIncantato(Player)} or the
-     * target's wand resists. The spell is killed once it has acted on a target.
+     * On a failed roll the caster is told the wand resisted. A block hit still scans for a nearby target so that
+     * slightly-off aim can succeed.
      * </p>
      */
     @Override
@@ -157,7 +145,6 @@ public class PRIOR_INCANTATO extends O2Spell {
             return;
         }
 
-        // if the wand has previously cast a spell, let the target plus all nearby players "see" the prior incantato
         List<Entity> nearbyPlayers = EntityCommon.getNearbyEntitiesByType(target.getLocation(), visibleRadius, EntityType.PLAYER);
 
         for (Entity entity : nearbyPlayers) {

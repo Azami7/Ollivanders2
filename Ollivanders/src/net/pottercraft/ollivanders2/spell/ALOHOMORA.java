@@ -14,17 +14,11 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unlocking charm that removes COLLOPORTUS magical locks.
- *
- * <p>When the projectile hits a COLLOPORTUS stationary spell, the spell removes (kills) all COLLOPORTUS
- * spells at that location and displays a visual flair effect for player feedback. The projectile stops
- * when it hits a solid block via hasHitTarget(), but continues searching for COLLOPORTUS spells each tick
- * until it hits a block.</p>
- *
- * <p><strong>World Guard:</strong> Requires the INTERACT flag when WorldGuard is enabled.</p>
+ * Unlocking charm that removes COLLOPORTUS magical locks where the projectile passes. Sends a failure message if no
+ * COLLOPORTUS lock is found before the projectile hits a block.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Unlocking_Charm">Unlocking Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Unlocking_Charm">Harry Potter Wiki - Unlocking Charm</a>
  */
 public final class ALOHOMORA extends O2Spell {
     /**
@@ -66,11 +60,8 @@ public final class ALOHOMORA extends O2Spell {
     }
 
     /**
-     * Search for and remove COLLOPORTUS stationary spells at the projectile's location.
-     *
-     * <p>Each tick, checks if the projectile hit a solid block. If COLLOPORTUS spells are found at the
-     * projectile's current location, kills them and displays a visual flair effect. The spell does not
-     * stop the projectile on its own; it only stops when hasHitTarget() returns true (solid block hit).</p>
+     * Remove every COLLOPORTUS stationary spell at the projectile's current location, flaring each for feedback, or
+     * send a failure message if none are there. Ends when the projectile hits a block.
      */
     @Override
     protected void doCheckEffect() {

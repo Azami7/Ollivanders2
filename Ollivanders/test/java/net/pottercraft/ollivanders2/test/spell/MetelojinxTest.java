@@ -33,7 +33,7 @@ public class MetelojinxTest extends MetelojinxBaseTest {
 
     /**
      * Verify that when usesModifier is less than 10 (so {@code (int)(usesModifier/10)} truncates to 0),
-     * the storm duration is clamped to the 1-minute minimum rather than 0.
+     * the storm duration is limited to the 1-minute minimum rather than 0.
      */
     @Test
     void minStormDurationTest() {
@@ -50,6 +50,6 @@ public class MetelojinxTest extends MetelojinxBaseTest {
         mockServer.getScheduler().performTicks(20);
         assertTrue(metelojinx.isKilled(), "spell not killed after cast");
         assertEquals(Ollivanders2Common.ticksPerMinute, testWorld.getWeatherDuration(),
-                "weather duration should be clamped to 1 minute minimum when usesModifier < 10");
+                "weather duration should be limited to 1 minute minimum when usesModifier < 10");
     }
 }

@@ -1,9 +1,11 @@
 package net.pottercraft.ollivanders2.spell;
 
 /**
- * @see <a href="https://harrypotter.fandom.com/wiki/Severing_Charm">https://harrypotter.fandom.com/wiki/Severing_Charm</a>
+ * Placeholder for the Severing Charm, pending reimplementation.
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Severing_Charm">Harry Potter Wiki - Severing Charm</a>
  */
-// todo rework this spell to match books - https://github.com/Azami7/Ollivanders2/issues/501
+// TODO: rework this spell to match the books
 public final class DIFFINDO {
 
 }

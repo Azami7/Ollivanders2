@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -44,7 +43,7 @@ public final class REPARIFARGE extends O2Spell {
     public static final int minSuccessRate = 10;
 
     /**
-     * The current success rate for this cast, clamped to [{@link #minSuccessRate}, {@link #maxSuccessRate}].
+     * The current success rate for this cast, limited to [{@link #minSuccessRate}, {@link #maxSuccessRate}].
      * Set in {@link #doInitSpell()} based on caster experience.
      */
     int successRate = minSuccessRate;
@@ -101,13 +100,12 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Attempt to revert a transfiguration on the target block or a nearby entity.
+     * Attempt to revert a transfiguration on the hit block or the first nearby transfigured entity, message the
+     * caster, and end the spell.
      * <p>
-     * When the projectile hits a block, the block is checked for an active transfiguration via
-     * {@link #reparifargeBlock(Block)}. When the projectile is in flight, nearby entities are
-     * scanned via {@link #reparifargeEntity(Entity)} (caster excluded, {@link EnderDragonPart}
-     * resolved to parent). In both cases, a success or failure message is sent to the caster
-     * and the spell is killed after the first attempt.
+     * A block hit reverts the block; otherwise nearby entities are scanned (the caster is skipped and an
+     * {@link EnderDragonPart} is resolved to its parent dragon). The caster is sent the success message on a revert
+     * and the failure message otherwise.
      * </p>
      */
     @Override
@@ -141,18 +139,20 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Attempts to revert any active entity transfiguration affecting the target entity.
+     * Revert an active transfiguration affecting the target entity, if its level is within one of Reparifarge's own
+     * and the success roll passes.
      *
-     * @param target the target entity to check for transfiguration
-     * @return true if any transfiguration was found affecting this entity, false otherwise
+     * @param target the entity to check for an active transfiguration
+     * @return true if a transfiguration affecting the target was found and reverted, false otherwise
      */
     public boolean reparifargeEntity(@NotNull Entity target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof Transfiguration && ((Transfiguration) spell).isTransfigured(target)) {
-                if ((spell.getLevel().ordinal() <= this.spellType.getLevel().ordinal() + 1) && checkSuccess())
+                if ((spell.getLevel().ordinal() <= this.spellType.getLevel().ordinal() + 1) && checkSuccess()) {
                     spell.kill();
 
-                return true;
+                    return true;
+                }
             }
         }
 
@@ -160,18 +160,20 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Attempts to revert any active block transfiguration affecting the target block.
+     * Revert an active transfiguration affecting the target block, if its level is within one of Reparifarge's own
+     * and the success roll passes.
      *
-     * @param target the target block to check for transfiguration
-     * @return true if any transfiguration was found affecting this block, false otherwise
+     * @param target the block to check for an active transfiguration
+     * @return true if a transfiguration affecting the target was found and reverted, false otherwise
      */
     public boolean reparifargeBlock(@NotNull Block target) {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof Transfiguration && ((Transfiguration) spell).isTransfigured(target)) {
-                if ((spell.getLevel().ordinal() <= this.spellType.getLevel().ordinal() + 1) && checkSuccess())
+                if ((spell.getLevel().ordinal() <= this.spellType.getLevel().ordinal() + 1) && checkSuccess()) {
                     spell.kill();
 
-                return true;
+                    return true;
+                }
             }
         }
 
@@ -190,7 +192,7 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Get the success rate for this cast, as a percentage clamped to
+     * Get the success rate for this cast, as a percentage limited to
      * [{@link #minSuccessRate}, {@link #maxSuccessRate}].
      *
      * @return the success rate percentage (10–100)

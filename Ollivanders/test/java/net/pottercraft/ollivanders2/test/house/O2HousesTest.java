@@ -25,8 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for {@link O2Houses}.
+ */
 public class O2HousesTest {
-    // Constants
     private static final String SCOREBOARD_OBJECTIVE = "o2_hpoints";
     private static final int INITIAL_POINTS = 0;
 
@@ -39,7 +41,6 @@ public class O2HousesTest {
     static PlayerMock player2;
     static PlayerMock player3;
 
-    // Helper methods
     private void assertPlayerInHouse(PlayerMock player, O2HouseType house, String message) {
         assertTrue(testHouses.getHouseMembers(house).contains(player.getName()), message);
     }

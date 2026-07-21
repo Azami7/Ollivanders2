@@ -14,10 +14,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Avifors - https://harrypotter.fandom.com/wiki/Avifors_Spell - transfigures entity into a parrot.
+ * Transfiguration spell that disguises the target entity as a parrot for a limited duration.
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Avifors_Spell">Harry Potter Wiki - Avifors Spell</a>
  */
 public final class AVIFORS extends FriendlyMobDisguise {
-    //todo make the entities this can target small
+    // TODO: restrict the entities this can target to small ones
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -69,7 +71,7 @@ public final class AVIFORS extends FriendlyMobDisguise {
     }
 
     /**
-     * Revert the entity back to their original form.
+     * Turn off the parrot disguise's elytra flight before reverting the entity to its original form.
      */
     @Override
     public void revert() {

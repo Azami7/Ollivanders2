@@ -22,64 +22,25 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the IMMOBILIZE effect.
- *
- * <p>IMMOBILIZE is a complete immobilization effect that prevents all player movement and actions.
- * This test validates that the effect correctly cancels all movement-related events and interaction
- * events to ensure the immobilized player cannot perform any action.</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>PlayerInteractEvent cancellation - ensures players cannot interact with the environment</li>
- * <li>PlayerToggleFlightEvent cancellation - prevents flight toggling</li>
- * <li>PlayerToggleSneakEvent cancellation - prevents sneak toggling</li>
- * <li>PlayerToggleSprintEvent cancellation - prevents sprint toggling</li>
- * <li>PlayerVelocityEvent cancellation - prevents velocity-based movement</li>
- * <li>PlayerMoveEvent cancellation - prevents direct player movement</li>
- * </ul>
+ * Unit tests for {@link IMMOBILIZE}.
  *
  * @author Azami7
- * @see IMMOBILIZE for the effect implementation being tested
- * @see EffectTestSuper for the base testing framework
+ * @see EffectTestSuper
  */
 public class ImmobolizeTest extends EffectTestSuper {
-    /**
-     * Create an IMMOBILIZE effect for testing.
-     *
-     * <p>Instantiates a new IMMOBILIZE effect with the specified parameters. This method is called
-     * by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new IMMOBILIZE effect targeting the specified player
-     */
     @Override
     IMMOBILIZE createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new IMMOBILIZE(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
-    /**
-     * Test basic IMMOBILIZE effect behavior.
-     *
-     * <p>IMMOBILIZE is a passive effect that only prevents movement through event cancellation.
-     * This test does not need to verify any active behavior during checkEffect(), as all
-     * immobilization is handled through event handlers.</p>
-     */
     @Override
     void checkEffectTest() {
     }
 
-    /**
-     * Run all event handler tests for the IMMOBILIZE effect.
-     *
-     * <p>Tests all movement and interaction prevention mechanisms by creating an immobilized player
-     * and firing various events to verify they are properly cancelled.</p>
-     */
     @Override
     void eventHandlerTests() {
         PlayerMock target = mockServer.addPlayer();
-        IMMOBILIZE immobilize = (IMMOBILIZE) addEffect(target, 100, false);
+        addEffect(target, 100, false);
         mockServer.getScheduler().performTicks(10);
 
         doOnPlayerInteractEventTest(target);
@@ -93,10 +54,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that PlayerInteractEvent is cancelled by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players cannot interact with blocks, items, or other objects
-     * in the world. The test creates a block interaction event and ensures it is cancelled.</p>
+     * A block interaction by the immobilized player is cancelled.
      *
      * @param target the immobilized player
      */
@@ -110,10 +68,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that PlayerToggleFlightEvent is cancelled by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players cannot toggle flight mode. The test creates a flight
-     * toggle event and ensures it is cancelled, preventing the player from enabling or disabling flight.</p>
+     * A flight toggle by the immobilized player is cancelled.
      *
      * @param target the immobilized player
      */
@@ -126,10 +81,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that PlayerToggleSneakEvent is cancelled by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players cannot toggle sneak mode. The test creates a sneak
-     * toggle event and ensures it is cancelled, preventing the player from changing their sneak state.</p>
+     * A sneak toggle by the immobilized player is cancelled.
      *
      * @param target the immobilized player
      */
@@ -142,10 +94,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that PlayerToggleSprintEvent is cancelled by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players cannot toggle sprint mode. The test creates a sprint
-     * toggle event and ensures it is cancelled, preventing the player from activating or deactivating sprinting.</p>
+     * A sprint toggle by the immobilized player is cancelled.
      *
      * @param target the immobilized player
      */
@@ -158,11 +107,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that PlayerVelocityEvent is cancelled by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players cannot be moved by velocity-changing mechanisms such as
-     * explosions, knockback, or other forces. The test creates a velocity event and ensures it is
-     * cancelled, preventing any velocity-based movement.</p>
+     * A velocity change on the immobilized player is cancelled.
      *
      * @param target the immobilized player
      */
@@ -175,11 +120,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that PlayerMoveEvent is cancelled by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players cannot move from their current location. The test creates
-     * a move event where the player attempts to move 5 blocks away and ensures it is cancelled,
-     * keeping the immobilized player in place.</p>
+     * A positional move by the immobilized player is cancelled.
      *
      * @param target the immobilized player
      */
@@ -194,11 +135,7 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that rotation-only movement is allowed by IMMOBILIZE.
-     *
-     * <p>Verifies that immobilized players can still change their pitch and yaw without restriction.
-     * The test creates a move event where only the rotation (pitch) changes but location remains the same,
-     * and ensures the event is not cancelled, allowing the player to look around.</p>
+     * A rotation-only move (pitch/yaw, same location) by the immobilized player is allowed, not cancelled.
      *
      * @param target the immobilized player
      */
@@ -215,13 +152,8 @@ public class ImmobolizeTest extends EffectTestSuper {
     }
 
     /**
-     * Test that IMMOBILIZE is removed when the player teleports or apparates.
-     *
-     * <p>Verifies that immobilized players who attempt to teleport (via PlayerTeleportEvent) or apparate
-     * (via OllivandersApparateByCoordinatesEvent or OllivandersApparateByNameEvent) have the IMMOBILIZE
-     * effect automatically removed if distance > 100, freeing them from immobilization, or the event is canceled
-     * if distance < 100. This test validates three scenarios: standard Bukkit teleportation, coordinate-based
-     * apparition, and name-based apparition.</p>
+     * A teleport or apparition (by coordinates or by name) of more than 100 blocks removes IMMOBILIZE; a shorter one
+     * leaves it in place.
      */
     @Test
     void doOnPlayerTeleportEventsTests() {
@@ -266,12 +198,6 @@ public class ImmobolizeTest extends EffectTestSuper {
         assertTrue(immobilize.isKilled(), "effect not canceled when player apparated by name");
     }
 
-    /**
-     * Test IMMOBILIZE effect cleanup.
-     *
-     * <p>The IMMOBILIZE effect has no persistent state to clean up when removed. All immobilization
-     * is handled through event cancellation, so there is nothing to verify during cleanup.</p>
-     */
     @Override
     void doRemoveTest() {
     }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Turn animals to flower pots (approximation for water goblets).
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Vera_Verto">https://harrypotter.fandom.com/wiki/Vera_Verto</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Vera_Verto">Harry Potter Wiki - Vera Verto</a>
  */
 public final class VERA_VERTO extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;

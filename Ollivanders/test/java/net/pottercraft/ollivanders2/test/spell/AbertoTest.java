@@ -21,17 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for ABERTO spell functionality.
- *
- * <p>Tests the opening charm including:</p>
- * <ul>
- * <li>Spell failure when cast at non-door blocks</li>
- * <li>Successfully opening closed doors and trapdoors</li>
- * <li>Spell failure when target door is protected by COLLOPORTUS</li>
- * </ul>
- *
- * <p>Validates that doors transition from closed to open state when the spell is cast, and that
- * COLLOPORTUS stationary spells successfully block the opening spell.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.ABERTO}.
  *
  * @author Azami7
  */
@@ -43,11 +33,8 @@ public class AbertoTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test ABERTO spell behavior for door opening and locking protection.
-     *
-     * <p>Verifies that the spell fails gracefully when cast at non-door blocks, successfully
-     * opens doors by setting their Openable state to true, and fails to open doors protected
-     * by COLLOPORTUS stationary spells.</p>
+     * Verify ABERTO fails on a non-door block, opens a closed door or trapdoor, and fails on a door protected by
+     * COLLOPORTUS.
      */
     @Override
     @Test

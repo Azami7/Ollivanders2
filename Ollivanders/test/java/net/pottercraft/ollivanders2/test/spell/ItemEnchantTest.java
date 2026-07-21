@@ -25,53 +25,30 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test class for ItemEnchant spell implementations.
+ * Base test class for {@link ItemEnchant} spells, covering projectile and held-item enchantment, stack splitting,
+ * magnitude scaling, and item-type validation. Subclasses supply the valid/invalid item types and implement the
+ * spell-specific {@link #createEnchantmentArgsTest()} and {@link #alterItemTest()}.
  *
- * <p>Provides common test coverage for all item enchantment spells, including projectile-based
- * enchantment (targeting dropped items) and held-item enchantment (targeting off-hand items).
- * Concrete subclasses must implement {@link #getValidItemType()}, {@link #getInvalidItemType()},
- * {@link #createEnchantmentArgsTest()}, and {@link #alterItemTest()}.</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Projectile-based item enchantment and item stack splitting</li>
- * <li>Held-item enchantment from player off-hand</li>
- * <li>Item stack splitting when enchanting stacks with multiple items</li>
- * <li>Magnitude calculation based on caster skill and spell strength</li>
- * <li>Item type validation and filtering</li>
- * <li>Spell-specific enchantment argument generation and item alteration</li>
- * </ul>
- *
- * @see net.pottercraft.ollivanders2.spell.ItemEnchant for the spell base class
- * @see O2SpellTestSuper for inherited spell testing framework
+ * @see ItemEnchant
+ * @see O2SpellTestSuper
  */
 abstract class ItemEnchantTest extends O2SpellTestSuper {
     /**
-     * Get the primary material type that this enchantment spell can target.
-     *
-     * @return a Material type that is valid for this enchantment
+     * @return a material this enchantment spell can target
      */
     @NotNull
     abstract Material getValidItemType();
 
     /**
-     * Get an invalid material type that this enchantment spell cannot target.
-     *
-     * <p>Return null to skip testing invalid material types. This is typically used when
-     * the spell accepts all items (no material restrictions) or when the spell uses
-     * {@link net.pottercraft.ollivanders2.item.O2ItemType} filtering instead of Material filtering.</p>
-     *
-     * @return an invalid Material, or null to skip invalid type testing
+     * @return a material this enchantment spell cannot target, or null to skip invalid-type testing (e.g. when the
+     *         spell accepts all materials or filters by O2ItemType instead)
      */
     @Nullable
     abstract Material getInvalidItemType();
 
     /**
-     * Create a valid item stack that this enchantment spell can target.
-     *
-     * <p>Prioritizes creating items from the spell's O2ItemTypeAllowList if available,
-     * otherwise creates a stack of the valid material type. This allows testing spells
-     * that have specific O2ItemType restrictions.</p>
+     * Create a valid item stack this spell can target — from the spell's O2ItemType allow list if it has one,
+     * otherwise of {@link #getValidItemType()}.
      *
      * @param itemEnchant the spell being tested
      * @param amount      the number of items in the stack
@@ -92,10 +69,8 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Create an invalid item stack that this enchantment spell cannot target.
-     *
-     * <p>If the spell has no invalid material types (accepts all items), returns a BARRIER item.
-     * Otherwise, returns a stack of the invalid material type specified by {@link #getInvalidItemType()}.</p>
+     * Create an invalid item stack this spell cannot target — of {@link #getInvalidItemType()}, or a BARRIER when the
+     * spell has no invalid material type.
      *
      * @return an invalid ItemStack that cannot be enchanted
      */
@@ -113,15 +88,8 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test projectile-based item enchantment.
-     *
-     * <p>For spells that use projectiles (noProjectile == false), verifies that:</p>
-     * <ul>
-     * <li>The spell targets items at its projectile endpoint</li>
-     * <li>The original item is removed from the world</li>
-     * <li>An enchanted item is dropped at the spell location</li>
-     * <li>The enchanted item has the correct enchantment type applied</li>
-     * </ul>
+     * Verify a projectile spell enchants a dropped item at its endpoint: the original is removed and a correctly
+     * enchanted item is dropped in its place.
      */
     @Test
     void doCheckEffectTest() {
@@ -149,15 +117,7 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test held-item enchantment from player off-hand.
-     *
-     * <p>For spells that use held-item mode (noProjectile == true), verifies that:</p>
-     * <ul>
-     * <li>Spell completes successfully when caster holds no item in off-hand</li>
-     * <li>Spell enchants a valid item held in the caster's off-hand</li>
-     * <li>The enchanted item is dropped at the spell location</li>
-     * <li>The enchanted item has the correct enchantment type applied</li>
-     * </ul>
+     * Verify a held-item spell does nothing when the off-hand is empty and enchants a valid off-hand item otherwise.
      */
     @Test
     void affectsHeldItemTest() {
@@ -188,14 +148,7 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test item stack splitting when enchanting stacks with multiple items.
-     *
-     * <p>Verifies that when enchanting a stack containing multiple items:</p>
-     * <ul>
-     * <li>Exactly one item is enchanted and dropped separately</li>
-     * <li>The remaining items are dropped as a separate stack</li>
-     * <li>The remainder stack has the correct reduced amount (original - 1)</li>
-     * </ul>
+     * Verify enchanting a stack of two leaves one enchanted item and a remainder stack of one.
      */
     @Test
     void enchantStackWithMultipleItemsTest() {
@@ -233,15 +186,8 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test magnitude calculation based on caster skill and spell strength.
-     *
-     * <p>Verifies the magnitude formula: magnitude = (int)((usesModifier / 10) * strength),
-     * clamped to the range [minMagnitude, maxMagnitude]. Tests with various experience levels:</p>
-     * <ul>
-     * <li>Low experience (4): magnitude within valid range</li>
-     * <li>Medium experience (80): magnitude calculation matches formula</li>
-     * <li>High experience (200): magnitude capped at maxMagnitude</li>
-     * </ul>
+     * Verify the enchantment magnitude follows {@code (usesModifier / 10) * strength} and stays within its min/max
+     * bounds across low, medium, and high skill.
      */
     @Test
     void magnitudeTest() {
@@ -266,14 +212,7 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test item type validation and filtering.
-     *
-     * <p>Verifies the spell's item enchantment validation:</p>
-     * <ul>
-     * <li>Valid item types are enchantable</li>
-     * <li>Wands cannot be enchanted (cannot stack enchantments)</li>
-     * <li>Invalid item types (based on allow lists) are rejected</li>
-     * </ul>
+     * Verify canBeEnchanted accepts a valid item but rejects wands and invalid item types.
      */
     @Test
     void canBeEnchantedTest() {
@@ -296,32 +235,21 @@ abstract class ItemEnchantTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test spell-specific enchantment argument generation.
-     *
-     * <p>Concrete subclasses must implement this test to verify that enchantment arguments
-     * are correctly generated and stored. Enchantment arguments are spell-specific data
-     * (e.g., book content for CELATUM, destination coordinates for PORTUS) that are
-     * associated with the enchanted item.</p>
+     * Subclasses verify the spell-specific enchantment arguments stored with the item (e.g. book content for CELATUM,
+     * destination coordinates for PORTUS).
      */
     @Test
     abstract void createEnchantmentArgsTest();
 
     /**
-     * Test spell-specific item alteration effects.
-     *
-     * <p>Concrete subclasses must implement this test to verify that the spell applies
-     * any custom visual or functional modifications to the enchanted item
-     * (e.g., clearing pages for CELATUM). Most spells do not alter items and can
-     * leave this method empty.</p>
+     * Subclasses verify any spell-specific alteration of the enchanted item (e.g. clearing pages for CELATUM); most
+     * spells alter nothing and can leave this empty.
      */
     @Test
     abstract void alterItemTest();
 
     /**
-     * Test revert functionality (not applicable for item enchantments).
-     *
-     * <p>Item enchantments do not have revert actions. Once an item is enchanted,
-     * the enchantment persists indefinitely unless explicitly removed.</p>
+     * No-op: item enchantments have no revert action.
      */
     @Override
     @Test

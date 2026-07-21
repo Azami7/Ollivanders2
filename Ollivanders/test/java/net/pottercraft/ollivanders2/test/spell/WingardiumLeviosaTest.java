@@ -18,12 +18,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for the {@link WINGARDIUM_LEVIOSA} spell, the Levitation Charm, which lets a sneaking caster lift a
+ * nearby dropped item and steer it along their gaze until they stop sneaking or the skill-scaled hold time runs
+ * out.
+ *
+ * @author Azami7
+ */
 public class WingardiumLeviosaTest extends O2SpellTestSuper {
     @Override @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.WINGARDIUM_LEVIOSA;
     }
 
+    /**
+     * Tests item acquisition and movement: the spell ends without levitating when no item is found, or when an
+     * item is found but the caster is not sneaking; when the caster is sneaking it disables the item's gravity and
+     * steers the item up or down to follow the caster's gaze.
+     */
     @Override @Test
     void doCheckEffectTest() {
         World testWorld = mockServer.addSimpleWorld("world");
@@ -71,6 +83,10 @@ public class WingardiumLeviosaTest extends O2SpellTestSuper {
         assertTrue(target.getVelocity().getY() < 0, "item should have downward velocity when caster looks down");
     }
 
+    /**
+     * Tests that the hold time scales with caster skill: zero ticks at experience 0 and five seconds at
+     * experience 50.
+     */
     @Test
     void moveTicksTest() {
         World testWorld = mockServer.addSimpleWorld("world");
@@ -85,6 +101,10 @@ public class WingardiumLeviosaTest extends O2SpellTestSuper {
         assertEquals(5 * Ollivanders2Common.ticksPerSecond, wingardiumLeviosa.calculateMoveTicks(), "unexpected moveTicks for skill level 50");
     }
 
+    /**
+     * Tests that levitation ends and the item's gravity is restored both when the caster stops sneaking and when
+     * the hold time (moveTicks) reaches zero.
+     */
     @Override @Test
     void revertTest() {
         World testWorld = mockServer.addSimpleWorld("world");

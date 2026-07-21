@@ -14,19 +14,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Creates a line of glowstone blocks that dissipate after a duration based on caster skill.
- *
- * <p><strong>Behavior:</strong></p>
- * <ul>
- * <li>Projectile travels forward, ignoring air blocks</li>
- * <li>Line creation begins after 2 ticks to avoid blocks too close to caster</li>
- * <li>Creates up to 5 glowstone blocks along projectile path</li>
- * <li>Blocks remain for a duration scaled by caster experience (60-300 seconds)</li>
- * <li>Blocks automatically revert to air when duration expires or spell is killed</li>
- * </ul>
+ * Creates a line of up to {@link #maxLineLength} glowstone blocks along the projectile's path that revert to air
+ * after a skill-scaled duration.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Lumos_Duo">https://harrypotter.fandom.com/wiki/Lumos_Duo</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lumos_Duo">Harry Potter Wiki - Lumos Duo</a>
  */
 public final class LUMOS_DUO extends O2Spell {
     /**
@@ -51,7 +43,7 @@ public final class LUMOS_DUO extends O2Spell {
 
     /**
      * How long the glowstone line will remain. Set by {@link #doInitSpell()} based on caster skill,
-     * clamped between {@link #minDuration} and {@link #maxDuration}.
+     * limited between {@link #minDuration} and {@link #maxDuration}.
      */
     private int spellDuration = minDuration;
 
@@ -98,11 +90,8 @@ public final class LUMOS_DUO extends O2Spell {
     }
 
     /**
-     * Calculates spell duration based on caster skill level.
-     *
-     * <p>Duration is calculated as: {@code usesModifier * 2 * ticksPerSecond}, clamped to
-     * the range [{@link #minDuration}, {@link #maxDuration}]. At spell mastery (usesModifier=100),
-     * duration is 200 seconds.</p>
+     * Set how long the glowstone line lasts from the caster's skill, limited to [{@link #minDuration},
+     * {@link #maxDuration}].
      */
     @Override
     void doInitSpell() {
@@ -114,15 +103,9 @@ public final class LUMOS_DUO extends O2Spell {
     }
 
     /**
-     * Updates spell state each game tick.
-     *
-     * <p><strong>Phases:</strong></p>
-     * <ol>
-     * <li><strong>Delay:</strong> For first 2 ticks, no action (avoids blocks too close to caster)</li>
-     * <li><strong>Line Creation:</strong> While projectile is moving and line length &lt; {@link #maxLineLength},
-     * place glowstone blocks at current location</li>
-     * <li><strong>Countdown:</strong> After projectile stops, count down until duration expires</li>
-     * </ol>
+     * Lay a glowstone block at the projectile's position each tick until the line reaches {@link #maxLineLength},
+     * then keep the line until the spell's duration expires. The first two ticks are skipped so blocks are not placed
+     * on top of the caster.
      */
     @Override
     protected void doCheckEffect() {
@@ -154,9 +137,7 @@ public final class LUMOS_DUO extends O2Spell {
     }
 
     /**
-     * Reverts all glowstone blocks created by this spell back to air.
-     *
-     * <p>Called when the spell is terminated, either by duration expiration or manual kill.</p>
+     * Revert all glowstone blocks created by this spell back to air.
      */
     @Override
     protected void revert() {

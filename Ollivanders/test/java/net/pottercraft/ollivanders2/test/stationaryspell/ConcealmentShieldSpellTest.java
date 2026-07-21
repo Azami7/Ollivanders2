@@ -21,48 +21,32 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract test suite for concealment shield spell implementations.
- *
- * <p>Provides common test cases for all concealment shield spell types. Tests verify core behaviors
- * including spell lifecycle (upkeep), entity targeting prevention, visibility toggling, area entry
- * restrictions, chat filtering, proximity alarms, and cleanup effects. Subclasses implement
- * spell-specific factory methods and proximity alarm verification.</p>
+ * Base test class for concealment shield spells, holding the tests common to that family: upkeep aging, targeting
+ * prevention, visibility toggling, entry restrictions, chat filtering, proximity alarms, and cleanup. Subclasses
+ * provide the spell factory and proximity-alarm assertion.
  */
 abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     /**
-     * Default spell radius for test instances (10 blocks).
-     * Used by createStationarySpell() implementations as the initial radius.
+     * Radius passed to the spell factory in these tests, in blocks.
      */
     int defaultRadius = 10;
 
     /**
-     * Default spell duration for test instances (1000 ticks).
-     * Used by createStationarySpell() implementations as the initial duration.
+     * Duration passed to the spell factory in these tests, in ticks.
      */
     int defaultDuration = 1000;
 
     /**
-     * Creates a concealment shield spell instance for testing.
+     * Build a spell instance to test at the default radius and duration.
      *
-     * <p>Subclasses implement this to create their specific spell type with default radius
-     * and duration values at the specified location.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location for the spell (not null)
-     * @return a new concealment shield spell instance of the subclass type
+     * @param caster   the player casting the spell
+     * @param location the center location for the spell
+     * @return a new concealment shield spell instance
      */
     abstract ConcealmentShieldSpell createStationarySpell(Player caster, Location location);
 
     /**
-     * Tests the spell lifecycle during upkeep (aging and death).
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Calling upkeep() decrements the spell duration by 1</li>
-     *   <li>The spell remains alive until duration reaches 0</li>
-     *   <li>The spell is killed when upkeep() is called at duration 1</li>
-     * </ul>
-     * </p>
+     * Upkeep decrements the duration by one tick and kills the spell when it reaches zero.
      */
     @Override @Test
     void upkeepTest() {
@@ -83,15 +67,8 @@ abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests entity targeting prevention for spells that block targeting.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Entities outside the spell area cannot target players inside (event cancelled)</li>
-     *   <li>Entities outside the spell area can target players outside (event not cancelled)</li>
-     *   <li>The test skips for spell types that allow unrestricted targeting (canTarget returns true)</li>
-     * </ul>
-     * </p>
+     * An outside entity's attempt to target a player inside the area is cancelled but targeting a player outside is
+     * allowed. Skipped for spells that permit targeting into the area.
      */
     @Test
     void doOnEntityTargetEventTest() {
@@ -129,17 +106,8 @@ abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests visibility toggling as players move across spell boundaries.
-     *
-     * <p>Verifies that concealment rules are properly applied and updated when players move relative
-     * to the spell area. Tests all four scenarios:
-     * <ul>
-     *   <li>Player outside can't see caster inside; caster inside can see player outside</li>
-     *   <li>Both inside: both can see each other</li>
-     *   <li>Caster exits: player inside can still see caster outside; caster outside can't see player inside</li>
-     *   <li>Both outside: both can see each other</li>
-     * </ul>
-     * </p>
+     * Visibility updates correctly as the players move across the boundary: an outsider cannot see a player concealed
+     * inside, while a player inside the area can see everyone, across all inside/outside combinations.
      */
     @Test
     void doOnPlayerMoveEventTest() {
@@ -188,26 +156,14 @@ abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests spell-specific visibility logic from the perspective of outside entities.
-     *
-     * <p>Subclasses implement this to verify spell-specific visibility rules, such as which types
-     * of entities (muggles, non-magical beings, etc.) can or cannot see concealed players inside
-     * the protected area.</p>
+     * Verify this spell's own visibility rule, e.g. which kinds of outside entity can see players inside the area.
      */
     @Test
     abstract void doOnEntityTargetEventTestVisibilityCheck();
 
     /**
-     * Tests proximity alarm functionality when entities approach the spell boundary.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Proximity detection correctly identifies locations inside and outside the proximity radius</li>
-     *   <li>When an entity moves into the proximity alarm range, appropriate alarm actions occur</li>
-     *   <li>For spells with proximity alarms enabled, checkProximityAlarm() is invoked</li>
-     *   <li>For spells without proximity alarms, no messages are sent to the caster</li>
-     * </ul>
-     * </p>
+     * Proximity detection distinguishes locations inside and outside the proximity radius, and moving into range fires
+     * the alarm (via {@link #checkProximityAlarm}) for spells that have one and stays silent for those that do not.
      */
     @Test
     void doOnPlayerMoveEventTestProximityCheck() {
@@ -248,28 +204,15 @@ abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     }
 
     /**
-     * Helper method for subclasses to verify spell-specific proximity alarm behavior.
+     * Assert this spell's proximity-alarm behavior; called only for spells that have an alarm.
      *
-     * <p>Called by doOnPlayerMoveEventTestProximityCheck() when a spell has proximity alarms enabled.
-     * Subclasses implement this to verify that appropriate alarm messages are sent or other
-     * alarm actions are triggered.</p>
-     *
-     * @param caster                   the player who cast the spell (inside the spell area)
-     * @param concealmentShieldSpell   the active concealment spell to check alarm behavior on
+     * @param caster                 the player who cast the spell, inside the area
+     * @param concealmentShieldSpell the active spell to check
      */
     abstract void checkProximityAlarm(PlayerMock caster, ConcealmentShieldSpell concealmentShieldSpell);
 
     /**
-     * Tests that chat from inside the spell area is blocked from reaching outside recipients.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>A player outside the spell is initially in the chat recipients list</li>
-     *   <li>When the caster inside sends chat, the outside player is removed from recipients</li>
-     *   <li>The outside player never receives the chat message</li>
-     *   <li>Conversation within the spell area is concealed from outsiders</li>
-     * </ul>
-     * </p>
+     * Chat from a player inside the area does not reach a recipient outside it.
      */
     @Test
     void doOnAsyncPlayerChatEventTest() {
@@ -301,16 +244,8 @@ abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests visibility initialization for newly joined players.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>When a player joins the server while a spell is active, they immediately have correct visibility</li>
-     *   <li>Players inside the spell area are correctly hidden from the newly joined player based on spell rules</li>
-     *   <li>The newly joined player can see the caster when appropriate (e.g., outside the spell area)</li>
-     *   <li>Visibility is properly initialized without requiring movement events</li>
-     * </ul>
-     * </p>
+     * A player joining while the spell is active immediately sees the correct visibility: a player concealed inside the
+     * area is hidden from them without any movement event.
      */
     @Test
     void doOnPlayerJoinEvent() {
@@ -329,16 +264,7 @@ abstract public class ConcealmentShieldSpellTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests cleanup of concealment effects when the spell expires.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Players inside the spell are initially hidden from outside players</li>
-     *   <li>When the spell expires after its duration elapses, all concealment effects are removed</li>
-     *   <li>Previously hidden players become visible again to all other players</li>
-     *   <li>The spell's visibility effects are properly reversed on cleanup</li>
-     * </ul>
-     * </p>
+     * When the spell expires, a player who was concealed inside the area becomes visible again.
      */
     @Test
     void doCleanUp() {

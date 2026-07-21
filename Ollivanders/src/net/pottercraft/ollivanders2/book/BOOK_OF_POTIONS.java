@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.wikia.com/wiki/Book_of_Potions">https://harrypotter.wikia.com/wiki/Book_of_Potions</a>
+ * @see <a href="https://harrypotter.wikia.com/wiki/Book_of_Potions">Book of Potions</a>
  */
 public class BOOK_OF_POTIONS extends O2Book {
     /**

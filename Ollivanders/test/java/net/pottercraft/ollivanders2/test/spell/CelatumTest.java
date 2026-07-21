@@ -22,46 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the CELATUM spell.
- *
- * <p>CELATUM is a concealment charm that enchants written books to hide their text content.
- * When a CELATUM-enchanted book is picked up, the enchanted items system reveals the hidden text.
- * The spell stores book content as enchantment arguments and replaces the original pages with blank
- * pages, preserving the author and title metadata.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.CELATUM for the spell implementation
- * @see ItemEnchantTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CELATUM}. Extends {@link ItemEnchantTest} for the shared
+ * enchantment tests. CELATUM blanks a written book's pages, stashing the original text in the enchantment args for
+ * {@link net.pottercraft.ollivanders2.spell.APARECIUM} to restore.
  */
 public class CelatumTest extends ItemEnchantTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.CELATUM
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.CELATUM;
     }
 
-    /**
-     * Get a valid item type for CELATUM testing.
-     *
-     * @return Material.WRITTEN_BOOK
-     */
     @Override
     @NotNull
     Material getValidItemType() {
         return Material.WRITTEN_BOOK;
     }
 
-    /**
-     * Get an invalid item type for CELATUM testing.
-     *
-     * <p>CELATUM only enchants written books, so other materials like STICK are invalid.</p>
-     *
-     * @return Material.STICK (invalid for this spell)
-     */
     @Override
     @Nullable
     Material getInvalidItemType() {
@@ -69,9 +46,7 @@ public class CelatumTest extends ItemEnchantTest {
     }
 
     /**
-     * Create an invalid O2ItemType for CELATUM testing.
-     *
-     * @return a Book item stack
+     * @return a plain {@link Material#BOOK} (not a WRITTEN_BOOK), which CELATUM cannot enchant
      */
     @Override
     @NotNull
@@ -80,9 +55,7 @@ public class CelatumTest extends ItemEnchantTest {
     }
 
     /**
-     * Test item stack splitting (not applicable for books).
-     *
-     * <p>Written books typically appear as single items, not stacks, so this test is skipped.</p>
+     * Overridden to a no-op: written books never stack, so there is no multi-item stack to enchant.
      */
     @Override
     @Test
@@ -91,11 +64,7 @@ public class CelatumTest extends ItemEnchantTest {
     }
 
     /**
-     * Test that enchantment arguments store the book's text content.
-     *
-     * <p>Verifies that CELATUM extracts and stores the book's pages as enchantment arguments,
-     * using the page delimiter to separate pages. The stored text is later revealed when
-     * the enchanted book is picked up.</p>
+     * Verify CELATUM stores the book's pages as enchantment args, separated by the page delimiter.
      */
     @Override
     @Test
@@ -119,11 +88,7 @@ public class CelatumTest extends ItemEnchantTest {
     }
 
     /**
-     * Test that enchanted books have their pages cleared.
-     *
-     * <p>Verifies that CELATUM removes all text from the book while preserving author and title
-     * metadata. The blank book is dropped as a replacement at the same location due to client
-     * caching issues with direct item alteration.</p>
+     * Verify CELATUM blanks the book's pages while preserving its author and title.
      */
     @Override
     @Test

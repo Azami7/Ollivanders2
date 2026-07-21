@@ -6,22 +6,10 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Test suite for the SPONGIFY spell (softening charm).
- *
- * <p>Tests verify that SPONGIFY correctly targets and transfigures eligible blocks while rejecting
- * unbreakable and protected materials. SPONGIFY transforms most block types into SPONGE with
- * a radius determined by player skill level.</p>
- *
- * <p>Test coverage includes:</p>
- * <ul>
- * <li>Valid target material: STONE (and other transfigurable block types)</li>
- * <li>Invalid target material: Unbreakable materials (bedrock, end portal blocks, etc.)</li>
- * <li>Blocked materials: WATER and hot blocks (lava, fire, etc.)</li>
- * <li>Effect radius scaling based on player skill</li>
- * <li>Spell duration based on skill level</li>
- * <li>Success and failure messaging</li>
- * <li>Temporary transfiguration with automatic reversion</li>
- * </ul>
+ * Test suite for the {@link net.pottercraft.ollivanders2.spell.SPONGIFY} spell (softening charm), which temporarily
+ * transfigures most breakable, non-water, non-hot blocks into SPONGE within a skill-scaled radius. Inherits the
+ * shared block transfiguration tests from {@link BlockTransfigurationTest}, supplying STONE as a representative
+ * valid target and an unbreakable material as the invalid target.
  *
  * @author Azami7
  * @see net.pottercraft.ollivanders2.spell.SPONGIFY
@@ -39,10 +27,7 @@ public class SpongifyTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns the valid target material for SPONGIFY tests.
-     *
-     * <p>SPONGIFY can transfigure most block types except water and hot blocks. STONE is used
-     * as a representative valid target material for testing.</p>
+     * Returns the valid target material for SPONGIFY tests: STONE, a representative block SPONGIFY can transfigure.
      *
      * @return STONE material type
      */
@@ -53,12 +38,10 @@ public class SpongifyTest extends BlockTransfigurationTest {
     }
 
     /**
-     * Returns an invalid target material for SPONGIFY tests.
+     * Returns an invalid target material for SPONGIFY tests: an unbreakable material, which is on SPONGIFY's
+     * blocked list.
      *
-     * <p>SPONGIFY cannot transfigure unbreakable materials such as bedrock and protected blocks.
-     * Unbreakable materials are on SPONGIFY's material blocked list.</p>
-     *
-     * @return First unbreakable material from the global list
+     * @return the first unbreakable material from the global list
      */
     @Override
     @NotNull

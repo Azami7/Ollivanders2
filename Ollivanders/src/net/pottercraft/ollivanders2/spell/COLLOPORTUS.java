@@ -19,19 +19,8 @@ import java.util.ArrayList;
  * Colloportus is a locking spell that locks doors, trapdoors, and chests so they cannot be opened or broken.
  * The spell is permanent and can only be removed by the Unlocking Spell, Alohomora.
  *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Locks doors, trapdoors, and chests at the target location</li>
- * <li>Prevents the target from being opened by any means</li>
- * <li>Prevents the target from being broken or destroyed</li>
- * <li>Permanent spell - duration and radius do not apply</li>
- * <li>Can only be removed with the Alohomora (unlocking) spell</li>
- * <li>Fixed radius (all locked objects are treated the same)</li>
- * </ul>
- *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">Harry Potter Wiki - Locking Spell</a>
  * @see net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS
  */
 public final class COLLOPORTUS extends StationarySpell {
@@ -54,15 +43,11 @@ public final class COLLOPORTUS extends StationarySpell {
     }
 
     /**
-     * Constructs a new COLLOPORTUS spell cast by a player.
+     * Constructor.
      *
-     * <p>Sets up the spell-specific parameters. Since COLLOPORTUS is a permanent locking spell,
-     * it has a fixed radius (no duration/radius scaling). The spell requires a projectile to hit
-     * a valid target (door, trapdoor, or chest) to succeed.</p>
-     *
-     * @param plugin    a callback to the MC plugin (not null)
-     * @param player    the player who cast this spell (not null)
-     * @param rightWand the wand correctness factor (not null)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

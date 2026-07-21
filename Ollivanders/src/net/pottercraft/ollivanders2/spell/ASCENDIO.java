@@ -23,14 +23,8 @@ import java.util.ArrayList;
  * @see <a href="https://harrypotter.fandom.com/wiki/Ascendio">Ascendio</a>
  */
 public final class ASCENDIO extends Knockback {
-    /**
-     * The min distance
-     */
     public static double minDistanceConfig = 0.5;
 
-    /**
-     * The max distance
-     */
     public static double maxDistanceConfig = 10;
 
     /**
@@ -76,10 +70,8 @@ public final class ASCENDIO extends Knockback {
     }
 
     /**
-     * Can this spell target this entity?
-     *
      * @param entity the entity to check
-     * @return true if it can target the entity, false otherwise
+     * @return true if the entity is the caster
      */
     boolean canTarget(Entity entity) {
         return entity.getUniqueId().equals(caster.getUniqueId());

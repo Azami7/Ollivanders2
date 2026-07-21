@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author lownes
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari">https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lacarnum_Inflamari">Harry Potter Wiki - Lacarnum Inflamari</a>
  */
 public final class LACARNUM_INFLAMARI extends O2Spell {
     /**

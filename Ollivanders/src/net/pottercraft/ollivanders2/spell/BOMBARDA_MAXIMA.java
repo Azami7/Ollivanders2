@@ -9,23 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * A more powerful variant of Bombarda that creates a larger explosion.
- *
- * <p>An advanced bombing spell with greater blast radius and block-breaking power.
- * Can break blocks with blast resistance up to 3.0 and hardness up to 2.0.
- * Capable of breaking doors.</p>
+ * A stronger {@link BOMBARDA}: a larger explosion that breaks tougher blocks, including doors.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Bombarda_Maxima">Bombarda Maxima</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Bombarda_Maxima">Harry Potter Wiki - Bombarda Maxima</a>
  */
 public final class BOMBARDA_MAXIMA extends BombardaBase {
     static final double minEffectRadiusConfig = 2;
     static final double maxEffectRadiusConfig = 6;
 
     /**
-     * Constructor for spell info generation. Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
-     * @param plugin the Ollivanders2 plugin instance
+     * @param plugin the Ollivanders2 plugin
      */
     public BOMBARDA_MAXIMA(Ollivanders2 plugin) {
         super(plugin);
@@ -43,11 +39,11 @@ public final class BOMBARDA_MAXIMA extends BombardaBase {
     }
 
     /**
-     * Constructor to cast the Bombarda Maxima spell.
+     * Constructor.
      *
-     * @param plugin    the Ollivanders2 plugin instance
-     * @param player    the player casting the spell
-     * @param rightWand the wand being used
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public BOMBARDA_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

@@ -31,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 public class ObliviateTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -49,23 +48,11 @@ public class ObliviateTest extends O2SpellTestSuper {
     }
 
     /**
-     * Cover the projectile and impact paths.
-     * <p>
-     * Asserts that:
-     * </p>
-     * <ul>
-     * <li>Hitting a non-player block kills the spell.</li>
-     * <li>At zero experience, hitting a target reduces a known spell or potion by exactly 1 level
-     *     (the {@code usesModifier < 1} branch in {@code forgetSomething}).</li>
-     * <li>At mastery, hitting a target reduces the targeted spell or potion below its starting
-     *     level (loose comparison because the per-iteration reduction is randomized).</li>
-     * <li>At twice mastery, both the targeted spell and potion are reduced below their starting
-     *     levels within {@code maxImpact} iterations.</li>
-     * </ul>
-     * <p>
-     * Each sub-test resets the target's spell/potion levels before casting so the assertions do
-     * not depend on what previous sub-tests left in the maps.
-     * </p>
+     * Cover the projectile and impact paths: a non-player block hit kills the spell; at zero experience a hit reduces
+     * a known spell or potion by exactly 1 (the {@code usesModifier < 1} branch); at mastery it reduces the target
+     * below its starting level (loose comparison, since the reduction is randomized); at twice mastery both a spell
+     * and a potion drop below their starting levels within {@code maxImpact} iterations. Each sub-test resets the
+     * target's levels first so assertions don't depend on prior sub-tests.
      */
     @Override
     @Test

@@ -7,27 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Enhanced movement speed potion effect that significantly increases the affected player's movement speed.
- *
- * <p>SPEED_SPEEDIER is an enhanced variant of the SPEED effect that applies Minecraft's SPEED potion
- * effect with increased potency (strength 2 instead of 1). This effect produces a much more pronounced
- * speed boost, allowing the player to move at significantly faster velocities than the base SPEED effect.
- * The enhanced movement speed improves traversal capabilities and combat mobility. The effect is detectable
- * by both mind-reading spells (Legilimens) and information spells (Informous) which report the target
- * "is moving very fast".</p>
+ * Applies Minecraft's SPEED potion effect at strength 2 — a stronger variant of {@link SPEED}. Detectable via Informous
+ * and Legilimens.
  *
  * @author Azami7
- * @see SPEED for the standard speed enhancement effect
- * @see PotionEffect for the potion effect application mechanism
+ * @see SPEED
+ * @see PotionEffect
  */
 public class SPEED_SPEEDIER extends PotionEffect {
     /**
-     * Constructor for creating an enhanced movement speed effect.
-     *
-     * <p>Creates an enhanced potion effect that significantly increases the target player's movement speed
-     * using Minecraft's SPEED potion effect type with strength 2 (double the potency of the standard SPEED
-     * effect). Sets detection text for both mind-reading spells (Legilimens) and information spells (Informous)
-     * to "is moving very fast".</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -47,13 +36,6 @@ public class SPEED_SPEEDIER extends PotionEffect {
         informousText = legilimensText = "is moving very fast";
     }
 
-    /**
-     * Perform cleanup when the enhanced speed effect is removed.
-     *
-     * <p>The default implementation does nothing, as SPEED_SPEEDIER is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is manually
-     * removed, the player's movement speed returns to normal.</p>
-     */
     @Override
     public void doRemove() {
     }

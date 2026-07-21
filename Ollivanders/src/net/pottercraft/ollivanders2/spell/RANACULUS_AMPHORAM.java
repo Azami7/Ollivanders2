@@ -77,7 +77,7 @@ public class RANACULUS_AMPHORAM extends LivingEntityToItemTransfiguration {
     /**
      * Calculate the per-tick success rate from the caster's skill, with a {@link #minSuccessRate} floor.
      * <p>
-     * If {@code usesModifier} is at or below {@link #minSuccessRate}, the success rate is clamped
+     * If {@code usesModifier} is at or below {@link #minSuccessRate}, the success rate is limited
      * to that floor; otherwise it equals {@code usesModifier} directly. Higher skill therefore
      * produces a proportionally higher per-tick chance to transfigure the tadpole while the spell
      * projectile is active.

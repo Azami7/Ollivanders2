@@ -24,17 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the VERDIMILLIOUS_DUO curse detection spell.
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.VERDIMILLIOUS_DUO}. Extends {@link SparksTest} for the
+ * shared sparks tests.
  *
- * <p>Provides comprehensive test coverage for the spell's curse detection and glow functionality:</p>
- * <ul>
- * <li><strong>Curse Detection:</strong> Verifies the spell detects cursed items and makes them glow</li>
- * <li><strong>Glow Duration:</strong> Confirms the glow effect lasts 60 seconds then turns off</li>
- * <li><strong>Skill-Based Detection:</strong> Tests that only cursed items within the caster's skill level are detected</li>
- * <li><strong>Non-Cursed Items:</strong> Validates the spell ignores regular and enchanted non-cursed items</li>
- * </ul>
- *
- * <p>Tests use Mockito spies to verify the spell's sound effect and proper spell termination.</p>
+ * @author Azami7
  */
 public class VerdimilliousDuoTest extends SparksTest {
     @Override
@@ -44,15 +37,8 @@ public class VerdimilliousDuoTest extends SparksTest {
     }
 
     /**
-     * Tests detection and glow of cursed items.
-     *
-     * <p>Verifies the spell's core functionality:</p>
-     * <ul>
-     * <li>Casts FLAGRANTE to create a cursed item</li>
-     * <li>Casts VERDIMILLIOUS_DUO to detect the cursed item</li>
-     * <li>Confirms the item starts glowing immediately</li>
-     * <li>Confirms the item stops glowing after the glow duration expires (60 seconds)</li>
-     * </ul>
+     * Verify the spell detects a FLAGRANTE-cursed item and makes it glow immediately, then the glow turns off after
+     * {@link VERDIMILLIOUS_DUO#getGlowTime()}.
      */
     @Test
     void cursedItemsTest() {
@@ -81,16 +67,8 @@ public class VerdimilliousDuoTest extends SparksTest {
     }
 
     /**
-     * Tests that the spell ignores curses above the caster's skill level.
-     *
-     * <p>Verifies skill-based curse detection:</p>
-     * <ul>
-     * <li>Casts GEMINO (higher-level curse) to create an undetectable cursed item</li>
-     * <li>Casts VERDIMILLIOUS_DUO with basic skill (20 uses)</li>
-     * <li>Confirms the spell does not detect the high-level curse and item does not glow</li>
-     * </ul>
-     *
-     * <p>This test ensures the spell only reveals curses appropriate to the player's level.</p>
+     * Verify a curse above the caster's skill level (a GEMINO curse cast at basic skill) is not detected, so the item
+     * does not glow.
      */
     @Test
     void undetectableCurseTest() {
@@ -116,16 +94,7 @@ public class VerdimilliousDuoTest extends SparksTest {
     }
 
     /**
-     * Tests that the spell ignores non-cursed items.
-     *
-     * <p>Verifies the spell only glows cursed items:</p>
-     * <ul>
-     * <li>Drops a regular item (compass) and an enchanted non-cursed item (broomstick)</li>
-     * <li>Casts VERDIMILLIOUS_DUO at the target location</li>
-     * <li>Confirms neither item glows after the spell completes</li>
-     * </ul>
-     *
-     * <p>This test ensures the spell accurately distinguishes cursed items from regular items.</p>
+     * Verify the spell leaves a regular item (compass) and an enchanted-but-not-cursed item (broomstick) un-glowing.
      */
     @Test
     void notCursedItemTest() {

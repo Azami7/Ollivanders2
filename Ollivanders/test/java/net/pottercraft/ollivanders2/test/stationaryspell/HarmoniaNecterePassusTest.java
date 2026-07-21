@@ -33,38 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the HARMONIA_NECTERE_PASSUS stationary spell.
- *
- * <p>Tests spell-specific behavior for the vanishing cabinet that creates paired portals
- * between two locations. Verifies cabinet structural integrity, player teleportation mechanics,
- * cooldown management, serialization, and deserialization validation.</p>
+ * Unit tests for {@link HARMONIA_NECTERE_PASSUS}.
  *
  * @author Azami7
  */
 public class HarmoniaNecterePassusTest {
-    /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
-     */
     static ServerMock mockServer;
 
-    /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
-     */
     static Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -72,18 +49,16 @@ public class HarmoniaNecterePassusTest {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's initial 20-tick delay so it is running
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**
-     * Creates a vanishing cabinet structure for testing.
+     * Build a well-formed vanishing cabinet at {@code fromLocation} whose sign names {@code toLocation} as its
+     * destination, for use as valid test setup.
      *
-     * <p>Builds a 3x3 cabinet with walls, a door, a sign, and a solid top. The sign at feet level
-     * contains the destination location information. Used by tests to set up valid cabinet structures.</p>
-     *
-     * @param fromLocation the location of the cabinet's feet (sign position)
-     * @param toLocation   the destination location (written on the sign)
+     * @param fromLocation the cabinet's foot (sign) location
+     * @param toLocation   the destination written on the sign
      */
     public static void createCabinet(Location fromLocation, Location toLocation) {
         Block feet = fromLocation.getBlock();
@@ -120,10 +95,8 @@ public class HarmoniaNecterePassusTest {
     }
 
     /**
-     * Tests cabinet structural integrity checking and spell destruction.
-     *
-     * <p>Verifies that spells are killed when cabinets don't exist, persist when cabinets are valid,
-     * and are killed when cabinet structure is damaged.</p>
+     * A cabinet spell is killed when its structure is missing or later damaged, and survives while the structure is
+     * valid.
      */
     @Test
     void upkeepCabinetIntegrityTest() {
@@ -163,10 +136,8 @@ public class HarmoniaNecterePassusTest {
     }
 
     /**
-     * Tests in-use cooldown tracking and expiration.
-     *
-     * <p>Verifies that players are tracked as using a cabinet after entering, remain tracked
-     * in the cooldown period after leaving, and are removed from tracking after cooldown expires.</p>
+     * A player is marked as using the cabinet on entry, stays marked through the cooldown after leaving, and is cleared
+     * once it expires.
      */
     @Test
     void upkeepInUseByTest() {
@@ -209,9 +180,7 @@ public class HarmoniaNecterePassusTest {
     }
 
     /**
-     * Tests finding the twin cabinet.
-     *
-     * <p>Verifies that getTwin() correctly locates the paired cabinet by its location.</p>
+     * getTwin returns the paired cabinet.
      */
     @Test
     void getTwinTest() {
@@ -240,11 +209,8 @@ public class HarmoniaNecterePassusTest {
     }
 
     /**
-     * Tests player teleportation between cabinets.
-     *
-     * <p>Verifies that players entering a cabinet are teleported to the twin, null destination
-     * locations don't cause teleportation, and cooldown prevents immediate re-teleportation
-     * when arriving at the twin cabinet.</p>
+     * A player entering a cabinet is teleported to the twin; a null destination is a no-op; and the cooldown stops an
+     * immediate teleport back from the twin.
      */
     @Test
     void doOnPlayerMoveEventTest () {
@@ -287,11 +253,8 @@ public class HarmoniaNecterePassusTest {
     }
 
     /**
-     * Tests serialization and deserialization of vanishing cabinet spell data.
-     *
-     * <p>Verifies that the twin cabinet location is correctly serialized to a map, and that
-     * deserializing valid data restores the twin location. Also verifies that deserializing
-     * with missing twin location data does not set the twin location.</p>
+     * The twin location serializes and round-trips back, and deserializing empty data neither restores it nor kills the
+     * spell.
      */
     @Test
     void serializeAndDeserializeSpellDataTest() {
@@ -322,11 +285,7 @@ public class HarmoniaNecterePassusTest {
     }
 
     /**
-     * Tests spell deserialization validation.
-     *
-     * <p>Verifies that a spell created via the deserialization constructor fails
-     * checkSpellDeserialization() because it lacks required data (player UUID, location,
-     * and twin cabinet location), while a properly initialized spell passes validation.</p>
+     * A bare spell from createStationarySpellByType fails the deserialization check; a fully constructed one passes.
      */
     @Test
     void checkSpellDeserializationTest() {
@@ -343,13 +302,6 @@ public class HarmoniaNecterePassusTest {
         assertTrue(spell.checkSpellDeserialization(), "Properly initialized spell failed deserialization check");
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

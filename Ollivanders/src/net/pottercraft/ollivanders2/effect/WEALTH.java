@@ -12,24 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Wealth effect that periodically grants the affected player magical currency.
- *
- * <p>WEALTH is a beneficial effect that periodically generates magical currency coins and adds them
- * to the target player's inventory. Every 120 game ticks (6 seconds), the effect generates a random
- * coin based on weighted probability influenced by the strength multiplier. The higher the strength,
- * the more likely the player receives high-value coins (Galleons) instead of low-value coins (Knuts).
- * The probability distribution is: strength-adjusted random % 100, with Galleons (>90%), Sickles
- * (>60%), and Knuts (default). The effect is detectable by both mind-reading spells (Legilimens)
- * and information spells (Informous) which report the target "feels fortunate".</p>
- *
- * <p>Wealth Configuration:</p>
- * <ul>
- * <li>Generation interval: every 120 game ticks (6 seconds)</li>
- * <li>Coin types: Galleon (high value), Sickle (medium value), Knut (low value)</li>
- * <li>Strength parameter: multiplies random value to affect coin probability</li>
- * <li>Probability calculation: (random % 100) * strength</li>
- * <li>Detection text: "feels fortunate"</li>
- * </ul>
+ * Grants the affected player a random magical coin (Galleon, Sickle, or Knut) every 10 seconds. A higher
+ * {@link #setStrength(int)} multiplier skews the odds toward more valuable coins. Detectable via Informous and
+ * Legilimens.
  *
  * @author Azami7
  */
@@ -40,12 +25,7 @@ public class WEALTH extends O2Effect {
     int strength = 1;
 
     /**
-     * Constructor for creating a wealth effect.
-     *
-     * <p>Creates a wealth effect that periodically generates magical coins for the target player.
-     * Initializes the strength multiplier to 1 (normal probability). Detection text is set for both
-     * mind-reading spells (Legilimens) and information spells (Informous). The target player reference
-     * is acquired at initialization time.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the wealth effect in game ticks
@@ -62,24 +42,18 @@ public class WEALTH extends O2Effect {
     }
 
     /**
-     * Age the wealth effect and generate coins periodically.
-     *
-     * <p>Called each game tick. This method ages the effect counter. Every 120 ticks (6 seconds),
-     * a random coin is generated based on weighted probability. The strength multiplier is applied to
-     * the random value to increase the chance of higher-value coins. Generated coins are immediately
-     * added to the target player's inventory.</p>
+     * Ages the effect and, once every 10 seconds, adds one strength-weighted coin to the target's inventory.
      */
     @Override
     public void checkEffect() {
-        // age the effect
         age(1);
 
-        // only take action once per 10 seconds, which is every 120 ticks
+        // only grant a coin once every 10 seconds
         if ((duration % (Ollivanders2Common.ticksPerSecond * 10)) == 0) {
             List<ItemStack> kit = new ArrayList<>();
 
             ItemStack money;
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) * strength;
+            int rand = Ollivanders2Common.random.nextInt(100) * strength;
 
             if (rand > 90)
                 money = O2ItemType.GALLEON.getItem(1);
@@ -94,24 +68,14 @@ public class WEALTH extends O2Effect {
     }
 
     /**
-     * Set the strength multiplier for coin probability generation.
+     * Set the strength multiplier that skews coin generation toward more valuable coins.
      *
-     * <p>The strength multiplier affects the weighted probability of coin generation. A strength of 1
-     * uses normal probability distribution. Higher values increase the likelihood of generating
-     * high-value coins (Galleons) over low-value coins (Knuts).</p>
-     *
-     * @param strength a positive integer multiplier where 1 is normal strength
+     * @param strength a positive multiplier where 1 is normal
      */
     public void setStrength(int strength) {
         this.strength = strength;
     }
 
-    /**
-     * Perform cleanup when the wealth effect is removed.
-     *
-     * <p>The default implementation does nothing, as WEALTH has no persistent state to clean up.
-     * When removed, the player keeps all coins that were generated while the effect was active.</p>
-     */
     @Override
     public void doRemove() {
     }

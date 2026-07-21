@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CAVE_INIMICUM}. Extends {@link StationarySpellTest} for
+ * the shared stationary-spell tests.
+ */
 public class CaveInimicumTest extends StationarySpellTest {
     @Override
     @NotNull

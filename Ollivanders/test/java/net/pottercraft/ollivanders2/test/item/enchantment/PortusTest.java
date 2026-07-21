@@ -22,37 +22,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link ItemEnchantmentType#PORTUS} portkey enchantment.
+ * Unit tests for {@link PORTUS}.
  * <p>
- * Verifies that the PORTUS enchantment correctly creates and activates portkeys that teleport
- * players to predetermined destinations. Portkeys are magical transportation devices that can
- * transport multiple players within a configurable radius.
+ * All scenarios run in a single test method so they execute sequentially, avoiding race conditions on the shared
+ * MockBukkit server. Each scenario uses distinct coordinates to keep from interfering with the others.
  * </p>
- * <p>
- * All test scenarios are consolidated into a single test method to ensure sequential execution
- * and avoid race conditions from parallel test execution with the shared MockBukkit server.
- * </p>
- * <p>
- * Test coverage includes:
- * <ul>
- * <li>Non-player pickup blocking: verifies only players can activate portkeys</li>
- * <li>Player teleportation: verifies players are teleported to the destination</li>
- * <li>Round-trip behavior: verifies the destination is updated to the pickup location after teleportation</li>
- * <li>Stationary spell blocking: verifies NULLUM_EVANESCUNT and NULLUM_APPAREBIT prevent teleportation</li>
- * <li>Proximity check: verifies portkeys don't activate if player is within 3 blocks of destination</li>
- * <li>Radius teleportation: verifies nearby players are also teleported</li>
- * </ul>
- * </p>
- *
- * @see ItemEnchantmentType#PORTUS the portkey enchantment being tested
  */
 public class PortusTest extends EnchantmentTestSuper {
     /**
-     * Configure this test instance for PORTUS enchantment testing.
-     * <p>
-     * Sets the enchantment type to PORTUS, uses FLOWER_POT material for creating test items,
-     * and sets default args to teleport to coordinates (100, 4, 100) in the test world.
-     * </p>
+     * Configure the test to use the PORTUS enchantment on a flower pot, with a default destination of (100, 4, 100)
+     * in the test world.
      */
     @Override @BeforeEach
     void setUp() {
@@ -62,24 +41,9 @@ public class PortusTest extends EnchantmentTestSuper {
     }
 
     /**
-     * Comprehensive test for all PORTUS portkey enchantment behaviors.
-     * <p>
-     * This method consolidates all portkey test scenarios into a single sequential test to avoid
-     * race conditions from parallel test execution. Each scenario uses different coordinates to
-     * prevent interference between tests.
-     * </p>
-     * <p>
-     * Scenarios tested:
-     * <ol>
-     * <li>Non-player pickup blocking: skeleton cannot pick up portkey</li>
-     * <li>Player teleportation: player is teleported to destination when picking up portkey</li>
-     * <li>Round-trip behavior: portkey destination updates to pickup location after teleportation</li>
-     * <li>NULLUM_EVANESCUNT blocking: stationary spell prevents teleportation FROM location</li>
-     * <li>NULLUM_APPAREBIT blocking: stationary spell prevents teleportation TO destination</li>
-     * <li>Proximity check: portkey doesn't activate within 3 blocks of destination</li>
-     * <li>Radius teleportation: nearby players are also teleported</li>
-     * </ol>
-     * </p>
+     * Exercise every portkey activation path: non-player pickup is blocked; a player is teleported to the destination
+     * and the portkey then points back to the origin; NULLUM_EVANESCUNT (origin) and NULLUM_APPAREBIT (destination)
+     * block teleport; a destination within 3 blocks is ignored; and other players within the radius travel too.
      */
     @Override @Test
     void doEntityPickupItemTest() {
@@ -211,19 +175,13 @@ public class PortusTest extends EnchantmentTestSuper {
     }
 
     /**
-     * Portus has no action for PlayerDropItemEvent.
-     * <p>
-     * PORTUS portkeys only activate when picked up by a player, not when dropped.
-     * </p>
+     * PORTUS has no drop behavior; a portkey only activates when a player picks it up.
      */
     @Override @Test
     void doItemDropTest() {}
 
     /**
-     * Portus has no action for PlayerItemHeldEvent.
-     * <p>
-     * PORTUS portkeys only activate when picked up from the world, not when held or switched to.
-     * </p>
+     * PORTUS has no slot-switch behavior; a portkey only activates when a player picks it up.
      */
     @Override @Test
     void doItemHeldTest() {}

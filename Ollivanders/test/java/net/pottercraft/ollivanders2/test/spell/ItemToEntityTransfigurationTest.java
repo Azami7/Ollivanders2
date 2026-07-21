@@ -28,20 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract test suite for {@link ItemToEntityTransfiguration} spells.
- *
- * <p>Tests item-to-entity transfiguration behavior: material type validation, enchanted item handling,
- * transfiguration map allowlisting, and entity death event handling. Subclasses provide the valid and
- * invalid material types for the specific spell being tested.</p>
+ * Base test class for {@link ItemToEntityTransfiguration} spells, covering material validation, transfiguration-map
+ * allowlisting, and termination when the spawned entity dies. Subclasses supply the valid and invalid materials.
  *
  * @see ItemToEntityTransfiguration
  * @see EntityTransfigurationTest
  */
 abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurationTest {
     /**
-     * Returns {@link EntityType#ITEM} since all item-to-entity spells target dropped items.
-     *
-     * @return ITEM entity type
+     * @return the ITEM entity type, since these spells only target dropped items
      */
     @Override
     @NotNull
@@ -50,9 +45,7 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
     }
 
     /**
-     * Returns a non-item entity type that should not be targetable.
-     *
-     * @return ACACIA_BOAT entity type
+     * @return a non-item entity type, which these spells cannot target
      */
     @Override
     @Nullable
@@ -61,9 +54,7 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
     }
 
     /**
-     * Returns null since items cannot already be the target entity type.
-     *
-     * @return null
+     * @return null, since an item can never already be the target entity type
      */
     @Override
     @Nullable
@@ -72,9 +63,7 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
     }
 
     /**
-     * Returns true since these spells only target items
-     *
-     * @return true
+     * @return true, since these spells target items
      */
     @Override
     boolean transfiguresItems() {
@@ -82,7 +71,7 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
     }
 
     /**
-     * Test that a valid item is transfigured into the expected entity type.
+     * Verify a valid item is transfigured into the expected entity type.
      */
     @Override
     @Test
@@ -200,7 +189,7 @@ abstract public class ItemToEntityTransfigurationTest extends EntityTransfigurat
 
             if (transfigured instanceof LivingEntity) {
                 DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                        .withDamageLocation(transfigured.getLocation())  // location of the fire block
+                        .withDamageLocation(transfigured.getLocation())
                         .build();
 
                 EntityDeathEvent event = new EntityDeathEvent((LivingEntity) transfigured, damageSource, new ArrayList<>());

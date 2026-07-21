@@ -20,9 +20,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The Revealing Charm reveals text that has been magically concealed by {@link CELATUM}.
  *
- * <p>When the spell projectile passes near a dropped item enchanted with {@link ItemEnchantmentType#CELATUM},
- * the hidden book text is restored from the enchantment args and a new book with the revealed pages is
- * dropped in its place.</p>
+ * <p>While in flight, the projectile reveals the first nearby book enchanted with
+ * {@link ItemEnchantmentType#CELATUM}: the concealed item is removed and a fresh written book carrying the
+ * restored pages is dropped at the spell's location.</p>
  *
  * @author Azami7
  * @see CELATUM
@@ -65,10 +65,9 @@ public final class APARECIUM extends O2Spell {
     }
 
     /**
-     * Searches for nearby {@link ItemEnchantmentType#CELATUM} enchanted items and reveals the hidden text.
-     *
-     * <p>The hidden text is retrieved from the enchantment args before the enchantment is removed. A new book
-     * with the restored pages is dropped and the original concealed item is removed from the world.</p>
+     * Reveals the first nearby book concealed by {@link ItemEnchantmentType#CELATUM}: the concealed item is removed
+     * and a fresh written book with the restored pages is dropped at the spell's location. The spell is killed on the
+     * first block hit or once a book has been revealed.
      */
     @Override
     protected void doCheckEffect() {
@@ -81,21 +80,18 @@ public final class APARECIUM extends O2Spell {
         for (Item item : items) {
             if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)) {
                 if (Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack()) == ItemEnchantmentType.CELATUM) {
-                    // create a new book with the hidden text
                     ItemStack newBook = revealText(item.getItemStack());
 
                     if (newBook == null) {
                         common.printDebugMessage("APARECIUM: failed to reveal text", null, null, false);
                         sendFailureMessage();
+
+                        kill();
                         return;
                     }
 
-                    // drop the new book
                     World world = item.getWorld();
                     world.dropItem(location, newBook);
-
-                    // remove the old book
-                    item.remove();
 
                     // remove the Celatum enchantment from the book
                     ItemStack disenchantedItemStack = Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
@@ -104,7 +100,8 @@ public final class APARECIUM extends O2Spell {
                         common.printDebugMessage("APARECIUM.doCheckEffect: item still enchanted after removeEnchantment", null, null, true);
                     }
 
-                    // kill the spell
+                    item.remove();
+
                     kill();
                     return;
                 }
@@ -113,14 +110,12 @@ public final class APARECIUM extends O2Spell {
     }
 
     /**
-     * Rebuilds the book pages from the enchantment args stored by {@link CELATUM}.
+     * Builds an un-enchanted copy of a concealed book with its original pages restored.
      *
-     * <p>Reads the hidden text from the item's enchantment args, splits it by the page delimiter, and
-     * creates a new written book with the restored pages. The enchantment must still be present on the
-     * item when this method is called.</p>
-     *
-     * @param bookItem the concealed book with the celatum enchantment still applied
-     * @return a new written book with revealed pages, or null if the item is invalid or has no hidden text
+     * @param bookItem a written book with the {@link ItemEnchantmentType#CELATUM} enchantment still applied; the
+     *                 concealed text is read from its enchantment args
+     * @return a new written book with the restored pages, or null if {@code bookItem} is not a written book or has no
+     *         concealed text
      */
     @Nullable
     private ItemStack revealText(ItemStack bookItem) {

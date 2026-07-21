@@ -14,14 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Abstract base class for colour change spells that recolor sheep or colorable blocks.
- *
- * <p>When the projectile encounters a living entity, the spell checks for sheep and recolors the first
- * one found. If no entities are nearby and the projectile hits a colorable block, the block's color is
- * changed instead. Non-colorable targets produce a failure message.</p>
- *
- * <p>Subclasses set {@link #color} to determine the target color. See {@link O2Color#isColorable(Material)}
- * for the list of supported block types.</p>
+ * Base class for color-change spells that recolor a nearby sheep or, failing that, a colorable target block (see
+ * {@link O2Color#isColorable(Material)} for which blocks qualify).
  *
  * @author Azami7
  * @see O2Color#changeColor(Material, O2Color)
@@ -43,8 +37,6 @@ public abstract class ChangeColorable extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using

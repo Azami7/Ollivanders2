@@ -18,62 +18,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Opens a door, trapdoor, or gate for a duration that scales with the caster's skill.
- * <p>
- * Dissendium targets any {@link Openable} block — vanilla doors, trapdoors, and fence gates —
- * and holds it open for {@link #openTime} ticks before automatically closing it. The duration
- * is computed from the caster's {@code usesModifier} in {@link #doInitSpell()} and clamped to
- * the {@link #minOpenTime}/{@link #maxOpenTime} range.
- * </p>
- * <p>
- * If the target block is locked by a {@link COLLOPORTUS} stationary spell, Dissendium fails
- * silently and is killed without opening the block. If the block is broken or replaced during
- * the open window, {@link #revert()} bails out defensively rather than throwing.
- * </p>
+ * The Opening Charm: opens a targeted door, trapdoor, or fence gate for a skill-scaled duration, then closes it again.
+ *
+ * <p>A door locked by a {@link COLLOPORTUS} stationary spell cannot be opened — the cast fails silently.</p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/One-Eyed_Witch_Spell">Harry Potter Wiki - One-Eyed Witch Spell</a>
  */
 public final class DISSENDIUM extends O2Spell {
     /**
-     * Maximum number of ticks the target block stays open. Caps the duration computed from
-     * {@code usesModifier} in {@link #doInitSpell()}. Currently 60 seconds.
+     * Maximum ticks the target block stays open; caps the skill-derived duration set in {@link #doInitSpell()}.
      */
     public final static int maxOpenTime = Ollivanders2Common.ticksPerSecond * 60;
 
     /**
-     * Minimum number of ticks the target block stays open. Floors the duration computed from
-     * {@code usesModifier} in {@link #doInitSpell()}. Currently 2 seconds.
+     * Minimum ticks the target block stays open; floors the skill-derived duration set in {@link #doInitSpell()}.
      */
     public final static int minOpenTime = Ollivanders2Common.ticksPerSecond * 2;
 
     /**
-     * Remaining ticks the door stays open. Computed in {@link #doInitSpell()}, then decremented
-     * each tick once {@link #doorOpened} is set. When this reaches zero, the spell self-kills.
+     * Remaining ticks the door stays open, counted down each tick once opened; the spell self-kills at zero.
      */
     private int openTime;
 
     /**
-     * True once {@link #openDoor()} has successfully flipped the target block to open. Used by
-     * {@link #doCheckEffect()} to switch from "look for a target" mode to "count down then close"
-     * mode, and by {@link #revert()} to know whether there's anything to undo.
+     * True once the target block has been flipped open; separates the "find a target" and "count down then close"
+     * phases and tells {@link #revert()} whether there is anything to undo.
      */
     private boolean doorOpened;
 
     /**
-     * The target block this spell opened. Captured in {@link #openDoor()} so {@link #revert()}
-     * can re-close the same block when the spell is killed, even if the projectile's
-     * {@code location} has since drifted.
+     * The block this spell opened, captured so {@link #revert()} re-closes the same block even if the projectile's
+     * location has since moved.
      */
     private Block doorBlock;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
-     * <p>
-     * Populates {@link #flavorText} with the canon "Opening Charm" excerpt and sets the
-     * descriptive {@link #text}. Does not configure cast-time state such as the
-     * {@code materialAllowList} or WorldGuard flags — the casting constructor handles that.
-     * </p>
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -92,12 +73,8 @@ public final class DISSENDIUM extends O2Spell {
     }
 
     /**
-     * Calculate how long the door will stay open based on the caster's skill.
-     * <p>
-     * {@link #openTime} is set to {@code (usesModifier / 3)} seconds (converted to ticks),
-     * then clamped to the {@link #minOpenTime}/{@link #maxOpenTime} range. Higher skill
-     * therefore produces a longer open duration, up to the configured ceiling.
-     * </p>
+     * Set how long the door stays open from the caster's skill, limited to [{@link #minOpenTime},
+     * {@link #maxOpenTime}].
      */
     @Override
     void doInitSpell() {
@@ -110,14 +87,7 @@ public final class DISSENDIUM extends O2Spell {
     }
 
     /**
-     * Constructor for casting Dissendium.
-     * <p>
-     * Restricts the spell's {@code materialAllowList} to door, trapdoor, and gate materials
-     * (via {@link Ollivanders2Common#getDoors()}) so the projectile is killed by the parent
-     * spell flow when it hits anything else. Adds the {@link Flags#USE} WorldGuard flag if
-     * WorldGuard is enabled, then invokes {@link #initSpell()} which triggers
-     * {@link #doInitSpell()} to compute the open duration.
-     * </p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -140,14 +110,8 @@ public final class DISSENDIUM extends O2Spell {
     }
 
     /**
-     * Tick handler: advance the projectile, open the target on first hit, and close it once the
-     * configured duration has elapsed.
-     * <p>
-     * If the projectile hasn't hit a block yet, returns. Once {@link #doorOpened} is set, decrements
-     * {@link #openTime} each tick and calls {@link #kill()} when the
-     * counter expires. On the first hit, validates that the target is {@link Openable}, kills
-     * the spell if not, otherwise delegates to {@link #openDoor()}.
-     * </p>
+     * On the first block hit, open the target if it is a closed {@link Openable} (otherwise end the spell); on
+     * subsequent ticks, count down the open timer and end the spell when it expires.
      */
     @Override
     protected void doCheckEffect() {
@@ -189,14 +153,8 @@ public final class DISSENDIUM extends O2Spell {
     }
 
     /**
-     * Open the door, trapdoor, or gate at the target block.
-     * <p>
-     * Fails (and kills the spell) if the target is null, locked by an active
-     * {@link COLLOPORTUS} stationary spell at the same location, or already open. On success,
-     * stores the block in {@link #doorBlock}, sets {@link Openable#setOpen(boolean) open=true}
-     * on its block data, and flips {@link #doorOpened} so {@link #doCheckEffect()} starts counting
-     * down toward auto-close.
-     * </p>
+     * Open the target door, trapdoor, or gate and mark it opened. Fails and kills the spell if the target is missing
+     * or locked by an active {@link COLLOPORTUS} stationary spell at its location.
      */
     private void openDoor() {
         Block target = getTargetBlock();
@@ -229,13 +187,8 @@ public final class DISSENDIUM extends O2Spell {
     }
 
     /**
-     * Close the door, trapdoor, or gate previously opened by this spell.
-     * <p>
-     * No-op if the spell never successfully opened a target. Defensively re-checks that the
-     * stored {@link #doorBlock} is still {@link Openable} before casting — a player or other
-     * spell may have replaced or destroyed the block during the open window. If the block is
-     * no longer openable, kills the spell and returns without throwing.
-     * </p>
+     * Close the door this spell opened. No-op if it never opened one. Re-checks that {@link #doorBlock} is still
+     * {@link Openable} first, since another player or spell may have replaced the block during the open window.
      */
     @Override
     protected void revert() {

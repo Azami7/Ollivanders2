@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.test.spell;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import net.pottercraft.ollivanders2.spell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.spell.DISSENDIUM;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -35,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 public class DissendiumTest extends O2SpellTestSuper {
-    /** {@inheritDoc} */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -54,22 +52,12 @@ public class DissendiumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Cover the projectile-target validation paths.
+     * Cover the target-validation paths: a non-Openable target (chest) is rejected; each Openable family (door, fence
+     * gate, trapdoor) opens; and an already-open target kills the spell without reopening.
      * <p>
-     * Asserts that:
-     * </p>
-     * <ul>
-     * <li>A non-Openable target (CHEST) is rejected by the materialAllowList — spell killed,
-     *     {@code doorOpened} stays false.</li>
-     * <li>Each Openable family — door, fence gate, trapdoor — opens correctly and the target
-     *     block reports {@code isOpen() == true} afterwards.</li>
-     * <li>Targeting an already-open Openable kills the spell without flipping
-     *     {@code doorOpened} and leaves the block open.</li>
-     * </ul>
-     * <p>
-     * The {@code performTicks(1)} after each {@link DISSENDIUM#kill()} works around a
-     * MockBukkit timing issue where killed spells linger one tick before pruning; without
-     * the gap the next sub-test's casts can race against stale state. Do not remove.
+     * The {@code performTicks(1)} after each {@link DISSENDIUM#kill()} works around a MockBukkit timing issue where
+     * killed spells linger one tick before pruning; without the gap the next sub-test's casts can race against stale
+     * state. Do not remove.
      * </p>
      */
     @Override
@@ -140,11 +128,8 @@ public class DissendiumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verify the {@code openTime} clamping in {@link DISSENDIUM}.
-     * <p>
-     * At zero experience the computed open time should clamp up to {@link DISSENDIUM#minOpenTime};
-     * at twice mastery it should clamp down to {@link DISSENDIUM#maxOpenTime}.
-     * </p>
+     * Verify the open time limits to {@link DISSENDIUM#minOpenTime} at zero experience and to
+     * {@link DISSENDIUM#maxOpenTime} at twice mastery.
      */
     @Test
     void openTimeTest() {
@@ -161,12 +146,7 @@ public class DissendiumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verify that DISSENDIUM cannot open a door locked by an active COLLOPORTUS stationary spell.
-     * <p>
-     * Casts COLLOPORTUS at the target door first, confirms the stationary spell is registered,
-     * then casts DISSENDIUM at the same location and asserts the spell is killed without
-     * opening the door (the COLLOPORTUS check in {@link DISSENDIUM}).
-     * </p>
+     * Verify DISSENDIUM is killed without opening a door that is locked by an active COLLOPORTUS stationary spell.
      */
     @Test
     void colloportusTest() {
@@ -188,20 +168,9 @@ public class DissendiumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verify revert semantics when DISSENDIUM is killed.
-     * <p>
-     * Covers three scenarios in sequence:
-     * </p>
-     * <ul>
-     * <li><b>Manual kill:</b> Cast on a closed trapdoor, confirm it opens, kill the spell,
-     *     and verify {@link DISSENDIUM} closes the trapdoor again.</li>
-     * <li><b>Auto-kill on duration expiry:</b> Cast at zero experience (so the open window
-     *     is exactly {@link DISSENDIUM#minOpenTime}); verify the trapdoor stays open until
-     *     just before the timer elapses, then auto-closes when the spell self-kills.</li>
-     * <li><b>Block replaced mid-window:</b> Open a trapdoor, swap the block to CHEST under
-     *     the spell, then kill — {@link DISSENDIUM}'s defensive {@code instanceof
-     *     Openable} check should bail out without throwing.</li>
-     * </ul>
+     * Verify revert closes the trapdoor on manual kill and on duration expiry, and that swapping the opened block to
+     * a non-Openable (chest) mid-window makes revert bail out via its defensive {@code instanceof Openable} check
+     * rather than throw.
      */
     @Override
     @Test

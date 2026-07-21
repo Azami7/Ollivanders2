@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class SKURGE extends O2Spell {
     /**
      * The radius, in blocks, within which slime blocks are cleared. Set from the caster's experience in
-     * {@link #doInitSpell()} and clamped to the range 1 to {@link #maxRadius}.
+     * {@link #doInitSpell()} and limited to the range 1 to {@link #maxRadius}.
      */
     int radius = 1;
 
@@ -54,8 +54,7 @@ public class SKURGE extends O2Spell {
     }
 
     /**
-     * Casting constructor. Sets the spell type and branch, registers the WorldGuard BUILD flag so the spell
-     * is blocked in regions where the caster cannot build, and initializes the projectile.
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -74,12 +73,7 @@ public class SKURGE extends O2Spell {
     }
 
     /**
-     * Set the radius of effect from the caster's experience.
-     * <p>
-     * The radius grows by one block for every 10 points of {@code usesModifier}, then is clamped to the
-     * range 1 to {@link #maxRadius} so that inexperienced casters still clear at least the impact block and
-     * experienced casters do not clear an unbounded area.
-     * </p>
+     * Set the effect radius from the caster's experience, limited to the range 1 to {@link #maxRadius}.
      */
     @Override
     void doInitSpell() {
@@ -92,12 +86,8 @@ public class SKURGE extends O2Spell {
     }
 
     /**
-     * Clear slime blocks once the projectile has hit a block.
-     * <p>
-     * Waits until the projectile strikes a block, then turns every slime block within {@link #radius} of the
-     * impact point to air and ends the spell. While the projectile is still in flight this does nothing,
-     * allowing it to continue traveling.
-     * </p>
+     * Clear every slime block within {@link #radius} of the impact point once the projectile has hit a block, then
+     * end the spell.
      */
     @Override
     protected void doCheckEffect() {
@@ -113,7 +103,7 @@ public class SKURGE extends O2Spell {
 
     /**
      * Get the radius, in blocks, this cast clears slime blocks within. Set by {@link #doInitSpell()} from the
-     * caster's experience and clamped to the range 1 to {@link #maxRadius}.
+     * caster's experience and limited to the range 1 to {@link #maxRadius}.
      *
      * @return the affected radius
      */

@@ -10,25 +10,17 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Stunning Spell that stuns targets with blindness and slowness.
+ * The Stunning Spell: applies Blindness and Slowness to the target for a skill-scaled duration, with a strength that
+ * rises in three tiers with the caster's skill.
  *
- * <p>Stupefy is a projectile charm that applies Blindness and Slowness effects to targets,
- * incapacitating them for a duration based on the caster's spell level. Duration ranges from
- * 5 to 180 seconds. The amplifier (effect strength) scales in three tiers with skill level:
- * Blindness I / Slowness I (0-spellMasteryLevel/2), Blindness II / Slowness II
- * (spellMasteryLevel/2 to spellMasteryLevel), and Blindness III / Slowness III
- * (spellMasteryLevel+).</p>
- *
- * @see <a href="https://harrypotter.fandom.com/wiki/Stunning_Spell">Stunning Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Stunning_Spell">Harry Potter Wiki - Stunning Spell</a>
  */
 public final class STUPEFY extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 5;
     private static final int maxDurationInSecondsConfig = 180;
 
     /**
-     * Default constructor for use in generating spell text.
-     *
-     * <p>Do not use this constructor to cast the spell. Use the three-parameter constructor instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -47,11 +39,7 @@ public final class STUPEFY extends AddPotionEffect {
     }
 
     /**
-     * Constructor for casting the spell.
-     *
-     * <p>Fires a projectile that applies Blindness and Slowness effects to targets.
-     * Duration ranges from 5 to 180 seconds based on caster skill level. The amplifier
-     * scales in three tiers with skill progression.</p>
+     * Constructor.
      *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
@@ -72,15 +60,7 @@ public final class STUPEFY extends AddPotionEffect {
     }
 
     /**
-     * Calculate the potion effect amplifier based on caster skill level.
-     *
-     * <p>Stupefy scales the Blindness and Slowness effects in three tiers:</p>
-     *
-     * <ul>
-     * <li>Amplifier 0 (Blindness I / Slowness I): usesModifier &lt; spellMasteryLevel / 2</li>
-     * <li>Amplifier 1 (Blindness II / Slowness II): usesModifier &lt; spellMasteryLevel</li>
-     * <li>Amplifier 2 (Blindness III / Slowness III): usesModifier &gt;= spellMasteryLevel</li>
-     * </ul>
+     * Set the effect amplifier in three skill tiers: 0 below half of spell mastery, 1 below mastery, 2 at or above.
      */
     @Override
     void calculateAmplifier() {

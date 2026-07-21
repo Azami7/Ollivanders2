@@ -15,16 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Box-Blasting Charm, which blasts open a container and scatters some of its contents.
- * <p>
- * Cistem Aperio is cast as a projectile. When it strikes a container block (chest, barrel, hopper, shulker box,
- * etc.), each item in the container has an independent chance to be ejected, scaling up to 99% as the caster gains
- * experience with the spell. Ejected items are dropped into the world at the container's location.
- * </p>
- * <p>
- * The spell fails with a "shakes but nothing happens" message if the target container is empty or if no items
- * happen to be ejected, and does nothing at all if the target block is not a container.
- * </p>
+ * The Box-Blasting Charm: a projectile that blasts open a struck container (chest, barrel, hopper, shulker box, etc.)
+ * and scatters some of its contents into the world, ejecting more of them as the caster's skill grows.
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Box_Blasting_Charm">Harry Potter Wiki - Box-Blasting Charm</a>
@@ -74,14 +66,10 @@ public class CISTEM_APERIO extends O2Spell {
     }
 
     /**
-     * Blast open the struck container, ejecting some of its contents.
-     * <p>
-     * Runs only once the projectile has hit a block, after which the spell is killed. If the struck block is not a
-     * {@link Container} the spell does nothing further. Otherwise each item in the container is independently rolled
-     * against a chance derived from the caster's {@code usesModifier} (up to 99%); a selected item is cleared from
-     * its slot and dropped at the container. If the container is empty, or no item is ejected, the caster is sent
-     * the failure message.
-     * </p>
+     * On the tick the projectile hits a block, blast open the struck container: each item gets an independent,
+     * skill-scaled chance to be ejected and dropped into the world, and the spell is killed. Sends the caster the
+     * {@link #containerShakesMessage} failure message when the container is empty or nothing is ejected, and does
+     * nothing when the struck block is not a {@link Container}.
      */
     @Override
     protected void doCheckEffect() {

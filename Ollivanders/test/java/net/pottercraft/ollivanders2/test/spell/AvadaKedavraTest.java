@@ -13,9 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the AVADA_KEDAVRA spell.
- *
- * <p>Covers damage scaling by spell level and entity death mechanics.</p>
+ * Unit tests for {@link AVADA_KEDAVRA}.
  */
 public class AvadaKedavraTest extends O2SpellTestSuper {
     @Override
@@ -25,14 +23,7 @@ public class AvadaKedavraTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests damage scaling and target death mechanics.
-     *
-     * <p>Verifies that:</p>
-     *
-     * <ul>
-     * <li>With spell level 1, damage dealt equals caster's modifier (1 health point)</li>
-     * <li>With default spell level, damage is high enough to kill the target</li>
-     * </ul>
+     * Verify damage equals the caster's modifier at skill level 1, and a default-level cast kills the target.
      */
     @Override
     @Test
@@ -55,16 +46,14 @@ public class AvadaKedavraTest extends O2SpellTestSuper {
         castSpell(caster, location, targetLocation);
         mockServer.getScheduler().performTicks(20);
 
-        assertEquals(0, player.getHealth(), "playaer health did not go down by expected amount");
+        assertEquals(0, player.getHealth(), "player health did not go down by expected amount");
         assertTrue(player.isDead(), "player is not dead");
 
         player.disconnect();
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * <p>No state changes to revert for this spell.</p>
+     * No-op: AVADA_KEDAVRA has no state changes to revert.
      */
     @Override
     @Test

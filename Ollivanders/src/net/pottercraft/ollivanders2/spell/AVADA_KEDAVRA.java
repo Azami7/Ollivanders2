@@ -13,18 +13,15 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Killing Curse—an unforgivable dark magic spell that inflicts damage on a living entity.
+ * The Killing Curse — an unforgivable dark curse that deals direct, skill-scaled damage to the nearest living entity.
  *
- * <p>Damage dealt is determined by the caster's spell level (usesModifier).
- * Subject to WorldGuard PVP and damage animal restrictions.</p>
- *
- * <p>Reference: <a href="https://harrypotter.fandom.com/wiki/Killing_Curse">Killing Curse</a></p>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Killing_Curse">Harry Potter Wiki - Killing Curse</a>
  */
 public final class AVADA_KEDAVRA extends O2Spell {
     /**
-     * Constructor for spell info generation. Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
-     * @param plugin the Ollivanders2 plugin instance
+     * @param plugin the Ollivanders2 plugin
      */
     public AVADA_KEDAVRA(Ollivanders2 plugin) {
         super(plugin);
@@ -42,11 +39,11 @@ public final class AVADA_KEDAVRA extends O2Spell {
     }
 
     /**
-     * Constructor to cast the Avada Kedavra spell.
+     * Constructor.
      *
-     * @param plugin    the Ollivanders2 plugin instance
-     * @param player    the player casting the spell
-     * @param rightWand the wand being used
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public AVADA_KEDAVRA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -64,9 +61,8 @@ public final class AVADA_KEDAVRA extends O2Spell {
     }
 
     /**
-     * Finds and damages the nearest damageable entity within range.
-     *
-     * <p>Skips the caster themselves. Damage is scaled by the caster's spell level.</p>
+     * Damage the nearest damageable entity in range (never the caster) by the caster's skill level, then end the
+     * spell.
      */
     @Override
     protected void doCheckEffect() {

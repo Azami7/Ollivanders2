@@ -14,41 +14,19 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the FULL_IMMOBILIZE effect.
+ * Unit tests for {@link net.pottercraft.ollivanders2.effect.FULL_IMMOBILIZE}. Inherits IMMOBILIZE coverage and
+ * overrides the rotation-only and teleport cases, which FULL_IMMOBILIZE blocks even when IMMOBILIZE allows them.
  *
- * <p>FULL_IMMOBILIZE is an enhanced variant of IMMOBILIZE that prevents all player movement,
- * including rotation-only changes. While IMMOBILIZE allows players to rotate their view,
- * FULL_IMMOBILIZE blocks even rotation-only movement events to ensure complete immobilization.
- * Additionally, FULL_IMMOBILIZE cancels all teleport and apparate attempts (both short and long
- * distance), whereas IMMOBILIZE only blocks short-distance attempts and allows long-distance
- * escape (> 100 blocks).</p>
- *
- * <p>Inherits all test coverage from {@link ImmobolizeTest} and adds specific tests for
- * rotation-only movement prevention and complete teleportation blocking.</p>
+ * @see ImmobolizeTest
  */
 public class FullImmobilizeTest extends ImmobolizeTest {
-    /**
-     * Creates a FULL_IMMOBILIZE effect for testing.
-     *
-     * <p>Instantiates a new FULL_IMMOBILIZE effect with the specified parameters.
-     * This method is called by the inherited test methods to create fresh effect instances.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new FULL_IMMOBILIZE effect
-     */
     @Override
     IMMOBILIZE createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new FULL_IMMOBILIZE(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
     /**
-     * Tests that FULL_IMMOBILIZE blocks rotation-only movement.
-     *
-     * <p>Verifies that a PlayerMoveEvent with only rotation changes (pitch change, same position)
-     * is cancelled by the FULL_IMMOBILIZE effect. This is the key difference between FULL_IMMOBILIZE
-     * and regular IMMOBILIZE, which allows rotation-only changes.</p>
+     * A rotation-only move (pitch change, same position) is cancelled; IMMOBILIZE would allow it.
      *
      * @param target the immobilized player
      */
@@ -66,12 +44,7 @@ public class FullImmobilizeTest extends ImmobolizeTest {
     }
 
     /**
-     * Tests that FULL_IMMOBILIZE cancels all teleport and apparate attempts.
-     *
-     * <p>Verifies that FULL_IMMOBILIZE blocks teleportation magic completely, preventing both
-     * Bukkit teleports and Ollivanders apparate spells regardless of distance. Unlike IMMOBILIZE,
-     * which allows long-distance escapes (> 100 blocks), FULL_IMMOBILIZE traps the player completely
-     * with no magical escape possible.</p>
+     * All teleport and apparate attempts are cancelled regardless of distance; IMMOBILIZE allows long-distance escapes.
      */
     @Override
     @Test

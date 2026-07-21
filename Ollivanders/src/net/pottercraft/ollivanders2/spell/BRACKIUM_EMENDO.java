@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * Healing spell that can be used to mend broken bones. Can also be used defensively against skeletons, damaging them.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Brackium_Emendo">https://harrypotter.fandom.com/wiki/Brackium_Emendo</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Brackium_Emendo">Harry Potter Wiki - Brackium Emendo</a>
  */
 public final class BRACKIUM_EMENDO extends O2Spell {
     private final double maxDamage = 10;

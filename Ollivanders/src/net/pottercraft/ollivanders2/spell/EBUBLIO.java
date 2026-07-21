@@ -13,27 +13,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * The Bubble Jinx that traps a target player inside a shell of glass.
+ * The Bubble Jinx: traps a target player inside a hollow shell of white stained glass and immobilizes them.
  *
- * <p>EBUBLIO entraps the target in a shell of white stained glass that cannot be broken by the
- * player inside. Only the outer shell is built — blocks the player occupies are left unchanged
- * to prevent suffocation damage. The spell only affects players at normal or reduced size (scale ≤ 1.0).</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Only targets players with scale attribute ≤ 1.0</li>
- * <li>Builds a shell of WHITE_STAINED_GLASS around the player's expanded bounding box</li>
- * <li>Blocks inside the player's own bounding box are not changed (shell only)</li>
- * <li>Uses partial immobilization (allows rotation but prevents movement)</li>
- * <li>Minimum effect duration: 2 minutes</li>
- * </ul>
+ * <p>Only the outer shell is built — the blocks the player occupies are left clear to avoid suffocation — and only
+ * players at normal or reduced size (scale ≤ 1.0) can be trapped, since an oversized player would not fit inside it.</p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Ebublio_Jinx">Harry Potter Wiki - Ebublio Jinx</a>
  */
 public class EBUBLIO extends ImmobilizePlayer {
     /**
-     * Minimum effect duration set to 2 minutes to match CARCEREM_AQUATICUM behaviour.
+     * Minimum ticks the target stays trapped, floored at 2 minutes.
      */
     private static final int minEffectDurationConfig = 2 * Ollivanders2Common.ticksPerMinute;
 
@@ -83,13 +73,11 @@ public class EBUBLIO extends ImmobilizePlayer {
     }
 
     /**
-     * Determine if a player can be targeted by this spell.
-     *
-     * <p>Only players with a scale attribute of 1.0 or lower can be targeted. Oversized players cannot
-     * be trapped in the glass bubble due to the expanded bounding box being too small to contain them.</p>
+     * Check whether the target can be trapped by this spell. Oversized players do not fit inside the glass shell
+     * and are rejected.
      *
      * @param target the player to validate as a potential target
-     * @return true if the player's scale is ≤ 1.0, false if oversized (or if scale attribute is null)
+     * @return true if the player's scale attribute is ≤ 1.0; false if it is larger or absent
      */
     boolean canTarget(Player target) {
         if (!Ollivanders2.testMode) {

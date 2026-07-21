@@ -13,41 +13,17 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Parent class for all effects that change the player's scale.
+ * Parent class for effects that change the player's scale, such as {@link SWELLING} and {@link SHRINKING}.
  *
- * <p>PlayerChangeSizeSuper provides the core scaling mechanism used by scaling effects like SWELLING and SHRINKING.
- * Scaling is implemented using a multiplier-based system where the new scale is calculated by multiplying the player's
- * current scale by a scaleMultiplier. For example, a multiplier of 2.0 doubles the player's size, while 0.5 halves it.
- * </p>
- *
- * <p>Effect Lifecycle:</p>
- * <ol>
- * <li>A subclass creates an instance with a specific scaleMultiplier (set before startEffect() is called)</li>
- * <li>The subclass calls startEffect() to schedule the size change via an async BukkitRunnable (5-tick delay)</li>
- * <li>changePlayerSize() executes asynchronously: removes any conflicting scale effects, applies the new scale, and kills
- *     the effect if the player returns to normal size (1.0)</li>
- * <li>checkEffect() ages the effect each tick (only for non-permanent effects)</li>
- * <li>When the effect expires, doRemove() resets the player back to normal scale (1.0)</li>
- * </ol>
- *
- * <p>Scale Bounds:
- * The player's scale is clamped to the range [0.25, 4.0] to prevent the game engine from being overwhelmed by
- * extremely large or small players. Values outside this range are automatically adjusted to the nearest boundary.</p>
- *
- * <p>Stacking Behavior:
- * Multiple scaling effects cannot stack on the same player. When changePlayerSize() executes, it removes any existing
- * SWELLING or SHRINKING effects before applying the new scale. This ensures only one scaling effect is active at a time.</p>
+ * <p>Multiplies the player's current scale by a per-subclass multiplier, clamped to [0.25, 4.0] so the engine is not
+ * overwhelmed by extreme sizes. Only one scaling effect may be active on a player at a time: applying a new one removes
+ * any existing scaling effect. On removal the player is reset to normal scale (1.0).</p>
  *
  * @author Azami7
  */
 public abstract class PlayerChangeSize extends O2Effect {
     /**
-     * A list of the scale effect types that can affect player size.
-     *
-     * <p>This list is used to detect and remove conflicting scaling effects when a new scale effect is applied.
-     * Since only one scaling effect can be active on a player at a time, when changePlayerSize() runs, it removes
-     * any existing effects in this list before applying the new scale. This prevents multiple scaling effects from
-     * stacking unexpectedly.</p>
+     * The scaling effect types that are mutually exclusive; any active one is removed before a new scale is applied.
      */
     ArrayList<O2EffectType> scaleEffectTypes = new ArrayList<>() {{
         add(O2EffectType.SWELLING);
@@ -55,13 +31,13 @@ public abstract class PlayerChangeSize extends O2Effect {
     }};
 
     /**
-     * How does this effect change the player's size. Values above 1 will increase size, so if this is set to 2 it will
-     * double the player's current size. If this is set to 0.5 it will make the player half their current size.
+     * Multiplier applied to the player's current scale. Above 1 increases size (2 doubles it); below 1 decreases it
+     * (0.5 halves it). Subclasses must set this before calling {@link #startEffect()}.
      */
     double scaleMultiplier = 0;
 
     /**
-     * Is the effect currently changing the target's scale?
+     * Whether the scale change has been applied to the target yet.
      */
     boolean transformed = false;
 
@@ -78,14 +54,8 @@ public abstract class PlayerChangeSize extends O2Effect {
     }
 
     /**
-     * Schedule the size change to occur asynchronously with a 5-tick delay.
-     *
-     * <p>This method should be called by subclass constructors or initialization methods to apply the size change.
-     * The actual size modification is executed asynchronously (5 ticks / 250 milliseconds later) to avoid potential
-     * synchronization issues. Child classes must set scaleMultiplier before calling this method.</p>
-     *
-     * <p>The 5-tick delay allows the player entity to be fully initialized in the server before scale modifications
-     * are applied.</p>
+     * Schedule the size change to run asynchronously after a 5-tick delay, giving the player entity time to fully
+     * initialize on the server. Subclasses must set {@link #scaleMultiplier} before calling this.
      */
     protected void startEffect() {
         // change the player's size
@@ -98,10 +68,7 @@ public abstract class PlayerChangeSize extends O2Effect {
     }
 
     /**
-     * Check this effect's behavior each game tick.
-     *
-     * <p>This method is called once per tick by the effects system. For non-permanent scaling effects, it ages the
-     * effect by 1 tick. The actual size change was already applied asynchronously when startEffect() was called.</p>
+     * Apply the size change on the first tick, then age the effect each tick unless it is permanent.
      */
     @Override
     public void checkEffect() {
@@ -115,19 +82,10 @@ public abstract class PlayerChangeSize extends O2Effect {
     }
 
     /**
-     * Apply the scale change to the affected player.
-     *
-     * <p>This method executes asynchronously and handles the following:</p>
-     * <ol>
-     * <li>Retrieves the player's scale attribute (returns early if not found)</li>
-     * <li>Removes any existing SWELLING or SHRINKING effects to prevent stacking multiple scaling effects</li>
-     * <li>Calculates the new scale by multiplying the current scale by scaleMultiplier</li>
-     * <li>Applies the clamped new scale to the player</li>
-     * <li>If the player returns to normal scale (1.0), kills the effect since its purpose is fulfilled</li>
-     * </ol>
+     * Remove any conflicting scaling effect and apply the clamped new scale to the player. Kills this effect if the
+     * player is left at normal scale (1.0) or has no scale attribute.
      */
     private void changePlayerSize() {
-        // Get the player's scale attribute
         AttributeInstance scaleAttribute = getScaleAttribute();
         if (scaleAttribute == null) {
             common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): Player's scale attribute was null", null, null, false);
@@ -149,8 +107,8 @@ public abstract class PlayerChangeSize extends O2Effect {
         scaleAttribute.setBaseValue(newScale);
         common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): new scale is " + newScale, null, null, false);
 
-        if (newScale == 1.0) { // returned the player to normal size
-            // we can just kill the effect because this will set them to normal size, then end and set them to normal size - no point
+        // already at normal size, so end the effect rather than have doRemove reset it again
+        if (newScale == 1.0) {
             kill();
         }
 
@@ -158,9 +116,10 @@ public abstract class PlayerChangeSize extends O2Effect {
     }
 
     /**
-     * Get the scale attribute for the affected player.
+     * Get the scale attribute for the affected player. Kills this effect and returns null if the player is offline or
+     * has no scale attribute.
      *
-     * @return the scale attribute instance or null if an error occurred
+     * @return the scale attribute, or null if it could not be retrieved
      */
     @Nullable
     private AttributeInstance getScaleAttribute() {
@@ -182,11 +141,7 @@ public abstract class PlayerChangeSize extends O2Effect {
     }
 
     /**
-     * Calculate the new scale value with clamping.
-     *
-     * <p>This method multiplies the current scale by the scaleMultiplier, then clamps the result to the valid range
-     * [0.25, 4.0] to prevent the Minecraft engine from struggling with extremely large or small players.
-     * Values below 0.25 (1/4 scale) are set to 0.25, and values above 4.0 (4x scale) are set to 4.0.</p>
+     * Apply the scale multiplier to the current scale, clamped to [0.25, 4.0].
      *
      * @param currentScale the player's current scale before the multiplier is applied
      * @return the new scale value, clamped to [0.25, 4.0]
@@ -194,8 +149,7 @@ public abstract class PlayerChangeSize extends O2Effect {
     double getNewScale(double currentScale) {
         double newScale = currentScale * scaleMultiplier;
 
-        // make sure they do not get too big or too small for the game to handle
-        // keep the scale between 0.25 (1/4 scale) and 4.0 (4x scale)
+        // keep the scale within a range the game can handle
         if (newScale < 0.25)
             newScale = 0.25;
         else if (newScale > 4.0)
@@ -205,11 +159,7 @@ public abstract class PlayerChangeSize extends O2Effect {
     }
 
     /**
-     * Remove this effect and reset the player to normal size.
-     *
-     * <p>Called when the effect is being removed from the player (either due to expiration or explicit removal).
-     * This method retrieves the player's scale attribute and resets it to 1.0 (normal size), effectively undoing
-     * any size changes applied by this effect.</p>
+     * Reset the player to normal scale (1.0), undoing this effect's size change.
      */
     @Override
     public void doRemove() {
@@ -218,32 +168,21 @@ public abstract class PlayerChangeSize extends O2Effect {
             kill();
             return;
         }
-        // change player back to normal size
         scaleAttribute.setBaseValue(1.0);
     }
 
     /**
-     * Check if this effect has successfully transformed the player's size.
+     * Check whether the size change has been applied to the player yet.
      *
-     * <p>Returns true after the size change has been applied to the player (i.e., after the
-     * asynchronous startEffect() runnable has executed and changePlayerSize() has been called).
-     * This flag is used to ensure the size change runs exactly once per effect.</p>
-     *
-     * @return true if the player has been transformed, false if the transformation is still pending
+     * @return true once the scale change has been applied, false while it is still pending
      */
     public boolean isTransformed() {
         return transformed;
     }
 
     /**
-     * Get the scale multiplier for this size-changing effect.
-     *
-     * <p>Returns the multiplier used to calculate the new player scale. Values above 1.0 increase
-     * the player's size, while values below 1.0 decrease it. For example:</p>
-     * <ul>
-     * <li>2.0 doubles the player's size (SWELLING)</li>
-     * <li>0.5 halves the player's size (SHRINKING)</li>
-     * </ul>
+     * Get the scale multiplier for this effect. Above 1.0 increases size (2.0 doubles), below 1.0 decreases it
+     * (0.5 halves).
      *
      * @return the scale multiplier value
      */

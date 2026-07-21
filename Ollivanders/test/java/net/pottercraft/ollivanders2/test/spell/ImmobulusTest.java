@@ -13,22 +13,10 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for the IMMOBULUS spell.
- *
- * <p>IMMOBULUS is the Freezing Charm that applies Slowness and Slow Falling effects to targets,
- * immobilizing them for 15-180 seconds depending on caster skill level. This test class overrides
- * the amplifier test to verify the three-tier Slowness scaling (Slowness I/II/III) specific to
- * this spell.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.IMMOBULUS for the spell implementation
- * @see AddPotionEffectTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.IMMOBULUS}. Extends {@link AddPotionEffectTest} for the
+ * shared potion-effect tests.
  */
 public class ImmobulusTest extends AddPotionEffectTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.IMMOBULUS
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -36,11 +24,8 @@ public class ImmobulusTest extends AddPotionEffectTest {
     }
 
     /**
-     * Test the three-tier amplifier scaling for IMMOBULUS.
-     *
-     * <p>Verifies that the Slowness amplifier scales correctly through three tiers:
-     * Slowness I (amplifier 0) at low skill levels, Slowness II (amplifier 1) at
-     * mid-skill levels, and Slowness III (amplifier 2) at high skill levels.</p>
+     * Verify the Slowness amplifier steps through its three skill tiers: 0 at low skill, 1 near mastery, 2 above
+     * mastery.
      */
     @Override
     @Test
@@ -66,6 +51,6 @@ public class ImmobulusTest extends AddPotionEffectTest {
         level = O2Spell.spellMasteryLevel + 1;
         addPotionEffect = (AddPotionEffect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, level);
         mockServer.getScheduler().performTicks(5);
-        assertEquals(2, addPotionEffect.getAmplifier(), "unexpected amplifier for skill level O2Spell.spellMasteryLevel - 1");
+        assertEquals(2, addPotionEffect.getAmplifier(), "unexpected amplifier for skill level O2Spell.spellMasteryLevel + 1");
     }
 }

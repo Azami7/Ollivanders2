@@ -39,7 +39,6 @@ import java.util.UUID;
  * and {@link #checkAlarm(LivingEntity)}.</p>
  *
  * @author Azami7
- * @since 2.21
  */
 public abstract class ConcealmentShieldSpell extends ShieldSpell {
     /**
@@ -72,10 +71,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     protected ArrayList<String> entryDenyMessages = new ArrayList<>();
 
     /**
-     * Constructs a concealment spell from deserialized data at server start.
-     *
-     * <p>Used only for loading saved spells from disk. Subclasses should not call this
-     * for spell casting - use the full constructor instead.</p>
+     * Constructor for loading a saved spell from disk; do not use to cast a new spell.
      *
      * @param plugin a callback to the MC plugin
      */
@@ -84,10 +80,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Constructs a new concealment shield spell cast by a player.
-     *
-     * <p>Initializes the spell with the specified properties and immediately hides all players
-     * currently in the spell area (based on the {@link #canSee(LivingEntity)} implementation).</p>
+     * Constructor for casting a new concealment shield spell. Immediately hides the players already inside the area.
      *
      * @param plugin   a callback to the MC plugin
      * @param pid      the UUID of the player who cast the spell
@@ -99,45 +92,37 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         super(plugin, pid, location);
 
         setRadius(radius);
-        setDuration(duration);
+        setDuration(duration, false);
 
         hidePlayersInSpellArea();
     }
 
     /**
-     * Performs per-tick upkeep for this concealment spell.
-     *
-     * <p>Ages the spell by one tick, decrements the proximity alarm cooldown timer,
-     * and kills the spell when duration reaches zero.</p>
+     * Age the spell by one tick and count down the proximity-alarm cooldown.
      */
     @Override
     public void upkeep() {
-        // age the spell
         age();
 
-        // decrement the proximity timer if it is running
         if (proximityCooldownTimer > 0)
             proximityCooldownTimer = proximityCooldownTimer - 1;
 
-        // kill the spell if the age limit is reached
         if (duration <= 1)
             kill();
     }
 
     /**
-     * Get the entry deny messages.
+     * Get the messages shown to entities denied entry to this spell's area.
      *
-     * @return the entry deny messages
+     * @return a copy of the entry-deny message list; empty if none are configured
      */
     public ArrayList<String> getEntryDenyMessages() {
         return new ArrayList<>(entryDenyMessages);
     }
 
     /**
-     * Hides or shows players in the spell area based on visibility rules.
-     *
-     * <p>Iterates through all players in the spell radius and toggles their visibility
-     * according to the {@link #toggleVisibility(Player)} logic and {@link #canSee(LivingEntity)} implementation.</p>
+     * Re-evaluate visibility for every player currently inside the spell area, hiding or showing them per
+     * {@link #canSee(LivingEntity)}.
      */
     protected void hidePlayersInSpellArea() {
         for (Player player : getPlayersInsideSpellRadius()) {
@@ -147,42 +132,30 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Toggles the visibility of a specific player based on concealment rules.
-     *
-     * <p>For each online player (viewer), hides or shows the target player based on:</p>
-     * <ul>
-     *   <li>Whether the target is inside the spell area</li>
-     *   <li>Whether the viewer can see into the spell area (via {@link #canSee(LivingEntity)})</li>
-     *   <li>Whether the target has other invisibility effects</li>
-     * </ul>
-     * <p>Does not hide the target from themselves.</p>
+     * Hide the given player from every online viewer who cannot see into the spell area. No-op if the player is not
+     * inside the area or is already invisible from another effect; the player is never hidden from themselves.
      *
      * @param player the player whose visibility to toggle
      */
     protected void toggleVisibility(@NotNull Player player) {
-        // do not do anything if they are not inside the spell area or are otherwise invisible already
         if (!isLocationInside(player.getLocation()) || O2PlayerCommon.isInvisible(player))
             return;
 
         for (Player viewer : p.getServer().getOnlinePlayers()) {
-            // don't hide the player from themselves :)
             if (viewer.getUniqueId().equals(player.getUniqueId())) {
                 continue;
             }
 
-            // if the viewer cannot see players in this spell area, hide the player from them
             if (!canSee(viewer)) {
                 viewer.hidePlayer(p, player);
             }
-            else if (!player.isInvisible()) // show the player to viewer can see them and they are not otherwise invisible
+            else if (!player.isInvisible())
                 viewer.showPlayer(p, player);
         }
     }
 
     /**
-     * Shows all players in the spell area to other online players.
-     *
-     * <p>Called when the spell ends to remove the concealment effect from all affected players.</p>
+     * Show every player inside the spell area to all online players, removing this spell's concealment.
      */
     protected void unhidePlayersInSpellArea() {
         for (Player player : getPlayersInsideSpellRadius()) {
@@ -191,15 +164,12 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Shows a player to all online players (removes concealment).
-     *
-     * <p>Called when a player leaves the spell area or when the spell ends.
-     * Does not unhide players who have other invisibility effects.</p>
+     * Show a player to all online players. No-op if the player is invisible from another effect, so this spell does
+     * not reveal players concealed by other means.
      *
      * @param player the player to show
      */
     protected void unhidePlayer(@NotNull Player player) {
-        // do not unhide them if they are otherwise invisible
         if (O2PlayerCommon.isInvisible(player))
             return;
 
@@ -209,12 +179,9 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Gets a random entry denial message to display to players blocked from entering.
+     * Get a random message to show a player denied entry to the spell area.
      *
-     * <p>Selects a random message from the configured {@link #entryDenyMessages} list.
-     * Used when a player attempts to enter the spell area but fails the {@link #canEnter(LivingEntity)} check.</p>
-     *
-     * @return a random message from the configured list, or null if no messages are configured
+     * @return a random configured entry-deny message, or null if none are configured
      */
     @Nullable
     protected String getAreaEntryDenialMessage() {
@@ -225,16 +192,12 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Checks and triggers a proximity alarm if conditions are met.
-     *
-     * <p>Tests whether the entity meets alarm conditions via {@link #checkAlarm(LivingEntity)} or
-     * {@link #checkAlarm(Player)} and triggers {@link #proximityAlarm()} if conditions match.
-     * Does nothing if the proximity alarm cooldown is active.</p>
+     * Trigger the proximity alarm if the entity meets this spell's alarm conditions. No-op while the alarm cooldown
+     * is active.
      *
      * @param entity the living entity that may trigger the alarm
      */
     protected void doProximityCheck(@NotNull LivingEntity entity) {
-        // do not run the proximity alarm if it is in cooldown
         if (proximityCooldownTimer > 0)
             return;
 
@@ -251,20 +214,17 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Checks if a location is within the proximity alarm detection radius.
-     *
-     * <p>The proximity radius extends {@link #proximityRadiusModifier} blocks beyond the spell's
-     * boundary.</p>
+     * Check whether a location is within this spell's proximity-alarm radius.
      *
      * @param alertLocation the location to check
-     * @return true if the location is within the proximity alarm radius, false otherwise
+     * @return true if the location is within the proximity radius, false otherwise
      */
     public boolean isInProximity(Location alertLocation) {
         return Ollivanders2Common.isInside(location, alertLocation, getProximityRadius());
     }
 
     /**
-     * The radius from the spell center for proximity checks for this spell
+     * Get the proximity-alarm radius: the spell radius extended by {@link #proximityRadiusModifier} blocks.
      *
      * @return the proximity radius
      */
@@ -273,7 +233,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Does this spell alarm on proximity?
+     * Check whether this spell triggers a proximity alarm.
      *
      * @return true if it alarms on proximity, false otherwise
      */
@@ -286,23 +246,19 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     //
 
     /**
-     * Prevents entities outside the spell from targeting players inside.
-     *
-     * <p>If an entity outside the area targets a player inside, checks {@link #canTarget(LivingEntity)}
-     * to determine if the targeting should be allowed. Cancels the event if targeting is not permitted.</p>
+     * Cancel an outside entity's attempt to target a living entity inside the area unless {@link #canTarget} allows it.
      *
      * @param event the entity target event
      */
     @Override
     void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
         Entity target = event.getTarget();
-        Entity entity = event.getEntity(); // will never be null
+        Entity entity = event.getEntity();
 
-        // make sure this event is targeting a living entity inside the spell area
         if (!(target instanceof LivingEntity) || !(entity instanceof LivingEntity))
             return;
 
-        // if the target is inside the area, the entity is outside the area, check if the entity can target in the area
+        // only guard the case of an outside attacker targeting something inside the area
         if (isLocationInside(target.getLocation()) && !isLocationInside(entity.getLocation())) {
             if (!canTarget((LivingEntity) entity)) {
                 event.setCancelled(true);
@@ -312,11 +268,8 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Manages player movement across spell boundaries and handles area entry/exit logic.
-     *
-     * <p>Prevents players from entering the spell area if {@link #canEnter(LivingEntity)} returns false.
-     * Asynchronously handles visibility updates when players enter or leave the spell area, and checks
-     * for proximity alarms when players move near the boundary.</p>
+     * Block a player from crossing into the area when {@link #canEnter} denies them (sending an entry-deny message),
+     * otherwise schedule the visibility and proximity update for their move.
      *
      * @param event the player move event
      */
@@ -326,7 +279,6 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         Location fromLocation = event.getFrom();
         Player player = event.getPlayer();
 
-        // if the event is canceled, skip
         if (event.isCancelled())
             return;
 
@@ -352,36 +304,28 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Handles visibility and proximity logic when an entity moves relative to the spell boundary.
-     *
-     * <p>Called asynchronously after a player move event completes successfully. Handles three cases:</p>
-     * <ul>
-     *   <li>Entity entering: Re-evaluates visibility for all players in the area if entry is allowed</li>
-     *   <li>Entity leaving: Unhides the departing player to all viewers</li>
-     *   <li>Proximity check: Triggers proximity alarm if entity moves near the boundary</li>
-     * </ul>
-     * <p>Assumes the move event completed and entry restrictions have already been checked.</p>
+     * Update concealment for a completed move: re-hide the area on entry, unhide a departing player and re-hide the
+     * rest on exit, or run a proximity check when the entity moves near the boundary from outside.
      *
      * @param entity       the living entity that moved
      * @param toLocation   the location the entity moved to
      * @param fromLocation the location the entity moved from
      */
     protected void handleEntityMove(@NotNull LivingEntity entity, @NotNull Location toLocation, @NotNull Location fromLocation) {
-        // entity moving in to the spell area when they were outside it
+        // moving in from outside
         if (isLocationInside(toLocation) && !isLocationInside(fromLocation)) {
-            // if they entered the area, recheck all visibility
             if (canEnter(entity)) {
                 common.printDebugMessage(entity.getName() + " entering spell area", null, null, false);
                 hidePlayersInSpellArea();
             }
         }
-        // player moving out of the spell area from inside it, unhide them, then recheck visibility of players in the spell area
+        // moving out from inside
         else if (!isLocationInside(toLocation) && isLocationInside(fromLocation) && entity instanceof Player) {
             common.printDebugMessage(entity.getName() + " leaving spell area", null, null, false);
             unhidePlayer((Player) entity);
             hidePlayersInSpellArea();
         }
-        // entity is moving around outside the spell area and this spell has a proximity alarm
+        // moving around outside, within the proximity boundary
         else if (!isLocationInside(toLocation) && !isLocationInside(fromLocation) && isInProximity(toLocation)) {
             common.printDebugMessage(entity.getName() + " at proximity boundary", null, null, false);
             doProximityCheck(entity);
@@ -389,11 +333,8 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Filters chat recipients to prevent players outside from hearing players inside.
-     *
-     * <p>If a player inside the spell area chats, removes any recipients who cannot hear inside the area
-     * (as determined by {@link #canHear(LivingEntity)}). Allows concealment of conversation within
-     * the protected area.</p>
+     * When a player inside the area speaks, drop any recipients who cannot hear into the area per {@link #canHear},
+     * concealing the conversation.
      *
      * @param event the async player chat event
      */
@@ -414,25 +355,17 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Re-evaluates visibility for all players in the spell area when a new player joins.
-     *
-     * <p>Called when a player joins the server to ensure that newly joined players see the correct
-     * visibility state for concealed players in the spell area. Uses {@link #hidePlayersInSpellArea()}
-     * to update visibility based on current {@link #canSee(LivingEntity)} rules.</p>
+     * Re-apply concealment when a player joins so the newcomer sees the correct visibility for the area.
      *
      * @param event the player join event
      */
     @Override
     void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        // re-evaluate all hidden players in the spell area
         hidePlayersInSpellArea();
     }
 
     /**
-     * Removes all concealment effects when the spell ends.
-     *
-     * <p>Unhides all players that were previously concealed by this spell, making them visible to all
-     * online players again.</p>
+     * Unhide every player this spell was concealing when it ends.
      */
     @Override
     void doCleanUp() {
@@ -444,12 +377,10 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     //
 
     /**
-     * Serializes concealment spell data for persistence.
+     * Serialize this spell's extra data. The base implementation has none; subclasses override to persist their own
+     * configuration.
      *
-     * <p>This base implementation returns an empty map. Subclasses can override to save
-     * spell-specific configuration like proximity alarm settings or custom messages.</p>
-     *
-     * @return a map of serialized spell-specific data
+     * @return a map of serialized spell-specific data; empty in the base implementation
      */
     @Override
     @NotNull
@@ -458,10 +389,8 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     }
 
     /**
-     * Deserializes concealment spell data from storage.
-     *
-     * <p>This base implementation does nothing. Subclasses can override to restore
-     * spell-specific configuration that was previously saved.</p>
+     * Restore this spell's extra data. The base implementation has none; subclasses override to read back what they
+     * serialized.
      *
      * @param spellData the map of saved spell-specific data
      */
@@ -474,76 +403,55 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     //
 
     /**
-     * Determines if an entity outside the spell area can hear sounds from inside.
+     * Whether an entity outside the area can hear conversations inside it.
      *
-     * <p>Used by {@link #doOnAsyncPlayerChatEvent(AsyncPlayerChatEvent)} to determine if chat
-     * from players inside should reach this entity.</p>
-     *
-     * @param entity the entity outside the spell area to check (not null)
-     * @return true if the entity can hear conversations inside the spell area, false if sounds are concealed
+     * @param entity the outside entity to check
+     * @return true if the entity can hear inside the area, false if sounds are concealed
      */
     protected abstract boolean canHear(@NotNull LivingEntity entity);
 
     /**
-     * Determines if an entity outside the spell area can see players inside.
+     * Whether an entity outside the area can see players inside it.
      *
-     * <p>Used by {@link #toggleVisibility(Player)} to determine whether to hide concealed players
-     * from this entity's view.</p>
-     *
-     * @param entity the entity outside the spell area to check (not null)
-     * @return true if the entity can see players inside the spell area, false if players are hidden
+     * @param entity the outside entity to check
+     * @return true if the entity can see players inside, false if they are hidden
      */
     protected abstract boolean canSee(@NotNull LivingEntity entity);
 
     /**
-     * Determines if an entity outside the spell area can target players inside.
+     * Whether an entity outside the area can target players inside it.
      *
-     * <p>Used by {@link #doOnEntityTargetEvent(EntityTargetEvent)} to determine if targeting
-     * attempts from outside should succeed.</p>
-     *
-     * @param entity the entity outside the spell area to check (not null)
-     * @return true if the entity can target players inside the spell area, false if targeting is blocked
+     * @param entity the outside entity to check
+     * @return true if the entity can target players inside, false if targeting is blocked
      */
     public abstract boolean canTarget(@NotNull LivingEntity entity);
 
     /**
-     * Determines if an entity can enter the spell area.
+     * Whether an entity may enter the area.
      *
-     * <p>Used by {@link #doOnPlayerMoveEvent(PlayerMoveEvent)} to determine if a player attempting
-     * to cross the spell boundary should be allowed entry.</p>
-     *
-     * @param entity the entity attempting to enter the spell area (not null)
-     * @return true if the entity can enter the spell area, false if entry is blocked
+     * @param entity the entity attempting to enter
+     * @return true if the entity may enter, false if entry is blocked
      */
     public abstract boolean canEnter(@NotNull LivingEntity entity);
 
     /**
-     * Checks if a player outside the spell area should trigger a proximity alarm.
+     * Whether a player near the boundary should trigger the proximity alarm.
      *
-     * <p>Called by {@link #doProximityCheck(LivingEntity)} when an entity moves within the
-     * proximity alarm radius. Allows subclasses to implement spell-specific alarm conditions.</p>
-     *
-     * @param player the player outside the spell area at proximity distance (not null)
-     * @return true if the alarm conditions are met, false otherwise
+     * @param player the player at proximity distance
+     * @return true if the alarm should fire, false otherwise
      */
     protected abstract boolean checkAlarm(@NotNull Player player);
 
     /**
-     * Checks if a non-player entity outside the spell area should trigger a proximity alarm.
+     * Whether a non-player entity near the boundary should trigger the proximity alarm.
      *
-     * <p>Called by {@link #doProximityCheck(LivingEntity)} when an entity moves within the
-     * proximity alarm radius. Allows subclasses to implement spell-specific alarm conditions.</p>
-     *
-     * @param entity the non-player entity outside the spell area at proximity distance (not null)
-     * @return true if the alarm conditions are met, false otherwise
+     * @param entity the non-player entity at proximity distance
+     * @return true if the alarm should fire, false otherwise
      */
     protected abstract boolean checkAlarm(@NotNull LivingEntity entity);
 
     /**
-     * Performs the proximity alarm action for this spell.
-     *
-     * <p>Called by {@link #doProximityCheck(LivingEntity)} when proximity alarm conditions are met.
-     * Typically, sends a message or triggers an effect to alert players inside the spell area.</p>
+     * Perform this spell's proximity-alarm action, e.g. alerting the players inside the area.
      */
     protected abstract void proximityAlarm();
 }

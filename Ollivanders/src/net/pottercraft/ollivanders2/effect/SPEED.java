@@ -7,24 +7,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Movement speed enhancement potion effect that increases the affected player's movement speed.
- *
- * <p>SPEED applies Minecraft's SPEED potion effect to increase the target player's movement
- * velocity. The effect enhances how quickly the player can move, improving their traversal speed
- * and mobility in combat scenarios. The effect is powered by the Minecraft potion effect system
- * with strength (amplifier) set to 1. The effect is detectable by both mind-reading spells
- * (Legilimens) and information spells (Informous) which report the target "is moving fast".</p>
+ * Applies Minecraft's SPEED potion effect (amplifier 1) to increase the target's movement speed.
+ * Detectable via Informous and Legilimens.
  *
  * @author Azami7
- * @see PotionEffect for the potion effect application mechanism
  */
 public class SPEED extends PotionEffect {
     /**
-     * Constructor for creating a movement speed enhancement effect.
-     *
-     * <p>Creates a potion effect that increases the target player's movement speed using Minecraft's
-     * SPEED potion effect type with strength 1. Sets detection text for both mind-reading spells
-     * (Legilimens) and information spells (Informous) to "is moving fast".</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -45,11 +35,7 @@ public class SPEED extends PotionEffect {
     }
 
     /**
-     * Perform cleanup when the speed effect is removed.
-     *
-     * <p>The default implementation does nothing, as SPEED is a potion effect whose effects
-     * are automatically managed by the Minecraft potion system. When the effect expires or is
-     * manually removed, the player's movement speed returns to normal.</p>
+     * No cleanup needed; the Minecraft potion effect expires on its own.
      */
     @Override
     public void doRemove() {

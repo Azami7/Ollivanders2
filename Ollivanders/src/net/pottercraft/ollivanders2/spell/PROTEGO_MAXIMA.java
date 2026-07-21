@@ -10,16 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * A stronger version of Protego that covers an area (rather than the caster) and protects against stronger spells. In HP this
- * spell would also repel hostile entities like dementors but Spigot does not provide an entity move event so we have no way
- * to handle controlling entity movement.
+ * A stronger {@link PROTEGO} that shields an area (rather than the caster) and protects against stronger spells.
  * <p>
- * {@link net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA}
+ * In canon this would also repel hostile entities like dementors, but Spigot provides no entity-move event, so there
+ * is no way to control entity movement.
+ * </p>
  *
  * @author Azami7
- * @version Ollicanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
- * @since 2.21
+ * @see net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA
+ * @see <a href="https://harrypotter.fandom.com/wiki/Protego_Maxima">Harry Potter Wiki - Protego Maxima</a>
  */
 public final class PROTEGO_MAXIMA extends StationarySpell {
     /**

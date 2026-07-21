@@ -22,46 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the NULLUM_EVANESCUNT stationary spell.
- *
- * <p>Tests spell-specific behavior for the anti-disapparition barrier that prevents entities
- * from escaping the protected area through apparition or teleportation. Inherits common
- * stationary spell tests from the base class and adds tests for event handling specific to
- * this spell's escape-prevention mechanics.</p>
+ * Unit tests for {@link NULLUM_EVANESCUNT}. Extends {@link O2StationarySpellTest} for the shared stationary-spell
+ * tests.
  *
  * @author Azami7
  */
 public class NullumEvanescuntTest extends O2StationarySpellTest {
-    /**
-     * Gets the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#NULLUM_EVANESCUNT}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.NULLUM_EVANESCUNT;
     }
 
-    /**
-     * Creates a NULLUM_EVANESCUNT spell instance for testing.
-     *
-     * <p>Constructs a new spell at the specified location with the minimum radius and duration values.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new NULLUM_EVANESCUNT spell instance (not null)
-     */
     @Override
     NULLUM_EVANESCUNT createStationarySpell(Player caster, Location location) {
-        return new NULLUM_EVANESCUNT(testPlugin, caster.getUniqueId(), location, NULLUM_APPAREBIT.minRadiusConfig, NULLUM_APPAREBIT.minDurationConfig); // nullum evanescunt uses the radius and duration constants rom nullum apparebit
+        // nullum evanescunt shares nullum apparebit's radius and duration bounds
+        return new NULLUM_EVANESCUNT(testPlugin, caster.getUniqueId(), location, NULLUM_APPAREBIT.minRadiusConfig, NULLUM_APPAREBIT.minDurationConfig);
     }
 
-    /**
-     * Tests upkeep behavior (skipped - covered by base class tests).
-     *
-     * <p>The upkeep method only performs aging, which is already tested comprehensively by the inherited
-     * ageAndKillTest() from the base test class.</p>
-     */
     @Override
     @Test
     void upkeepTest() {
@@ -69,12 +46,7 @@ public class NullumEvanescuntTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests apparate by name and coordinates event handling.
-     *
-     * <p>Verifies that players inside the spell area cannot apparate out by name or coordinates,
-     * while players outside the spell area can freely apparate in. Confirms that both blocked and
-     * allowed apparations are handled correctly, and that players receive feedback when their
-     * escape attempts are prevented.</p>
+     * Apparition out of the area (by name and by coordinates) is blocked with feedback, while apparition in is allowed.
      */
     @Test
     void doOnOllivandersApparateEventsTest() {
@@ -127,10 +99,7 @@ public class NullumEvanescuntTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests entity teleport event handling.
-     *
-     * <p>Verifies that non-player entities inside the spell area are prevented from teleporting out,
-     * while entities outside the spell area can freely teleport into the protected area.</p>
+     * A non-player entity is blocked teleporting out of the area but may teleport in.
      */
     @Test
     void doOnEntityTeleportEventTest() {
@@ -161,11 +130,7 @@ public class NullumEvanescuntTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests player teleport event handling.
-     *
-     * <p>Verifies that players inside the spell area are prevented from teleporting out and receive
-     * feedback when their escape attempts are blocked, while players outside the spell area can
-     * freely teleport into the protected area.</p>
+     * A player is blocked teleporting out of the area (with feedback) but may teleport in.
      */
     @Test
     void doOnPlayerTeleportEventTest() {

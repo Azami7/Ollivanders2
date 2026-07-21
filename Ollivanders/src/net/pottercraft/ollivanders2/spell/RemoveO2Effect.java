@@ -12,13 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract base class for spells that remove a single {@link O2EffectType} from a target player.
- * <p>
- * When the projectile reaches a nearby player, the spell attempts to remove the first effect on its
- * {@link #effectsAllowList} that the target currently has, subject to a skill-based success check
- * ({@link #checkSuccess(O2EffectType)}). Effects on {@link #effectBlockedList} can never be removed, regardless of the
- * allow list. Subclasses configure the allow list and {@link #successModifier} in their constructors.
- * </p>
+ * Base class for spells that remove a single {@link O2EffectType} from a target player, subject to a skill-based
+ * success check. A spell can only remove effects on its own allow list, and some effects can never be removed.
  */
 abstract public class RemoveO2Effect extends O2Spell {
     /**
@@ -54,8 +49,6 @@ abstract public class RemoveO2Effect extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using

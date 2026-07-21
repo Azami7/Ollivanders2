@@ -82,7 +82,7 @@ public class HORREAT_PROTEGAT extends O2Spell {
     }
 
     /**
-     * Set the radius change amount based on the caster's skill, clamped to [{@link #minChange}, {@link #maxChange}].
+     * Set the radius change amount based on the caster's skill, limited to [{@link #minChange}, {@link #maxChange}].
      */
     @Override
     void doInitSpell() {

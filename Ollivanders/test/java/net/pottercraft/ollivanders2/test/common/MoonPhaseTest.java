@@ -12,19 +12,7 @@ import org.mockbukkit.mockbukkit.ServerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test suite for the MoonPhase utility enum.
- *
- * <p>Tests the moon phase calculation that determines the current lunar phase based on world time.
- * Verifies that:</p>
- * <ul>
- * <li>All 8 moon phases are correctly identified based on world time</li>
- * <li>Moon phase cycles through all phases in the correct order</li>
- * <li>Full moon (phase 0) is correctly returned as the default</li>
- * <li>Phase transitions occur at the correct world time intervals (every 24000 ticks / Minecraft day)</li>
- * </ul>
- *
- * <p>The moon phase is calculated as (worldTime / 24000) % 8, where each phase represents
- * one-eighth of the full lunar cycle (8 Minecraft days).</p>
+ * Unit tests for {@link MoonPhase}.
  */
 public class MoonPhaseTest {
     static ServerMock mockServer;
@@ -41,19 +29,14 @@ public class MoonPhaseTest {
     }
 
     /**
-     * Test that full moon (phase 0) is correctly identified.
-     *
-     * <p>Verifies that when world time is 0 or any multiple of 24000 * 8,
-     * the full moon phase is returned.</p>
+     * Full moon is identified at world time 0 and again one full 8-day cycle later.
      */
     @Test
     void testFullMoon() {
-        // Set world time to 0 (full moon)
         world.setFullTime(0);
         assertEquals(MoonPhase.FULL_MOON, MoonPhase.getMoonPhase(world),
             "Full moon not identified at world time 0");
 
-        // Test another full moon cycle
         world.setFullTime(24000L * 8);
         assertEquals(MoonPhase.FULL_MOON, MoonPhase.getMoonPhase(world),
             "Full moon not identified at world time 192000");
@@ -130,10 +113,7 @@ public class MoonPhaseTest {
     }
 
     /**
-     * Test that moon phases cycle correctly through multiple lunar cycles.
-     *
-     * <p>Verifies that the moon phase calculation correctly cycles through all 8 phases
-     * multiple times as world time progresses.</p>
+     * The eight phases repeat in order across successive 8-day cycles.
      */
     @Test
     void testMoonPhaseCycle() {
@@ -164,10 +144,7 @@ public class MoonPhaseTest {
     }
 
     /**
-     * Test that intermediate world times (midday) return the correct phase.
-     *
-     * <p>Verifies that the phase calculation ignores partial days. For example,
-     * world time 1000 (partway through the first day) should still return full moon.</p>
+     * The phase depends only on whole days, so a time partway through a day returns that day's phase.
      */
     @Test
     void testIntermediateDayTimes() {

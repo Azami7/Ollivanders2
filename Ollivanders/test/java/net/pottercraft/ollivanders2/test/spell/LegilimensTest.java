@@ -29,21 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for LEGILIMENS spell functionality.
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.LEGILIMENS}.
  *
- * <p>Tests the mind-reading spell including:</p>
- * <ul>
- * <li>Failure when caster has insufficient skill to detect targets</li>
- * <li>Information revealed progressively by caster's Legilimens level (muggle status, wand, spells, effects, animagus form)</li>
- * <li>Detection of animagus forms by level 10+ casters only</li>
- * <li>Spell failure when target is in animagus form and caster skill is below mastery</li>
- * <li>Spell failure when no targets are in range</li>
- * <li>Zone-based spell blocking via isAllowed check</li>
- * </ul>
- *
- * <p>All tests are combined into a single method because global state like maxSpellLevel and blocked spell
- * zones interfere when tests run in parallel. The @Isolated annotation should be used to prevent parallel
- * execution of this test class.</p>
+ * <p>All scenarios run in a single method: the spell reads global state like {@code maxSpellLevel} and blocked-spell
+ * zones, which would interfere if the cases ran in parallel.</p>
  *
  * @author Azami7
  */
@@ -54,13 +43,9 @@ public class LegilimensTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test LEGILIMENS spell behavior across all scenarios.
-     *
-     * <p>Validates spell functionality including failure detection, progressive information revelation,
-     * animagus detection, and spell blocking. Tests are ordered to progressively enable features and
-     * modify player state (house sorting, wand acquisition, effects, animagus transformation, skill level changes)
-     * to verify spell behavior at each stage. Tests confirm that readMind() revealscorrect information and that
-     * checkEffect() properly handles animagus forms and skill thresholds.</p>
+     * Exercise every LEGILIMENS scenario in sequence, progressively enabling features and mutating player state
+     * (house sorting, wand, last spell, mastered spell, effects, animagus form, skill level, blocked-spell zone) to
+     * check the reveal and failure behavior at each stage.
      */
     @Override @Test
     void doCheckEffectTest() {

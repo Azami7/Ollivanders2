@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="http://harrypotter.wikia.com/wiki/Unfogging_the_Future">http://harrypotter.wikia.com/wiki/Unfogging_the_Future</a>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Unfogging_the_Future">Unfogging the Future</a>
  */
 public class UNFOGGING_THE_FUTURE extends O2Book {
     /**

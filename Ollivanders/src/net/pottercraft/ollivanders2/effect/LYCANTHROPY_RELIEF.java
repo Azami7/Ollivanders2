@@ -7,38 +7,18 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Passive marker effect that suppresses the secondary effects of lycanthropy curse.
- *
- * <p>LYCANTHROPY_RELIEF is a temporary marker effect that suppresses the unwanted symptoms of
- * the LYCANTHROPY curse. When applied to a player affected by lycanthropy, this effect does not
- * directly remove the curse itself, but rather suppresses the secondary effects (AGGRESSION and
- * LYCANTHROPY_SPEECH) that normally accompany werewolf transformation during full moons. The effect
- * is passive and only needs to be tracked until expiration. The effect is detectable by information
- * spells (Informous) which report the target "looks unwell".</p>
- *
- * <p>Mechanism:</p>
- * <ul>
- * <li>Passive marker effect - no active behavior during each tick</li>
- * <li>Suppresses AGGRESSION and LYCANTHROPY_SPEECH secondary effects from lycanthropy curse</li>
- * <li>Does not remove the permanent LYCANTHROPY curse itself</li>
- * <li>Detectable by information spells (Informous)</li>
- * <li>Detection text: "looks unwell"</li>
- * <li>Effect expires naturally when duration reaches zero</li>
- * </ul>
+ * Marker effect that suppresses the secondary symptoms of the {@link LYCANTHROPY} curse (its {@link AGGRESSION}
+ * and {@link LYCANTHROPY_SPEECH} effects during full-moon transformation) without removing the curse itself. It
+ * does this by setting the relief flag on the active LYCANTHROPY effect. Detectable via Informous.
  *
  * @author Azami7
- * @see LYCANTHROPY for the lycanthropy curse being suppressed
- * @see AGGRESSION for the aggressive behavior effect suppressed by this relief
- * @see LYCANTHROPY_SPEECH for the speech effect suppressed by this relief
+ * @see LYCANTHROPY
+ * @see AGGRESSION
+ * @see LYCANTHROPY_SPEECH
  */
 public class LYCANTHROPY_RELIEF extends O2Effect {
     /**
-     * Constructor for creating a lycanthropy relief passive marker effect.
-     *
-     * <p>Creates a temporary marker effect that suppresses the secondary symptoms of lycanthropy.
-     * This effect is passive and does not directly remove the curse; the LYCANTHROPY effect itself
-     * determines whether to apply AGGRESSION and LYCANTHROPY_SPEECH based on whether this relief
-     * effect is present. Sets the detection text for information spells to "looks unwell".</p>
+     * Constructor.
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the relief effect in game ticks
@@ -55,18 +35,8 @@ public class LYCANTHROPY_RELIEF extends O2Effect {
     }
 
     /**
-     * Age the lycanthropy relief marker effect and set relief flag on lycanthropy.
-     *
-     * <p>Called each game tick. This method ages the effect by 1 tick and performs two key functions:</p>
-     * <ol>
-     * <li>Checks if the player still has the LYCANTHROPY effect. If not found, kills this relief effect
-     * since it cannot function without an active lycanthropy curse to suppress.</li>
-     * <li>Sets the relief flag on the LYCANTHROPY effect to true, signaling that secondary effects
-     * (AGGRESSION and LYCANTHROPY_SPEECH) should be suppressed during transformation. The LYCANTHROPY
-     * effect checks this flag during checkEffect() to prevent applying secondary effects.</li>
-     * </ol>
-     *
-     * <p>When the duration reaches zero, the effect is automatically killed and removed from the player.</p>
+     * Age the effect and set the relief flag on the target's {@link LYCANTHROPY} effect. Kills this effect if the
+     * target no longer has an active LYCANTHROPY curse to suppress.
      */
     @Override
     public void checkEffect() {
@@ -83,13 +53,8 @@ public class LYCANTHROPY_RELIEF extends O2Effect {
     }
 
     /**
-     * Perform cleanup when the lycanthropy relief effect is removed.
-     *
-     * <p>When the relief effect is removed (either by duration expiration or manual removal),
-     * this method clears the relief flag on the LYCANTHROPY effect. This allows the lycanthropy
-     * curse to resume applying its secondary effects (AGGRESSION and LYCANTHROPY_SPEECH) during
-     * future transformations at moonrise. If the player no longer has the LYCANTHROPY effect,
-     * no cleanup is needed.</p>
+     * Clear the relief flag on the target's {@link LYCANTHROPY} effect so its secondary effects resume at the next
+     * transformation. No-op if the target no longer has the LYCANTHROPY effect.
      */
     @Override
     public void doRemove() {

@@ -5,19 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Enumeration of all potion types available in Ollivanders2.
- * <p>
- * Each potion type defines a distinct magical brew with its display name, implementation class,
- * and magic difficulty level. Potions are brewed by players using cauldrons and specific ingredients,
- * then consumed for various magical effects.
- * </p>
- * <p>
- * Magic levels range from BEGINNER (simple potions like Cure for Boils) to NEWT (advanced potions
- * like Draught of Living Death).
- * </p>
+ * The available potion types. Each carries its {@link O2Potion} implementation class (instantiated via reflection), a
+ * display name, and a {@link MagicLevel} indicating brewing difficulty.
  *
  * @author Azami7
- * @see O2Potion the abstract base class for all potion implementations
+ * @see O2Potion
  */
 public enum O2PotionType {
     /**
@@ -114,10 +106,7 @@ public enum O2PotionType {
     WOLFSBANE_POTION(WOLFSBANE_POTION.class, "Wolfsbane Potion", MagicLevel.EXPERT);
 
     /**
-     * The implementation class for this potion type.
-     * <p>
-     * Used with reflection to instantiate potion objects. Must extend O2Potion.
-     * </p>
+     * The {@link O2Potion} implementation class for this potion type, instantiated via reflection.
      */
     private final Class<?> className;
 
@@ -132,10 +121,10 @@ public enum O2PotionType {
     private final String name;
 
     /**
-     * Constructor for creating a potion type enum constant.
+     * Constructor
      *
-     * @param className the implementation class for this potion type (must extend O2Potion)
-     * @param name      the display name of the potion (e.g., "Baruffio's Brain Elixir")
+     * @param className the {@link O2Potion} implementation class for this potion type
+     * @param name      the display name of the potion
      * @param level     the magic difficulty level required to brew this potion
      */
     O2PotionType(@NotNull Class<?> className, @NotNull String name, @NotNull MagicLevel level) {
@@ -175,15 +164,11 @@ public enum O2PotionType {
     }
 
     /**
-     * Get an O2PotionType enum from its enum name string.
-     * <p>
-     * This should be used as the opposite of toString() on the enum. This is distinctly different from
-     * {@link #getPotionTypeByName(String)} which gets the potion type by the display name, which may
-     * not match enum.toString() (e.g., "Baruffio's Brain Elixir" vs "BARUFFIOS_BRAIN_ELIXIR").
-     * </p>
+     * Get a potion type from its enum name (the inverse of {@code toString()}). Use {@link #getPotionTypeByName(String)}
+     * to look up by display name instead, since display names (e.g. "Baruffio's Brain Elixir") differ from enum names.
      *
-     * @param potionString the enum name of the potion type (e.g., "SLEEPING_DRAUGHT", "WIGGENWELD_POTION")
-     * @return the potion type if found, null if the string doesn't match any potion type
+     * @param potionString the enum name of the potion type, e.g. "SLEEPING_DRAUGHT"
+     * @return the potion type, or null if the string matches no potion type
      */
     @Nullable
     public static O2PotionType getPotionTypeFromString(@NotNull String potionString) {
@@ -193,25 +178,18 @@ public enum O2PotionType {
             potionType = O2PotionType.valueOf(potionString);
         }
         catch (Exception e) {
-            // we don't do anything, this will happen if they send an invalid potion name
+            // invalid potion name; leave potionType null
         }
 
         return potionType;
     }
 
     /**
-     * Get a potion type by its display name.
-     * <p>
-     * This is distinctly different from {@link #getPotionTypeFromString(String)} which gets the potion
-     * based on the enum.toString() value. Display names may include punctuation and spaces that aren't
-     * valid in enum names (e.g., "Baruffio's Brain Elixir", "Wit-Sharpening Potion").
-     * </p>
-     * <p>
-     * The comparison is case-insensitive.
-     * </p>
+     * Get a potion type by its display name, case-insensitively. Unlike {@link #getPotionTypeFromString(String)}, this
+     * matches the human-readable name (which may contain spaces and punctuation not valid in an enum name).
      *
-     * @param name the display name of the potion to find (e.g., "Sleeping Draught")
-     * @return the potion type if found, null if no potion matches the given name
+     * @param name the display name of the potion, e.g. "Sleeping Draught"
+     * @return the potion type, or null if no potion matches the name
      */
     @Nullable
     public static O2PotionType getPotionTypeByName(@NotNull String name) {

@@ -29,28 +29,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for {@link net.pottercraft.ollivanders2.item.wand.O2Wands} wand management functionality.
- * <p>
- * Verifies wand creation, validation, NBT handling, inventory checks, and player wand assignment.
- * Tests cover both full wands (wood + core) and coreless wands, as well as random wand generation.
- * </p>
+ * Unit tests for O2Wands.
  */
 public class O2WandsTest {
     /**
-     * Mock Bukkit server instance used for all tests.
-     * <p>
-     * Set up during {@link #globalSetUp()} and torn down during {@link #globalTearDown()}.
-     * This allows tests to interact with Minecraft server objects without requiring an actual server.
-     * </p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The Ollivanders2 plugin instance loaded with default test configuration.
-     * <p>
-     * Initialized during {@link #globalSetUp()} to provide access to plugin functionality and
-     * allow proper initialization of all O2Items through the plugin's startup sequence.
-     * </p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
@@ -64,17 +52,8 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#isWand(ItemStack)}.
-     * <p>
-     * Verifies that wand detection correctly identifies both Elder Wands and regular wands with NBT,
-     * while rejecting non-wands and incomplete wands.
-     * </p>
-     * <ul>
-     *   <li>Valid wand (wood + core NBT): Returns true</li>
-     *   <li>Elder Wand: Returns true</li>
-     *   <li>Non-wand item (APPLE): Returns false</li>
-     *   <li>WAND O2Item without wood/core NBT: Returns false</li>
-     * </ul>
+     * isWand() is true for the Elder Wand and for a WAND with wood+core NBT, and false for other items or a WAND
+     * missing that NBT.
      */
     @Test
     void isWandTest() {
@@ -99,15 +78,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#checkNBT(ItemStack)}.
-     * <p>
-     * Verifies that NBT validation requires both wood and core keys to be present.
-     * </p>
-     * <ul>
-     *   <li>Valid wand with both NBT keys: Returns true</li>
-     *   <li>Coreless wand (only wood NBT): Returns false</li>
-     *   <li>Non-wand item (no NBT): Returns false</li>
-     * </ul>
+     * checkNBT() requires both wood and core NBT keys, so a coreless wand or a non-wand item fails.
      */
     @Test
     void checkNBTTest() {
@@ -127,10 +98,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#createLore(String, String)}.
-     * <p>
-     * Verifies that the lore string is correctly formatted as "wood and core".
-     * </p>
+     * createLore() formats the lore as "wood and core".
      */
     @Test
     void createLoreTest() {
@@ -143,15 +111,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#checkCoreNBT(String, ItemStack)}.
-     * <p>
-     * Verifies that core NBT matching is case-insensitive and correctly identifies mismatches.
-     * </p>
-     * <ul>
-     *   <li>Matching core: Returns true</li>
-     *   <li>Non-matching core: Returns false</li>
-     *   <li>Item without core NBT: Returns false</li>
-     * </ul>
+     * checkCoreNBT() is true only when the item's core NBT matches the given core, and false on mismatch or missing NBT.
      */
     @Test
     void checkCoreNBTTest() {
@@ -172,15 +132,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#checkWoodNBT(String, ItemStack)}.
-     * <p>
-     * Verifies that wood NBT matching is case-insensitive and correctly identifies mismatches.
-     * </p>
-     * <ul>
-     *   <li>Matching wood: Returns true</li>
-     *   <li>Non-matching wood: Returns false</li>
-     *   <li>Item without wood NBT: Returns false</li>
-     * </ul>
+     * checkWoodNBT() is true only when the item's wood NBT matches the given wood, and false on mismatch or missing NBT.
      */
     @Test
     void checkWoodNBTTest() {
@@ -201,18 +153,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#holdsWand(Player)} and {@link net.pottercraft.ollivanders2.item.wand.O2Wands#holdsWand(Player, EquipmentSlot)}.
-     * <p>
-     * Verifies that wand detection in player hands works for both main and off-hand, and that the
-     * default method checks only the main hand.
-     * </p>
-     * <ul>
-     *   <li>Empty main hand: Returns false</li>
-     *   <li>Wand in main hand: Returns true</li>
-     *   <li>Non-wand in main hand: Returns false</li>
-     *   <li>Wand in off-hand with EquipmentSlot.OFF_HAND: Returns true</li>
-     *   <li>Wand only in off-hand, default method: Returns false</li>
-     * </ul>
+     * holdsWand() detects a wand in the specified hand; the no-arg overload checks only the main hand.
      */
     @Test
     void holdsWandTest() {
@@ -241,15 +182,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#getAllWands()}.
-     * <p>
-     * Verifies that all possible wood/core combinations are returned and all are valid wands.
-     * </p>
-     * <ul>
-     *   <li>List is not empty</li>
-     *   <li>Size equals woods count × cores count</li>
-     *   <li>All entries are valid wands</li>
-     * </ul>
+     * getAllWands() returns a valid wand for every wood × core combination.
      */
     @Test
     void getAllWandsTest() {
@@ -268,16 +201,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#makeWand(String, String, int)}.
-     * <p>
-     * Verifies wand creation with valid and invalid wood/core combinations and various amounts.
-     * </p>
-     * <ul>
-     *   <li>Valid wand (OAK + UNICORN_HAIR, amount 1): Returns non-null wand</li>
-     *   <li>Valid wand with amount 3: Returns wand with correct amount</li>
-     *   <li>Invalid wood: Returns null</li>
-     *   <li>Invalid core: Returns null</li>
-     * </ul>
+     * makeWand() builds a wand of the requested amount for a valid wood+core, and returns null if either is invalid.
      */
     @Test
     void makeWandTest() {
@@ -297,15 +221,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#isDestinedWand(Player, ItemStack)} and {@link net.pottercraft.ollivanders2.item.wand.O2Wands#isDestinedWand(O2Player, ItemStack)}.
-     * <p>
-     * Verifies that a wand is correctly matched to a player's destined wood and core.
-     * </p>
-     * <ul>
-     *   <li>Wand matching both wood and core: Returns true for both overloads</li>
-     *   <li>Wand with wrong wood, correct core: Returns false</li>
-     *   <li>Wand with correct wood, wrong core: Returns false</li>
-     * </ul>
+     * isDestinedWand() (both overloads) is true only when the wand's wood and core both match the player's destined wand.
      */
     @Test
     void isDestinedWandTest() {
@@ -331,16 +247,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#createCorelessWand(O2WandWoodType, int)}.
-     * <p>
-     * Verifies that coreless wands have wood NBT but no core NBT and are not detected as complete wands.
-     * </p>
-     * <ul>
-     *   <li>Coreless wand: Has wood NBT</li>
-     *   <li>Coreless wand: Does not have full wand NBT</li>
-     *   <li>Coreless wand: Not detected as a wand</li>
-     *   <li>Amount is preserved: Returns correct quantity</li>
-     * </ul>
+     * createCorelessWand() sets wood NBT but no core NBT, so it is not a complete wand, and preserves the amount.
      */
     @Test
     void createCorelessWandTest() {
@@ -364,15 +271,8 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#makeWandFromCoreless(ItemStack, O2WandCoreType, int)}.
-     * <p>
-     * Verifies that a core can be added to a coreless wand, and that the wood type is preserved or
-     * falls back to random if not present.
-     * </p>
-     * <ul>
-     *   <li>Coreless wand with known wood + core: Wood and core preserved/set correctly</li>
-     *   <li>Plain item without wood NBT: Falls back to random wood, creates valid wand</li>
-     * </ul>
+     * makeWandFromCoreless() adds the core and keeps the coreless wand's wood, falling back to a random wood when the
+     * source has no wood NBT.
      */
     @Test
     void makeWandFromCorelessTest() {
@@ -399,14 +299,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#giveRandomWand(Player)}.
-     * <p>
-     * Verifies that a random wand is created and successfully added to the player's inventory.
-     * </p>
-     * <ul>
-     *   <li>Method returns true indicating success</li>
-     *   <li>Player inventory contains a valid wand</li>
-     * </ul>
+     * giveRandomWand() succeeds and leaves a valid wand in the player's inventory.
      */
     @Test
     void giveRandomWandTest() {
@@ -427,15 +320,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#createRandomWand()}.
-     * <p>
-     * Verifies that a random wand is created with valid wood and core types.
-     * </p>
-     * <ul>
-     *   <li>Returns a valid wand (not null)</li>
-     *   <li>Wand is recognized as a wand</li>
-     *   <li>Amount is exactly 1</li>
-     * </ul>
+     * createRandomWand() returns a single valid wand.
      */
     @Test
     void createRandomWandTest() {
@@ -446,15 +331,7 @@ public class O2WandsTest {
     }
 
     /**
-     * Test {@link net.pottercraft.ollivanders2.item.wand.O2Wands#isCorelessWand(ItemStack)}.
-     * <p>
-     * Verifies that coreless wand detection requires wood NBT but no core NBT.
-     * </p>
-     * <ul>
-     *   <li>Coreless wand (wood NBT, no core NBT): Returns true</li>
-     *   <li>Complete wand (wood + core NBT): Returns false</li>
-     *   <li>Non-wand item (no NBT): Returns false</li>
-     * </ul>
+     * isCorelessWand() is true only for an item with wood NBT but no core NBT.
      */
     @Test
     void isCorelessWandTest() {
@@ -473,26 +350,11 @@ public class O2WandsTest {
         assertFalse(Ollivanders2API.getItems().getWands().isCorelessWand(apple), "isCorelessWand() returned true for Material.APPLE");
     }
 
-    /**
-     * Reset test state after each test method.
-     * <p>
-     * Ensures the debug flag is disabled after each test to prevent debug output from affecting
-     * subsequent tests or polluting test logs.
-     * </p>
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     * Clean up MockBukkit server after all tests complete.
-     * <p>
-     * Releases MockBukkit resources and unloads the mock server. This must be called after all
-     * tests in the class have finished to properly clean up the test environment and allow
-     * other test classes to create fresh mock servers.
-     * </p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

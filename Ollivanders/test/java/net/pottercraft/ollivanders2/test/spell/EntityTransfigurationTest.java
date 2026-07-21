@@ -26,11 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract test suite for entity transfiguration spells.
- *
- * <p>Tests the common transfiguration behavior: entity targeting, type validation, success rate,
- * duration bounds, reversion, permanent vs temporary behavior, and caster messaging. Subclasses
- * provide the valid/invalid/same entity types and implement spell-specific transfiguration tests.</p>
+ * Base test class for {@link EntityTransfiguration} spells, covering entity targeting, success rate, duration,
+ * permanence, reversion, and messaging. Subclasses supply the valid/invalid/same entity types.
  *
  * @see EntityTransfiguration
  * @see O2SpellTestSuper
@@ -127,7 +124,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
 
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(entityTransfiguration.hasHitBlock(), "hitTarget not set when spell hit valid target");
+        assertTrue(entityTransfiguration.hasHitBlock(), "hasHitBlock not set when spell hit valid target");
         assertTrue(entityTransfiguration.isTransfigured(), "target was not transfigured");
     }
 
@@ -138,10 +135,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     abstract void transfigureTest();
 
     /**
-     * Tests success rate mechanics based on player spell skill level.
-     *
-     * <p>Verifies that spells fail with low skill (when success rate < 100%) and succeed
-     * at spell mastery level (skill = 100).</p>
+     * Verify the transfiguration fails at zero skill (success rate under 100%) and succeeds at mastery skill.
      */
     @Test
     void effectSuccessRateTest() {
@@ -267,10 +261,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests spell duration and automatic termination for temporary transfigurations.
-     *
-     * <p>Verifies that non-permanent spells run for their specified duration and are
-     * killed when the duration expires.</p>
+     * Verify a temporary transfiguration stays alive until its duration expires, then is killed.
      */
     @Test
     void ageAndKillTest() {
@@ -300,10 +291,8 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests permanent transfiguration spells that are not reverted after duration expires.
-     *
-     * <p>Verifies that permanent spells are immediately killed after transfiguration
-     * and transfigured blocks remain in their changed state.</p>
+     * Verify a permanent transfiguration is killed immediately on success, removing the original entity and leaving
+     * the transfigured one in place.
      */
     @Test
     void isPermanentTest() {
@@ -328,10 +317,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that spell duration is within configured min/max bounds for temporary spells.
-     *
-     * <p>Verifies that the duration of temporary transfigurations is properly calculated
-     * and falls within the valid range.</p>
+     * Verify a temporary transfiguration's computed duration falls within its min and max bounds.
      */
     @Test
     void effectDurationTest() {
@@ -355,10 +341,8 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that appropriate success and failure messages are sent to the caster.
-     *
-     * <p>Verifies that the caster receives the success message when transfiguration succeeds
-     * and the failure message when transfiguration fails.</p>
+     * Verify the caster gets the failure message when the transfiguration fails and the success message when it
+     * succeeds.
      */
     @Test
     void successAndFailureMessageTest() {
@@ -376,7 +360,7 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
             mockServer.getScheduler().performTicks(20);
 
             assertTrue(entityTransfiguration.isKilled());
-            assertFalse(entityTransfiguration.isTransfigured()); // should fail because the block is already transfigured
+            assertFalse(entityTransfiguration.isTransfigured()); // invalid entity type, should fail
             String message = caster.nextMessage();
             assertNotNull(message, "caster did not receive failure message");
             assertEquals(entityTransfiguration.getFailureMessage(), TestCommon.cleanChatMessage(message), "caster did not get expected failure message");
@@ -423,6 +407,9 @@ abstract public class EntityTransfigurationTest extends O2SpellTestSuper {
         }
     }
 
+    /**
+     * Verify reverting a temporary transfiguration of an inventory-holding entity restores an entity at the target.
+     */
     @Test
     void inventoryHolderRevertTest() {
         World testWorld = mockServer.addSimpleWorld(getSpellType().getSpellName());

@@ -19,32 +19,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- *
+ * Unit tests for {@link O2Item}.
  */
 public class O2ItemTest {
     /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The plugin instance being tested.
-     *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
-     * logger, scheduler, and other plugin API methods during tests.</p>
+     * The plugin instance, reloaded before each test method for isolation.
      */
     Ollivanders2 testPlugin;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -52,14 +39,11 @@ public class O2ItemTest {
         mockServer = MockBukkit.mock();
     }
 
-    /**
-     *
-     */
     @BeforeEach
     void setUp() {
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
 
-        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        // advance past the scheduler's 20-tick startup delay
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
@@ -71,7 +55,7 @@ public class O2ItemTest {
     }
 
     /**
-     *
+     * getItem() returns a stack of the requested amount.
      */
     @Test
     void getItemTest() {
@@ -89,7 +73,7 @@ public class O2ItemTest {
     }
 
     /**
-     *
+     * getType() returns the type the item was created with.
      */
     @Test
     void getItemTypeTest() {
@@ -105,7 +89,7 @@ public class O2ItemTest {
     }
 
     /**
-     *
+     * The static O2Item.getItemType(ItemStack) recovers the type from a created item stack.
      */
     @Test
     void getStaticItemTypeTest() {
@@ -124,17 +108,11 @@ public class O2ItemTest {
         assertEquals(itemType, O2Item.getItemType(itemStack), "O2Item.getItemType(itemStack) did not return expected type");
     }
 
-    /**
-     *
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     *
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

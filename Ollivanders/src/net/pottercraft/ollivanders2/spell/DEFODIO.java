@@ -14,14 +14,9 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Gouging Charm, which mines a line of blocks in the direction it is cast.
- * <p>
- * When the projectile strikes a block, the spell digs forward one block at a time along the cast vector, breaking
- * each block naturally so it drops its normal items. Digging continues until the spell reaches a blocked material
- * (water, lava, or fire), a block that cannot be broken, or has mined its full length. The number of blocks mined
- * scales with the caster's skill, and the digging is throttled to a few blocks per second rather than happening
- * all at once.
- * </p>
+ * The Gouging Charm: digs a straight line of blocks in the direction it is cast, breaking each so it drops normally.
+ * The line's length scales with the caster's skill (up to {@link #maxDepth}) and mining is throttled to a few blocks
+ * per second rather than happening all at once.
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Gouging_Spell">Harry Potter Wiki - Gouging Spell</a>
@@ -102,7 +97,7 @@ public final class DEFODIO extends O2Spell {
     /**
      * Set the number of blocks to mine from the caster's skill.
      * <p>
-     * The dig length grows by one block for every 4 points of {@code usesModifier}, then is clamped to the range
+     * The dig length grows by one block for every 4 points of {@code usesModifier}, then is limited to the range
      * 1 to {@link #maxDepth} so an unskilled caster still mines at least one block and a highly skilled caster
      * cannot tunnel without limit.
      * </p>
@@ -182,7 +177,7 @@ public final class DEFODIO extends O2Spell {
 
     /**
      * Get the number of blocks this cast will mine, as set by {@link #doInitSpell()} from the caster's skill and
-     * clamped to the range 1 to {@link #getMaxDepth()}.
+     * limited to the range 1 to {@link #getMaxDepth()}.
      *
      * <p>This value is only meaningful before the spell resolves: it is decremented as each block is mined, so
      * read it before the spell ticks to its effect.</p>

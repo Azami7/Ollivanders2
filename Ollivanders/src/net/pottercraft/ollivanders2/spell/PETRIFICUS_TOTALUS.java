@@ -8,24 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Petrificus Totalus - The Full Body-Bind Curse.
- *
- * <p>PETRIFICUS_TOTALUS is a curse that temporarily paralyzes the target player's entire body,
- * preventing all movement and rotation. The victim becomes completely rigid and unable to perform any
- * action, much like a soldier at attention. The spell can target any player regardless of size or status,
- * making it a universally applicable immobilization curse.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Targets any player without restrictions</li>
- * <li>Applies FULL_IMMOBILIZE effect (prevents all movement including rotation)</li>
- * <li>No additional effects are applied</li>
- * <li>Duration scales with spell usage (usesModifier), clamped to 30-300 seconds</li>
- * <li>Complete immobilization leaves the victim helpless but unharmed</li>
- * </ul>
+ * Petrificus Totalus - The Full Body-Bind Curse: fully immobilizes the target player, preventing all movement and
+ * rotation for a skill-scaled duration and leaving them helpless but unharmed. Any player can be targeted.
  *
  * @author Azami7
- * @see <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">Harry Potter Wiki - Full Body-Bind Curse</a></p>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">Harry Potter Wiki - Full Body-Bind Curse</a>
  */
 public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
     /**
@@ -67,13 +54,10 @@ public class PETRIFICUS_TOTALUS extends ImmobilizePlayer {
     }
 
     /**
-     * Determine if a player can be targeted by this curse.
-     *
-     * <p>Petrificus Totalus can target any player without restrictions. There are no protective effects
-     * or conditions that would prevent this curse from affecting a player.</p>
+     * Check whether the target can be affected by this curse; Petrificus Totalus can target any player.
      *
      * @param target the player to validate as a potential target
-     * @return always returns true, as any player can be targeted
+     * @return always true
      */
     boolean canTarget(Player target) {
         return true; // we can target any player

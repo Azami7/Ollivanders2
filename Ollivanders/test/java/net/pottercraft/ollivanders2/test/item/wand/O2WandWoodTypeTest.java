@@ -25,29 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for {@link O2WandWoodType} enum functionality.
- * <p>
- * Verifies that wand wood type retrieval, filtering, random selection, and item validation
- * work correctly across all wood types. Tests ensure deterministic behavior for seed-based
- * selection and proper material-to-type mapping.
- * </p>
+ * Unit tests for {@link O2WandWoodType}.
  */
 public class O2WandWoodTypeTest {
     /**
-     * Mock Bukkit server instance used for all tests.
-     * <p>
-     * Set up during {@link #globalSetUp()} and torn down during {@link #globalTearDown()}.
-     * This allows tests to interact with Minecraft server objects without requiring an actual server.
-     * </p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The Ollivanders2 plugin instance loaded with default test configuration.
-     * <p>
-     * Initialized during {@link #globalSetUp()} to provide access to plugin functionality and
-     * allow proper initialization of all O2Items through the plugin's startup sequence.
-     * </p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
@@ -61,10 +48,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getMaterial()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * {@link O2WandWoodType#getMaterial()} is a simple getter and needs no explicit test.
      */
     @Test
     void getMaterialTest() {
@@ -72,10 +56,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getLabel()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * {@link O2WandWoodType#getLabel()} is a simple getter and needs no explicit test.
      */
     @Test
     void getLabelTest() {
@@ -83,14 +64,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getWandWoodTypeByMaterial(Material)}.
-     * <p>
-     * Verifies that wand wood types can be correctly retrieved by {@link Material}.
-     * </p>
-     * <ul>
-     *   <li>Invalid material (AIR): Returns null</li>
-     *   <li>Valid wood material (CHERRY): Returns correct wood type</li>
-     * </ul>
+     * getWandWoodTypeByMaterial() returns the wood type for a wand-wood material, and null for a non-wand material.
      */
     @Test
     void getWandWoodTypeByMaterialTest() {
@@ -103,15 +77,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getWandWoodTypeByName(String)}.
-     * <p>
-     * Verifies that wand wood types can be correctly retrieved by name with exact case matching.
-     * </p>
-     * <ul>
-     *   <li>Invalid name: Returns null</li>
-     *   <li>Valid name (CHERRY): Returns correct wood type</li>
-     *   <li>Case sensitivity: Lowercase name returns null</li>
-     * </ul>
+     * getWandWoodTypeByName() matches by exact (case-sensitive) name, and returns null for an unknown or wrong-case name.
      */
     @Test
     void getWandWoodTypeByNameTest() {
@@ -128,15 +94,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getAllWandWoodsByName()}.
-     * <p>
-     * Verifies that the returned list contains all wand wood names with no duplicates.
-     * </p>
-     * <ul>
-     *   <li>List is not empty and contains all enum values</li>
-     *   <li>Each enum constant's label is present in the list</li>
-     *   <li>No duplicate names exist in the list</li>
-     * </ul>
+     * getAllWandWoodsByName() returns every wood's name with no duplicates.
      */
     @Test
     void getAllWandWoodsByNameTest() {
@@ -161,15 +119,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getRandomWood()}.
-     * <p>
-     * Verifies that random wood selection returns valid wood types and exhibits variance
-     * across multiple calls.
-     * </p>
-     * <ul>
-     *   <li>All returned woods are valid and retrievable by name</li>
-     *   <li>Multiple calls produce at least 2 different wood types (randomness verified)</li>
-     * </ul>
+     * getRandomWood() returns valid wood names and varies across repeated calls.
      */
     @Test
     void getRandomWoodTest() {
@@ -189,14 +139,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#getWandWoodBySeed(int)}.
-     * <p>
-     * Verifies that seed-based wood selection is deterministic and handles large seed values correctly.
-     * </p>
-     * <ul>
-     *   <li>All returned woods are valid and retrievable by name for random seeds</li>
-     *   <li>Same seed always produces the same wood (determinism verified with seed=42)</li>
-     * </ul>
+     * getWandWoodBySeed() returns a valid wood and is deterministic for a given seed.
      */
     @Test
     void getWandWoodBySeedTest() {
@@ -219,14 +162,7 @@ public class O2WandWoodTypeTest {
     }
 
     /**
-     * Test {@link O2WandWoodType#isWandWood(Material)}.
-     * <p>
-     * Verifies that wood type detection correctly identifies wand woods.
-     * </p>
-     * <ul>
-     *   <li>Valid wand wood material (BIRCH): Returns true</li>
-     *   <li>Invalid material (AIR): Returns false</li>
-     * </ul>
+     * isWandWood() is true for a wand-wood material and false otherwise.
      */
     @Test
     void isWandWoodTest() {
@@ -235,26 +171,11 @@ public class O2WandWoodTypeTest {
         assertFalse(O2WandWoodType.isWandWood(Material.AIR), "O2WandWoodType.isWandWood(Material.AIR) returned true");
     }
 
-    /**
-     * Reset test state after each test method.
-     * <p>
-     * Ensures the debug flag is disabled after each test to prevent debug output from affecting
-     * subsequent tests or polluting test logs.
-     * </p>
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     * Clean up MockBukkit server after all tests complete.
-     * <p>
-     * Releases MockBukkit resources and unloads the mock server. This must be called after all
-     * tests in the class have finished to properly clean up the test environment and allow
-     * other test classes to create fresh mock servers.
-     * </p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

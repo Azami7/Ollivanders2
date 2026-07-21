@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="http://harrypotter.wikia.com/wiki/Potion_Opuscule">http://harrypotter.wikia.com/wiki/Potion_Opuscule</a>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Potion_Opuscule">Potion Opuscule</a>
  */
 public class POTION_OPUSCULE extends O2Book {
     /**

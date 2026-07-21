@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Turn target entity in to a Dragon.
+ * Turn target entity in to a dragon.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Draconifors_Spell">https://harrypotter.fandom.com/wiki/Draconifors_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Draconifors_Spell">Harry Potter Wiki - Draconifors Spell</a>
  */
 public final class DRACONIFORS extends FriendlyMobDisguise {
-    // todo make this spawn phantoms and not dragons since the ender dragon is way too big
+    // TODO: spawn phantoms instead of the ender dragon, which is too big
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 

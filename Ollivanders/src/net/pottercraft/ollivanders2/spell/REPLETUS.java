@@ -13,18 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Repletus — the Refilling Charm that replenishes empty containers.
- *
- * <p>REPLETUS fills empty water bottles and buckets held in the caster's off-hand.
- * The spell converts glass bottles to water potions and buckets to water buckets.
- * The refilling is instant with no projectile, and a splash sound is played when the
- * spell successfully fills a container.</p>
- *
- * <p>Supported items:</p>
- * <ul>
- * <li><strong>Glass Bottle:</strong> Converts to water potion (same amount)</li>
- * <li><strong>Bucket:</strong> Converts to water bucket (same amount)</li>
- * </ul>
+ * Refilling Charm — refills an empty container held in the caster's off hand: a glass bottle becomes a water potion
+ * and a bucket becomes a water bucket. Cast directly with no projectile.
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Refilling_Charm">Refilling Charm on Harry Potter Wiki</a>
  */
@@ -67,17 +57,11 @@ public class REPLETUS extends O2Spell {
     }
 
     /**
-     * Instantly refills containers held in the caster's off hand.
-     *
-     * <p>Checks the item in the caster's off hand and converts it if it's a supported container:</p>
-     * <ul>
-     * <li>Glass bottles → water potions (with the same stack size)</li>
-     * <li>Buckets → water buckets (with the same stack size)</li>
-     * </ul>
-     *
-     * <p>If a supported item is converted, a splash sound is played at the spell location.
-     * If the item is not a supported container, the spell has no effect.
-     * The spell always kills itself immediately after attempting to fill.</p>
+     * Refill a supported container held in the caster's off hand, then end the spell.
+     * <p>
+     * A glass bottle becomes a water potion and a bucket becomes a water bucket, keeping the stack size, and a fill
+     * sound is played. Any other off-hand item is left unchanged.
+     * </p>
      */
     @Override
     protected void doCheckEffect() {

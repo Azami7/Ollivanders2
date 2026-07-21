@@ -69,7 +69,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
             worldGuardFlags.add(Flags.BUILD);
         }
 
-        // pass-through materials
+        // stop the projectile at fire and water so it can target the fireplace rather than passing through
         projectilePassThrough.remove(Material.WATER);
         projectilePassThrough.remove(Material.FIRE);
 
@@ -77,11 +77,8 @@ public final class ALIQUAM_FLOO extends O2Spell {
     }
 
     /**
-     * Registers a fireplace with the Floo Network if the target is a fire/campfire with a sign above it.
-     *
-     * <p>Checks that the projectile hit a fire or campfire block, reads the four-line sign above it for the
-     * fireplace name, verifies no duplicate names exist, and creates a permanent stationary spell to represent
-     * the registered fireplace on the network.</p>
+     * Registers a fireplace with the Floo Network if the target is a fire/campfire with a sign above it. The sign's
+     * four lines form the fireplace name; registration is skipped if that name is blank or already in use.
      */
     @Override
     protected void doCheckEffect() {
@@ -100,6 +97,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
                 if (flooName.isBlank()) {
                     common.printDebugMessage("ALIQUAM_FLOO.doCheckEffect: sign is blank", null, null, false);
                     sendFailureMessage();
+                    kill();
                     return;
                 }
 

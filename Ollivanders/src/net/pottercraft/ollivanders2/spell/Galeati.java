@@ -11,17 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Abstract base class for spells that replace a player's helmet with a specific block type.
+ * Base class for spells that replace a target player's helmet with a block.
  * <p>
- * Galeati spells use the entity-scanning projectile model: each tick the projectile scans for
- * nearby players within {@link #defaultRadius}. The first non-caster player found has their
- * current helmet dropped at their eye location (if non-AIR) and replaced with a new
- * {@link ItemStack} of {@link #helmetType}. Subclasses set {@code helmetType} in their
- * casting constructor to control what block the target wears.
- * </p>
- * <p>
- * In Harry Potter lore these would be Transfiguration spells, but for code purposes they
- * behave like charm projectiles and set {@code branch} to {@link net.pottercraft.ollivanders2.O2MagicBranch#CHARMS}.
+ * In Harry Potter lore these are Transfiguration spells, but they behave like charm projectiles here and set their
+ * branch to {@link net.pottercraft.ollivanders2.O2MagicBranch#CHARMS}.
  * </p>
  *
  * @see MELOFORS
@@ -29,13 +22,12 @@ import java.util.List;
  */
 public abstract class Galeati extends O2Spell {
     /**
-     * The material placed on the target player's head. Defaults to {@link Material#AIR};
-     * subclasses override this in their casting constructor.
+     * The material placed on the target player's head. Subclasses set this in their casting constructor.
      */
     protected Material helmetType = Material.AIR;
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -44,8 +36,6 @@ public abstract class Galeati extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -55,17 +45,8 @@ public abstract class Galeati extends O2Spell {
     }
 
     /**
-     * Scan for a nearby player and replace their helmet with {@link #helmetType}.
-     * <p>
-     * Each tick, the method scans within {@link #defaultRadius} for players. The caster is
-     * skipped. The first non-caster player found has their current helmet (if any and non-AIR)
-     * dropped as an item at their eye location, then replaced with a new item of
-     * {@code helmetType}. The spell is then killed (single-target).
-     * </p>
-     * <p>
-     * If the projectile hits a block before finding a player, the spell is killed and returns
-     * silently.
-     * </p>
+     * Replace the first nearby player's helmet (excluding the caster) with {@link #helmetType}, dropping their
+     * existing helmet on the ground, then end the spell. Killed if the projectile hits a block first.
      */
     @Override
     protected void doCheckEffect() {

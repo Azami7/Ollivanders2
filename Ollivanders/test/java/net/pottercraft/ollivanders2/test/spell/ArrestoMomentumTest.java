@@ -25,39 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the ARRESTO_MOMENTUM spell.
- *
- * <p>ARRESTO_MOMENTUM slows down the velocity of items or living entities based on the caster's
- * spell experience level. The spell prioritizes living entities (with size and year restrictions)
- * over items, falling back to items if no valid living entity is found.</p>
- *
- * <p>Test Coverage:</p>
- * <ul>
- * <li>Item targeting and velocity reduction</li>
- * <li>Living entity targeting with year-level restrictions</li>
- * <li>Oversized entity rejection (bounding box height > 2 blocks)</li>
- * <li>Velocity multiplier scaling based on spell experience</li>
- * </ul>
- *
- * @see net.pottercraft.ollivanders2.spell.ARRESTO_MOMENTUM for the spell implementation
- * @see O2SpellTestSuper for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.ARRESTO_MOMENTUM}.
  */
 public class ArrestoMomentumTest extends O2SpellTestSuper {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.ARRESTO_MOMENTUM
-     */
     @Override @NotNull
     O2SpellType getSpellType() {
         return O2SpellType.ARRESTO_MOMENTUM;
     }
 
     /**
-     * Test that the spell targets and slows items.
-     *
-     * <p>Verifies that when no valid living entity is nearby, the spell falls back to targeting
-     * the nearest item and reduces its velocity according to the spell's multiplier.</p>
+     * Verify the spell falls back to the nearest item and slows it when no valid living entity is nearby.
      */
     @Override @Test
     void doCheckEffectTest() {
@@ -79,11 +56,8 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that living entity targeting respects year-level restrictions.
-     *
-     * <p>Verifies that when years are enabled, only casters at Year 5 or higher can target living
-     * entities. Below Year 5, the spell should skip living entities and target items instead. Casters
-     * at Year 5 and above can successfully slow living entities.</p>
+     * Verify that with years enabled only a Year 5+ caster can slow a living entity; below Year 5 the spell targets
+     * an item instead.
      */
     @Test
     void livingEntityTest() {
@@ -120,10 +94,7 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that oversized entities are not targeted.
-     *
-     * <p>Verifies that entities with bounding box height > 2 blocks (like Iron Golems) are skipped
-     * and their velocity remains unchanged. The spell will only target normal-sized entities.</p>
+     * Verify entities taller than 2 blocks (e.g. an iron golem) are skipped and keep their velocity.
      */
     @Test
     void oversizedEntityTest() {
@@ -149,11 +120,8 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that velocity multiplier scales correctly with spell experience.
-     *
-     * <p>Verifies that the velocity reduction multiplier decreases (stronger slowing) as spell
-     * experience increases. Tests all five multiplier tiers: experience 10 (0.6x), 30 (0.5x), 60 (0.4x),
-     * 80 (0.3x), and 101+ (0.2x).</p>
+     * Verify the velocity multiplier shrinks (stronger slowing) as experience rises, across all five tiers from
+     * 0.6x at low skill to 0.2x above 100.
      */
     @Test
     void velocityMultiplierTest() {
@@ -198,10 +166,7 @@ public class ArrestoMomentumTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test revert functionality.
-     *
-     * <p>ARRESTO_MOMENTUM has no revert actions since velocity changes are not tracked
-     * for automatic cleanup.</p>
+     * No-op: ARRESTO_MOMENTUM tracks no changes to revert (velocity changes are not undone).
      */
     @Override @Test
     void revertTest() {

@@ -31,31 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for {@link net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells} manager.
- *
- * <p>Tests the core functionality of the stationary spells manager including spell addition,
- * removal, querying by location and type, and creation of spell instances via reflection.
- * Event handler behavior is tested by individual spell implementation test classes.</p>
- *
- * <p>Note: Serialization/deserialization tests are deferred to integration tests to avoid
- * file I/O dependencies that could cause flakiness in parallel test execution.</p>
+ * Unit tests for the {@link net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells} manager: adding, removing,
+ * and querying spells by location and type, and creating spell instances by type. Per-spell event handling is covered
+ * by each spell's own test class.
  */
 public class O2StationarySpellsTest {
-    /**
-     * Shared mock Bukkit server instance for all tests.
-     *
-     * <p>Static field initialized once before all tests in this class. Reused across test instances
-     * to avoid expensive server setup/teardown for each test method.</p>
-     */
     static ServerMock mockServer;
 
-    /**
-     * Initialize the mock Bukkit server before all tests.
-     *
-     * <p>Static setup method called once before all tests in this class. Creates the shared
-     * MockBukkit server instance that is reused across all test methods to avoid expensive
-     * server creation/destruction overhead.</p>
-     */
     @BeforeAll
     static void globalSetUp() {
         Ollivanders2.testMode = true;
@@ -63,10 +45,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Loads a fresh plugin instance with default configuration.
-     *
-     * <p>Each test method calls this to get a properly initialized plugin with all managers
-     * and event listeners registered. The server scheduler is advanced to complete plugin startup.</p>
+     * Load a fresh plugin instance with all managers and listeners registered, advancing the scheduler through startup.
      *
      * @return a fresh Ollivanders2 plugin instance
      */
@@ -77,10 +56,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests adding and removing stationary spells.
-     *
-     * <p>Verifies that a spell can be added to the manager, becomes available at its location,
-     * and is properly removed when marked as killed.</p>
+     * An added spell is present at its location and is gone after being removed and the next upkeep.
      */
     @Test
     void addAndRemoveStationarySpellTest() {
@@ -102,9 +78,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests retrieving active stationary spells.
-     *
-     * <p>Verifies that the manager correctly identifies active spells and excludes killed ones.</p>
+     * The active-spells list includes an added spell and excludes it once killed.
      */
     @Test
     void getActiveStationarySpellsTest() {
@@ -128,9 +102,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests finding spells at a location.
-     *
-     * <p>Verifies that spells are correctly found at their location and removed from results when killed.</p>
+     * The location query returns every spell whose radius covers the location and drops killed ones.
      */
     @Test
     void getStationarySpellsAtLocationTest() {
@@ -159,9 +131,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests finding active spells of a specific type at a location.
-     *
-     * <p>Verifies that spells are filtered by both location and type, and that killed spells are excluded.</p>
+     * The by-type location query returns only active spells matching both the location and the type.
      */
     @Test
     void getActiveStationarySpellsAtLocationByTypeTest() {
@@ -195,10 +165,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests checking for a spell of a specific type at a location.
-     *
-     * <p>Verifies that the manager correctly identifies whether a location has an active spell
-     * of a given type, and returns false when no spell of that type is present.</p>
+     * The location-and-type check is true only when a spell of that type covers the location.
      */
     @Test
     void checkLocationForStationarySpellTest() {
@@ -219,10 +186,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests determining whether a location is inside a spell's radius.
-     *
-     * <p>Verifies that locations within a spell's radius return true and locations outside
-     * return false, using a radius-based distance check.</p>
+     * isInsideOf is true for locations within an active spell's radius and false beyond it or for an absent type.
      */
     @Test
     void isInsideOfTest() {
@@ -240,37 +204,17 @@ public class O2StationarySpellsTest {
         assertFalse(Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.MOLLIARE, new Location(location.getWorld(), location.getX() + 10, location.getY(), location.getZ())), "");
     }
 
-    /**
-     * Tests the upkeep mechanism for active spells.
-     *
-     * <p>Note: Individual spell upkeep behavior is tested by each spell's specific test class.
-     * This test is included for completeness in test coverage.</p>
-     */
     @Test
     void upkeepTest() {
-        // tested by each spells upkeep tests
+        // tested by each spell's own upkeep test
     }
 
-    /**
-     * Tests persisting active spells to storage.
-     *
-     * <p>Note: Serialization/deserialization is deferred to integration tests to avoid file I/O
-     * dependencies and flakiness that could occur from parallel test execution modifying shared
-     * save files non-deterministically.</p>
-     */
     @Test
     void saveO2StationarySpellsTest() {
         // cannot test this in unit tests because they run in parallel and each is
         // altering the save files non-deterministically
     }
 
-    /**
-     * Tests restoring persisted spells from storage.
-     *
-     * <p>Note: Serialization/deserialization is deferred to integration tests to avoid file I/O
-     * dependencies and flakiness that could occur from parallel test execution modifying shared
-     * save files non-deterministically.</p>
-     */
     @Test
     void loadO2StationarySpellsTest() {
         // cannot test this in unit tests because they run in parallel and each is
@@ -278,12 +222,7 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Tests creating spell instances via reflection by spell type.
-     *
-     * <p>Verifies that the reflection-based spell factory correctly instantiates all spell types,
-     * that created spells have the correct spell type, and that spells start inactive until
-     * their data is fully loaded. Tests both simple spells and spells with unique initialization
-     * requirements.</p>
+     * The factory creates an inactive instance of the correct type for every spell type.
      */
     @Test
     void createStationarySpellByTypeTest() {
@@ -312,34 +251,22 @@ public class O2StationarySpellsTest {
     }
 
     /**
-     * Cleans up state after each test to ensure test isolation.
-     *
-     * <p>Kills all active spells and clears the static floo network list to prevent
-     * test pollution from affecting subsequent tests.</p>
+     * Kill all active spells and clear the static floo network so tests do not pollute each other.
      */
     @AfterEach
     void cleanUp() {
-        // kill all active stationary spells
         if (Ollivanders2API.getStationarySpells() != null) {
             for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
                 spell.kill();
             }
 
-            // run upkeep to remove killed spells from the list
+            // run upkeep to remove the killed spells from the list
             mockServer.getScheduler().performTicks(20);
         }
 
-        // clear the static floo network list
         ALIQUAM_FLOO.clearFlooNetwork();
     }
 
-    /**
-     * Tear down the mock Bukkit server after all tests complete.
-     *
-     * <p>Static teardown method called once after all tests in this class have finished.
-     * Releases the MockBukkit server resources to prevent memory leaks and allow clean
-     * test execution in subsequent test classes.</p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

@@ -18,56 +18,22 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the {@link PROTEGO_TOTALUM} stationary spell.
- *
- * <p>Tests the protego totalum protective barrier spell, which prevents entities from entering
- * the protected area by:
- * <ul>
- *   <li>Disabling AI on hostile mobs that enter the spell area</li>
- *   <li>Blocking player movement into the protected area</li>
- *   <li>Preventing creature spawns inside the protected area</li>
- *   <li>Restoring AI to affected entities when the spell ends</li>
- * </ul>
- * Inherits common spell tests from {@link O2StationarySpellTest} and provides spell-specific
- * factory methods for test setup.</p>
- *
- * @author Test Author
+ * Unit tests for {@link PROTEGO_TOTALUM}. Extends {@link O2StationarySpellTest} for the shared stationary-spell tests.
  */
 public class ProtegoTotalumTest extends O2StationarySpellTest {
-    /**
-     * Gets the spell type being tested.
-     *
-     * @return {@link O2StationarySpellType#PROTEGO_TOTALUM}
-     */
     @Override
     O2StationarySpellType getSpellType() {
         return O2StationarySpellType.PROTEGO_TOTALUM;
     }
 
-    /**
-     * Creates a PROTEGO_TOTALUM spell instance for testing.
-     *
-     * <p>Constructs a new protego totalum spell at the specified location with the minimum radius and duration values.</p>
-     *
-     * @param caster   the player casting the spell (not null)
-     * @param location the center location of the spell (not null)
-     * @return a new PROTEGO_TOTALUM spell instance (not null)
-     */
     @Override
     PROTEGO_TOTALUM createStationarySpell(Player caster, Location location) {
         return new PROTEGO_TOTALUM(testPlugin, caster.getUniqueId(), location, PROTEGO_TOTALUM.minRadiusConfig, PROTEGO_TOTALUM.minDurationConfig);
     }
 
     /**
-     * Tests upkeep behavior and hostile mob AI management.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Hostile mobs outside the spell area are unaffected</li>
-     *   <li>Hostile mobs inside the spell area have their AI disabled and are tracked</li>
-     *   <li>Non-hostile mobs (passive mobs) inside the spell area are not affected</li>
-     * </ul>
-     * </p>
+     * Upkeep disables and tracks the AI of a hostile mob that enters the area, leaves a passive mob's AI alone, and
+     * leaves mobs outside the area untouched.
      */
     @Override
     @Test
@@ -103,14 +69,7 @@ public class ProtegoTotalumTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests player movement blocking at the spell boundary.
-     *
-     * <p>Verifies that:
-     * <ul>
-     *   <li>Players cannot move from outside the spell area to inside it</li>
-     *   <li>Players can move from inside the spell area to outside it</li>
-     * </ul>
-     * </p>
+     * A player is blocked moving from outside into the area but may move from inside out.
      */
     @Test
     void doOnPlayerMoveEventTest() {
@@ -139,10 +98,7 @@ public class ProtegoTotalumTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests creature spawn blocking inside the spell area.
-     *
-     * <p>Verifies that creatures attempting to spawn inside the protected area have their spawn
-     * event cancelled and the entity is removed.</p>
+     * A creature spawning inside the area has its spawn cancelled and the entity removed.
      */
     @Test
     void doOnCreatureSpawnEventTest() {
@@ -163,10 +119,7 @@ public class ProtegoTotalumTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests cleanup behavior when the spell ends.
-     *
-     * <p>Verifies that when the spell is killed, AI is restored to affected entities that are
-     * still alive. Also tests that dead entities in the tracked list do not cause issues during cleanup.</p>
+     * When the spell ends, AI is restored to still-living affected entities and a dead tracked entity causes no error.
      */
     @Test
     void doCleanUpTest() {

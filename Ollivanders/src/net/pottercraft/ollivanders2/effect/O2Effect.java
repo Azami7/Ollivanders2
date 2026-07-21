@@ -36,59 +36,40 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract base class for all magical effects that can be applied to players.
- *
- * <p>An O2Effect represents a temporary or semi-permanent magical alteration of a player's behavior or abilities.
- * Effects are managed by the player effects system and processed each game tick. While O2Effect itself cannot
- * permanently modify a player's core data, some effects may persist indefinitely until explicitly removed or
- * until a specific in-game action cancels them.</p>
- *
- * <p>Effect Lifecycle:</p>
- * <ol>
- * <li>Effect is created with a duration (in game ticks)</li>
- * <li>checkEffect() is called every game tick to apply the effect's behavior</li>
- * <li>age() is called to decrement the duration counter</li>
- * <li>When duration reaches zero (or effect is manually killed), doRemove() is called for cleanup</li>
- * <li>Effect is removed from the player's effect list</li>
- * </ol>
- *
- * <p>Event Integration:
- * Subclasses can override event handler methods (doOnPlayerInteractEvent, doOnPlayerChatEvent, etc.)
- * to respond to specific server events. These methods are called automatically when their corresponding
- * events occur and the effect is active.</p>
+ * <p>
+ * An effect is a temporary or permanent magical alteration of a player, managed by the player effects system and
+ * ticked while active: {@link #checkEffect()} runs each tick to apply behavior, {@link #age(int)} counts down the
+ * duration, and {@link #doRemove()} cleans up when the effect expires or is killed. Subclasses may override the
+ * {@code doOn...Event} hooks to react to server events while the effect is active.
+ * </p>
  *
  * @author Azami7
- * @see O2EffectType for available effect types and their implementation classes
+ * @see O2EffectType
  */
 public abstract class O2Effect {
     /**
-     * The type of magical effect this instance represents.
-     * Used to identify the specific effect and is set to BABBLING as a safe default.
+     * The type of effect this instance represents; defaults to BABBLING until a subclass sets it.
      */
     public O2EffectType effectType = O2EffectType.BABBLING;
 
     /**
-     * The remaining duration of this effect, measured in game ticks.
-     * One game tick = 1/20 of a second. One Minecraft day = 24000 ticks (~20 real minutes).
-     * Decremented each tick by age(). When it reaches zero or below, the effect is automatically killed.
-     * Permanent effects have a duration of -1 and do not age.
+     * The remaining duration in game ticks, decremented by {@link #age(int)}; the effect is killed once it reaches 0.
+     * Permanent effects hold -1 and do not age.
      */
     public int duration;
 
     /**
-     * Reference to the plugin for accessing configuration, logging, and server API.
+     * Reference to the plugin
      */
     final protected Ollivanders2 p;
 
     /**
-     * Flag indicating this effect has been marked for removal.
-     * When true, the effect will be removed from the player's effect list on the next upkeep cycle.
+     * Whether this effect is marked for removal on the next upkeep cycle.
      */
     protected boolean kill;
 
     /**
-     * Flag indicating whether this effect is permanent.
-     * Permanent effects do not age (duration stays at -1) and are only removed when explicitly killed or
-     * when a specific game action triggers their removal via doRemove().
+     * Whether this effect is permanent; permanent effects do not age and are removed only when explicitly killed.
      */
     protected boolean permanent;
 
@@ -98,56 +79,46 @@ public abstract class O2Effect {
     protected UUID targetID;
 
     /**
-     * The text displayed by information detection spells (e.g., Informous) if this effect can be detected.
-     * This string is the predicate of a sentence that starts with the player's name and should not include
-     * ending punctuation. Example: "feels unnaturally tired" (resulting in "Player feels unnaturally tired").
-     * If null, the effect is not detectable by information spells.
+     * Predicate shown by information-detection spells (e.g. Informous), starting after the player's name and without
+     * ending punctuation, e.g. "feels unnaturally tired". Null if this effect is undetectable by information spells.
      */
     protected String informousText;
 
     /**
-     * The text displayed by mind-reading detection spells (e.g., Legilimens) if this effect can be detected.
-     * This string is the predicate of a sentence that starts with the player's name and should not include
-     * ending punctuation. Example: "feels aggressive" (resulting in "Player feels aggressive").
-     * If null, the effect is not detectable by mind-reading spells.
+     * Predicate shown by mind-reading spells (e.g. Legilimens), starting after the player's name and without ending
+     * punctuation, e.g. "feels aggressive". Null if this effect is undetectable by mind-reading spells.
      */
     protected String legilimensText;
 
     /**
-     * The message shown to a player when they become affected by this effect.
-     * This is sent as a chat message to the target player immediately after the effect is applied.
-     * If null, no message is sent to the affected player.
+     * Chat message sent to the target when the effect is applied; null sends nothing.
      */
     protected String affectedPlayerText;
 
     /**
-     * Common utility functions for the plugin.
+     * Common functions
      */
     Ollivanders2Common common;
 
     /**
-     * The player affected by this effect.
-     *
-     * <p>This reference is initialized in the constructor and guaranteed to be non-null or the effect
-     * will be killed immediately. All child classes use this inherited field instead of maintaining
-     * their own local Player reference.</p>
+     * The affected player; resolved in the constructor, and the effect is killed immediately if they are offline.
+     * Child classes use this inherited reference rather than keeping their own.
      */
     Player target;
 
     /**
-     * Constructor for creating a new magical effect.
+     * Constructor
+     * <p>
+     * If the target player is offline the effect is killed immediately.
+     * </p>
+     * <p>
+     * TODO: keep this signature in sync with the reflection that instantiates effects (e.g. O2Prophecy.fulfill()).
+     * </p>
      *
-     * <p>Creates an effect with the given duration and target player. If the duration is negative,
-     * the effect is automatically set to permanent (duration = -1). Non-permanent effects with
-     * durations shorter than minDuration are automatically extended to meet the minimum.</p>
-     *
-     * <p><strong>IMPORTANT:</strong> If you change this method signature, be sure to update all reflection
-     * code that instantiates effects using this constructor (e.g., O2Prophecy.fulfill()).</p>
-     *
-     * @param plugin          reference to the plugin for API access
-     * @param durationInTicks the duration in game ticks. Negative values create permanent effects
-     * @param isPermanent     whether this effect is permanent (ie. does not age) or not
-     * @param pid             the unique ID of the target player for this effect
+     * @param plugin          reference to the plugin
+     * @param durationInTicks the duration in game ticks; negative values create a permanent effect
+     * @param isPermanent     whether this effect is permanent (does not age)
+     * @param pid             the unique ID of the target player
      */
     public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, boolean isPermanent, @NotNull UUID pid) {
         p = plugin;
@@ -222,34 +193,27 @@ public abstract class O2Effect {
     }
 
     /**
-     * Decrement the effect's duration by the specified amount.
+     * Decrement this effect's duration, killing it if the duration runs out. Permanent effects are left unchanged.
      *
-     * <p>Called by the player effects system each game tick to age the effect. Permanent effects
-     * are not aged and immediately return. Non-permanent effects have their duration decremented;
-     * when duration drops below zero, the effect is automatically killed.</p>
-     *
-     * @param i the number of ticks to subtract from the effect's remaining duration
+     * @param i the number of ticks to subtract
      */
     public void age(int i) {
-        // Skip aging for permanent effects - they never expire
         if (permanent)
             return;
 
         duration = duration - i;
-        // Auto-kill when duration expires (reaches or goes below zero)
         if (duration <= 0)
             kill();
     }
 
     /**
-     * Override default permanent setting for an effect.
+     * Set whether this effect is permanent. Making it permanent sets its duration to -1 so it no longer ages.
      *
      * @param perm true if this is permanent, false otherwise
      */
     public void setPermanent(boolean perm) {
         permanent = perm;
 
-        // Set duration to -1 to mark permanent effects (consistent with negative duration constructor signal)
         if (permanent)
             duration = -1;
     }
@@ -264,35 +228,23 @@ public abstract class O2Effect {
     /**
      * Get the unique identifier of the player affected by this effect.
      *
-     * <p>Returns a copy of the target UUID to prevent external modification of the original.</p>
-     *
-     * @return the unique ID of the target player
+     * @return a copy of the target player's unique ID
      */
     @NotNull
     public UUID getTargetID() {
-        // Return a copy of the UUID to prevent external code from modifying our internal state
-        // UUIDs are immutable, so creating a new instance with the same bits is the safest approach
         return new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
     }
 
     /**
-     * Execute this effect's behavior for the current game tick.
-     *
-     * <p>This method is called once per game tick for active effects on a player. Subclasses should override
-     * this method to implement the effect's specific behavior (e.g., applying potion effects, restricting actions,
-     * modifying movement, etc.). Subclasses should call age() in this method to ensure the effect ages and eventually expires.</p>
-     *
-     * <p><strong>Implementation Note:</strong> This method is called within the main server thread on each tick.
-     * Keep execution time short to avoid lag.</p>
+     * Apply this effect's behavior for the current game tick. Called once per tick while the effect is active;
+     * implementations must call {@link #age(int)} so the effect eventually expires, and should keep the work short as
+     * this runs on the main server thread.
      */
     abstract public void checkEffect();
 
     /**
-     * Perform cleanup when this effect is removed from the player.
-     *
-     * <p>Called when the effect is about to be removed from the player's effect list (either due to expiration,
-     * being killed, or a player logout). Subclasses should override this method to undo any permanent changes
-     * made by the effect, such as removing potion effects, restoring abilities, or updating the player's state.</p>
+     * Clean up when this effect is removed (on expiration, kill, or logout), undoing any lasting changes it made such
+     * as potion effects or restricted abilities.
      */
     abstract public void doRemove();
 
@@ -320,12 +272,9 @@ public abstract class O2Effect {
     }
 
     /**
-     * Get the message to display to a player when this effect is applied.
+     * Get the message shown to the target when this effect is applied.
      *
-     * <p>This message is sent to the target player as a chat message immediately after the effect is applied.
-     * If no message is desired, subclasses can leave affectedPlayerText as null, and no message will be sent.</p>
-     *
-     * @return the message to show, or null if no message should be displayed
+     * @return the message, or null if none should be shown
      */
     @Nullable
     public String getAffectedPlayerText() {
@@ -333,275 +282,158 @@ public abstract class O2Effect {
     }
 
     /**
-     * Handle effects when an entity is damaged by another entity.
-     *
-     * <p>Called when an EntityDamageByEntityEvent occurs and this effect is active.
-     * Subclasses can override to prevent damage, modify damage amounts, or trigger additional effects.</p>
-     *
-     * @param event the damage event
+     * Hook called on {@link EntityDamageByEntityEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
     }
 
     /**
-     * Handle effects when the player interacts with a block or entity.
-     *
-     * <p>Called when a PlayerInteractEvent occurs and this effect is active.
-     * Subclasses can override to prevent interactions or trigger action-based effects.</p>
-     *
-     * @param event the interact event
+     * Hook called on {@link PlayerInteractEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
     }
 
     /**
-     * Handle effects when the player sends a chat message.
-     *
-     * <p>Called when an AsyncPlayerChatEvent occurs and this effect is active.
-     * Subclasses can override to prevent chat, modify messages, or trigger chat-based effects.</p>
-     *
-     * @param event the chat event
+     * Hook called on {@link AsyncPlayerChatEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
     }
 
     /**
-     * Handle effects when the player attempts to sleep in a bed.
-     *
-     * <p>Called when a PlayerBedEnterEvent occurs and this effect is active.
-     * Subclasses can override to prevent sleeping or trigger sleep-related effects.</p>
-     *
-     * @param event the bed enter event
+     * Hook called on {@link PlayerBedEnterEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {
     }
 
     /**
-     * Handle effects when the player toggles creative flight.
-     *
-     * <p>Called when a PlayerToggleFlightEvent occurs and this effect is active.
-     * Subclasses can override to prevent flight or apply effects related to flying.</p>
-     *
-     * @param event the toggle flight event
+     * Hook called on {@link PlayerToggleFlightEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {
     }
 
     /**
-     * Handle effects when the player toggles sneaking.
-     *
-     * <p>Called when a PlayerToggleSneakEvent occurs and this effect is active.
-     * Subclasses can override to prevent sneaking or trigger sneaking-related effects.</p>
-     *
-     * @param event the toggle sneak event
+     * Hook called on {@link PlayerToggleSneakEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {
     }
 
     /**
-     * Handle effects when the player toggles sprinting.
-     *
-     * <p>Called when a PlayerToggleSprintEvent occurs and this effect is active.
-     * Subclasses can override to prevent sprinting or trigger sprint-related effects.</p>
-     *
-     * @param event the toggle sprint event
+     * Hook called on {@link PlayerToggleSprintEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {
     }
 
     /**
-     * Handle effects when the player's velocity changes.
-     *
-     * <p>Called when a PlayerVelocityEvent occurs and this effect is active.
-     * Subclasses can override to modify velocity or prevent movement effects.</p>
-     *
-     * @param event the velocity event
+     * Hook called on {@link PlayerVelocityEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {
     }
 
     /**
-     * Handle effects when the player picks up an item.
-     *
-     * <p>Called when an EntityPickupItemEvent occurs and this effect is active.
-     * Subclasses can override to prevent pickup or trigger item-based effects.</p>
-     *
-     * @param event the pickup item event
+     * Hook called on {@link EntityPickupItemEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {
     }
 
     /**
-     * Handle effects when the player changes which item they are holding.
-     *
-     * <p>Called when a PlayerItemHeldEvent occurs and this effect is active.
-     * Subclasses can override to trigger effects based on item changes.</p>
-     *
-     * @param event the item held event
+     * Hook called on {@link PlayerItemHeldEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {
     }
 
     /**
-     * Handle effects when the player consumes an item (food, potion, etc.).
-     *
-     * <p>Called when a PlayerItemConsumeEvent occurs and this effect is active.
-     * Subclasses can override to prevent consumption or trigger consumption-based effects.</p>
-     *
-     * @param event the item consume event
+     * Hook called on {@link PlayerItemConsumeEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {
     }
 
     /**
-     * Handle effects when the player drops an item.
-     *
-     * <p>Called when a PlayerDropItemEvent occurs and this effect is active.
-     * Subclasses can override to prevent dropping or trigger drop-based effects.</p>
-     *
-     * @param event the drop item event
+     * Hook called on {@link PlayerDropItemEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {
     }
 
     /**
-     * Handle effects when the player moves.
-     *
-     * <p>Called when a PlayerMoveEvent occurs and this effect is active.
-     * Subclasses can override to prevent movement, modify movement, or trigger position-based effects.</p>
-     *
-     * @param event the move event
+     * Hook called on {@link PlayerMoveEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
     }
 
     /**
-     * Handle effects when a spell projectile moves.
-     *
-     * <p>Called when an OllivandersSpellProjectileMoveEvent occurs and this effect is active.
-     * Subclasses can override to interfere with projectile movement or trigger projectile-based effects.</p>
-     *
-     * @param event the projectile move event
+     * Hook called on {@link OllivandersSpellProjectileMoveEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
     }
 
     /**
-     * Handle effects when the player quits the server.
-     *
-     * <p>Called when a PlayerQuitEvent occurs and this effect is active.
-     * Subclasses can override to save effect state or trigger logout-related cleanup.</p>
-     *
-     * @param event the player quit event
+     * Hook called on {@link PlayerQuitEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
     }
 
     /**
-     * Handle effects when the player joins the server.
-     *
-     * <p>Called when a PlayerJoinEvent occurs and this effect is active.
-     * Subclasses can override to save effect state or trigger logout-related cleanup.</p>
-     *
-     * @param event the player join event
+     * Hook called on {@link PlayerJoinEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
     }
 
     /**
-     * Handle effects when an entity dies.
-     *
-     * <p>Called on EntityDeathEvent and this event is active. Subclasses should override if they care about
-     * this event type.</p>
-     *
-     * @param event the entity death event
+     * Hook called on {@link EntityDeathEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnEntityDeathEvent(@NotNull EntityDeathEvent event) {
     }
 
     /**
-     * Handle effects when an entity is damaged.
-     *
-     * <p>Called on EntityDamageEvent and this event is active. Subclasses should override if they care about
-     * this event type.</p>
-     *
-     * @param event the entity damage event
+     * Hook called on {@link EntityDamageEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
     }
 
     /**
-     * Handle effects when an entity targets the affected player.
-     *
-     * <p>Called when an EntityTargetEvent occurs and this effect is active.
-     * Subclasses can override to prevent targeting or trigger aggression-related effects.</p>
-     *
-     * @param event the entity target event
+     * Hook called on {@link EntityTargetEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
     }
 
     /**
-     * Handle effects when a projectile is launched.
-     *
-     * <p>Called when a ProjectileLaunchEvent occurs and this effect is active.
-     * Subclasses can override to prevent projectile launch or apply projectile-based effects.</p>
-     *
-     * @param event the projectile launch event
+     * Hook called on {@link ProjectileLaunchEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
     }
 
     /**
-     * Handle effects when a projectile hits a target.
-     *
-     * <p>Called when a ProjectileHitEvent occurs and this effect is active.
-     * Subclasses can override to trigger effects on projectile impact.</p>
-     *
-     * @param event the projectile hit event
+     * Hook called on {@link ProjectileHitEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
     }
 
     /**
-     * Handle effects when the player uses standard Bukkit teleportation.
-     *
-     * <p>Called when a PlayerTeleportEvent occurs and this effect is active.
-     * Subclasses can override to prevent teleportation, apply distance-based logic,
-     * or trigger teleportation-related effects.</p>
-     *
-     * @param event the player teleport event
+     * Hook called on {@link PlayerTeleportEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
     }
 
     /**
-     * Handle effects when the player uses coordinate-based apparition.
-     *
-     * <p>Called when an OllivandersApparateByCoordinatesEvent occurs and this effect is active.
-     * Subclasses can override to prevent apparition, apply distance-based logic,
-     * or trigger apparition-related effects.</p>
-     *
-     * @param event the apparate by coordinates event
+     * Hook called on {@link OllivandersApparateByCoordinatesEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
     }
 
     /**
-     * Handle effects when the player uses name-based apparition.
-     *
-     * <p>Called when an OllivandersApparateByNameEvent occurs and this effect is active.
-     * Subclasses can override to prevent apparition, apply distance-based logic,
-     * or trigger apparition-related effects.</p>
-     *
-     * @param event the apparate by name event
+     * Hook called on {@link OllivandersApparateByNameEvent} while this effect is active; overridden by effects that react to it.
      */
     void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
     }
 
+    /**
+     * Hook called on {@link EntityDismountEvent} while this effect is active; overridden by effects that react to it.
+     */
     void doOnEntityDismountEvent(@NotNull EntityDismountEvent event) {
     }
 
+    /**
+     * Hook called on {@link VehicleExitEvent} while this effect is active; overridden by effects that react to it.
+     */
     void doOnVehicleExitEvent(@NotNull VehicleExitEvent event) {
     }
 }

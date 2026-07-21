@@ -12,78 +12,63 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Parent class for all spells that create a stationary spell.
- *
- * <p>StationarySpell extends O2Spell to handle spells that create persistent effects in the world.
- * These spells either hit a target block (with a projectile) or are cast directly on the caster
- * (noProjectile). When the spell hits its target (or is cast), it calculates duration and radius
- * based on the caster's experience, creates the underlying stationary spell instance, and displays
- * flair effects if configured.</p>
- *
- * <p>Subclasses must implement {@link #createStationarySpell()} to define the spell-specific
- * behavior and instance type. They can also override the default duration/radius modifiers and
- * min/max values to customize spell scaling.</p>
- *
- * <p>Key behavior:</p>
- *
- * <ul>
- * <li>Duration is calculated as: (experience × ticksPerSecond) + (ticksPerSecond × durationModifierInSeconds)</li>
- * <li>Radius is calculated as: floor(experience / radiusModifier)</li>
- * <li>Both duration and radius are clamped to their configured min/max bounds</li>
- * <li>Water is NOT a pass-through material (unlike other O2Spell subclasses)</li>
- * <li>The spell is killed after the stationary spell is created</li>
- * </ul>
+ * Base class for spells that create a persistent {@link O2StationarySpell} in the world. The spell either lands on a
+ * target block or is cast directly on the caster (noProjectile); on landing it creates the stationary spell with a
+ * skill-scaled duration and radius, then ends.
+ * <p>
+ * Subclasses implement {@link #createStationarySpell()}. Unlike most spells, water does not stop the projectile.
+ * </p>
  *
  * @see O2StationarySpell
  */
 public abstract class StationarySpell extends O2Spell {
     /**
-     * The time left for this stationary spell.
+     * The stationary spell's duration in ticks. Set by {@link #setDuration()}.
      */
     int duration;
 
     /**
-     * Duration modifier
+     * Seconds added to the base duration; see {@link #setDuration()} for the formula.
      */
     int durationModifierInSeconds = 15;
 
     /**
-     * Radius of the spell
+     * The stationary spell's radius in blocks. Set by {@link #setRadius()}.
      */
     int radius;
 
     /**
-     * Radius modifier
+     * Divisor applied to caster skill when computing radius; see {@link #setRadius()} for the formula.
      */
     int radiusModifier = 1;
 
     /**
-     * Do flair when casting the stationary spell
+     * If true, a visual flair is shown when the stationary spell is created.
      */
     boolean flair = true;
 
     /**
-     * Flair size
+     * The size of the flair effect.
      */
     int flairSize = 10;
 
     /**
-     * The maximum duration a stationary spell can last, if it is not permanent
+     * Upper limit for {@link #duration}, in ticks. Only applies to non-permanent stationary spells.
      */
-    int maxDuration = Ollivanders2Common.ticksPerMinute * 30; // 30 minutes, only applies to non-permanent stationary spells.
+    int maxDuration = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
-     * The minimum duration a stationary spell can last
+     * Lower limit for {@link #duration}, in ticks. Only applies to non-permanent stationary spells.
      */
-    int minDuration = Ollivanders2Common.ticksPerMinute; // 1 minute, only applies to non-permanent stationary spells
+    int minDuration = Ollivanders2Common.ticksPerMinute;
 
     /**
-     * The maximum radius for this stationary spell type
+     * Upper limit for {@link #radius}, in blocks.
      */
     int maxRadius = 50;
 
     /**
-     * The minimum radius for this stationary spell type
+     * Lower limit for {@link #radius}, in blocks.
      */
     int minRadius = 5;
 
@@ -99,14 +84,9 @@ public abstract class StationarySpell extends O2Spell {
     }
 
     /**
-     * Constructs a new StationarySpell cast by a player.
-     *
-     * <p>Initializes spell-specific configuration including WorldGuard flags and pass-through materials.
-     * Sets default success/failure messages for stationary spell casting.</p>
-     *
-     * @param plugin    a callback to the MC plugin (not null)
-     * @param player    the player who cast this spell (not null)
-     * @param rightWand the wand correctness factor (not null)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand the wand correctness factor
      */
     public StationarySpell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -124,11 +104,8 @@ public abstract class StationarySpell extends O2Spell {
     }
 
     /**
-     * Creates the stationary spell with duration and radius based on the caster's skill.
-     *
-     * <p>Called each tick after the spell has hit its target (or immediately for noProjectile spells).
-     * Calculates duration and radius, creates the stationary spell instance via {@link #createStationarySpell()},
-     * adds it to the spell registry, displays flair effects if configured, and kills this spell.</p>
+     * On landing (or immediately for noProjectile spells), create the stationary spell with a skill-scaled duration
+     * and radius, register it, and end this spell. Sends the failure message if creation fails.
      */
     @Override
     protected void doCheckEffect() {
@@ -155,10 +132,8 @@ public abstract class StationarySpell extends O2Spell {
     }
 
     /**
-     * Calculates the duration for the stationary spell based on caster experience.
-     *
-     * <p>Duration formula: (experience × ticksPerSecond) + (ticksPerSecond × durationModifierInSeconds)
-     * The result is clamped to [minDuration, maxDuration].</p>
+     * Set {@link #duration} to {@code (usesModifier + durationModifierInSeconds) * ticksPerSecond}, limited to
+     * [{@link #minDuration}, {@link #maxDuration}].
      */
     void setDuration() {
         duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond) + (Ollivanders2Common.ticksPerSecond * durationModifierInSeconds);
@@ -170,10 +145,8 @@ public abstract class StationarySpell extends O2Spell {
     }
 
     /**
-     * Calculates the radius for the stationary spell based on caster experience.
-     *
-     * <p>Radius formula: floor(experience / radiusModifier)
-     * The result is clamped to [minRadius, maxRadius].</p>
+     * Set {@link #radius} to {@code floor(usesModifier / radiusModifier)}, limited to [{@link #minRadius},
+     * {@link #maxRadius}].
      */
     void setRadius() {
         radius = (int) Math.floor(usesModifier / radiusModifier);
@@ -184,13 +157,10 @@ public abstract class StationarySpell extends O2Spell {
     }
 
     /**
-     * Creates the stationary spell instance for this spell type.
+     * Create the stationary spell instance for this spell type, using the calculated {@link #radius} and
+     * {@link #duration}.
      *
-     * <p>Must be implemented by subclasses to instantiate the appropriate O2StationarySpell subclass.
-     * The spell is created with the calculated radius and duration. If this method returns null,
-     * the spell cast is considered a failure and a failure message is sent to the caster.</p>
-     *
-     * @return the stationary spell instance, or null if the spell cannot be created
+     * @return the stationary spell instance, or null if it cannot be created (treated as a failed cast)
      */
     @Nullable
     abstract protected O2StationarySpell createStationarySpell();

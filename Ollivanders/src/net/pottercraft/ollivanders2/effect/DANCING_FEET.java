@@ -12,50 +12,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Effect that forces a player to move around uncontrollably through involuntary sneak toggling.
- *
- * <p>The DANCING_FEET effect causes affected players to dance uncontrollably by repeatedly toggling their
- * sneak state at half-second intervals (10 ticks). Each cycle alternates between sneaking and standing,
- * with a random directional rotation (0-360 degrees) applied before teleporting the player to the new
- * location. The teleportation is delayed by 5 ticks to prevent all movements from happening simultaneously.</p>
- *
- * <p>Mechanism:</p>
- * <ul>
- * <li>Sneak state toggled every half-second (10 tick cooldown)</li>
- * <li>Random rotation (0-360 degrees) applied each cycle</li>
- * <li>Player teleported to new location with 5-tick delay</li>
- * <li>Player movement events cancelled to prevent manual control</li>
- * <li>Sneak and sprint toggles cancelled to prevent state override</li>
- * <li>Detectable by information spells (Informous)</li>
- * <li>Informs player "You start dancing" on application</li>
- * </ul>
+ * Forces a player to dance uncontrollably: cancels their movement, sneak, and sprint input and periodically
+ * teleports them to a random new facing. Detectable via Informous.
  *
  * @author Azami7
  */
 public class DANCING_FEET extends O2Effect {
     /**
-     * Countdown counter for the movement cooldown.
-     *
-     * <p>Tracks remaining ticks until the next sneak toggle and teleportation. Counts down from cooldown
-     * (10 ticks) to 0 each cycle. When it reaches 0, the player's sneak state is toggled and they are
-     * teleported with a new random rotation.</p>
+     * Ticks remaining until the next dance cycle; counts down to 0 each cycle.
      */
     int cooldownCounter = 0;
 
     /**
-     * The duration of the movement cooldown in game ticks (half second).
-     *
-     * <p>Set to ticksPerSecond / 2, which equals 10 ticks (0.5 seconds). This determines the frequency
-     * of involuntary sneak toggles and teleportations.</p>
+     * Interval between dance cycles, in ticks.
      */
     final int cooldown = Ollivanders2Common.ticksPerSecond / 2;
 
     /**
-     * Constructor for creating a dancing feet uncontrollable movement effect.
-     *
-     * <p>Creates an effect that forces the player to dance uncontrollably by repeatedly toggling their sneak
-     * state and teleporting them with random rotations. Sets information detection text to "cannot control their feet"
-     * and affected player text to "You start dancing" to notify the player they are affected.</p>
+     * Constructor
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the effect in game ticks
@@ -72,34 +46,16 @@ public class DANCING_FEET extends O2Effect {
         affectedPlayerText = "You start dancing.";
     }
 
-    /**
-     * Age the effect and apply periodic sneak toggles with delayed teleportation.
-     *
-     * <p>Called each game tick. This method:</p>
-     * <ol>
-     * <li>Ages the effect (decrements duration until expiration)</li>
-     * <li>Decrements the cooldownCounter by 1 each tick</li>
-     * <li>When cooldownCounter reaches 0, executes a dance cycle:
-     *   <ul>
-     *   <li>Resets cooldownCounter to cooldown (10 ticks)</li>
-     *   <li>Toggles player sneak state (returns early if turning sneak ON to split toggles across ticks)</li>
-     *   <li>Generates random rotation (0-360 degrees)</li>
-     *   <li>Schedules teleportation 5 ticks later with the new rotated location</li>
-     *   </ul>
-     * </li>
-     * </ol>
-     */
     @Override
     public void checkEffect() {
-        // age this effect
         age(1);
 
-        if (cooldownCounter > 0) // decrement cooldown counter
+        if (cooldownCounter > 0)
             cooldownCounter = cooldownCounter - 1;
-        else { // move the player if the cooldown counter is complete
+        else {
             cooldownCounter = cooldown;
 
-            // toggle sneaking - so if they are sneaking make them stand, if standing make them sneak
+            // toggle sneak; when turning it on, return so the stand-up and reposition happen on a later cycle
             if (target.isSneaking()) {
                 target.setSneaking(false);
             }
@@ -108,7 +64,6 @@ public class DANCING_FEET extends O2Effect {
                 return;
             }
 
-            // pick a random direction to face
             int rand = Math.abs(Ollivanders2Common.random.nextInt() % 360);
             float currentYaw = target.getLocation().getYaw();
             Location newLocation = target.getLocation();
@@ -125,12 +80,7 @@ public class DANCING_FEET extends O2Effect {
     }
 
     /**
-     * Prevent the player from manually toggling sneak state.
-     *
-     * <p>Cancels sneak toggle events to ensure the effect maintains complete control over the player's
-     * sneak state. Manual sneak toggling would interfere with the involuntary dance movement cycles.</p>
-     *
-     * @param event the sneak toggle event to cancel
+     * Cancel the target's sneak toggles so the effect keeps control of their sneak state.
      */
     @Override
     void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {
@@ -140,12 +90,7 @@ public class DANCING_FEET extends O2Effect {
     }
 
     /**
-     * Prevent the player from toggling sprint while dancing.
-     *
-     * <p>Cancels sprint toggle events to prevent the player from activating sprint, which would
-     * interfere with the controlled dance movement and teleportation cycles.</p>
-     *
-     * @param event the sprint toggle event to cancel
+     * Cancel the target's sprint toggles while dancing.
      */
     @Override
     void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {
@@ -155,13 +100,7 @@ public class DANCING_FEET extends O2Effect {
     }
 
     /**
-     * Prevent the player from manually moving while affected by dancing effect.
-     *
-     * <p>Cancels all player movement events to ensure the effect maintains complete control over the
-     * player's position through involuntary teleportation. Manual movement would interfere with the
-     * choreographed dance cycles.</p>
-     *
-     * @param event the player move event to cancel
+     * Cancel the target's own movement so the effect controls their position via teleportation.
      */
     @Override
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
@@ -170,12 +109,6 @@ public class DANCING_FEET extends O2Effect {
         }
     }
 
-    /**
-     * Perform cleanup when the dancing effect is removed.
-     *
-     * <p>The default implementation does nothing, as the dancing effect has no persistent state to
-     * clean up. The player regains normal control over movement once the effect expires or is killed.</p>
-     */
     @Override
     public void doRemove() {
     }

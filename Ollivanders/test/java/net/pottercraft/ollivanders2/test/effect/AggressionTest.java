@@ -12,42 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the AGGRESSION spell effect.
+ * Unit tests for {@link AGGRESSION}.
  *
- * <p>AggressionTest verifies that the AGGRESSION effect correctly implements spell mechanics for
- * causing nearby neutral entities to become hostile and attack the targeted player. The test creates
- * AGGRESSION effects as permanent effects and validates that aggression level properly controls the
- * effectiveness of the spell.</p>
- *
- * @see AGGRESSION for the effect being tested
- * @see PermanentEffectTestSuper for the testing framework
+ * @see PermanentEffectTestSuper
  */
 public class AggressionTest extends PermanentEffectTestSuper {
-    /**
-     * Create an AGGRESSION effect for testing.
-     *
-     * <p>Creates a permanent AGGRESSION effect. The isPermanent parameter is ignored as
-     * AGGRESSION effects are always permanent by design.</p>
-     *
-     * @param target the player to be affected by AGGRESSION
-     * @param durationInTicks the duration parameter (unused for permanent effects)
-     * @param isPermanent     ignored; AGGRESSION effects are always permanent
-     * @return the newly created AGGRESSION effect instance
-     */
     @Override
     AGGRESSION createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new AGGRESSION(testPlugin, durationInTicks, true, target.getUniqueId());
     }
 
     /**
-     * Test AGGRESSION effect behavior on nearby neutral entities.
-     *
-     * <p>Verifies that the AGGRESSION effect correctly:
-     * - Spawns nearby neutral entities (bees) in a known non-hostile state
-     * - Applies the AGGRESSION effect to the target player with maximum aggression level
-     * - Runs the server scheduler for one aggression cooldown cycle
-     * - Confirms that nearby entities become hostile and target the player
-     * - Confirms that nearby entities take damage from the aggression effect</p>
+     * At maximum aggression level, a nearby neutral entity becomes hostile toward the target and takes damage.
      */
     @Override
     void checkEffectTest() {
@@ -75,13 +51,7 @@ public class AggressionTest extends PermanentEffectTestSuper {
         assertTrue(bee1.getHealth() < health, "bee1 not damaged by aggression");
     }
 
-    /**
-     * Verify doRemove() cleanup for AGGRESSION effect.
-     *
-     * <p>The AGGRESSION effect does not perform any special cleanup when removed, so this test
-     * is empty. All state changes (hostile entities, damage) are already persistent in the world
-     * and do not need to be reverted.</p>
-     */
+    // AGGRESSION has no doRemove() cleanup to verify
     @Override
     void doRemoveTest() {}
 

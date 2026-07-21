@@ -13,24 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for the PROTEGO effect.
+ * Unit tests for {@link PROTEGO}, an active shield charm that tracks projectiles within 120 blocks and removes them
+ * when they cross the shield boundary.
  *
- * <p>PROTEGO is an active projectile-tracking spell shield charm that blocks both physical projectiles
- * (arrows, snowballs, eggs, potions) and projectile spells. Unlike passive shields, PROTEGO actively
- * tracks projectiles within a 120-block range and removes them when they cross the shield boundary.
- * This test validates projectile tracking, removal mechanics, spell blocking, and event handling.</p>
+ * @see ShieldSpellEffectTestSuper
  */
 public class ProtegoTest extends ShieldSpellEffectTestSuper {
     /**
-     * Create a PROTEGO effect for testing.
-     *
-     * <p>Instantiates a new PROTEGO effect with the specified parameters. This method is called
-     * by the test methods to create fresh effect instances for each test scenario.</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new PROTEGO effect targeting the specified player
+     * {@inheritDoc}
      */
     @Override
     PROTEGO createEffect(Player target, int durationInTicks, boolean isPermanent) {
@@ -38,14 +28,8 @@ public class ProtegoTest extends ShieldSpellEffectTestSuper {
     }
 
     /**
-     * Test that PROTEGO removes tracked projectiles when they enter the shield radius.
-     *
-     * <p>Validates that:</p>
-     * <ul>
-     * <li>Tracked projectiles outside the shield radius are not removed</li>
-     * <li>Tracked projectiles that enter the shield radius are removed</li>
-     * <li>Dead projectiles are cleaned up from the tracking list</li>
-     * </ul>
+     * Tracked projectiles are removed once inside the shield radius, left alone while outside it, and pruned from the
+     * tracking list once dead.
      */
     @Override
     void checkEffectTest() {
@@ -88,19 +72,7 @@ public class ProtegoTest extends ShieldSpellEffectTestSuper {
     }
 
     /**
-     * Test event handlers for PROTEGO projectile tracking and blocking.
-     * <p>
-     * This test method executes all PROTEGO-specific event handler tests:
-     * <ul>
-     * <li>Calls parent {@link ShieldSpellEffectTestSuper#eventHandlerTests()} for inherited shield behavior tests</li>
-     * <li>Calls {@link #doOnProjectileLaunchEventTest()} to validate projectile tracking within 120-block range</li>
-     * <li>Calls {@link #doOnProjectileHitEvent()} to validate projectile hit cancellation on shielded players</li>
-     * </ul>
-     * </p>
-     * <p>
-     * These tests validate the core event-driven behavior of PROTEGO: detecting when projectiles are launched
-     * near the shielded player and blocking them when they would hit.
-     * </p>
+     * Run the inherited shield tests plus PROTEGO's projectile launch tracking and hit cancellation checks.
      */
     @Override
     void eventHandlerTests() {
@@ -111,14 +83,7 @@ public class ProtegoTest extends ShieldSpellEffectTestSuper {
     }
 
     /**
-     * Test that projectiles launched within 120 blocks are tracked.
-     *
-     * <p>Validates that:</p>
-     * <ul>
-     * <li>Supported projectiles (arrows, snowballs, eggs, splash/lingering potions) within 120 blocks
-     *     are added to the tracking list</li>
-     * <li>Projectiles beyond 120 blocks are NOT tracked</li>
-     * </ul>
+     * Supported projectiles launched within 120 blocks are added to the tracking list; those beyond 120 blocks are not.
      */
     void doOnProjectileLaunchEventTest() {
         Object[] setup = setupShieldedPlayerAtLocation(0, 4, 0);
@@ -138,9 +103,7 @@ public class ProtegoTest extends ShieldSpellEffectTestSuper {
     }
 
     /**
-     * Test that projectile hits to the shielded player are cancelled.
-     *
-     * <p>This is a placeholder for additional projectile hit testing.</p>
+     * A projectile hit on the shielded player is cancelled.
      */
     void doOnProjectileHitEvent() {
         Player target = mockServer.addPlayer();
@@ -153,21 +116,16 @@ public class ProtegoTest extends ShieldSpellEffectTestSuper {
     }
 
     /**
-     * Test PROTEGO effect cleanup.
-     *
-     * <p>PROTEGO has no persistent state to clean up when removed.</p>
+     * PROTEGO has no persistent state to clean up when removed.
      */
     @Override
     void doRemoveTest() {
     }
 
     /**
-     * Helper method to spawn a projectile and fire a launch event.
+     * Spawn a projectile at the given location and fire a {@link ProjectileLaunchEvent} for it.
      *
-     * <p>Spawns a projectile at the given location and fires a ProjectileLaunchEvent for it.
-     * Specific to PROTEGO's projectile tracking testing needs.</p>
-     *
-     * @param projectileClass the class of projectile to spawn (e.g., Arrow.class)
+     * @param projectileClass the class of projectile to spawn (e.g. Arrow.class)
      * @param location        the location to spawn the projectile
      * @return the spawned projectile
      */

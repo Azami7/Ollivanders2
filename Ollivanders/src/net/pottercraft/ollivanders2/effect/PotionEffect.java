@@ -7,56 +7,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Parent class for effects that apply Minecraft potion effects to players.
- *
- * <p>PotionEffectSuper provides a potion effect application mechanism that applies effects
- * immediately and then expires. Potion effects are applied in checkEffect() and the effect
- * kills itself in the same tick.
- * </p>
- *
- * <p>Duration Mechanism:</p>
- * Potion effects are applied with a duration clamped to a valid range:
- * <ul>
- * <li>Minimum duration: 2400 ticks (2 minutes)</li>
- * <li>Maximum duration: 6000 ticks (5 minutes)</li>
- * <li>The duration specified in the constructor is clamped to this range</li>
- * </ul>
- *
- * <p>Effect Configuration:
- * Subclasses set potionEffectType to specify which Minecraft potion effect (POISON, WEAKNESS, etc.)
- * to apply, and strength to set the amplifier level of the effect (1 is normal strength).</p>
+ * Base class for effects that hand off to a Minecraft potion effect: it applies the potion on the first tick and
+ * immediately kills itself. Subclasses set {@link #potionEffectType} and {@link #strength} before the effect runs.
  *
  * @author Azami7
  */
 public abstract class PotionEffect extends O2Effect {
     /**
-     * The amplifier level of this potion effect.
-     *
-     * <p>Strength represents the amplifier level for the Minecraft potion effect. A value of 1 is
-     * normal strength. Higher values increase the effect's potency:
-     * <ul>
-     * <li>strength = 1: Normal potency (amplifier 1)</li>
-     * <li>strength = 2: Enhanced potency (amplifier 2)</li>
-     * <li>strength = 3: Stronger potency (amplifier 3)</li>
-     * </ul>
-     * Subclasses typically set this value before the effect is applied.</p>
+     * The potion amplifier level; 1 is normal strength, higher values are more potent.
      */
     int strength = 1;
 
     /**
-     * The type of Minecraft potion effect to apply.
-     *
-     * <p>Subclasses override this field to specify which potion effect (POISON, WEAKNESS, GLOWING, etc.)
-     * will be applied to the target player. This value is used when creating the potion effect in checkEffect().</p>
+     * The Minecraft potion effect this effect applies. Subclasses set this to the desired type.
      */
     PotionEffectType potionEffectType = PotionEffectType.GLOWING;
 
     /**
-     * Constructor for creating a potion effect.
-     *
-     * <p>Creates an effect that will apply a Minecraft potion effect immediately and expire in a single
-     * game tick. Subclasses should initialize potionEffectType and strength fields before the effect
-     * is added to a player's effect list.</p>
+     * Constructor
      *
      * @param plugin      a reference to the plugin
      * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
@@ -68,17 +36,7 @@ public abstract class PotionEffect extends O2Effect {
     }
 
     /**
-     * Apply the potion effect immediately and expire.
-     *
-     * <p>This method executes in a single game tick and performs the following:</p>
-     * <ol>
-     * <li>Creates a new potion effect with the specified type, duration, and strength (amplifier)</li>
-     * <li>Applies the potion effect to the target player (initialized in O2Effect constructor)</li>
-     * <li>Kills the effect so it doesn't persist beyond the single tick</li>
-     * </ol>
-     *
-     * <p>Example: A POISON effect with strength 2 will create a poison effect with amplifier 2 and the
-     * duration specified when the effect was created (clamped to 2400-6000 ticks).</p>
+     * Applies the configured potion effect to the target for this effect's remaining duration, then kills this effect.
      */
     @Override
     public void checkEffect() {
@@ -88,12 +46,9 @@ public abstract class PotionEffect extends O2Effect {
     }
 
     /**
-     * Set the amplifier strength of this potion effect.
+     * Set the potion amplifier level.
      *
-     * <p>Sets the strength (amplifier level) of the potion effect that will be applied to the player.
-     * A value of 1 represents normal strength. Higher values increase the effect's potency.</p>
-     *
-     * @param s a positive integer representing the amplifier level (1 = normal, 2 = enhanced, etc.)
+     * @param s the amplifier level; 1 is normal strength, higher is more potent
      */
     public void setStrength(int s) {
         strength = s;

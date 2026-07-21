@@ -19,8 +19,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for TimeCommon enum.
- * Tests cover game time constants, world time retrieval, and timestamp generation.
+ * Unit tests for {@link TimeCommon}.
  */
 public class TimeCommonTest {
     static ServerMock mockServer;
@@ -34,8 +33,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that the MIDNIGHT enum constant has the correct tick value.
-     * Verifies that MIDNIGHT is set to 18000 ticks.
+     * MIDNIGHT is 18000 ticks.
      */
     @Test
     void midnightTickTest() {
@@ -43,8 +41,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that the DAWN enum constant has the correct tick value.
-     * Verifies that DAWN is set to 23000 ticks.
+     * DAWN is 23000 ticks.
      */
     @Test
     void dawnTickTest() {
@@ -52,8 +49,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that the MIDDAY enum constant has the correct tick value.
-     * Verifies that MIDDAY is set to 6000 ticks.
+     * MIDDAY is 6000 ticks.
      */
     @Test
     void middayTickTest() {
@@ -61,8 +57,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that the SUNSET enum constant has the correct tick value.
-     * Verifies that SUNSET is set to 12000 ticks.
+     * SUNSET is 12000 ticks.
      */
     @Test
     void sunsetTickTest() {
@@ -70,8 +65,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests retrieving the default world time from the server.
-     * Verifies that getDefaultWorldTime() returns a valid time value.
+     * getDefaultWorldTime() returns a valid (non-negative) time.
      */
     @Test
     void getDefaultWorldTimeTest() {
@@ -80,14 +74,12 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that the default world time changes after advancing server time.
-     * Verifies that time progression is correctly reflected in the default world.
+     * The default world time advances as the scheduler ticks.
      */
     @Test
     void getDefaultWorldTimeAdvancedTest() {
         long initialTime = TimeCommon.getDefaultWorldTime();
 
-        // Advance time by 100 ticks
         mockServer.getScheduler().performTicks(100);
 
         long newTime = TimeCommon.getDefaultWorldTime();
@@ -95,8 +87,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests timestamp generation in the correct format.
-     * Verifies that getCurrentTimestamp() returns a string matching the expected pattern yyyy-MM-dd-HH-mm-ss.
+     * getCurrentTimestamp() matches the pattern yyyy-MM-dd-HH-mm-ss.
      */
     @Test
     void getCurrentTimestampTest() {
@@ -104,15 +95,13 @@ public class TimeCommonTest {
 
         assertNotNull(timestamp, "getCurrentTimestamp() should not return null");
 
-        // Validate format using regex pattern: yyyy-MM-dd-HH-mm-ss
         String pattern = "\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2}";
         assertTrue(Pattern.matches(pattern, timestamp),
             "Timestamp should match pattern yyyy-MM-dd-HH-mm-ss, but got: " + timestamp);
     }
 
     /**
-     * Tests that consecutive timestamp calls are different when time has passed.
-     * Verifies that timestamps are generated at different times (with at least a small time difference).
+     * Consecutive timestamp calls each return a non-empty value.
      */
     @Test
     void getCurrentTimestampUniqueTest() {
@@ -127,15 +116,13 @@ public class TimeCommonTest {
 
         String timestamp2 = TimeCommon.getCurrentTimestamp();
 
-        // Timestamps should be different (or at least the seconds should be tracked)
         assertNotNull(timestamp1, "First timestamp should not be null");
         assertNotNull(timestamp2, "Second timestamp should not be null");
         assertTrue(!timestamp1.isEmpty() && !timestamp2.isEmpty(), "Timestamps should not be empty");
     }
 
     /**
-     * Tests that the timestamp is parseable back to a valid date.
-     * Verifies that the generated timestamp format can be used to reconstruct a Date object.
+     * A generated timestamp parses back into a Date.
      */
     @Test
     void getCurrentTimestampParseable() {
@@ -151,8 +138,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that all TimeCommon enum constants have valid tick values.
-     * Verifies that all enum values return non-negative tick values.
+     * Every constant has a non-negative tick value.
      */
     @Test
     void allEnumConstantsHaveValidTicksTest() {
@@ -163,8 +149,7 @@ public class TimeCommonTest {
     }
 
     /**
-     * Tests that different enum constants have different tick values.
-     * Verifies that each time of day has a unique tick value.
+     * Every constant has a distinct tick value.
      */
     @Test
     void enumConstantsHaveUniquTicksTest() {

@@ -9,37 +9,20 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The event that is triggered when a spell projectile moves
+ * Fired each time a spell projectile moves from one location to the next.
  */
 public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements Cancellable {
-    /**
-     * event handlers
-     */
     private static final HandlerList handlers = new HandlerList();
 
-    /**
-     * Is this event canceled
-     */
     boolean canceled = false;
 
-    /**
-     * The spell the projectile is
-     */
     O2Spell spell;
 
-    /**
-     * Where the projectile moved from
-     */
     Location from;
 
-    /**
-     * Where the projectile moved to
-     */
     Location to;
 
     /**
-     * Constructor
-     *
      * @param player the player who created the spell projectile
      * @param spell  the spell projectile
      * @param from   where it moved from
@@ -53,40 +36,25 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
         this.to = to;
     }
 
-    /**
-     * Get the handlers for this Event
-     *
-     * @return the event handlers
-     */
     @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
-    /**
-     * Get the handlers for this Event
-     *
-     * @return the event handlers
-     */
     public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    /**
-     * Is this event canceled?
-     *
-     * @return true if canceled, false otherwise
-     */
     @Override
     public boolean isCancelled() {
         return canceled;
     }
 
     /**
-     * Set whether this event is canceled or not
+     * Cancelling the move kills the spell. Passing false is a no-op; a cancelled move cannot be reinstated.
      *
-     * @param cancel true if event should be canceled, false otherwise
+     * @param cancel true to cancel the move and kill the spell
      */
     @Override
     public void setCancelled(boolean cancel) {
@@ -97,9 +65,7 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
     }
 
     /**
-     * Get the location where the projectile moved from
-     *
-     * @return the locationt the spell moved from
+     * @return the location the projectile moved from
      */
     @NotNull
     public Location getFrom() {
@@ -107,8 +73,6 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
     }
 
     /**
-     * Get the location the projectile moved to
-     *
      * @return the location the projectile moved to
      */
     @NotNull
@@ -117,9 +81,7 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
     }
 
     /**
-     * Get the spell this projectile is
-     *
-     * @return the spell for this projectile
+     * @return the spell this projectile belongs to
      */
     @NotNull
     public O2Spell getSpell() {

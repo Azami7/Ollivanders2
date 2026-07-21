@@ -19,42 +19,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract base class for player immobilization spells.
- *
- * <p>ImmobilizePlayer provides the common implementation for spells that immobilize a target player.
- * This class handles target detection, effect duration calculation, immobilization effect application,
- * and optional prison block creation. Concrete subclasses must implement target validation (canTarget)
- * and may override addAdditionalEffects() for spell-specific extras.</p>
- *
- * <p>Spell Mechanics:</p>
- * <ul>
- * <li>Searches for nearby players within the spell's default radius</li>
- * <li>Validates each nearby player using canTarget() to determine if they can be affected</li>
- * <li>Calculates immobilization duration based on spell uses, clamped to min/max bounds</li>
- * <li>Applies either IMMOBILIZE (partial) or FULL_IMMOBILIZE (complete) based on fullImmobilize</li>
- * <li>Triggers spell-specific additional effects via addAdditionalEffects()</li>
- * <li>Optionally surrounds the target with prison blocks if imprison is true</li>
- * <li>Kills the spell after successfully targeting a player</li>
- * </ul>
+ * Base class for spells that immobilize a target player for a skill-scaled duration, optionally imprisoning them in
+ * blocks. Subclasses implement {@link #canTarget(Player)} and may override {@link #addAdditionalEffects(Player)}.
  *
  * @author Azami7
- * @see IMMOBILIZE for partial immobilization effect
- * @see FULL_IMMOBILIZE for complete immobilization effect
- * @see O2Spell for the base spell class
+ * @see IMMOBILIZE
+ * @see FULL_IMMOBILIZE
  */
 abstract public class ImmobilizePlayer extends O2Spell {
     /**
-     * The minimum time the target player can be affected.
+     * Lower limit for {@link #effectDuration}, in ticks.
      */
     int minEffectDuration = 30 * Ollivanders2Common.ticksPerSecond;
 
     /**
-     * The maximum time the target player can be affected.
+     * Upper limit for {@link #effectDuration}, in ticks.
      */
     int maxEffectDuration = 300 * Ollivanders2Common.ticksPerSecond;
 
     /**
-     * The duration for this spell's effect.
+     * The immobilization duration in ticks. Set by {@link #calculateDuration()}.
      */
     int effectDuration = 0;
 
@@ -90,8 +74,6 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -110,13 +92,8 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Search for nearby players and immobilize the first valid target.
-     *
-     * <p>Called when the spell is active. This method iterates through nearby players within the spell's
-     * default radius, validates each using canTarget(), and immobilizes the first valid target. The
-     * validation skips the caster and any players that fail the canTarget() check. Upon finding a valid
-     * target, applies the calculated immobilization effect, triggers additional spell-specific effects,
-     * and kills the spell.</p>
+     * Immobilize the first valid nearby player (excluding the caster), applying any additional effects and
+     * imprisoning them when configured, then end the spell. Killed if the projectile hits a block first.
      */
     @Override
     protected void doCheckEffect() {
@@ -145,24 +122,16 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Determine if a player can be targeted by this immobilization spell.
-     *
-     * <p>Abstract method that concrete subclasses must implement to define spell-specific target validation
-     * rules. Examples include checking for protective effects, player status, or other conditions that
-     * would prevent the spell from affecting a player.</p>
+     * Check whether a player can be targeted by this spell.
      *
      * @param target the player to validate as a potential target
-     * @return true if the player can be targeted and immobilized, false otherwise
+     * @return true if the player can be immobilized, false otherwise
      */
     abstract boolean canTarget(Player target);
 
     /**
-     * Calculate the immobilization effect duration based on spell usage.
-     *
-     * <p>Calculates the immobilization duration in game ticks based on the spell's usage count (usesModifier).
-     * The base formula is: (usesModifier + 30) seconds, which is then converted to ticks. The resulting
-     * duration is clamped to the configured minimum (30 seconds / 600 ticks) and maximum (300 seconds / 6000 ticks)
-     * bounds. The calculated duration is stored in the effectDuration field.</p>
+     * Set {@link #effectDuration} to {@code (usesModifier + 30) * ticksPerSecond}, limited to
+     * [{@link #minEffectDuration}, {@link #maxEffectDuration}].
      */
     void calculateDuration() {
         effectDuration = ((int) usesModifier + 30) * Ollivanders2Common.ticksPerSecond;
@@ -174,11 +143,8 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Apply the immobilization effect to the target player.
-     *
-     * <p>Creates and applies either a FULL_IMMOBILIZE effect (if fullImmobilize is true) or an IMMOBILIZE
-     * effect (if fullImmobilize is false) to the target player with the calculated effect duration.
-     * The effect is added to the player effects system and begins taking effect immediately.</p>
+     * Apply the immobilization effect to the target for {@link #effectDuration}, full or partial per
+     * {@link #fullImmobilize}.
      *
      * @param target the player to immobilize
      */
@@ -194,13 +160,9 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Surround the target player with prison blocks.
-     *
-     * <p>Expands the target player's bounding box by 1 block in all directions, then converts all air
-     * blocks within that expanded region to the spell's imprisonMaterial. Only air blocks are changed,
-     * preserving any existing non-air blocks. If prisonIsShell is true, blocks the player physically
-     * occupies are skipped to prevent suffocation. All changed blocks are tracked so they can be
-     * reverted when the effect expires.</p>
+     * Enclose the target in {@link #imprisonMaterial}, replacing only the air blocks in the region around them (and
+     * leaving the blocks they occupy clear when {@link #prisonIsShell} is set, to avoid suffocation). The blocks are
+     * reverted automatically when the effect expires.
      *
      * @param target the player to surround with prison blocks
      */
@@ -241,12 +203,10 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Get optional additional block data to apply to each prison block after setting its material.
+     * Hook for subclasses to supply extra block data applied to each prison block after its material is set. The
+     * default implementation returns null.
      *
-     * <p>Returns null by default. Subclasses may override this to apply extra block state (e.g., water
-     * level data) to each prison block immediately after the material is set.</p>
-     *
-     * @return block data to apply, or null if none
+     * @return block data to apply, or null for none
      */
     @Nullable
     BlockData getAdditionalPrisonBlockData() {
@@ -254,10 +214,7 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Apply any spell-specific additional effects to the immobilized target.
-     *
-     * <p>No-op by default. Subclasses may override to apply extra effects such as potion effects
-     * or other environmental changes beyond the base immobilization.</p>
+     * Hook for subclasses to apply extra effects to the immobilized target. The default implementation does nothing.
      *
      * @param target the immobilized player
      */
@@ -265,13 +222,8 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Calculate all blocks within the given bounding box region.
-     *
-     * <p>Iterates through all integer block coordinates within the given bounding box and collects
-     * the Block objects. These blocks will be filtered in the caller to only change eligible blocks.</p>
-     *
-     * @param boundingBox the bounding box region to collect blocks from
-     * @return a list of all Block objects within the bounding box coordinates
+     * @param boundingBox the region to collect blocks from
+     * @return every distinct block whose coordinates fall within the bounding box
      */
     List<Block> calculateBlocksToChange(BoundingBox boundingBox) {
         ArrayList<Block> blocks = new ArrayList<>();
@@ -307,18 +259,14 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Get the minimum immobilization duration in game ticks.
-     *
-     * @return the minimum effect duration (30 seconds / 600 ticks)
+     * @return the minimum immobilization duration in ticks
      */
     public int getMinEffectDuration() {
         return minEffectDuration;
     }
 
     /**
-     * Get the maximum immobilization duration in game ticks.
-     *
-     * @return the maximum effect duration (300 seconds / 6000 ticks)
+     * @return the maximum immobilization duration in ticks
      */
     public int getMaxEffectDuration() {
         return maxEffectDuration;
@@ -353,10 +301,7 @@ abstract public class ImmobilizePlayer extends O2Spell {
     }
 
     /**
-     * Revert all prison blocks created by this spell.
-     *
-     * <p>Reverts all temporarily changed blocks created by imprisonPlayer(). This is automatically
-     * called after the effect duration expires via a scheduled task.</p>
+     * Revert all prison blocks this spell placed. Runs automatically when the effect expires.
      */
     void revertBlocks() {
         if (imprison)

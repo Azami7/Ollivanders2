@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art">https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art">Secrets of the Darkest Art</a>
  */
 public class SECRETS_OF_THE_DARKEST_ART extends O2Book {
     /**

@@ -12,18 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Base class for the Reparo family of repair charms, which restore durability to a damaged item the caster aims at.
+ * Base class for the Reparo family of repair charms, which restore a skill-scaled amount of durability to a damaged
+ * item the caster aims at.
  * <p>
- * This class holds the shared projectile and repair logic; concrete subclasses ({@link REPARO}, {@link DIAMAS_REPARO})
- * set their own {@code spellType}, {@code branch}, and per-spell repair bounds, then call {@code initSpell()} from their
- * casting constructor. The amount of durability restored is computed at effect time by {@link #calculateRepair()} from
- * the caster's skill ({@code usesModifier}) scaled by {@link #repairMultiplier} and clamped to
- * [{@link #minRepair}, {@link #maxRepair}].
- * </p>
- * <p>
- * Computing the repair amount lazily in {@link #doCheckEffect()} rather than during construction lets a subclass
- * override the repair fields after {@code super(...)} runs but before any repair is applied, so each spell repairs by
- * its own bounds regardless of constructor ordering.
+ * The repair amount is computed lazily at effect time rather than during construction, so a subclass can override the
+ * repair-bound fields after {@code super(...)} runs and still have each spell repair by its own bounds.
  * </p>
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Mending_Charm">Harry Potter Wiki - Mending Charm</a>
@@ -59,8 +52,6 @@ public abstract class ReparoBase extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -78,7 +69,7 @@ public abstract class ReparoBase extends O2Spell {
     /**
      * Calculate the durability to repair from the caster's skill.
      * <p>
-     * Scales the caster's {@code usesModifier} by {@link #repairMultiplier} and clamps the result to
+     * Scales the caster's {@code usesModifier} by {@link #repairMultiplier} and limits the result to
      * [{@link #minRepair}, {@link #maxRepair}]. Called at effect time so subclass overrides of the repair
      * fields are already in place.
      * </p>
@@ -93,13 +84,9 @@ public abstract class ReparoBase extends O2Spell {
     }
 
     /**
-     * Find a nearby damaged item and restore a portion of its durability.
-     * <p>
-     * If the projectile has hit a block, the spell is killed. The projectile's surroundings are searched for dropped
-     * items, and the first one whose meta is {@link Damageable} and that actually has damage has {@link #repair}
-     * durability points restored. Undamaged items are skipped so the spell is not consumed on a pristine item. Once an
-     * item is repaired, a success message is sent and the spell is killed.
-     * </p>
+     * Find the first nearby damaged item and restore up to {@link #repair} of its durability, then send a success
+     * message and end the spell. Undamaged items are skipped so a pristine item does not consume the cast; the spell
+     * is also killed if the projectile hits a block first.
      */
     @Override
     protected void doCheckEffect() {

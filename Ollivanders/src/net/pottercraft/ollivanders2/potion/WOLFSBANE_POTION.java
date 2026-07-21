@@ -9,29 +9,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Wolfsbane Potion - relieves the symptoms of Lycanthropy.
- *
- * <p>When consumed, this potion applies the LYCANTHROPY_RELIEF effect to the player, alleviating
- * the severe symptoms of Lycanthropy (werewolf curse). While this potion does not cure the condition
- * entirely, it greatly reduces the symptoms' severity, allowing affected players to function more
- * normally during their afflicted state. This potion is essential for managing the debilitating
- * effects of Lycanthropy and represents the most advanced potion-making techniques available.</p>
- *
- * <p>The LYCANTHROPY_RELIEF effect provides temporary respite from the worst aspects of the curse,
- * making this a critical potion for those affected by Lycanthropy. As an advanced potion with a
- * complex recipe, it requires significant potion-making skill to brew successfully.</p>
+ * Wolfsbane Potion — applies the LYCANTHROPY_RELIEF effect, temporarily easing (but not curing) the symptoms of
+ * Lycanthropy.
  *
  * @author Azami7
  * @author cakenggt
  */
 public final class WOLFSBANE_POTION extends O2Potion {
     /**
-     * Constructor for Wolfsbane Potion.
-     *
-     * <p>Initializes the potion with its complex recipe of rare ingredients (Wolfsbane, Mandrake
-     * Leaf, Poisonous Potato, Dittany, and Standard Potion Ingredients), description text, flavor
-     * text, potion color, and the LYCANTHROPY_RELIEF effect. Sets up the potion as an advanced
-     * brewing recipe reflecting the complexity of managing Lycanthropy symptoms.</p>
+     * Constructor
      *
      * @param plugin a callback to the plugin instance
      */
@@ -56,14 +42,7 @@ public final class WOLFSBANE_POTION extends O2Potion {
     }
 
     /**
-     * Drink the Wolfsbane Potion and relieve Lycanthropy symptoms.
-     *
-     * <p>Applies the LYCANTHROPY_RELIEF effect to the player for the default potion duration.
-     * This effect alleviates the severe symptoms of Lycanthropy, providing temporary relief from
-     * the curse's worst manifestations. While the potion does not cure Lycanthropy entirely, it
-     * greatly reduces the debilitating symptoms and allows the affected player to function more
-     * normally during the effect duration. The relief is temporary and will wear off after the
-     * effect expires.</p>
+     * Apply the LYCANTHROPY_RELIEF effect to the player for the default potion duration.
      *
      * @param player the player who drank the potion
      */

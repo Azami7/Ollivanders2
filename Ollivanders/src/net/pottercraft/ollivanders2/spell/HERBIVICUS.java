@@ -91,7 +91,7 @@ public final class HERBIVICUS extends O2Spell {
     /**
      * Scale the affected {@link #radius} and {@link #growth} amount by the caster's skill.
      * <p>
-     * The radius is one quarter of {@code usesModifier} and the growth one twenty-fifth, each clamped to a minimum
+     * The radius is one quarter of {@code usesModifier} and the growth one twenty-fifth, each limited to a minimum
      * of 1 and capped at {@link #maxRadius} and {@link #maxGrowth} respectively.
      * </p>
      */

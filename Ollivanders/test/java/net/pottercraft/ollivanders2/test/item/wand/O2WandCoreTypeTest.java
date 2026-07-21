@@ -27,29 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test suite for {@link O2WandCoreType} enum functionality.
- * <p>
- * Verifies that wand core type retrieval, filtering, random selection, and item stack validation
- * work correctly across all core types (both legacy and non-legacy). Tests ensure deterministic
- * behavior for seed-based selection and proper distinction between legacy and non-legacy cores.
- * </p>
+ * Unit tests for {@link O2WandCoreType}.
  */
 public class O2WandCoreTypeTest {
     /**
-     * Mock Bukkit server instance used for all tests.
-     * <p>
-     * Set up during {@link #globalSetUp()} and torn down during {@link #globalTearDown()}.
-     * This allows tests to interact with Minecraft server objects without requiring an actual server.
-     * </p>
+     * Shared MockBukkit server, mocked once per test class as server setup is expensive.
      */
     static ServerMock mockServer;
 
     /**
-     * The Ollivanders2 plugin instance loaded with default test configuration.
-     * <p>
-     * Initialized during {@link #globalSetUp()} to provide access to plugin functionality and
-     * allow proper initialization of all O2Items through the plugin's startup sequence.
-     * </p>
+     * The plugin instance, loaded once for the test class.
      */
     static Ollivanders2 testPlugin;
 
@@ -63,10 +50,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getO2ItemType()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * {@link O2WandCoreType#getO2ItemType()} is a simple getter and needs no explicit test.
      */
     @Test
     void getO2ItemTypeTest() {
@@ -74,10 +58,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getLabel()}.
-     * <p>
-     * This is a simple accessor method, so no explicit test is needed.
-     * </p>
+     * {@link O2WandCoreType#getLabel()} is a simple getter and needs no explicit test.
      */
     @Test
     void getLabelTest() {
@@ -85,15 +66,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getWandCoreTypeByItemType(O2ItemType)}.
-     * <p>
-     * Verifies that wand core types can be correctly retrieved by {@link O2ItemType}.
-     * </p>
-     * <ul>
-     *   <li>Legacy core: GUNPOWDER is correctly retrieved</li>
-     *   <li>Non-legacy core: PHOENIX_FEATHER is correctly retrieved</li>
-     *   <li>Invalid type: BEZOAR returns null (not a wand core)</li>
-     * </ul>
+     * getWandCoreTypeByItemType() returns the core type for a core item type, and null for a non-core item type.
      */
     @Test
     void getWandCoreTypeByItemTypeTest() {
@@ -114,16 +87,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getWandCoreTypeByName(String)}.
-     * <p>
-     * Verifies that wand core types can be correctly retrieved by name with exact case matching.
-     * </p>
-     * <ul>
-     *   <li>Valid legacy core: GUNPOWDER is correctly retrieved by name</li>
-     *   <li>Valid non-legacy core: PHOENIX_FEATHER is correctly retrieved by name</li>
-     *   <li>Invalid name: Returns null for non-existent core names</li>
-     *   <li>Case sensitivity: Name matching is case-sensitive (lowercase returns null)</li>
-     * </ul>
+     * getWandCoreTypeByName() matches by exact (case-sensitive) name, and returns null for an unknown or wrong-case name.
      */
     @Test
     void getWandCoreTypeByNameTest() {
@@ -149,15 +113,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getAllWandCoreNames()}.
-     * <p>
-     * Verifies that the returned list contains all wand core names with no duplicates.
-     * </p>
-     * <ul>
-     *   <li>List is not empty and contains all enum values</li>
-     *   <li>Each enum constant's label is present in the list</li>
-     *   <li>No duplicate names exist in the list</li>
-     * </ul>
+     * getAllWandCoreNames() returns every core's name with no duplicates.
      */
     @Test
     void getAllWandCoreNamesTest() {
@@ -182,14 +138,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getAllCoresByO2ItemType()}.
-     * <p>
-     * Verifies that the returned list contains all wand core item types with no duplicates.
-     * </p>
-     * <ul>
-     *   <li>List is not empty and contains all enum values</li>
-     *   <li>No duplicate O2ItemTypes exist in the list</li>
-     * </ul>
+     * getAllCoresByO2ItemType() returns every core's item type with no duplicates.
      */
     @Test
     void getAllCoresByO2ItemTypeTest() {
@@ -210,15 +159,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getRandomCore()}.
-     * <p>
-     * Verifies that random core selection never returns legacy cores and exhibits variance
-     * across multiple calls.
-     * </p>
-     * <ul>
-     *   <li>All returned cores are valid and non-legacy</li>
-     *   <li>Multiple calls produce at least 2 different core types (randomness verified)</li>
-     * </ul>
+     * getRandomCore() returns valid non-legacy cores and varies across repeated calls.
      */
     @Test
     void getRandomCoreTest() {
@@ -239,15 +180,7 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#getWandCoreBySeed(int)}.
-     * <p>
-     * Verifies that seed-based core selection is deterministic, never returns legacy cores,
-     * and handles large seed values correctly.
-     * </p>
-     * <ul>
-     *   <li>All returned cores are valid and non-legacy for random seeds</li>
-     *   <li>Same seed always produces the same core (determinism verified with seed=42)</li>
-     * </ul>
+     * getWandCoreBySeed() returns a valid non-legacy core and is deterministic for a given seed.
      */
     @Test
     void getWandCoreBySeedTest() {
@@ -271,20 +204,8 @@ public class O2WandCoreTypeTest {
     }
 
     /**
-     * Test {@link O2WandCoreType#isWandCore(ItemStack)}.
-     * <p>
-     * Verifies that wand core detection correctly identifies O2Items that are wand cores.
-     * The overloaded {@link O2WandCoreType#isWandCore(org.bukkit.entity.Item)} method is not tested separately as it
-     * delegates directly to this method.
-     * </p>
-     * <ul>
-     *   <li>Non-wand item (APPLE): Returns false</li>
-     *   <li>Vanilla material that matches wand core (STRING): Returns false (not an O2Item)</li>
-     *   <li>O2Item that is not a wand core (DITTANY): Returns false</li>
-     *   <li>Vanilla BONE material: Returns false (must be O2Item)</li>
-     *   <li>Legacy core O2Item (BONE): Returns true</li>
-     *   <li>Non-legacy core O2Item (UNICORN_HAIR): Returns true</li>
-     * </ul>
+     * isWandCore() is true only for an O2Item core (legacy or not), and false for vanilla items or non-core O2Items —
+     * a matching vanilla material alone is not enough. The Item overload delegates here and is not tested separately.
      */
     @Test
     void isWandCoreTest() {
@@ -311,26 +232,11 @@ public class O2WandCoreTypeTest {
         assertTrue(O2WandCoreType.isWandCore(itemStack), "O2WandCoreType.isWandCore(itemStack) returned false for O2ItemType.UNICORN_HAIR");
     }
 
-    /**
-     * Reset test state after each test method.
-     * <p>
-     * Ensures the debug flag is disabled after each test to prevent debug output from affecting
-     * subsequent tests or polluting test logs.
-     * </p>
-     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;
     }
 
-    /**
-     * Clean up MockBukkit server after all tests complete.
-     * <p>
-     * Releases MockBukkit resources and unloads the mock server. This must be called after all
-     * tests in the class have finished to properly clean up the test environment and allow
-     * other test classes to create fresh mock servers.
-     * </p>
-     */
     @AfterAll
     static void globalTearDown() {
         MockBukkit.unmock();

@@ -6,6 +6,9 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Jinx that transfigures the target player into a bear for a limited duration.
+ */
 public class URSIFORS_MAXIMA extends AddO2Effect {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -18,7 +21,7 @@ public class URSIFORS_MAXIMA extends AddO2Effect {
         spellType = O2SpellType.URSIFORS_MAXIMA;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        text = "Jinx that turns the target player in to a cow.";
+        text = "Jinx that turns the target player in to a bear.";
     }
 
     /**
@@ -36,7 +39,6 @@ public class URSIFORS_MAXIMA extends AddO2Effect {
         effectsToAdd.add(O2EffectType.URSIFORS_MAXIMA);
         strengthModifier = 1;
         minDurationInSeconds = 30;
-        targetSelf = true;
 
         initSpell();
     }

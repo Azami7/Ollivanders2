@@ -30,17 +30,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Utility class providing common functionality and constants for Ollivanders2.
+ * Shared constants and utility methods for Ollivanders2: material classification, location
+ * serialization, string formatting, particle effects, messaging, and the plugin-wide {@link Random}.
  * <p>
- * Contains static collections of Minecraft material constants (doors, trapdoors, chests, signs, etc.),
- * shared static utility methods for location operations, string transformations, particle effects,
- * and player messaging. Also manages the global Random instance for consistent random number generation
- * across the plugin.
- * </p>
- * <p>
- * This class serves as a central repository for shared data structures and utility methods that don't
- * require state-specific to individual game objects. Instance methods use the plugin reference to access
- * the logger and configuration.
+ * Instance methods use the plugin reference for logging; static methods stand alone.
  * </p>
  *
  * @author Azami7
@@ -69,28 +62,28 @@ public class Ollivanders2Common {
     /**
      * The number of ticks per second for an MC server.
      *
-     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">Minecraft Wiki - Tick</a>
      */
     public static final int ticksPerSecond = 20;
 
     /**
      * The number of ticks per minute for an MC server.
      *
-     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">Minecraft Wiki - Tick</a>
      */
     public static final int ticksPerMinute = 20 * 60;
 
     /**
      * The number of ticks per hour for an MC server.
      *
-     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">Minecraft Wiki - Tick</a>
      */
     public static final int ticksPerHour = 20 * 60 * 60;
 
     /**
-     * Number of ticks in a Minecraft day
+     * Number of ticks in a Minecraft day.
      *
-     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">Minecraft Wiki - Tick</a>
      */
     public static final int ticksPerDay = 24000;
 
@@ -159,20 +152,17 @@ public class Ollivanders2Common {
     }};
 
     /**
-     * All chest materials. Newer versions of minecraft have made checks to determine if a block is
-     * a chest a lot harder than the olden days.
+     * All chest materials, precomputed so per-block chest checks don't need version-specific logic.
      */
     private static final List<Material> chestBlocks = new ArrayList<>();
 
     /**
-     * All wall sign materials. Newer versions of minecraft have made checks to determine if a block is
-     * a wall sign a lot harder than the olden days.
+     * All wall sign materials, precomputed so per-block sign checks don't need version-specific logic.
      */
     private static final List<Material> wallSigns = new ArrayList<>();
 
     /**
-     * All standing sign materials. Newer versions of minecraft have made checks to determine if a block is
-     * a sign a lot harder than the olden days.
+     * All standing sign materials, precomputed so per-block sign checks don't need version-specific logic.
      */
     private static final List<Material> standingSigns = new ArrayList<>();
 
@@ -182,14 +172,12 @@ public class Ollivanders2Common {
     private static final List<Material> hangingSigns = new ArrayList<>();
 
     /**
-     * All door materials. Newer versions of minecraft have made checks to determine if a block is
-     * a door a lot harder than the olden days.
+     * All door materials, precomputed so per-block door checks don't need version-specific logic.
      */
     private static final List<Material> doors = new ArrayList<>();
 
     /**
-     * All trapdoor materials. Newer versions of minecraft have made checks to determine if a block is
-     * a trapdoor a lot harder than the olden days.
+     * All trapdoor materials, precomputed so per-block trapdoor checks don't need version-specific logic.
      */
     public static final List<Material> trapdoors = new ArrayList<>();
 
@@ -211,30 +199,23 @@ public class Ollivanders2Common {
     }};
 
     /**
-     * All natural wood log materials in Minecraft.
-     * Includes logs from all wood types (oak, birch, spruce, jungle, acacia, dark oak, mangrove, pale oak, cherry)
-     * and nether stems (crimson stem, warped stem). Used to simplify checks for wood-based blocks.
+     * All natural wood log and nether stem materials, precomputed for wood-block checks.
      */
     private static final List<Material> naturalLogs = new ArrayList<>();
 
     /**
-     * Global Random instance for generating random numbers across the plugin.
-     * <p>
-     * Seeded with {@link System#currentTimeMillis()} in the constructor to ensure different sequences
-     * across plugin reloads. All plugin components should use this shared instance rather than creating
-     * their own to maintain consistency in random number generation.
-     * </p>
+     * Shared Random for the whole plugin. All components should use this rather than creating their own.
      */
     public final static Random random = new Random();
 
     /**
-     * Reference to the plugin object
+     * Reference to the plugin object.
      */
     final private Ollivanders2 p;
 
     /**
-     * Initialize all the materials lists based on the loaded MC materials. This was done statically but moved to dynamic
-     * to work with varying MC versions with different block types.
+     * Populate the material lists from the materials the running server has loaded, so classification adapts to the
+     * MC version's block types. Idempotent: each list is filled only if currently empty.
      */
     public static void initMaterialLists() {
         if (chestBlocks.isEmpty()) {
@@ -273,6 +254,12 @@ public class Ollivanders2Common {
         }
     }
 
+    /**
+     * Get all registered materials whose name ends with the given suffix.
+     *
+     * @param endsWith the suffix to match against each material's name, e.g. "_LOG"
+     * @return the matching materials; empty if none match
+     */
     @NotNull
     public static List<Material> getAllMaterialsThatEndWith(@NotNull String endsWith) {
         ArrayList<Material> materials = new ArrayList<>();
@@ -287,13 +274,9 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Constructor that initializes the common utility class.
-     * <p>
-     * Stores a reference to the plugin for accessing the logger and configuration, and seeds the global
-     * Random instance with the current system time to ensure different random sequences across plugin reloads.
-     * </p>
+     * Reseeds the shared {@link #random} with the current system time so sequences differ across plugin reloads.
      *
-     * @param plugin a reference to the Ollivanders2 plugin instance
+     * @param plugin a reference to the Ollivanders2 plugin instance, used for logging
      */
     public Ollivanders2Common(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -342,10 +325,10 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Get a boolean from a string.
+     * Parse a boolean from a string.
      *
      * @param boolString the boolean as a string
-     * @return the Boolean or null if an exception occurred
+     * @return true if the string equals "true" ignoring case, false otherwise
      */
     @NotNull
     public Boolean booleanFromString(@NotNull String boolString) {
@@ -378,14 +361,10 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Transform an enum name string to a human-readable format.
-     * <p>
-     * Converts the input to lowercase, splits on underscores, and joins the parts with spaces.
-     * For example: "AVADA_KEDAVRA" → "avada kedavra"
-     * </p>
+     * Transform an enum name into a human-readable string, e.g. "AVADA_KEDAVRA" -> "avada kedavra".
      *
-     * @param s the enum name as a string (typically in CONSTANT_CASE format)
-     * @return a space-separated lowercase string with underscores removed
+     * @param s the enum name, typically in CONSTANT_CASE
+     * @return the name as lowercase words separated by spaces
      */
     @NotNull
     static public String enumRecode(@NotNull String s) {
@@ -394,52 +373,47 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Capitalize the first letter of each word while lowercasing the rest.
-     * <p>
-     * Transforms each word in the string so that only the first letter is uppercase
-     * and all subsequent letters are lowercase. Words are separated by spaces.
-     * For example: "hello world" → "Hello World", "HELLO" → "Hello"
-     * </p>
+     * Convert a space-separated string to title case, e.g. "hello world" -> "Hello World", "HELLO" -> "Hello".
      *
-     * @param str the string to convert
-     * @return a string with proper title case formatting
+     * @param str the space-separated string to convert
+     * @return the string with each word's first letter uppercased and the rest lowercased
      */
     @NotNull
     static public String firstLetterCapitalize(@NotNull String str) {
         StringBuilder sb = new StringBuilder();
-        String[] wordList = str.split(" ");
-        for (String s : wordList) {
+        for (String s : str.split(" ")) {
+            // skip empty tokens from leading, trailing, or repeated spaces so substring(0, 1) can't overrun
+            if (s.isEmpty())
+                continue;
+
             sb.append(s.substring(0, 1).toUpperCase());
             if (s.length() > 1) {
                 sb.append(s.substring(1).toLowerCase());
             }
             sb.append(" ");
         }
-        return sb.substring(0, sb.length() - 1);
+
+        // sb is empty when str had no words; otherwise drop the trailing space
+        return sb.isEmpty() ? "" : sb.substring(0, sb.length() - 1);
     }
 
     /**
-     * Serialize a Location
+     * Serialize a Location into a string map keyed by "{labelPrefix}_{field}".
      *
      * @param location    the Location to serialize
-     * @param labelPrefix the prefix for the label string, assumes not empty or null
-     * @return a map of the serialized OLocation data
+     * @param labelPrefix the prefix for each key; must be non-empty
+     * @return the serialized world, x, y, and z values, or null if the location has no world
      */
     @Nullable
     public Map<String, String> serializeLocation(@NotNull Location location, @NotNull String labelPrefix) {
         Map<String, String> locData = new HashMap<>();
 
-        //
-        // Location world
-        //
         if (location.getWorld() == null) {
             printDebugMessage("serializeLocation: location world is null", null, null, false);
             return null;
         }
         locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
 
-        //
-        //Location x, y, z
         locData.put(labelPrefix + "_" + locationXLabel, Double.toString(location.getX()));
         locData.put(labelPrefix + "_" + locationYLabel, Double.toString(location.getY()));
         locData.put(labelPrefix + "_" + locationZLabel, Double.toString(location.getZ()));
@@ -527,16 +501,11 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Create a particle flair effect around a location using SMOKE particles.
-     * <p>
-     * Spawns particles in a spherical pattern around the given location. The particles are distributed
-     * evenly across the sphere using spherical coordinates (inclination and azimuth angles).
-     * Defaults to SMOKE particles by calling {@link #flair(Location, int, int, Particle)}.
-     * </p>
+     * Spawn SMOKE particles in a spherical shell around a location. No-op if location is null.
      *
-     * @param location  the center location for the particle effect
+     * @param location  the center of the effect; no-op if null
      * @param radius    the radius of the sphere in blocks
-     * @param intensity the density of particles (0-10+, capped at 10). Higher intensity means more particles.
+     * @param intensity the particle density; higher is denser, values above 10 are capped at 10
      */
     public static void flair(Location location, int radius, int intensity) {
         if (location == null)
@@ -546,18 +515,11 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Create a particle flair effect around a location using the Bukkit Effect API.
-     * <p>
-     * Spawns particles in a spherical pattern around the given location using legacy Effect objects.
-     * Particles are distributed evenly across the sphere by iterating through spherical coordinates:
-     * inclination (polar angle, 0 to π) and azimuth (horizontal angle, 0 to 2π). The step size
-     * between points is determined by dividing π (or 2π) by the intensity value.
-     * </p>
+     * Spawn legacy Bukkit {@link Effect} particles in a spherical shell around a location. No-op if location is null.
      *
-     * @param location   the center location for the particle effect
+     * @param location   the center of the effect; no-op if null
      * @param radius     the radius of the sphere in blocks
-     * @param intensity  the density of particles (0-10+, capped at 10). Higher intensity means more particles
-     *                   spaced closer together
+     * @param intensity  the particle density; higher is denser, values above 10 are capped at 10
      * @param effectType the legacy Bukkit Effect to spawn at each point
      */
     public static void flair(Location location, int radius, int intensity, Effect effectType) {
@@ -582,19 +544,12 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Create a particle flair effect around a location using Bukkit Particle API.
-     * <p>
-     * Spawns particles in a spherical pattern around the given location. Particles are distributed
-     * evenly across the sphere by iterating through spherical coordinates: inclination (polar angle,
-     * 0 to π) and azimuth (horizontal angle, 0 to 2π). The step size between points is determined
-     * by dividing π (or 2π) by the intensity value. This is the modern particle spawning method.
-     * </p>
+     * Spawn Bukkit {@link Particle} particles in a spherical shell around a location. No-op if location is null.
      *
-     * @param location     the center location for the particle effect
+     * @param location     the center of the effect; no-op if null
      * @param radius       the radius of the sphere in blocks
-     * @param intensity    the density of particles (0-10+, capped at 10). Higher intensity means more particles
-     *                     spaced closer together
-     * @param particleType the particle type to spawn at each point (e.g., SMOKE, FLAME, SPARK)
+     * @param intensity    the particle density; higher is denser, values above 10 are capped at 10
+     * @param particleType the particle type to spawn at each point, e.g. SMOKE, FLAME
      */
     public static void flair(Location location, int radius, int intensity, Particle particleType) {
         if (location == null)
@@ -618,30 +573,19 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Convert spherical coordinates to a Cartesian vector.
-     * <p>
-     * Transforms spherical coordinates (inclination and azimuth) into a 3D Cartesian vector
-     * relative to the origin. The inclination angle is the polar angle measured from the positive Y-axis,
-     * and the azimuth angle is measured from the positive X-axis in the horizontal plane.
-     * </p>
-     * <p>
-     * Used by flair effects to distribute particles in a spherical pattern around a center location.
-     * </p>
+     * Convert spherical coordinates to a Cartesian vector relative to the origin.
      *
-     * @param sphere a 2-element array where:
-     *               - sphere[0] is the inclination (polar angle in radians, 0 to π)
-     *               - sphere[1] is the azimuth (horizontal angle in radians, 0 to 2π)
-     * @param radius the radius of the sphere, determining the distance from the origin
-     * @return a Vector representing the 3D position in Cartesian coordinates
+     * @param sphere the {@code [inclination, azimuth]} angles, in radians; inclination is the polar angle from the
+     *               Y-axis (0 to π) and azimuth is the horizontal angle (0 to 2π)
+     * @param radius the distance from the origin
+     * @return the equivalent Cartesian vector
      */
     @NotNull
     public static Vector sphereToVector(double[] sphere, int radius) {
         double inclusion = sphere[0];
         double azimuth = sphere[1];
-        // X and Z form the horizontal plane (radius from Y-axis), azimuth determines direction
         double x = radius * Math.sin(inclusion) * Math.cos(azimuth);
         double z = radius * Math.sin(inclusion) * Math.sin(azimuth);
-        // Y is the vertical component; cos(inclusion) ranges from -1 to 1 as inclusion goes 0 to π
         double y = radius * Math.cos(inclusion);
 
         return new Vector(x, y, z);
@@ -723,23 +667,15 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Filter the recipient set to only include players within the dropoff distance.
-     * <p>
-     * Modifies the recipients set in-place, removing all players who are outside the specified distance
-     * from the source location. This is used to implement chat distance limitations where players too far
-     * away cannot hear spell or magic-related messages.
-     * </p>
-     * <p>
-     * A copy of the original recipient set is iterated to safely remove players from the original set
-     * without causing concurrent modification exceptions.
-     * </p>
+     * Remove from the recipient set every player farther than the dropoff distance from the source location, so
+     * distant players do not receive spell or magic chat.
      *
-     * @param recipients the set of players to filter (modified by this method)
-     * @param dropoff    the maximum distance in blocks for a player to remain in the recipient set
-     * @param location   the source location from which to measure distance
+     * @param recipients the set of players to filter; players out of range are removed in-place
+     * @param dropoff    the maximum distance in blocks for a player to remain a recipient
+     * @param location   the source location from which distance is measured
      */
     static public void chatDropoff(Set<Player> recipients, int dropoff, Location location) {
-        // handle spell chat dropoff
+        // iterate a copy so we can remove from the original without a ConcurrentModificationException
         Set<Player> temp = new HashSet<>(recipients);
         for (Player recipient : temp) {
             if (!Ollivanders2Common.isInside(location, recipient.getLocation(), dropoff)) {
@@ -953,7 +889,7 @@ public class Ollivanders2Common {
             velocity.multiply(-1);
         }
 
-        // Actual velocity calculation would require calculus, this is a simple approximation that is good enough for our purposes
+        // an exact solution requires calculus; this approximation is good enough for our purposes
         double magnitude = distance + (distance * (1 - dragFactor));
 
         Ollivanders2API.common.printDebugMessage("magnitude = " + magnitude, null, null, false);
@@ -970,15 +906,13 @@ public class Ollivanders2Common {
      * @return the calculated velocity vector
      */
     public static Vector calculateVerticalVelocity(double distance, double dragFactor, boolean upwards) {
-        // Actual velocity calculation would require calculus, this is a simple approximation that is good enough for our purposes
+        // an exact solution requires calculus; this approximation is good enough for our purposes
         double magnitude = distance + (distance * (1 - dragFactor));
 
         Ollivanders2API.common.printDebugMessage("magnitude = " + magnitude, null, null, false);
 
-        // Create a purely vertical vector
         Vector velocity = new Vector(0, magnitude, 0);
 
-        // If downwards, make it negative
         if (!upwards) {
             velocity.setY(-magnitude);
         }

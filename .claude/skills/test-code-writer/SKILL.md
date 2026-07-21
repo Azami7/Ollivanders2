@@ -123,6 +123,27 @@ This works because MockBukkit fires `EntityPotionEffectEvent` when `addPotionEff
 
 This same pattern works for any effect or event that is difficult to observe after the fact — register a listener, let the spell run, then assert against the captured state.
 
+### Flaky probabilistic spells: fix with a production `testMode` guard, not test-side workarounds
+When a spell test is intermittent because the spell rolls a random chance, the project convention is to make the roll deterministic in the **production** code with an `Ollivanders2.testMode` guard — never retry loops or inflated-experience magic values in the test. Preferred form:
+
+```java
+if (Ollivanders2.testMode && usesModifier >= O2Spell.spellMasteryLevel)
+    successRate = 100;  // else: fall through to the normal random roll
+```
+
+The `>=` is deliberate: casting at `spellMasteryLevel` is guaranteed under test, while lower-skill casts still exercise the real roll (so zero-experience "should fail" tests stay deterministic without any guard). Only force the specific case the test needs — don't blanket-bypass, or failure-path tests break. Established examples: `OBLIVIATE.canContinue`, `LEGILIMENS`, `LAPIFORS.doInitSpell`, `CISTEM_APERIO.doCheckEffect`. Do NOT `testMode`-bypass **core spell logic** (e.g. a facing-block requirement) — that changes what the test tests; skip instead (see `getLineOfSight` below).
+
+### Known MockBukkit quirks (verified by decompiling the pinned jar)
+The project pins `mockbukkit-v1.21:4.71.0`. These bite repeatedly:
+
+- **`BlockMock.getLocation()` returns a shared mutable `Location` field** (CraftBlock returns a fresh copy). `.clone()` before mutating, always — mutating it corrupts the block's own location and any map key derived from it.
+- **`BlockMock` has no `equals`/`hashCode`** — object identity only. `HashMap<Block, ...>` works in-game (CraftBlock compares coordinates) but not under test; production code that must be testable keys by block-aligned `Location` (value equality) instead.
+- **`callEvent` does NOT reach a listener the spell self-registered at runtime** (`registerEvents(this, plugin)` in a spell constructor) — only centrally registered listeners. To test a spell's own `@EventHandler`, call the handler method directly; you then can't test (un)registration, only handler logic.
+- **`getLineOfSight` throws `UnimplementedOperationException`** — spells with a facing-block requirement can't have their success path tested. Skip with `Assumptions.assumeTrue(...)` plus a TODO; do not `testMode`-bypass the facing check.
+- **`launchProjectile` creates but never registers the projectile** — not in `world.getEntities()`, no `ProjectileLaunchEvent`. Observable scope: assert the spell `isKilled()` after a tick (an unsupported projectile class throws instead). Contrast `World.spawnEntity`, which IS registered and observable.
+- **`TestCommon.faceTarget` can't produce a clean horizontal vector** (vertical component always ≥ ±0.5 for integer target Y). For axis-aligned aims, target straight down (exact `(0,-1,0)`) or offset on one horizontal axis and flatten.
+- **`World.spawnFallingBlock` IS implemented and observable — but throws on AIR** blockData; skip air upstream.
+
 ### Snapshot vs live state in MockBukkit
 MockBukkit's `BlockState` snapshots can diverge from production Paper semantics for some `Container` types (notably `Chest`). When a test reads inventory state that the production code has just written, prefer re-fetching the state via `block.getState()` immediately before the assertion rather than reusing a stale snapshot reference. If a test still fails despite a fresh snapshot, suspect a MockBukkit-vs-Paper API divergence and check the API references below.
 

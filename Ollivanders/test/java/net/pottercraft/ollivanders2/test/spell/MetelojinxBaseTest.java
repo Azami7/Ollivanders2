@@ -14,11 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract tests for {@link MetelojinxBase} weather-altering spells.
- *
- * <p>Verifies the shared behaviour across both Metelojinx variants: when the current weather is the
- * opposite of what the spell wants, the spell adjusts the weather duration; when the current weather
- * already matches the spell's intent, the spell sends a failure message and does not change the duration.</p>
+ * Base test class for {@link MetelojinxBase} weather-altering spells. Verifies that the spell changes the weather
+ * duration when the current weather opposes its intent, and sends a failure message without changing anything when
+ * the weather already matches.
  */
 abstract public class MetelojinxBaseTest extends O2SpellTestSuper {
     /**
@@ -69,6 +67,9 @@ abstract public class MetelojinxBaseTest extends O2SpellTestSuper {
         assertEquals(spell.getFailureMessage(), TestCommon.cleanChatMessage(message), "caster did not receive expected failure message");
     }
 
+    /**
+     * No-op: weather spells have no revert action.
+     */
     @Override
     @Test
     void revertTest() {

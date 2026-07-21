@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Azami7
  * @see EVANESCO
- * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Spell">https://harrypotter.fandom.com/wiki/Vanishing_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Spell">Harry Potter Wiki - Vanishing Spell</a>
  */
 public final class EVANESCO_MAXIMA extends EVANESCO {
     /**

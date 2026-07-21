@@ -8,172 +8,65 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Color representation for Ollivanders2 supporting multiple Minecraft color formats.
- * <p>
- * Minecraft handles colors inconsistently across different contexts - chat messages use ChatColor and format codes (§),
- * items use Color, and blocks use DyeColor. This enum provides unified access to all color representations,
- * allowing seamless conversion between formats.
- * </p>
- * <p>
- * <strong>When to use each color representation:</strong>
- * <ul>
- * <li>{@link #getBukkitColor()} - For items and potions (Color class)</li>
- * <li>{@link #getChatColor()} - For chat messages in commands and player messages (ChatColor enum)</li>
- * <li>{@link #getChatColorCode()} - For text formatting in books and signs using color codes like "§c" for red</li>
- * <li>{@link #getDyeColor()} - For dyeable blocks like wool, concrete, and glass (DyeColor enum)</li>
- * </ul>
+ * A single color mapped to each of Minecraft's inconsistent color representations, so callers can convert freely
+ * between them: {@link Color} for items and potions, {@link ChatColor} for messages, a "§"-code string for book and
+ * sign text, and {@link DyeColor} for dyeable blocks.
  *
  * @author Azami7
  */
 public enum O2Color {
-    /**
-     * aqua - Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE
-     *
-     */
     AQUA(Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE),
-    /**
-     * black - Color.BLACK, ChatColor.BLACK, "§0", DyeColor.BLACK
-     */
     BLACK(Color.BLACK, ChatColor.BLACK, "§0", DyeColor.BLACK),
-    /**
-     * blue - Color.BLUE, ChatColor.BLUE, "§9", DyeColor.BLUE
-     */
     BLUE(Color.BLUE, ChatColor.BLUE, "§9", DyeColor.BLUE),
-    /**
-     * brown - Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.BROWN
-     */
     BROWN(Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.BROWN),
-    /**
-     * cyan - Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN
-     */
     CYAN(Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN),
-    /**
-     * dark blue - Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE
-     */
     DARK_BLUE(Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE),
-    /**
-     * dark gray - Color.GRAY, ChatColor.GRAY, "§8", DyeColor.GRAY
-     */
     DARK_GRAY(Color.GRAY, ChatColor.GRAY, "§8", DyeColor.GRAY),
-    /**
-     * dark green - Color.GREEN, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN
-     */
     DARK_GREEN(Color.GREEN, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN),
-    /**
-     * dark red - Color.RED, ChatColor.RED, "§4", DyeColor.RED
-     */
     DARK_RED(Color.RED, ChatColor.RED, "§4", DyeColor.RED),
-    /**
-     * fuschia - Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK
-     */
     FUCHSIA(Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK),
-    /**
-     * gold - Color.YELLOW, ChatColor.GOLD, "§6", DyeColor.YELLOW
-     */
     GOLD(Color.YELLOW, ChatColor.GOLD, "§6", DyeColor.YELLOW),
-    /**
-     * gray - Color.GRAY, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY
-     */
     GRAY(Color.GRAY, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
-    /**
-     * green - Color.GREEN, ChatColor.GREEN, "§a", DyeColor.GREEN
-     */
     GREEN(Color.GREEN, ChatColor.GREEN, "§a", DyeColor.GREEN),
-    /**
-     * light blue - Color.TEAL, ChatColor.BLUE, "§9", DyeColor.LIGHT_BLUE
-     */
     LIGHT_BLUE(Color.TEAL, ChatColor.BLUE, "§9", DyeColor.LIGHT_BLUE),
-    /**
-     * light gray - Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY
-     */
     LIGHT_GRAY(Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
-    /**
-     * light purple - Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PURPLE
-     */
     LIGHT_PURPLE(Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PURPLE),
-    /**
-     * lime - Color.LIME, ChatColor.GREEN, "§a", DyeColor.LIME
-     */
     LIME(Color.LIME, ChatColor.GREEN, "§a", DyeColor.LIME),
-    /**
-     * magenta - Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.MAGENTA
-     */
     MAGENTA(Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.MAGENTA),
-    /**
-     * maroon - Color.MAROON, ChatColor.DARK_RED, "§4", DyeColor.RED
-     */
     MAROON(Color.MAROON, ChatColor.DARK_RED, "§4", DyeColor.RED),
-    /**
-     * navy - Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE
-     */
     NAVY(Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE),
-    /**
-     * olive - Color.OLIVE, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN
-     */
     OLIVE(Color.OLIVE, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN),
-    /**
-     * orange - Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.ORANGE
-     */
     ORANGE(Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.ORANGE),
-    /**
-     * pink - Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK
-     */
     PINK(Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK),
-    /**
-     * purple - Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.PURPLE
-     */
     PURPLE(Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.PURPLE),
-    /**
-     * red - Color.RED, ChatColor.RED, "§c", DyeColor.RED
-     */
     RED(Color.RED, ChatColor.RED, "§c", DyeColor.RED),
-    /**
-     * silver - Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY
-     */
     SILVER(Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
-    /**
-     * teal - Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN
-     */
     TEAL(Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN),
-    /**
-     * white - Color.WHITE, ChatColor.WHITE, "§f", DyeColor.WHITE
-     */
     WHITE(Color.WHITE, ChatColor.WHITE, "§f", DyeColor.WHITE),
-    /**
-     * yellow - Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW
-     */
     YELLOW(Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW),
     ;
 
     /**
-     * Primary dye colors for common dyeable blocks.
-     * Used by {@link #getRandomPrimaryDyeableColor()} to select from the six most common color variants.
-     * Primarily used for blocks that support standard color variants.
+     * The six colors {@link #getRandomPrimaryDyeableColor()} draws from.
      */
     final static O2Color[] primaryDyeableColors = new O2Color[]{RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
 
     /**
-     * All dye colors supported by Minecraft dyeable blocks.
-     * Used by {@link #getRandomDyeableColor()} to select from the complete range of available dye colors.
-     * Includes all standard Minecraft dye colors that can be applied to wool, concrete, glass, and similar blocks.
+     * The sixteen dyeable-block colors {@link #getRandomDyeableColor()} draws from.
      */
     final static O2Color[] dyeableColors = new O2Color[]{BLACK, BLUE, BROWN, CYAN, GRAY, GREEN, LIGHT_BLUE, LIGHT_GRAY, LIME, MAGENTA, ORANGE, PINK, PURPLE, RED, WHITE, YELLOW};
 
     /**
-     * Bukkit-defined colors representing standard Minecraft colors.
-     * Used by {@link #getBukkitColorByNumber(int)} to convert numeric color codes (0-15) to their corresponding O2Color.
-     * These 16 colors match the legacy Minecraft color palette (corresponds to the old chat color codes).
-     * Defaults to WHITE if a number outside the valid range is provided.
+     * The legacy 16-color Minecraft palette, indexed by the old numeric color codes; see
+     * {@link #getBukkitColorByNumber(int)}.
      */
     final static O2Color[] bukkitColors = new O2Color[]{AQUA, BLACK, BLUE, FUCHSIA, GRAY, GREEN, LIME, MAROON, NAVY, OLIVE, ORANGE, PURPLE, RED, SILVER, TEAL, WHITE};
 
     /**
-     * Constructor
-     *
-     * @param color    the Color for this type
-     * @param chat     the chat color for this type
-     * @param chatCode the chat code to make this type
-     * @param dye      the dye for this type
+     * @param color    the item/potion color
+     * @param chat     the chat color
+     * @param chatCode the "§"-code chat format string
+     * @param dye      the dyeable-block color
      */
     O2Color(@NotNull Color color, @NotNull ChatColor chat, @NotNull String chatCode, @NotNull DyeColor dye) {
         bukkitColor = color;
@@ -182,36 +75,21 @@ public enum O2Color {
         dyeColor = dye;
     }
 
-    /**
-     * The Bukkit Color object for this color.
-     * Used for item coloring (e.g., potion colors). Access via {@link #getBukkitColor()}.
-     */
     final Color bukkitColor;
 
-    /**
-     * The ChatColor enum value for this color.
-     * Used for chat messages and command outputs. Access via {@link #getChatColor()}.
-     */
     final ChatColor chatColor;
 
     /**
-     * The chat format code for this color (e.g., "§c" for red).
-     * Used for text formatting in books, signs, and other text-based UI elements.
-     * Format is the section symbol (§) followed by a hexadecimal character. Access via {@link #getChatColorCode()}.
+     * The "§"-code chat format string for this color (section symbol plus a hex character, e.g. "§c").
      */
     final String chatColorCode;
 
-    /**
-     * The DyeColor enum value for this color.
-     * Used for dyeable blocks like wool, concrete, glass, and banners. Access via {@link #getDyeColor()}.
-     */
     final DyeColor dyeColor;
 
     /**
-     * Get the Bukkit Color object for this color.
-     * Used for coloring items such as potions, leather armor, and other colorable items.
+     * Get the Bukkit color, for coloring items such as potions and leather armor.
      *
-     * @return the Bukkit Color object
+     * @return the Bukkit Color
      */
     @NotNull
     public Color getBukkitColor() {
@@ -219,10 +97,9 @@ public enum O2Color {
     }
 
     /**
-     * Get the ChatColor enum value for this color.
-     * Used for chat messages, command messages, and other player-facing text.
+     * Get the chat color, for player-facing messages.
      *
-     * @return the ChatColor enum value
+     * @return the ChatColor
      */
     @NotNull
     public ChatColor getChatColor() {
@@ -230,11 +107,9 @@ public enum O2Color {
     }
 
     /**
-     * Get the chat format code for this color.
-     * Format is the section symbol (§) followed by a hexadecimal character (e.g., "§c" for red).
-     * Used for formatting text in books, signs, and other text-based UI elements.
+     * Get the "§"-code chat format string (e.g. "§c"), for text in books and signs.
      *
-     * @return the chat color code as a string
+     * @return the chat color code
      */
     @NotNull
     public String getChatColorCode() {
@@ -242,10 +117,9 @@ public enum O2Color {
     }
 
     /**
-     * Get the DyeColor enum value for this color.
-     * Used for dyeable blocks such as wool, concrete, glass, banners, candles, and shulker boxes.
+     * Get the dye color, for dyeable blocks such as wool, concrete, glass, and banners.
      *
-     * @return the DyeColor enum value
+     * @return the DyeColor
      */
     @NotNull
     public DyeColor getDyeColor() {
@@ -253,41 +127,30 @@ public enum O2Color {
     }
 
     /**
-     * Get the colored material variant for this color with the given base material name.
-     * <p>
-     * Minecraft colorable materials follow the naming convention: {@code COLOR_MATERIAL}
-     * (e.g., "RED_WOOL", "BLUE_CONCRETE", "WHITE_GLASS"). This method constructs the full material
-     * name by combining the DyeColor prefix with the provided base name.
-     * </p>
+     * Get the colored variant of a base material in this color, following Minecraft's {@code COLOR_BASE} naming
+     * (e.g. this color's dye prefix + "WOOL" -&gt; "RED_WOOL").
      *
-     * @param materialBaseName the base material name without color prefix (e.g., "WOOL", "CONCRETE", "GLASS")
-     * @return the colored Material (e.g., Material.RED_WOOL), or null if the colored variant doesn't exist
+     * @param materialBaseName the base material name without a color prefix (e.g. "WOOL", "CONCRETE", "GLASS")
+     * @return the colored Material, or null if no such variant exists
      */
     @Nullable
     public Material getColoredMaterial(String materialBaseName) {
-        // Concatenate the DyeColor enum with the base material name. DyeColor.toString() returns the enum name
-        // (e.g., "RED", "BLUE") which creates the full material name (e.g., "RED_WOOL", "BLUE_CONCRETE").
         String materialName = dyeColor + "_" + materialBaseName;
 
+        // a missing variant is an expected outcome (see the null contract), so swallow it rather than logging
         try {
             return Material.valueOf(materialName);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (IllegalArgumentException e) {
+            return null;
         }
-
-        return null;
     }
 
     /**
-     * Get the Bukkit color associated with a numeric color code.
-     * <p>
-     * Converts numeric color codes (0-15) to their corresponding O2Color from the legacy Minecraft color palette.
-     * This is useful for working with older data formats or system that use numeric color indices.
-     * </p>
+     * Map a legacy numeric color code to its color.
      *
-     * @param number a number between 0-15 corresponding to the legacy Minecraft color palette
-     * @return the O2Color at the specified index, or WHITE if the number is out of range (negative or >= 16)
+     * @param number an index into the legacy 16-color palette
+     * @return the matching color, or WHITE if the number is out of range (negative or &gt;= 16)
      */
     @NotNull
     public static O2Color getBukkitColorByNumber(int number) {
@@ -300,13 +163,9 @@ public enum O2Color {
     }
 
     /**
-     * Get a random primary dyeable color.
-     * <p>
-     * Returns one of the six primary dye colors: red, orange, yellow, green, blue, or purple.
-     * Uses a random seed from {@link Ollivanders2Common#random}.
-     * </p>
+     * Get a random primary dyeable color (red, orange, yellow, green, blue, or purple).
      *
-     * @return a random O2Color from the primary dyeable colors array
+     * @return a random primary dyeable color
      * @see #getRandomPrimaryDyeableColor(int)
      */
     @NotNull
@@ -317,31 +176,22 @@ public enum O2Color {
     }
 
     /**
-     * Get a primary dyeable color based on the provided seed.
-     * <p>
-     * Returns one of the six primary dye colors: red, orange, yellow, green, blue, or purple.
-     * The seed is used with modulo arithmetic to select from the available colors.
-     * </p>
+     * Select a primary dyeable color from a seed, so callers can reproduce a choice from a stored value.
      *
-     * @param seed the base value to determine which color is selected (using modulo)
-     * @return a primary dyeable color from the seed value
+     * @param seed any int; the color is chosen by its magnitude modulo the number of primary colors
+     * @return the selected primary dyeable color
      */
     @NotNull
     public static O2Color getRandomPrimaryDyeableColor(int seed) {
-        // Modulo 6 distributes the seed value evenly across the 6 primary colors (0-5)
         int rand = Math.abs(seed) % primaryDyeableColors.length;
 
         return primaryDyeableColors[rand];
     }
 
     /**
-     * Get a random dyeable color.
-     * <p>
-     * Returns one of the 16 available dye colors that can be applied to dyeable blocks.
-     * Uses a random seed from {@link Ollivanders2Common#random}.
-     * </p>
+     * Get a random dyeable-block color from the full set of 16.
      *
-     * @return a random O2Color from the complete dyeable colors array
+     * @return a random dyeable color
      * @see #getRandomDyeableColor(int)
      */
     @NotNull
@@ -352,36 +202,26 @@ public enum O2Color {
     }
 
     /**
-     * Get a dyeable color based on the provided seed.
-     * <p>
-     * Returns one of the 16 available dye colors that can be applied to dyeable blocks like wool, concrete, and glass.
-     * The seed is used with modulo arithmetic to select from the available colors.
-     * </p>
+     * Select a dyeable-block color from a seed, so callers can reproduce a choice from a stored value.
      *
-     * @param seed the base value to determine which color is selected (using modulo)
-     * @return a dyeable color from the seed value
+     * @param seed any int; the color is chosen by its magnitude modulo the number of dyeable colors
+     * @return the selected dyeable color
      */
     @NotNull
     public static O2Color getRandomDyeableColor(int seed) {
-        // Modulo 16 distributes the seed value evenly across the 16 available dye colors (0-15)
         int rand = Math.abs(seed) % dyeableColors.length;
 
         return dyeableColors[rand];
     }
 
     /**
-     * Check whether a material can be dyed to different colors.
-     * <p>
-     * Colorable materials follow the naming pattern {@code COLOR_BASE} (e.g., "RED_WOOL", "WHITE_CONCRETE").
-     * This method checks if the material name ends with one of the known dyeable base material suffixes.
-     * </p>
+     * Check whether a material has color variants (wool, carpet, concrete, glass, bed, candle, banner, shulker box,
+     * terracotta, and similar), determined by matching known dyeable base-material name suffixes.
      *
-     * @param material the Material to check for colorability
-     * @return true if the material is colorable (wool, carpet, concrete, glass, bed, candle, banner, shulker box),
-     * false otherwise
+     * @param material the material to check
+     * @return true if the material is colorable
      */
     public static boolean isColorable(@NotNull Material material) {
-        // determine if a material is colorable
         String materialName = material.toString();
 
         return (materialName.endsWith("_BANNER") || materialName.endsWith("_BED") || materialName.endsWith("_BUNDLE")
@@ -396,27 +236,21 @@ public enum O2Color {
     }
 
     /**
-     * Change a colorable material to a new color.
-     * <p>
-     * Converts the material to its color variant using the provided O2Color. For example, converting
-     * WOOL with color RED produces RED_WOOL. The material name pattern is {@code COLOR_BASE}.
-     * </p>
+     * Recolor a material to the given color (e.g. WHITE_WOOL with RED becomes RED_WOOL). Returns the material
+     * unchanged if it is not colorable or the target color has no such variant in Minecraft.
      *
-     * @param material the colorable Material to change the color of (e.g., WHITE_WOOL, BLUE_CONCRETE)
-     * @param color    the O2Color to change the material to
-     * @return the new colored Material (e.g., RED_WOOL), or the original material if:
-     * - the material is not colorable, or
-     * - the colored variant does not exist in Minecraft
+     * @param material the material to recolor
+     * @param color    the target color
+     * @return the recolored material, or the original if it could not be recolored
      */
     public static Material changeColor(@NotNull Material material, @NotNull O2Color color) {
         String materialName = material.toString();
 
-        // is this material colorable?
         if (!isColorable(material))
             return material;
 
-        // colorless materials that contain underscores need special handling before the split,
-        // otherwise GLASS_PANE splits into ["GLASS", "PANE"] instead of mapping to STAINED_GLASS_PANE
+        // uncolored materials whose names contain an underscore need the base spelled out here; otherwise the
+        // first-underscore split below would mis-parse them (e.g. GLASS_PANE -> "GLASS"/"PANE", losing STAINED_GLASS_PANE)
         String materialBase;
         if (materialName.equals("GLASS"))
             materialBase = "STAINED_GLASS";
@@ -425,9 +259,8 @@ public enum O2Color {
         else if (materialName.equals("SHULKER_BOX") || materialName.equals("CANDLE_CAKE"))
             materialBase = materialName;
         else if (materialName.contains("_")) {
-            // get the base material where name pattern is COLOR_MATERIAL, ex. WHITE_WOOL
-            // Use split with limit of 2 to only split at the FIRST underscore. This handles materials like
-            // STAINED_GLASS_PANE correctly: splits into ["WHITE", "STAINED_GLASS_PANE"], not ["WHITE", "STAINED", "GLASS_PANE"]
+            // split on the first underscore only, so the color prefix drops off but a multi-word base survives
+            // intact (WHITE_STAINED_GLASS_PANE -> "STAINED_GLASS_PANE", not "STAINED")
             String[] materialNameParts = materialName.split("_", 2);
             if (materialNameParts.length != 2)
                 return material;
@@ -440,7 +273,6 @@ public enum O2Color {
 
         Material newMaterialColor = color.getColoredMaterial(materialBase);
 
-        // return back the original if we failed to get this color for the material
         if (newMaterialColor == null)
             return material;
 

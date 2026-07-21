@@ -7,22 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for the FLAGRANTE spell.
- *
- * <p>FLAGRANTE is a dark arts enchantment spell that places a burning curse on items.
- * When a player picks up a FLAGRANTE-enchanted item, the enchanted items system triggers
- * the FLAGRANTE effect to deal damage. FLAGRANTE enchantments do not have magnitude variation
- * (all burn effects are identical regardless of caster skill) and do not modify the item appearance.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.FLAGRANTE for the spell implementation
- * @see ItemEnchantTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.FLAGRANTE}. Extends {@link ItemEnchantTest} for the
+ * shared item-enchantment tests.
  */
 public class FlagranteTest extends ItemEnchantTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.FLAGRANTE
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

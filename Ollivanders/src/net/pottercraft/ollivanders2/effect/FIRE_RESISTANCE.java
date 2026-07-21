@@ -7,21 +7,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Fire Resistance effect that grants immunity to fire damage.
- *
- * <p>Applies the Minecraft fire resistance potion effect, making the player immune to fire and lava damage.
- * This effect can be temporary or permanent depending on spell duration.</p>
+ * Applies Minecraft's fire resistance potion effect, making the player immune to fire and lava damage. Detectable via
+ * Informous and Legilimens.
  *
  * @author Azami7
+ * @see PotionEffect
  */
 public class FIRE_RESISTANCE extends PotionEffect {
     /**
-     * Constructor for Fire Resistance effect.
+     * Constructor
      *
-     * @param plugin the Ollivanders2 plugin
-     * @param duration the duration in ticks
-     * @param isPermanent whether the effect is permanent
-     * @param pid the player UUID
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to make fire-resistant
      */
     public FIRE_RESISTANCE(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, isPermanent, pid);
@@ -35,11 +34,6 @@ public class FIRE_RESISTANCE extends PotionEffect {
         strength = 1;
     }
 
-    /**
-     * Cleanup when the effect is removed.
-     *
-     * <p>Fire Resistance has no special cleanup needed beyond removing the potion effect.</p>
-     */
     @Override
     public void doRemove() {
     }

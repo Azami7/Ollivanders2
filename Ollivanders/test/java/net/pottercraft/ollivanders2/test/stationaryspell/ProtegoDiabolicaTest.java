@@ -30,26 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the PROTEGO_DIABOLICA stationary spell.
- *
- * <p>Tests the spell's core functionality including fire ring creation, radius management,
- * and damage mechanics. Verifies that the spell correctly damages disloyal players (Muggles
- * and students from other houses) while protecting loyal players (caster and students from
- * the same house).</p>
- *
- * <p>Test Coverage:</p>
- *
- * <ul>
- * <li>upkeepTest: Verifies fire ring creation with soul sand and soul fire blocks</li>
- * <li>radiusTest: Tests that radius can be modified before fire ring creation but not after</li>
- * <li>doOnPlayerMoveEventTest: Validates damage application on player movement into spell area</li>
- * <li>doOnPlayerTeleportEventTest: Validates damage application on player teleportation into spell area</li>
- * <li>doOnEntityCombustEventTest: Verifies combustion events are canceled for loyal players</li>
- * <li>doOnEntityDamageEvent: Verifies fire damage events are canceled for loyal players</li>
- * </ul>
+ * Unit tests for {@link PROTEGO_DIABOLICA}. Extends {@link O2StationarySpellTest} for the shared stationary-spell
+ * tests.
  *
  * @author Azami7
- * @see PROTEGO_DIABOLICA
  */
 @Isolated
 public class ProtegoDiabolicaTest extends O2StationarySpellTest {
@@ -63,10 +47,8 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests fire ring creation on spell upkeep.
-     *
-     * <p>Verifies that the spell creates a ring of soul sand and soul fire blocks at the
-     * configured radius when the spell is first added to the stationary spells manager.</p>
+     * The first upkeep builds a ring of soul sand and soul fire blocks at the spell radius, all registered as temporary
+     * blocks.
      */
     @Override
     @Test
@@ -75,7 +57,6 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
 
         World testWorld = mockServer.addSimpleWorld("world");
         Location location = new Location(testWorld, 100, 40, 100);
-        Location outsideLocation = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ() + PROTEGO_DIABOLICA.maxRadiusConfig + 1);
         PlayerMock caster = mockServer.addPlayer();
         caster.setLocation(location);
 
@@ -102,17 +83,13 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests radius modification before and after fire ring creation.
-     *
-     * <p>Verifies that the radius can be increased and decreased before the fire ring is created,
-     * but cannot be modified after the fire ring is created.</p>
+     * The radius can be changed before the fire ring is built but is locked afterward.
      */
     @Override
     @Test
     void radiusTest() {
         World testWorld = mockServer.addSimpleWorld("world");
         Location location = new Location(testWorld, 200, 40, 100);
-        Location outsideLocation = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ() + PROTEGO_DIABOLICA.maxRadiusConfig + 1);
         PlayerMock caster = mockServer.addPlayer();
 
         PROTEGO_DIABOLICA protegoDiabolica = createStationarySpell(caster, location);
@@ -139,10 +116,8 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests damage on player movement into spell area.
-     *
-     * <p>Verifies that Muggles and players from different houses take damage when moving into
-     * the spell area, while loyal players from the same house are protected.</p>
+     * A muggle or a wizard from another house is burned moving into the area, while the caster's housemates and anyone
+     * moving out are unharmed.
      */
     @Test
     void doOnPlayerMoveEventTest() {
@@ -205,10 +180,8 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests damage on player teleportation into spell area.
-     *
-     * <p>Verifies that players from different houses take damage when teleporting into
-     * the spell area, while loyal players from the same house are protected.</p>
+     * A wizard from another house is burned teleporting into the area, while the caster's housemates and anyone
+     * teleporting out are unharmed.
      */
     @Test
     void doOnPlayerTeleportEventTest() {
@@ -256,10 +229,8 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests that combustion events are properly canceled for loyal players.
-     *
-     * <p>Verifies that EntityCombustEvent is canceled for the caster and players from the same house,
-     * but not canceled for disloyal players.</p>
+     * Combustion is cancelled for the caster and their housemates inside the area, but not for disloyal players or
+     * anyone outside it.
      */
     @Test
     void doOnEntityCombustEventTest() {
@@ -310,10 +281,8 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
     }
 
     /**
-     * Tests that fire damage events are properly canceled for loyal players.
-     *
-     * <p>Verifies that fire damage events are canceled for the caster and players from the same house,
-     * but not canceled for disloyal players. Non-fire damage events should never be canceled.</p>
+     * Fire damage is cancelled for the caster and their housemates inside the area, but not for disloyal players,
+     * non-fire damage, or anyone outside it.
      */
     @Test
     void doOnEntityDamageEvent() {
@@ -341,7 +310,7 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
         mockServer.getScheduler().performTicks(5);
 
         DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                .withDamageLocation(player.getLocation())  // location of the fire block
+                .withDamageLocation(player.getLocation())
                 .build();
         EntityDamageEvent event = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.FIRE, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(event);
@@ -355,7 +324,7 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
         assertTrue(event.isCancelled(), "fire damage event not canceled when player is loyal");
 
         damageSource = DamageSource.builder(DamageType.ARROW)
-                .withDamageLocation(player.getLocation())  // location of the fire block
+                .withDamageLocation(player.getLocation())
                 .build();
         event = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(event);
@@ -364,7 +333,7 @@ public class ProtegoDiabolicaTest extends O2StationarySpellTest {
 
         player.setLocation(outsideLocation);
         damageSource = DamageSource.builder(DamageType.IN_FIRE)
-                .withDamageLocation(player.getLocation())  // location of the fire block
+                .withDamageLocation(player.getLocation())
                 .build();
         event = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.FIRE, damageSource, 1.0);
         mockServer.getPluginManager().callEvent(event);

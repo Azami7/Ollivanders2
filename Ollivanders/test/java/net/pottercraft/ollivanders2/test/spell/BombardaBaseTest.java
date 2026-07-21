@@ -17,10 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base test for Bombarda spell variants.
- *
- * <p>Tests block-breaking behavior including validation of blast resistance and hardness thresholds,
- * door-breaking capability, unbreakable materials, and explosion radius.</p>
+ * Base test class for {@link BombardaBase} spells, covering block breaking against the blast-resistance and hardness
+ * limits, door breaking, unbreakable materials, and explosion radius. Subclasses supply the test materials.
  */
 abstract public class BombardaBaseTest extends O2SpellTestSuper {
     /**
@@ -47,18 +45,8 @@ abstract public class BombardaBaseTest extends O2SpellTestSuper {
     abstract Material getInvalidBlastResistanceMaterial();
 
     /**
-     * Comprehensive test covering all block-breaking validation rules.
-     *
-     * <p>Tests include:</p>
-     *
-     * <ul>
-     * <li>Valid blocks are broken</li>
-     * <li>Unbreakable materials are not broken</li>
-     * <li>Door behavior matches the spell's {@code breaksDoors} setting</li>
-     * <li>Blocks exceeding max blast resistance are not broken</li>
-     * <li>Blocks exceeding max hardness are not broken</li>
-     * <li>Explosion radius correctly breaks nearby valid blocks</li>
-     * </ul>
+     * Verify block-breaking rules: valid blocks break, unbreakable/over-limit ones don't, doors follow
+     * {@code breaksDoors}, and every valid block within the radius breaks while those outside it do not.
      */
     @Override
     @Test
@@ -97,7 +85,7 @@ abstract public class BombardaBaseTest extends O2SpellTestSuper {
             assertEquals(Material.AIR, block.getType(), "spell did not break door");
         }
         else {
-            assertEquals(door, block.getType(), "spell broken a door when breakDoors = false");
+            assertEquals(door, block.getType(), "spell broke a door when breaksDoors = false");
         }
 
         // test blast resistance
@@ -134,9 +122,7 @@ abstract public class BombardaBaseTest extends O2SpellTestSuper {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * <p>No state changes to revert for Bombarda spells.</p>
+     * No-op: Bombarda spells have no revert action.
      */
     @Override
     @Test

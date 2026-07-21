@@ -4,20 +4,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Unit tests for the PERICULUM spell.
- *
- * <p>PERICULUM launches red star-burst fireworks. Tests verify that the spell correctly
- * spawns fireworks with the expected red color and star effect type.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.PERICULUM for the spell implementation
- * @see PyrotechniaTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.PERICULUM}. Extends {@link PyrotechniaTest} for the shared
+ * fireworks tests.
  */
 public class PericulumTest extends PyrotechniaTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.PERICULUM
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {

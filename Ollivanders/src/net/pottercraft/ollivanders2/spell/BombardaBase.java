@@ -15,73 +15,50 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Abstract base class for explosion spells that break blocks.
- *
- * <p>Bombarda spells create explosions that destroy blocks in a radius based on the caster's spell level.
- * Blocks can only be broken if they meet blast resistance and hardness thresholds.</p>
- *
- * <p>Subclasses configure spell-specific thresholds and behavior via the protected fields.</p>
+ * Base class for explosion spells that break blocks in a skill-scaled radius, up to a per-spell blast-resistance and
+ * hardness limit.
  *
  * @author Azami7
  */
 public abstract class BombardaBase extends O2Spell {
 
     /**
-     * The maximum blast resistance a block can have and be affected by Bombarda.
+     * The highest block blast resistance this spell can break.
      *
-     * <ul>
-     *     <li>Stone, brick, and similar - 6</li>
-     *     <li>Planks, fences, doors, and similar - 3</li>
-     *     <li>Wood - 2</li>
-     *     <li>Concrete - 1.8</li>
-     *     <li>Bookshelves - 1.5</li>
-     *     <li>Sandstone - 0.8</li>
-     * </ul>
-     *
-     * @see <a href="https://mcreator.net/wiki/list-block-resistance-levels">https://mcreator.net/wiki/list-block-resistance-levels</a>
+     * @see <a href="https://mcreator.net/wiki/list-block-resistance-levels">MCreator - block resistance levels</a>
      */
     double maxBlastResistance = 1.0;
 
     /**
-     * The maximum hardness a block can be and be affected by Bombarda. This is checked *after* blast resistance.
+     * The highest block hardness this spell can break, checked after blast resistance.
      *
-     * <ul>
-     *     <li>Obsidian - 50</li>
-     *     <li>Anvil, bell, iron objects, raw ore - 5</li>
-     *     <li>Wood doors/trapdoors - 3</li>
-     *     <li>Bricks, cobblestone, logs, planks - 2</li>
-     *     <li>All stone, bookshelf, concrete - 1.5</li>
-     *     <li>Banners, signs - 1</li>
-     *     <li>Sandstone - 0.8</li>
-     * </ul>
-     *
-     * @see <a href="https://mcreator.net/wiki/list-hardness-values-blocks">https://mcreator.net/wiki/list-hardness-values-blocks</a>
+     * @see <a href="https://mcreator.net/wiki/list-hardness-values-blocks">MCreator - block hardness values</a>
      */
     double maxHardness = 1.0;
 
     /**
-     * Does this spell break doors? Doors are specifically mentioned in HP as breaking for some
-     * users of Bombarda. In MC, doors have a blast resistance and hardness greater than concrete (which really doesn't make sense).
+     * If true, this spell can break doors regardless of their blast resistance and hardness (which in Minecraft
+     * exceed the usual thresholds), matching the books where some Bombarda casts blow doors open.
      */
     boolean breaksDoors = false;
 
     /**
-     * The radius of blocks the spell will attempt to break.
+     * The radius of blocks the spell breaks. Set by {@link #calculateEffectRadius()}.
      */
     double effectRadius = 1.0;
 
     /**
-     * The minimum radius that can be affected by this spell.
+     * Lower limit for {@link #effectRadius}.
      */
     double minEffectRadius = 1.0;
 
     /**
-     * The maximum radius that can be affected by this spell.
+     * Upper limit for {@link #effectRadius}.
      */
     double maxEffectRadius = 1.0;
 
     /**
-     * Constructor for spell info generation. Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin instance
      */
@@ -90,8 +67,6 @@ public abstract class BombardaBase extends O2Spell {
     }
 
     /**
-     * Constructor to cast a Bombarda spell.
-     *
      * @param plugin    the Ollivanders2 plugin instance
      * @param player    the player casting the spell
      * @param rightWand the wand being used
@@ -108,9 +83,7 @@ public abstract class BombardaBase extends O2Spell {
     }
 
     /**
-     * Spawns an explosion and breaks blocks within the calculated radius.
-     *
-     * <p>Only breaks blocks that pass the {@code canBreak()} validation.</p>
+     * Detonate at the target, breaking every breakable block within the skill-scaled radius, then end the spell.
      */
     protected void doCheckEffect() {
         if (hasHitBlock()) {
@@ -133,9 +106,8 @@ public abstract class BombardaBase extends O2Spell {
     }
 
     /**
-     * Calculates the explosion radius based on spell level.
-     *
-     * <p>Radius is 20% of the caster's uses modifier, clamped between min and max bounds.</p>
+     * Set {@link #effectRadius} to {@code usesModifier * 0.2}, limited to [{@link #minEffectRadius},
+     * {@link #maxEffectRadius}].
      */
     void calculateEffectRadius() {
         effectRadius = usesModifier * 0.2; // 20% of uses modifier
@@ -147,16 +119,8 @@ public abstract class BombardaBase extends O2Spell {
     }
 
     /**
-     * Determines if a block can be broken by this spell.
-     *
-     * <p>A block can be broken if:</p>
-     *
-     * <ul>
-     * <li>It's not in the unbreakable materials list</li>
-     * <li>If it's a door, the spell must have {@code breaksDoors = true}</li>
-     * <li>Its blast resistance does not exceed {@code maxBlastResistance}</li>
-     * <li>Its hardness does not exceed {@code maxHardness}</li>
-     * </ul>
+     * Check whether a block can be broken: not an unbreakable material and within the spell's blast-resistance and
+     * hardness thresholds. Doors are broken only when {@link #breaksDoors} is set, regardless of those thresholds.
      *
      * @param block the block to check
      * @return true if the block can be broken, false otherwise
@@ -183,9 +147,7 @@ public abstract class BombardaBase extends O2Spell {
     }
 
     /**
-     * Checks if this spell breaks door blocks.
-     *
-     * @return true if this spell can break doors, false otherwise
+     * @return true if this spell can break doors
      */
     public boolean doesBreakDoors() {
         return breaksDoors;

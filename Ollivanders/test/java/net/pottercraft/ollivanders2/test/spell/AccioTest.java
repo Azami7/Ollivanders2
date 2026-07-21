@@ -14,14 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for ACCIO spell functionality.
- *
- * <p>Tests the summoning charm including:</p>
- * <ul>
- * <li>Spell configuration (pull, min/max distance, strength reducer)</li>
- * <li>Entity targeting (items only)</li>
- * <li>Pull velocity application</li>
- * </ul>
+ * Unit tests for {@link ACCIO}. Extends {@link KnockbackTest} for the shared knockback tests.
  *
  * @author Azami7
  */

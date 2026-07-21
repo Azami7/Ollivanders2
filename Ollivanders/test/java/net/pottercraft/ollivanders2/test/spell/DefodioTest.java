@@ -14,17 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the DEFODIO spell, the Gouging Charm.
- *
- * <p>Once its projectile strikes a block, DEFODIO digs forward one block at a time along the cast vector, breaking
- * each block, until it reaches a blocked material (water, lava, fire), a block it cannot break, or has mined its
- * skill-scaled length. The dig length scales deterministically with the caster's skill, so these tests are
- * deterministic from the cast experience alone.</p>
- *
- * <p>Each digging cast aims straight down. DEFODIO advances by adding the cast vector to the block-aligned current
- * block, so the vector must be axis-aligned or the path drifts; the test harness's {@code faceTarget} cannot
- * produce a perfectly horizontal vector (its vertical component is always at least half a block), but a target
- * directly below the caster yields an exact (0, -1, 0) vector, giving a clean vertical dig down a known column.</p>
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.DEFODIO}. The dig length scales deterministically with the
+ * caster's skill, so these tests are deterministic from the cast experience alone.
+ * <p>
+ * Each digging cast aims straight down. DEFODIO advances by adding the cast vector to the block-aligned current block,
+ * so the vector must be axis-aligned or the path drifts; the harness's {@code faceTarget} cannot produce a perfectly
+ * horizontal vector (its vertical component is always at least half a block), but a target directly below the caster
+ * yields an exact (0, -1, 0) vector, giving a clean vertical dig down a known column.
+ * </p>
  *
  * @author Azami7
  */
@@ -48,11 +45,8 @@ public class DefodioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests mining a contiguous column of blocks down to the dig length.
-     *
-     * <p>A vertical column of stone is placed below the caster, who casts straight down. With a single cast,
-     * verifies that exactly the dig-length blocks from the impact point downward are cleared to air and the next
-     * block below is left intact, and that the spell ends afterward.</p>
+     * Verify a single downward cast clears exactly dig-length blocks from the impact point down, leaves the next
+     * block intact, and ends the spell.
      */
     @Override
     @Test
@@ -84,11 +78,8 @@ public class DefodioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the dig stops when it reaches a blocked material before exhausting its length.
-     *
-     * <p>Two stone blocks are placed, then water, then another stone, down the column. With a dig length of three,
-     * the spell should mine the two stone blocks, stop at the water (a blocked material it cannot dig through), and
-     * never reach the stone beyond it.</p>
+     * Verify the dig stops at a blocked material (water) before exhausting its length: it mines the two stone blocks
+     * above the water and never reaches the stone beyond it.
      */
     @Test
     void blockedMaterialStopsDigTest() {
@@ -119,10 +110,8 @@ public class DefodioTest extends O2SpellTestSuper {
     }
 
     /**
-     * Tests that the dig length scales with the caster's skill and is clamped at both ends.
-     *
-     * <p>Verifies that very low skill floors the dig length to 1, and very high skill clamps it to the spell's
-     * maximum. The length is read immediately after the cast, before any block is mined.</p>
+     * Verify the dig length limits to 1 at very low skill and to the spell's maximum at very high skill (read
+     * immediately after the cast, before any block is mined).
      */
     @Test
     void digLengthScalesWithSkillTest() {
@@ -135,7 +124,7 @@ public class DefodioTest extends O2SpellTestSuper {
         DEFODIO high = (DEFODIO) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1000);
 
         assertEquals(1, low.getRemainingCount(), "low-skill dig length was not floored to 1");
-        assertEquals(high.getMaxDepth(), high.getRemainingCount(), "high-skill dig length was not clamped to the maximum");
+        assertEquals(high.getMaxDepth(), high.getRemainingCount(), "high-skill dig length was not limited to the maximum");
     }
 
     /**

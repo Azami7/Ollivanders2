@@ -16,50 +16,27 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Parent test class for all shield spell effects.
+ * Base test class for {@link ShieldSpellEffect} shields. Covers the shared shield behavior — level-based spell
+ * blocking, entity-targeting prevention, and logout cleanup — that subclasses inherit; they may override to add
+ * variant-specific checks.
  *
- * <p>ShieldSpellEffectTestSuper provides a test framework for shield spell effects that block incoming
- * spells and entity targeting. This base class handles common shield mechanics testing such as spell
- * blocking based on level, entity targeting prevention, and player disconnection cleanup.</p>
- *
- * <p>Subclasses implement specific shield variants (passive shields like FUMOS, active shields like PROTEGO)
- * and can override default tests to add effect-specific behavior validation.</p>
- *
- * @see ShieldSpellEffect for the effect base class being tested
+ * @see ShieldSpellEffect
+ * @see EffectTestSuper
  */
 abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
-    /**
-     * Create a shield spell effect for testing.
-     *
-     * <p>This abstract method must be implemented by subclasses to instantiate the specific shield
-     * effect type being tested. Subclasses will return their concrete implementation (e.g., FUMOS, PROTEGO).</p>
-     *
-     * @param target          the player to add the effect to
-     * @param durationInTicks the duration of the effect in game ticks
-     * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @return a new shield spell effect of the subclass's type
-     */
     @Override
     abstract ShieldSpellEffect createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
-     * Test basic shield spell effect behavior.
-     *
-     * <p>Validates shield-specific behavior. Subclasses can override this method to add effect-specific
-     * testing (e.g., PROTEGO tests projectile removal in checkEffectTest()).
-     * Note: Particle effects cannot be fully tested with MockBukkit.</p>
+     * No-op: a shield's only per-tick behavior is particle flair, which MockBukkit cannot observe. Subclasses with
+     * other tick behavior (e.g. PROTEGO projectile removal) override this.
      */
     @Override
     void checkEffectTest() {
-        // cannot test flair with MockBukkit because they haven't implemented checking for particles
     }
 
     /**
-     * Run all event handler tests for shield spell effects.
-     *
-     * <p>Tests the three common event handlers that shield spells implement: spell blocking,
-     * player quit cleanup, and entity targeting prevention. Subclasses can override to add
-     * effect-specific event handler tests (e.g., PROTEGO tests projectile launch and hit events).</p>
+     * Runs the shared shield event-handler checks: spell blocking, logout cleanup, and entity-targeting prevention.
      */
     @Override
     void eventHandlerTests() {
@@ -69,14 +46,8 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
     }
 
     /**
-     * Test that spell projectiles are blocked by the shield.
-     *
-     * <p>Validates three spell blocking scenarios:</p>
-     * <ul>
-     * <li>BEGINNER level spells moving into the shield radius are cancelled</li>
-     * <li>Spells exiting the shield radius are NOT cancelled (only inbound blocking)</li>
-     * <li>EXPERT level spells that exceed the shield's protective level are NOT blocked</li>
-     * </ul>
+     * The shield cancels a low-level spell moving inbound into its radius, but not one moving outbound, nor one whose
+     * level exceeds the shield's protection.
      */
     void doOnOllivandersSpellProjectileMoveEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -110,12 +81,7 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
     }
 
     /**
-     * Test that shield effects are cleaned up when the protected player logs off.
-     *
-     * <p>Validates that the shield effect is properly killed (marked as inactive) when the player
-     * it protects disconnects from the server. This ensures that the effect doesn't persist in memory
-     * or continue running after the protected player is no longer online, preventing resource leaks
-     * and ensuring proper lifecycle management.</p>
+     * The shield is killed when the protected player logs off.
      */
     void doOnPlayerQuitEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -128,12 +94,7 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
     }
 
     /**
-     * Test that the shield prevents entities from targeting the protected player.
-     *
-     * <p>Validates that when an entity (such as a bee) attempts to target the shielded player,
-     * the shield blocks this targeting by cancelling the EntityTargetEvent. This ensures that
-     * the shield provides comprehensive protection not only against spell projectiles but also
-     * against mob and creature targeting behavior.</p>
+     * The shield cancels an entity's attempt to target the protected player.
      */
     void doOnEntityTargetEventTest() {
         PlayerMock target = mockServer.addPlayer();
@@ -148,15 +109,9 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
     }
 
     /**
-     * Helper method to set up a shielded player at a specific location.
+     * Create a shielded player at the given coordinates, for distance-based tests.
      *
-     * <p>Creates a new player, sets their location, applies a shield effect, and returns the effect.
-     * Used to reduce boilerplate in projectile and other distance-based tests.</p>
-     *
-     * @param x the X coordinate
-     * @param y the Y coordinate
-     * @param z the Z coordinate
-     * @return an array containing [0] the PlayerMock and [1] the ShieldSpellEffect
+     * @return {@code [PlayerMock, ShieldSpellEffect]}
      */
     protected Object[] setupShieldedPlayerAtLocation(double x, double y, double z) {
         PlayerMock target = mockServer.addPlayer();

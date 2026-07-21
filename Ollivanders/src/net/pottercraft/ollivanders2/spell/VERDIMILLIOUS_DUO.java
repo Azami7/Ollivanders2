@@ -14,20 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The enhanced Verdimillious Duo spell that damages entities and reveals cursed items.
- *
- * <p>VERDIMILLIOUS_DUO is a more powerful variant of VERDIMILLIOUS that combines damage-dealing
- * with curse detection. When cast, it emits green sparks that:</p>
- * <ul>
- * <li>Deal damage to nearby entities (damageModifier = 0.0625, radius = 2 blocks)</li>
- * <li>Detect cursed items within range and make them glow for 60 seconds</li>
- * </ul>
- *
- * <p>The spell searches for cursed items using skill-based detection and schedules a task
- * to turn off the glow effect after the duration expires.</p>
+ * A stronger {@link VERDIMILLIOUS}: shoots green sparks that damage nearby entities and reveal cursed items in range
+ * (appropriate to the caster's skill) by making them glow temporarily.
  *
  * @author Azami7
- * @see VERDIMILLIOUS for the basic variant
+ * @see VERDIMILLIOUS
  */
 public class VERDIMILLIOUS_DUO extends Sparks {
     /**
@@ -36,15 +27,13 @@ public class VERDIMILLIOUS_DUO extends Sparks {
     private static final int glowTime = Ollivanders2Common.ticksPerSecond * 60;
 
     /**
-     * The cursed item found by this spell, or null if no cursed item was detected.
-     *
-     * <p>Set when the spell detects a cursed item nearby. Used to track which item
-     * should have its glow turned off when the duration expires.</p>
+     * The cursed item this spell revealed (made glow), or null if none was detected; its glow is turned off when the
+     * duration expires.
      */
     Item cursedItem = null;
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -61,18 +50,11 @@ public class VERDIMILLIOUS_DUO extends Sparks {
     }
 
     /**
-     * Constructor for casting VERDIMILLIOUS_DUO spells.
+     * Constructor.
      *
-     * <p>Initializes the spell with:</p>
-     * <ul>
-     * <li>GREEN_STAINED_GLASS visual effect for projectile movement</li>
-     * <li>Damage-dealing enabled with 0.0625 modifier</li>
-     * <li>2-block radius for both damage and curse detection</li>
-     * </ul>
-     *
-     * @param plugin    the Ollivanders2 plugin
-     * @param player    the player casting this spell
-     * @param rightWand the wand correctness factor (1.0 = correct wand)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
      */
     public VERDIMILLIOUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -88,18 +70,8 @@ public class VERDIMILLIOUS_DUO extends Sparks {
     }
 
     /**
-     * Executes spell effects each game tick.
-     *
-     * <p>Performs the following:</p>
-     * <ul>
-     * <li>Calls parent {@link Sparks#doCheckEffect()} to handle damage and sound</li>
-     * <li>Searches for cursed items within radius</li>
-     * <li>Makes the first cursed item glow and schedules glow removal after 60 seconds</li>
-     * <li>Kills the spell after finding a cursed item</li>
-     * </ul>
-     *
-     * <p>The glow effect is skill-level aware: only cursed items appropriate to the player's
-     * spell level are detected.</p>
+     * Run the base spark damage, then make the first nearby cursed item appropriate to this spell's level glow, end
+     * the spell, and schedule the glow to turn off after {@link #getGlowTime()}.
      */
     @Override
     public void doCheckEffect() {
@@ -136,10 +108,7 @@ public class VERDIMILLIOUS_DUO extends Sparks {
     }
 
     /**
-     * Removes the glow effect from the cursed item.
-     *
-     * <p>Called by a scheduled task after the glow duration expires (60 seconds).
-     * Checks that the item is still valid before removing the glow.</p>
+     * Turn off the revealed cursed item's glow, if it still exists.
      */
     private void stopGlow() {
         if (cursedItem != null && !cursedItem.isDead())
@@ -147,11 +116,7 @@ public class VERDIMILLIOUS_DUO extends Sparks {
     }
 
     /**
-     * Gets the duration cursed items will glow after detection.
-     *
-     * <p>Used primarily by tests to verify glow timing behavior.</p>
-     *
-     * @return the glow duration in game ticks (60 seconds)
+     * @return how long a revealed cursed item glows, in ticks
      */
     public int getGlowTime() {
         return glowTime;

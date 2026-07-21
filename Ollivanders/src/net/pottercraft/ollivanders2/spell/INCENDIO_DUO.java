@@ -10,26 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * A stronger fire-making charm that ignites multiple targets in a larger radius.
- *
- * <p>INCENDIO_DUO is an enhanced version of INCENDIO with increased area of effect and duration.
- * It uses strafe mode to affect all blocks and entities within a 2-block radius, making it effective
- * against multiple targets simultaneously.</p>
- *
- * <p>Spell characteristics:
- * <ul>
- * <li><strong>Target:</strong> Multiple targets - strafe behavior enabled</li>
- * <li><strong>Block Radius:</strong> 2 blocks - affects blocks in a small area</li>
- * <li><strong>Entity Radius:</strong> 2 blocks - affects multiple entities in the area</li>
- * <li><strong>Duration Modifier:</strong> 2x - double the baseline burn duration</li>
- * <li><strong>Max Burn Duration:</strong> 20 seconds (400 ticks)</li>
- * </ul>
- *
- * <p>The spell will set all blocks and entities on fire within the 2-block radius, with burn duration
- * scaled by the caster's spell proficiency and doubled compared to basic INCENDIO.</p>
+ * A stronger {@link INCENDIO} that ignites blocks and entities across a larger radius as it strafes.
  *
  * @see IncendioBase
- * @see <a href="https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell">https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell">Harry Potter Wiki - Incendio Duo Spell</a>
  */
 public final class INCENDIO_DUO extends IncendioBase {
     private static final int maxBurnDurationConfig = Ollivanders2Common.ticksPerSecond * 20;

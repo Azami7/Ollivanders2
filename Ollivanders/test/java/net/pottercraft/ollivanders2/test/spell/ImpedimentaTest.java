@@ -13,22 +13,10 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for the IMPEDIMENTA spell.
- *
- * <p>IMPEDIMENTA is the Impediment Jinx that applies Slowness effect to targets, slowing
- * their movement for 5-60 seconds depending on caster skill level. This test class overrides
- * the amplifier test to verify the continuous amplifier scaling (Slowness I through V) specific
- * to this spell.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.IMPEDIMENTA for the spell implementation
- * @see AddPotionEffectTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.IMPEDIMENTA}. Extends {@link AddPotionEffectTest} for the
+ * shared potion-effect tests.
  */
 public class ImpedimentaTest extends AddPotionEffectTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.IMPEDIMENTA
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -36,11 +24,8 @@ public class ImpedimentaTest extends AddPotionEffectTest {
     }
 
     /**
-     * Test the continuous amplifier scaling for IMPEDIMENTA.
-     *
-     * <p>Verifies that the Slowness amplifier scales continuously with skill level according
-     * to the formula amplifier = usesModifier / 20, with a maximum cap of amplifier 4
-     * (Slowness V). Tests at multiple skill levels to verify the continuous scaling.</p>
+     * Verify the Slowness amplifier scales as {@code usesModifier / 20}, limited to 4 (Slowness V), across skill
+     * levels.
      */
     @Override
     @Test
@@ -61,11 +46,11 @@ public class ImpedimentaTest extends AddPotionEffectTest {
         level = 40;
         addPotionEffect = (AddPotionEffect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, level);
         mockServer.getScheduler().performTicks(5);
-        assertEquals(2, addPotionEffect.getAmplifier(), "unexpected amplifier for skill level O2Spell.spellMasteryLevel - 1");
+        assertEquals(2, addPotionEffect.getAmplifier(), "unexpected amplifier for skill level 40");
 
         level = O2Spell.spellMasteryLevel;
         addPotionEffect = (AddPotionEffect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, level);
         mockServer.getScheduler().performTicks(5);
-        assertEquals(4, addPotionEffect.getAmplifier(), "unexpected amplifier for skill level O2Spell.spellMasteryLevel - 1");
+        assertEquals(4, addPotionEffect.getAmplifier(), "unexpected amplifier for skill level O2Spell.spellMasteryLevel");
     }
 }

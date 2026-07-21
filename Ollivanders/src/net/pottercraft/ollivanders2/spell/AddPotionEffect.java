@@ -12,88 +12,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for spells that apply potion effects to targets.
- *
- * <p>Provides functionality for applying one or more potion effects to living entities within
- * a configurable radius. Effect duration is calculated from the caster's spell experience level.
- * Subclasses can configure effect types, radius, duration range, amplifier, and whether to target
- * the caster or only nearby entities.</p>
- *
- * <p>Configuration:</p>
- *
- * <ul>
- * <li>Duration: calculated from usesModifier * durationModifier, clamped to [minDurationInSeconds, maxDurationInSeconds]</li>
- * <li>Amplifier (strength): set by subclass or calculated via calculateAmplifier() override</li>
- * <li>Effect radius: calculated from usesModifier / 10, clamped to [minEffectRadius, maxEffectRadius]</li>
- * <li>Target filtering: excludes caster unless targetSelf is true; respects affectSingleTarget flag</li>
- * <li>Visual flair: optional particle effect at spell location (controlled by flair flag)</li>
- * </ul>
+ * Base class for spells that apply Bukkit potion effects to the caster and/or nearby living entities. Effect
+ * duration, radius, and amplifier scale with the caster's skill; subclasses configure the effect types and ranges.
  *
  * @see <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffect.html">Bukkit PotionEffect documentation</a>
+ * @author Azami7
  */
 public abstract class AddPotionEffect extends O2Spell {
     /**
-     * The duration for this effect.
+     * The effect duration in seconds. Set by {@link #calculateEffectDurationTicks()}.
      */
     int durationInSeconds;
 
     /**
-     * The longest this effect can last.
+     * Upper limit for {@link #durationInSeconds}.
      */
     int maxDurationInSeconds = 300; // 5 minutes;
 
     /**
-     * The least amount of time this effect can last.
+     * Lower limit for {@link #durationInSeconds}.
      */
     int minDurationInSeconds = 5; // 5 seconds
 
     /**
-     * Duration modifier is a multiplier on the usesModifier for this spell
+     * Scales how much caster skill affects duration; see {@link #calculateEffectDurationTicks()} for the formula.
      */
     double durationModifier = 1.0; // 100% of usesModifier
 
     /**
-     * Strength modifier, 0 is no modifier. This value can be between -127 and 127.
+     * The potion effect amplifier (0 = level I). Valid range is -127 to 127.
      *
-     * @see <a href="https://minecraft.fandom.com/wiki/Effect">https://minecraft.fandom.com/wiki/Effect</a>
+     * @see <a href="https://minecraft.fandom.com/wiki/Effect">Minecraft Wiki - Effect</a>
      */
     int amplifier = 0;
 
     /**
-     * If true, the spell affects only a single target and stops processing after the first hit.
-     * If false, the spell can affect multiple targets up to the spell's limit.
+     * If true, the spell stops after affecting one target; if false, it may affect every eligible target in range.
      */
     boolean affectSingleTarget = true;
 
     /**
-     * Whether the spell targets the caster in addition to nearby entities.
-     * If true, the caster is the first potential target. If false, only other entities are targeted.
+     * If true, the caster is targeted in addition to nearby entities; if false, only other entities are targeted.
      */
     boolean targetSelf = false;
 
     /**
-     * The calculated radius in blocks around the caster where targets are affected.
-     * Calculated from usesModifier / 10, clamped to [minEffectRadius, maxEffectRadius].
+     * The radius of entities affected around the projectile, in blocks. Set by {@link #calculateEffectRadius()}.
      */
     double effectRadius = defaultRadius;
 
     /**
-     * The minimum effect radius in blocks. Used to clamp calculated effectRadius.
+     * Lower limit for {@link #effectRadius}, in blocks.
      */
     double minEffectRadius = defaultRadius;
 
     /**
-     * The maximum effect radius in blocks. Used to clamp calculated effectRadius.
+     * Upper limit for {@link #effectRadius}, in blocks.
      */
     double maxEffectRadius = defaultRadius;
 
     /**
-     * If true, spawns a visual particle effect at the spell location when applied.
+     * If true, a visual particle effect is shown at the spell location when it applies.
      */
     boolean flair = false;
 
     /**
-     * The potion effect. Set to luck by default.
+     * The potion effect types this spell applies. Empty by default; subclasses populate it.
      */
     List<PotionEffectType> potionEffectTypes = new ArrayList<>();
 
@@ -109,8 +93,6 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -122,9 +104,7 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Apply potion effects to the caster and/or nearby living entities within the effect radius.
-     *
-     * <p>Called each tick. If the projectile hits a target, the spell is killed before processing effects.</p>
+     * Apply this spell's potion effects to eligible targets each tick.
      */
     @Override
     protected void doCheckEffect() {
@@ -135,16 +115,8 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Apply potion effects to the caster and/or nearby entities based on configuration.
-     *
-     * <p>Order of operations:</p>
-     *
-     * <ul>
-     * <li>Apply visual flair if enabled</li>
-     * <li>If targetSelf is true, apply effects to the caster and potentially stop</li>
-     * <li>Calculate the effect radius based on spell experience</li>
-     * <li>Iterate through nearby entities and apply effects, stopping after first target if affectSingleTarget is true</li>
-     * </ul>
+     * Apply the potion effects to the caster (when {@link #targetSelf} is set) and/or nearby living entities, ending
+     * the spell once a target is affected. Stops after the first target when {@link #affectSingleTarget} is set.
      */
     void affectRadius() {
         doFlair();
@@ -172,9 +144,8 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Calculate the effect radius based on caster spell experience.
-     *
-     * <p>Uses the formula: effectRadius = usesModifier / 10, then clamps to [minEffectRadius, maxEffectRadius].</p>
+     * Set {@link #effectRadius} to {@code usesModifier / 10}, limited to [{@link #minEffectRadius},
+     * {@link #maxEffectRadius}].
      */
     void calculateEffectRadius() {
         effectRadius = usesModifier / 10;
@@ -194,7 +165,7 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Add the effect to a target living entity.
+     * Apply this spell's potion effects to the target for the skill-scaled duration and amplifier.
      *
      * @param target the target living entity
      */
@@ -213,12 +184,10 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Calculate the effect duration in ticks based on caster spell experience.
+     * Set {@link #durationInSeconds} to {@code usesModifier * durationModifier}, limited to
+     * [{@link #minDurationInSeconds}, {@link #maxDurationInSeconds}].
      *
-     * <p>Uses the formula: durationInSeconds = usesModifier * durationModifier, then clamps to
-     * [minDurationInSeconds, maxDurationInSeconds] and converts to ticks.</p>
-     *
-     * @return the duration in ticks
+     * @return that duration converted to ticks
      */
     int calculateEffectDurationTicks() {
         durationInSeconds = (int) (usesModifier * durationModifier);
@@ -231,22 +200,18 @@ public abstract class AddPotionEffect extends O2Spell {
     }
 
     /**
-     * Calculate the potion effect amplifier (strength).
-     *
-     * <p>Default implementation sets a fixed amplifier value. Subclasses can override this method
-     * to implement custom scaling based on spell experience or other factors.</p>
+     * Set {@link #amplifier} from the caster's skill. The default raises it by one level past half spell mastery;
+     * subclasses override for custom scaling.
      */
     void calculateAmplifier() {
-        amplifier = 0; // Night Vision I
+        amplifier = 0;
 
         if (usesModifier > (double) (O2Spell.spellMasteryLevel / 2))
-            amplifier = 1; // Night Vision II
+            amplifier = 1;
     }
 
     /**
-     * Get the potion effect types this spell adds.
-     *
-     * @return a list of the potion effect types
+     * @return a copy of the potion effect types this spell applies
      */
     @NotNull
     public List<PotionEffectType> getPotionEffectTypes() {
@@ -255,38 +220,65 @@ public abstract class AddPotionEffect extends O2Spell {
         }};
     }
 
+    /**
+     * @return the minimum effect duration in seconds
+     */
     public int getMinDurationInSeconds() {
         return minDurationInSeconds;
     }
 
+    /**
+     * @return the maximum effect duration in seconds
+     */
     public int getMaxDurationInSeconds() {
         return maxDurationInSeconds;
     }
 
+    /**
+     * @return the effect duration in seconds most recently set by {@link #calculateEffectDurationTicks()}
+     */
     public int getDurationInSeconds() {
         return durationInSeconds;
     }
 
+    /**
+     * @return the minimum effect radius in blocks
+     */
     public double getMinEffectRadius() {
         return minEffectRadius;
     }
 
+    /**
+     * @return the maximum effect radius in blocks
+     */
     public double getMaxEffectRadius() {
         return maxEffectRadius;
     }
 
+    /**
+     * @return the effect radius in blocks most recently set by {@link #calculateEffectRadius()}
+     */
     public double getEffectRadius() {
         return effectRadius;
     }
 
+    /**
+     * @return true if this spell stops after affecting a single target
+     */
     public boolean affectsSingleTarget() {
         return affectSingleTarget;
     }
 
+    /**
+     * @return true if this spell targets the caster in addition to nearby entities
+     */
     public boolean targetsSelf() {
         return targetSelf;
     }
 
+    /**
+     * @return the potion effect amplifier
+     */
     public int getAmplifier() {
         return amplifier;
     }

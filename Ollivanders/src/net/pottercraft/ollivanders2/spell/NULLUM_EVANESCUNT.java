@@ -8,22 +8,12 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nullum Evanescunt is an anti-apparition charm that prevents players from apparating out of a protected area.
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Creates a stationary spell centered on the caster's location</li>
- * <li>Prevents apparition out of the protected area</li>
- * <li>Works in conjunction with Nullum Apparebit for two-way apparition blocking</li>
- * <li>Shares the same radius and duration configuration as Nullum Apparebit</li>
- * <li>No projectile required - cast directly on the caster</li>
- * <li>Radius range: varies by configuration</li>
- * <li>Duration range: varies by configuration (scales with caster experience)</li>
- * </ul>
+ * Nullum Evanescunt is an anti-apparition charm that prevents players from apparating out of a skill-scaled radius
+ * around the caster for a limited duration. Pairs with {@link NULLUM_APPAREBIT}, which blocks apparating in, and
+ * shares its radius and duration configuration.
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">Harry Potter Wiki - Anti-Disapparition Jinx</a>
  * @see net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT
  */
 public final class NULLUM_EVANESCUNT extends StationarySpell {
@@ -42,15 +32,11 @@ public final class NULLUM_EVANESCUNT extends StationarySpell {
     }
 
     /**
-     * Constructs a new NULLUM_EVANESCUNT spell cast by a player.
+     * Constructor.
      *
-     * <p>Sets up the spell-specific parameters including duration modifier, radius modifier,
-     * and min/max values for radius and duration. The spell is cast centered on the caster
-     * with no projectile required. Uses the same min/max configuration as NULLUM_APPAREBIT.</p>
-     *
-     * @param plugin    a callback to the MC plugin (not null)
-     * @param player    the player who cast this spell (not null)
-     * @param rightWand the wand correctness factor (not null)
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand the wand correctness factor
      */
     public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
@@ -73,11 +59,7 @@ public final class NULLUM_EVANESCUNT extends StationarySpell {
     }
 
     /**
-     * Creates the stationary spell instance.
-     *
-     * <p>Instantiates a new NULLUM_EVANESCUNT stationary spell with the calculated radius and duration.</p>
-     *
-     * @return the created stationary spell instance
+     * @return a new NULLUM_EVANESCUNT stationary spell with this cast's radius and duration
      */
     @Override
     protected O2StationarySpell createStationarySpell() {

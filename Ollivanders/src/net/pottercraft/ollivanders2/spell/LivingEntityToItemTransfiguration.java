@@ -17,17 +17,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Transforms entities in to items. This spell kills the entity (i.e. it does not revert)
+ * Base class for spells that transfigure a living entity into a dropped item. The original entity is consumed, so
+ * these transfigurations are permanent and never revert.
+ *
+ * @author Azami7
  */
 public abstract class LivingEntityToItemTransfiguration extends EntityTransfiguration {
     /**
-     * The target item material for this spell, only used if transfiguration map is not populated, then will turn any
-     * entity type in to this material.
+     * The default item material entities are turned into when not overridden by {@link #transfigurationMap}.
      */
     Material targetMaterial = null;
 
     /**
-     * If this is populated, any entity type key will be changed to item type material
+     * Per-source-entity-type item materials. An entity whose type is a key becomes the mapped material; any other
+     * entity becomes {@link #targetMaterial}. Empty by default.
      */
     protected Map<EntityType, Material> transfigurationMap = new HashMap<>();
 
@@ -43,8 +46,6 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
     }
 
     /**
-     * Constructor.
-     *
      * @param plugin    a callback to the MC plugin
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
@@ -65,10 +66,10 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
     }
 
     /**
-     * Transfigures item into EntityType.
+     * Transfigure the given living entity into a dropped item of the target material, consuming the entity.
      *
-     * @param entity the item to transfigure
-     * @return the transfigured entity if successful, null otherwise
+     * @param entity the entity to transfigure
+     * @return the new item, or null if no target material could be resolved
      */
     @Override
     @Nullable
@@ -94,20 +95,11 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
     }
 
     /**
-     * Determine if this entity be transfigured by this spell.
-     * <p>
-     * Entity can transfigure if:<br>
-     * 1. (super) success check passes<br>
-     * 2. (super) It is not in the blocked list<br>
-     * 3. (super) It is in the allowed list, if the allowed list exists<br>
-     * 4. (super) The entity is not already the target type<br>
-     * 5. (super) There are no WorldGuard permissions preventing the caster from altering this entity type<br>
-     * 6. (super) It is not already under a non-permanent transfiguration<br>
-     * 7. The entity is a LivingEntity<br>
-     * 8. The entity type is in the transfiguration map, if it is populated<br>
+     * Check whether an entity is an eligible target: in addition to the base entity checks, it must be a living entity
+     * whose type is in {@link #transfigurationMap} when that map is populated.
      *
      * @param entity the entity to check
-     * @return true if it can be changed
+     * @return true if the entity can be transfigured, false otherwise
      */
     public boolean canTransfigure(@NotNull Entity entity) {
         if (!super.canTransfigure(entity))
@@ -126,6 +118,9 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
         return true;
     }
 
+    /**
+     * @return the default target item material, or null if none has been set
+     */
     public Material getTargetMaterial() {
         return targetMaterial;
     }

@@ -15,22 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * CELATUM - The Concealing Charm spell.
+ * CELATUM - The Concealing Charm.
  *
- * <p>Enchants written books to hide their text content. When a CELATUM-enchanted book is picked up,
- * the enchanted items system reveals the hidden text. The original book's pages are replaced with
- * blank pages, preserving the author and title while concealing the content.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Target: Written books only (WRITTEN_BOOK material)</li>
- * <li>Enchantment argument: Book content (all pages concatenated with page delimiters)</li>
- * <li>Item alteration: Original book pages replaced with blank pages</li>
- * <li>Classification: Charms</li>
- * </ul>
+ * <p>Enchants a written book so its visible pages are blanked while the original text is preserved in the item's
+ * enchantment args; the author and title are left intact. {@link APARECIUM} reverses the concealment and restores
+ * the pages.</p>
  *
  * @see net.pottercraft.ollivanders2.item.enchantment.CELATUM the enchantment that powers this spell
+ * @see APARECIUM
  * @see <a href="https://harrypotter.fandom.com/wiki/Concealing_charms">Harry Potter Wiki - Concealing Charms</a>
  */
 public final class CELATUM extends ItemEnchant {
@@ -40,10 +32,7 @@ public final class CELATUM extends ItemEnchant {
     public static final String pageDelimiter = "##PAGE##";
 
     /**
-     * Constructor for generating spell information.
-     *
-     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
-     * Use the full constructor with player and wand parameters instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -80,11 +69,8 @@ public final class CELATUM extends ItemEnchant {
     }
 
     /**
-     * Extract and store the book's text content as enchantment arguments.
-     *
-     * <p>Concatenates all pages from the written book into a single string, separating pages
-     * with the {@link #pageDelimiter} token. This content is stored and later revealed when
-     * the enchanted book is picked up.</p>
+     * Store the book's text as enchantment args, concatenating all pages separated by the {@link #pageDelimiter}
+     * token. {@link APARECIUM} later splits this back into pages to restore the book.
      *
      * @param bookItem the written book to extract text from
      */
@@ -105,15 +91,13 @@ public final class CELATUM extends ItemEnchant {
     }
 
     /**
-     * Clear the enchanted book's pages and return a blank book.
+     * Blank the enchanted book's pages, preserving author and title. The concealed text remains in the enchantment
+     * args for {@link APARECIUM} to restore.
      *
-     * <p>Removes all text content from the enchanted book, leaving it blank while preserving
-     * the author and title metadata. The book is re-created and dropped at the same location
-     * to work around client caching issues. The concealed text is preserved in the enchantment
-     * arguments and revealed when the book is picked up.</p>
+     * <p>The book is re-created and re-dropped rather than edited in place to work around client-side item caching.</p>
      *
      * @param item the enchanted book Item entity
-     * @return the blank book (it may be a replacement item if dropped at same location)
+     * @return the blanked book (a replacement Item dropped at the same location)
      */
     @Override
     @NotNull

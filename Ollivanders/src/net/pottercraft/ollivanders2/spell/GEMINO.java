@@ -10,30 +10,17 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * GEMINO - The Doubling Curse spell.
+ * GEMINO - The Doubling Curse: enchants an item so it multiplies when picked up.
  *
- * <p>Enchants an item with the Doubling Curse. When a player picks up a GEMINO-enchanted item,
- * it duplicates exponentially (2^magnitude copies), potentially filling containers and
- * overwhelming the player with copies.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Strength multiplier: 0.75x (reduces spell experience effectiveness)</li>
- * <li>Maximum magnitude: 8 (produces up to 2^8 = 256 copies at maximum skill)</li>
- * <li>Classification: Dark Arts</li>
- * <li>Item type restrictions: None (can enchant any item)</li>
- * </ul>
+ * <p>On pickup the {@link net.pottercraft.ollivanders2.item.enchantment.GEMINO} enchantment duplicates the item
+ * exponentially (2^magnitude copies, up to 2^8 at maximum skill), potentially flooding the bearer with copies.</p>
  *
  * @see net.pottercraft.ollivanders2.item.enchantment.GEMINO the enchantment that powers this spell
  * @see <a href="https://harrypotter.fandom.com/wiki/Doubling_Charm">Harry Potter Wiki - Doubling Charm</a>
  */
 public final class GEMINO extends ItemEnchant {
     /**
-     * Constructor for generating spell information.
-     *
-     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
-     * Use the full constructor with player and wand parameters instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin instance
      */
@@ -52,15 +39,12 @@ public final class GEMINO extends ItemEnchant {
     }
 
     /**
-     * Constructor for casting the GEMINO duplication spell.
-     *
-     * <p>Initializes the spell with the player and wand information needed to cast and track the spell.
-     * Spell magnitude is calculated using the formula: magnitude = (int)((usesModifier / 10) * 0.75),
-     * capped at maxMagnitude of 8. The magnitude determines how many times the item duplicates (2^magnitude).</p>
+     * Constructor for casting GEMINO. The number of copies scales with caster skill up to a maximum magnitude of 8
+     * (2^8 copies).
      *
      * @param plugin    the Ollivanders2 plugin instance
      * @param player    the player casting this spell
-     * @param rightWand the wand strength/correctness factor (1.0 = normal, higher = more powerful)
+     * @param rightWand the wand strength/correctness factor
      */
     public GEMINO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);

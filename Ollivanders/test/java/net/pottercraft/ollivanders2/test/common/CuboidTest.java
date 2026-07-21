@@ -16,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the Cuboid class.
- * Tests cuboid area validation, location checking, and parsing functionality.
+ * Unit tests for {@link Cuboid}.
  */
 public class CuboidTest {
     static ServerMock mockServer;
@@ -65,15 +64,9 @@ public class CuboidTest {
     }
 
     /**
-     * Test that a point inside the x and y range but with z below the cuboid's z range
-     * is correctly identified as outside.
-     *
-     * <p>This case exercises the z-axis check independently from the x-axis check.
-     * A previous bug in {@link net.pottercraft.ollivanders2.common.Cuboid#isInside(String, int, int, int)}
-     * used the x coordinate where the z coordinate should have been used in the z-range
-     * comparison, so any test point that disagreed between x-inside and z-inside would
-     * have surfaced it. Points where x and z move together (e.g. (5,5,5) or (200,200,200))
-     * could not distinguish the bug from correct behavior.
+     * A point inside the x and y range but with z below the range is outside. Uses a point where x-inside and
+     * z-inside disagree, so it exercises the z-axis check independently of the x-axis check (which points like
+     * (5,5,5) or (200,200,200) cannot).
      */
     @Test
     void isInsideZBelowRangeTest() {
@@ -136,7 +129,6 @@ public class CuboidTest {
      */
     @Test
     void parseAreaTest() {
-        // make an area array from a string of two x, y, z coordinates in the format "0 0 0 0 0 0"
         int[] area = Cuboid.parseArea("0 0 0 100 100 100");
         assertNotNull(area, "Cuboid.parseArea() created null area");
         assertArrayEquals(area, cuboidArea, "Cuboid.parseArea() did not create expected area");

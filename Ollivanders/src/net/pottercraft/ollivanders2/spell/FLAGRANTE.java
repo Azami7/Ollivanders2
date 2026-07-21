@@ -10,29 +10,17 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * FLAGRANTE - The Burning Curse spell.
+ * FLAGRANTE - The Burning Curse: enchants an item so it burns whoever picks it up.
  *
- * <p>Enchants an item to burn its bearer when picked up. When a player touches a FLAGRANTE-enchanted
- * item, the enchanted items system triggers the FLAGRANTE effect, dealing damage to the player.</p>
- *
- * <p>Spell Mechanics:</p>
- *
- * <ul>
- * <li>Classification: Dark Arts</li>
- * <li>Can enchant any non-wand, non-enchanted item type</li>
- * <li>No magnitude or strength modifiers (burns equally at all experience levels)</li>
- * <li>Effect: FLAGRANTE enchantment effect on pickup (see {@link net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE})</li>
- * </ul>
+ * <p>The burn is applied by the {@link net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE} enchantment on
+ * pickup and does not scale with caster skill.</p>
  *
  * @see net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE the enchantment that powers this spell
  * @see <a href="https://harrypotter.fandom.com/wiki/Flagrante_Curse">Harry Potter Wiki - Flagrante Curse</a>
  */
 public final class FLAGRANTE extends ItemEnchant {
     /**
-     * Constructor for generating spell information.
-     *
-     * <p>Initializes the spell with flavor text and description. Do not use to cast the spell.
-     * Use the full constructor with player and wand parameters instead.</p>
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -51,11 +39,7 @@ public final class FLAGRANTE extends ItemEnchant {
     }
 
     /**
-     * Constructor for casting the FLAGRANTE spell.
-     *
-     * <p>Initializes the spell with the player and wand information needed to cast and track the spell.
-     * Magnitude is not used for FLAGRANTE (all FLAGRANTE enchantments behave identically regardless
-     * of caster skill), but is still calculated following the standard ItemEnchant formula.</p>
+     * Constructor for casting FLAGRANTE. All FLAGRANTE enchantments behave identically regardless of caster skill.
      *
      * @param plugin    the Ollivanders2 plugin
      * @param player    the player casting this spell

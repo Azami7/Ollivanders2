@@ -10,6 +10,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Transfiguration spell that disguises the target entity as a cow for a limited duration.
+ */
 public class BOVIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;

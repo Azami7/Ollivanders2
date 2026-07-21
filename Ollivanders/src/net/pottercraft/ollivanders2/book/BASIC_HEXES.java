@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed">https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed</a>
+ * @see <a href="https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed">Basic Hexes for the Busy and Vexed</a>
  */
 public class BASIC_HEXES extends O2Book {
     /**

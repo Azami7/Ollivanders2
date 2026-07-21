@@ -13,21 +13,10 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for the CONFUNDO spell.
- *
- * <p>CONFUNDO is the Confundus Charm that applies Confusion effect to targets, disorienting them
- * for 15-120 seconds depending on caster skill level. This test class overrides the amplifier test
- * to verify that the confusion effect uses a fixed amplifier that does not scale with skill level.</p>
- *
- * @see net.pottercraft.ollivanders2.spell.CONFUNDO for the spell implementation
- * @see AddPotionEffectTest for inherited test framework
+ * Unit tests for {@link net.pottercraft.ollivanders2.spell.CONFUNDO}. Extends {@link AddPotionEffectTest} for the
+ * shared potion-effect tests.
  */
 public class ConfundoTest extends AddPotionEffectTest {
-    /**
-     * Get the spell type being tested.
-     *
-     * @return O2SpellType.CONFUNDO
-     */
     @Override
     @NotNull
     O2SpellType getSpellType() {
@@ -35,10 +24,7 @@ public class ConfundoTest extends AddPotionEffectTest {
     }
 
     /**
-     * Test that the amplifier is fixed and does not scale with skill level.
-     *
-     * <p>Verifies that the Confusion amplifier remains constant at 0 across all skill levels,
-     * demonstrating that this spell's effect strength is not affected by caster skill progression.</p>
+     * Verify the amplifier stays fixed at 0 regardless of skill level.
      */
     @Override
     @Test

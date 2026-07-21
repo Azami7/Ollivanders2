@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class FiendfyreTest extends O2SpellTestSuper {
     /**
-     * Experience giving a usesModifier above 100, which both clamps the creature count to the maximum and enables
+     * Experience giving a usesModifier above 100, which both limits the creature count to the maximum and enables
      * all three spawn branches (ghasts require {@code > 100}, blazes {@code > 50}).
      */
     private static final int highExperience = 150;
@@ -56,12 +56,9 @@ public class FiendfyreTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell summons exactly its computed number of creatures where it hits a block, then ends.
-     *
-     * <p>A solid block at the target stops the projectile so it manifests there. The creature count is read before
-     * the spell resolves (the field is consumed during spawning), then enough ticks are run for the spell to hit
-     * and spawn. The high experience drives the count to its maximum and exercises all three spawn branches; the
-     * type split is random, so only the total is asserted.</p>
+     * Verify the spell summons exactly its computed total number of creatures where it hits a block, then ends. The
+     * count is read before resolving (spawning consumes it) and only the total is asserted, since the per-type split
+     * is random.
      */
     @Override
     @Test
@@ -86,11 +83,9 @@ public class FiendfyreTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the spell destroys a horcrux its projectile passes through and ends without summoning creatures.
-     *
-     * <p>A horcrux is placed in the projectile's path with no blocking terrain. The horcrux check runs every tick
-     * regardless of whether a block was hit, so the spell should kill the horcrux, kill itself, and never reach the
-     * creature-summoning branch (which requires hitting a block).</p>
+     * Verify the spell destroys a horcrux in its path and ends without summoning creatures. The horcrux check runs
+     * every tick regardless of a block hit, so the spell never reaches the creature-summoning branch (which requires
+     * hitting a block).
      */
     @Test
     void horcruxDestructionTest() {
@@ -114,10 +109,10 @@ public class FiendfyreTest extends O2SpellTestSuper {
     }
 
     /**
-     * Verifies that the creature count scales with caster skill and is clamped to [minCreatures, maxCreatures].
+     * Verifies that the creature count scales with caster skill and is limited to [minCreatures, maxCreatures].
      *
      * <p>The count is read from the spell immediately after creation (before any creature spawns). Low experience
-     * must floor to {@link FIENDFYRE#getMinCreatures()} and very high experience must clamp to
+     * must floor to {@link FIENDFYRE#getMinCreatures()} and very high experience must limit to
      * {@link FIENDFYRE#getMaxCreatures()}.</p>
      */
     @Test
@@ -131,9 +126,9 @@ public class FiendfyreTest extends O2SpellTestSuper {
         FIENDFYRE low = (FIENDFYRE) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1);
         assertEquals(low.getMinCreatures(), low.getNumCreatures(), "low-skill cast should floor to the minimum creature count");
 
-        // high experience clamps to the maximum creature count
+        // high experience limits to the maximum creature count
         FIENDFYRE high = (FIENDFYRE) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 1000);
-        assertEquals(high.getMaxCreatures(), high.getNumCreatures(), "high-skill cast should clamp to the maximum creature count");
+        assertEquals(high.getMaxCreatures(), high.getNumCreatures(), "high-skill cast should limit to the maximum creature count");
 
         assertFalse(low.isKilled(), "spell should still be active before resolving");
     }

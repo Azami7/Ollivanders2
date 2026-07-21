@@ -25,44 +25,27 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Abstract base class for knockback spell unit tests.
- *
- * <p>Provides shared test infrastructure for testing Knockback spell implementations including:</p>
- * <ul>
- * <li>Invalid entity type filtering</li>
- * <li>Targets-self spell behavior</li>
- * <li>No target found scenarios</li>
- * <li>Velocity application and direction (vertical/horizontal, push/pull)</li>
- * </ul>
- *
- * <p>Subclasses must implement {@link #getInvalidEntityType()} and {@link #getValidEntityType()} to define
- * which entity types the spell can and cannot target.</p>
+ * Base test class for {@link Knockback} spells, covering invalid-target rejection, self-targeting, no-target-found,
+ * and velocity direction (vertical/horizontal, push/pull, single and multiple targets). Subclasses supply the valid
+ * and invalid entity types.
  *
  * @author Azami7
  */
 public abstract class KnockbackTest extends O2SpellTestSuper {
     /**
-     * Get an entity type that this spell cannot target.
-     *
-     * @return an invalid entity type, or null if all entity types are valid
+     * @return an entity type this spell cannot target, or null if all types are valid
      */
     @Nullable
     abstract EntityType getInvalidEntityType();
 
     /**
-     * Get an entity type that this spell can target.
-     *
-     * @return a valid entity type
+     * @return an entity type this spell can target
      */
     @NotNull
     abstract EntityType getValidEntityType();
 
     /**
-     * Test that the spell rejects invalid entity types.
-     *
-     * <p>Verifies that when the spell targets an invalid entity type, no velocity is applied and the
-     * projectile stops. This test is skipped for spells that target the caster (targetsSelf=true) or
-     * those with no invalid entity types.</p>
+     * Verify the spell stops without applying velocity when it hits an invalid entity type (non-self spells only).
      */
     @Override
     @Test
@@ -92,10 +75,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that self-targeting spells apply velocity to the caster.
-     *
-     * <p>Verifies that spells with targetsSelf=true immediately kill the projectile and apply velocity to
-     * the caster. This test is skipped for spells that target other entities.</p>
+     * Verify a self-targeting spell immediately ends and applies velocity to the caster.
      */
     @Test
     void doCheckEffectTargetsSelf() {
@@ -118,10 +98,7 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that the spell kills when no valid target is found.
-     *
-     * <p>Verifies that when the spell projectile hits a solid block (with no entity target), the spell is
-     * killed and no message is sent to the caster. This test is skipped for spells that target the caster.</p>
+     * Verify the spell is killed with no message when its projectile hits a block without finding a target.
      */
     @Test
     void doCheckEffectNoTargetFoundTest() {
@@ -145,12 +122,8 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
     }
 
     /**
-     * Test that velocity is applied in the correct direction.
-     *
-     * <p>Verifies that the spell applies velocity in the correct direction based on the spell's configuration:
-     * for vertical spells, checks Y-axis velocity (positive for push, negative for pull);
-     * for horizontal spells, checks X-axis velocity (positive for push, negative for pull).
-     * This test is skipped for spells that target the caster.</p>
+     * Verify the velocity applied to a single target has the right sign and axis: Y for vertical, X for horizontal,
+     * positive for push and negative for pull.
      */
     @Test
     void doCheckEffectVelocityTest() {
@@ -198,6 +171,9 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
         assertEquals(velocity, target.getVelocity(), "velocity not set on target");
     }
 
+    /**
+     * Verify a multi-target spell applies the same correctly-directed velocity to every entity in range.
+     */
     @Test
     void doCheckEffectTargetMultipleTest() {
         World testWorld = mockServer.addSimpleWorld("world");
@@ -242,9 +218,9 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
             }
             else {
                 if (knockbackSpell.isPull())
-                    assertTrue(velocity.getX() < 0, "velocity not set to -X for horizontal pull, Y velocity = " + velocity.getX()); // we know it will be in X because location and targetLocation only differ in X
+                    assertTrue(velocity.getX() < 0, "velocity not set to -X for horizontal pull, X velocity = " + velocity.getX()); // we know it will be in X because location and targetLocation only differ in X
                 else
-                    assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, Y velocity = " + velocity.getX());
+                    assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, X velocity = " + velocity.getX());
             }
 
             assertEquals(velocity, target1.getVelocity(), "target1 velocity not set");

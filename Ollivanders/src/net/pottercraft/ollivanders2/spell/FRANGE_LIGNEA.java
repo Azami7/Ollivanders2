@@ -69,11 +69,9 @@ public final class FRANGE_LIGNEA extends O2Spell {
     }
 
     /**
-     * Converts a natural log block into coreless wands.
-     *
-     * <p>If the target block is a natural log suitable for wand making, the spell calculates the number of
-     * coreless wands to create based on the caster's skill (usesModifier * 0.1, capped at maxAmount),
-     * creates them, and drops them at the log location. The log block is then destroyed.</p>
+     * On the tick the projectile stops, break the struck log into a stack of coreless wands and drop them, destroying
+     * the log. The number of wands scales with the caster's skill up to {@link #maxAmount}. Sends the caster a failure
+     * message when the struck block is not a natural log, or is a wood type unsuitable for wand making.
      */
     @Override
     protected void doCheckEffect() {
