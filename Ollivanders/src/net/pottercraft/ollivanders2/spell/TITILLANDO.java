@@ -28,7 +28,7 @@ public class TITILLANDO extends AddO2Effect {
         super(plugin);
 
         spellType = O2SpellType.TITILLANDO;
-        branch = O2MagicBranch.DARK_ARTS;
+        branch = O2MagicBranch.HEX;
 
         flavorText = new ArrayList<>() {{
             add("The Tickling Hex");
@@ -48,7 +48,7 @@ public class TITILLANDO extends AddO2Effect {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.TITILLANDO;
-        branch = O2MagicBranch.CHARMS;
+        branch = O2MagicBranch.HEX;
 
         // effect
         effectsToAdd.add(O2EffectType.LAUGHING);

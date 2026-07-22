@@ -2,7 +2,10 @@ package net.pottercraft.ollivanders2.test.potion;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
@@ -11,6 +14,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -26,6 +36,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -128,10 +139,10 @@ public class O2PotionsTest {
     }
 
     /**
-     * brewPotion() creates the expected potion from matching cauldron ingredients (happy path).
+     * checkRecipeAndBrew() creates the expected potion from matching cauldron ingredients (happy path).
      */
     @Test
-    void brewPotionTest() {
+    void checkRecipeAndBrewTest() {
         Block cauldron = createCauldronAt(200);
         Location location = cauldron.getLocation();
         O2PotionType expectedPotionType = O2PotionType.COMMON_ANTIDOTE_POTION;
@@ -147,45 +158,45 @@ public class O2PotionsTest {
         PlayerMock player = mockServer.addPlayer();
         TestCommon.setPlayerPotionExperience(testPlugin, player, expectedPotionType, 100);
 
-        ItemStack brewedPotion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
-        assertNotNull(brewedPotion, "brewPotion should return a non-null potion for valid recipe");
+        ItemStack brewedPotion = Ollivanders2API.getPotions().checkRecipeAndBrew(cauldron, player);
+        assertNotNull(brewedPotion, "checkRecipeAndBrew should return a non-null potion for valid recipe");
         O2Potion potion = Ollivanders2API.getPotions().findPotionByItemStack(brewedPotion);
-        assertNotNull(potion, "brewPotion result should be findable by itemstack");
-        assertEquals(expectedPotionType, potion.getPotionType(), "brewPotion should create the expected potion type");
+        assertNotNull(potion, "checkRecipeAndBrew result should be findable by itemstack");
+        assertEquals(expectedPotionType, potion.getPotionType(), "checkRecipeAndBrew should create the expected potion type");
     }
 
     /**
-     * brewPotion() returns null when the block is not a water cauldron.
+     * checkRecipeAndBrew() returns null when the block is not a water cauldron.
      */
     @Test
-    void brewPotionNotCauldronTest() {
+    void checkRecipeAndBrewNotCauldronTest() {
         Location location = new Location(testWorld, 210, 4, 0);
         Block notCauldron = testWorld.getBlockAt(location);
         notCauldron.setType(Material.DIRT);
 
         PlayerMock player = mockServer.addPlayer();
 
-        ItemStack result = Ollivanders2API.getPotions().brewPotion(notCauldron, player);
-        assertNull(result, "brewPotion should return null for non-cauldron blocks");
+        ItemStack result = Ollivanders2API.getPotions().checkRecipeAndBrew(notCauldron, player);
+        assertNull(result, "checkRecipeAndBrew should return null for non-cauldron blocks");
     }
 
     /**
-     * brewPotion() returns null for a cauldron with no ingredients.
+     * checkRecipeAndBrew() returns null for a cauldron with no ingredients.
      */
     @Test
-    void brewPotionEmptyCauldronTest() {
+    void checkRecipeAndBrewEmptyCauldronTest() {
         Block cauldron = createCauldronAt(220);
         PlayerMock player = mockServer.addPlayer();
 
-        ItemStack result = Ollivanders2API.getPotions().brewPotion(cauldron, player);
-        assertNull(result, "brewPotion should return null for empty cauldrons");
+        ItemStack result = Ollivanders2API.getPotions().checkRecipeAndBrew(cauldron, player);
+        assertNull(result, "checkRecipeAndBrew should return null for empty cauldrons");
     }
 
     /**
-     * brewPotion() returns a bad potion when the ingredients match no known recipe.
+     * checkRecipeAndBrew() returns a bad potion when the ingredients match no known recipe.
      */
     @Test
-    void brewPotionUnknownRecipeTest() {
+    void checkRecipeAndBrewUnknownRecipeTest() {
         Block cauldron = createCauldronAt(230);
         Location location = cauldron.getLocation();
 
@@ -195,15 +206,15 @@ public class O2PotionsTest {
 
         PlayerMock player = mockServer.addPlayer();
 
-        ItemStack result = Ollivanders2API.getPotions().brewPotion(cauldron, player);
+        ItemStack result = Ollivanders2API.getPotions().checkRecipeAndBrew(cauldron, player);
         assertBadPotion(result, "unknown recipes");
     }
 
     /**
-     * brewPotion() returns a bad potion when the right ingredients are present in the wrong amounts.
+     * checkRecipeAndBrew() returns a bad potion when the right ingredients are present in the wrong amounts.
      */
     @Test
-    void brewPotionWrongAmountsTest() {
+    void checkRecipeAndBrewWrongAmountsTest() {
         Block cauldron = createCauldronAt(240);
         Location location = cauldron.getLocation();
         O2PotionType potionType = O2PotionType.CURE_FOR_BOILS;
@@ -216,15 +227,15 @@ public class O2PotionsTest {
 
         PlayerMock player = mockServer.addPlayer();
 
-        ItemStack result = Ollivanders2API.getPotions().brewPotion(cauldron, player);
+        ItemStack result = Ollivanders2API.getPotions().checkRecipeAndBrew(cauldron, player);
         assertBadPotion(result, "wrong ingredient amounts");
     }
 
     /**
-     * brewPotion() returns a bad potion when only some of the required ingredients are present.
+     * checkRecipeAndBrew() returns a bad potion when only some of the required ingredients are present.
      */
     @Test
-    void brewPotionIncompleteIngredientsTest() {
+    void checkRecipeAndBrewIncompleteIngredientsTest() {
         Block cauldron = createCauldronAt(250);
         Location location = cauldron.getLocation();
         O2PotionType potionType = O2PotionType.SLEEPING_DRAUGHT;
@@ -239,8 +250,318 @@ public class O2PotionsTest {
 
         PlayerMock player = mockServer.addPlayer();
 
-        ItemStack result = Ollivanders2API.getPotions().brewPotion(cauldron, player);
+        ItemStack result = Ollivanders2API.getPotions().checkRecipeAndBrew(cauldron, player);
         assertBadPotion(result, "incomplete ingredients");
+    }
+
+    /**
+     * brewPotion() puts the brewed potion in the player's off-hand, consumes the glass bottle, and empties the
+     * cauldron.
+     */
+    @Test
+    void brewPotionTest() {
+        Block cauldron = createHotCauldronAt(260);
+        O2PotionType expectedPotionType = O2PotionType.COMMON_ANTIDOTE_POTION;
+        addIngredientsFor(cauldron, expectedPotionType);
+
+        PlayerMock player = mockServer.addPlayer();
+        TestCommon.setPlayerPotionExperience(testPlugin, player, expectedPotionType, 100);
+        player.getInventory().setItemInOffHand(new ItemStack(Material.GLASS_BOTTLE, 1));
+
+        Ollivanders2API.getPotions().brewPotion(player, cauldron);
+
+        ItemStack offHand = player.getInventory().getItemInOffHand();
+        O2Potion potion = Ollivanders2API.getPotions().findPotionByItemStack(offHand);
+        assertNotNull(potion, "brewPotion should put a valid potion in the player's off-hand");
+        assertEquals(expectedPotionType, potion.getPotionType(), "brewPotion should brew the expected potion type");
+
+        assertTrue(Ollivanders2API.getPotions().getIngredientsInCauldron(cauldron).isEmpty(),
+                "brewPotion should remove the ingredients from the cauldron");
+        assertNull(TestCommon.getPlayerInventoryItem(player, Material.GLASS_BOTTLE),
+                "brewPotion should consume the player's only glass bottle");
+    }
+
+    /**
+     * brewPotion() consumes exactly one glass bottle, returning the rest of the stack to the player's inventory.
+     */
+    @Test
+    void brewPotionExtraBottlesTest() {
+        int bottleCount = 3;
+        Block cauldron = createHotCauldronAt(270);
+        O2PotionType expectedPotionType = O2PotionType.COMMON_ANTIDOTE_POTION;
+        addIngredientsFor(cauldron, expectedPotionType);
+
+        PlayerMock player = mockServer.addPlayer();
+        TestCommon.setPlayerPotionExperience(testPlugin, player, expectedPotionType, 100);
+        player.getInventory().setItemInOffHand(new ItemStack(Material.GLASS_BOTTLE, bottleCount));
+
+        Ollivanders2API.getPotions().brewPotion(player, cauldron);
+
+        assertNotNull(Ollivanders2API.getPotions().findPotionByItemStack(player.getInventory().getItemInOffHand()),
+                "brewPotion should put a valid potion in the player's off-hand");
+
+        ItemStack leftoverBottles = TestCommon.getPlayerInventoryItem(player, Material.GLASS_BOTTLE);
+        assertNotNull(leftoverBottles, "brewPotion should return the unused glass bottles to the player");
+        assertEquals(bottleCount - 1, leftoverBottles.getAmount(), "brewPotion should consume exactly one glass bottle");
+    }
+
+    /**
+     * brewPotion() leaves the player and cauldron untouched when the player has no glass bottle to brew into.
+     */
+    @Test
+    void brewPotionNoGlassBottleTest() {
+        Block cauldron = createHotCauldronAt(280);
+        O2PotionType potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
+        addIngredientsFor(cauldron, potionType);
+
+        PlayerMock player = mockServer.addPlayer();
+        TestCommon.setPlayerPotionExperience(testPlugin, player, potionType, 100);
+        player.getInventory().setItemInOffHand(new ItemStack(Material.STICK, 1));
+
+        Ollivanders2API.getPotions().brewPotion(player, cauldron);
+
+        assertEquals(Material.STICK, player.getInventory().getItemInOffHand().getType(),
+                "brewPotion should not replace an off-hand item that is not a glass bottle");
+        assertFalse(Ollivanders2API.getPotions().getIngredientsInCauldron(cauldron).isEmpty(),
+                "brewPotion should leave the ingredients in the cauldron when the player has no glass bottle");
+    }
+
+    /**
+     * brewPotion() leaves the player and cauldron untouched when the cauldron has no heat source under it.
+     */
+    @Test
+    void brewPotionColdCauldronTest() {
+        Block cauldron = createCauldronAt(290);
+        // air is not a heat source, so this cauldron can never brew
+        cauldron.getRelative(BlockFace.DOWN).setType(Material.AIR);
+
+        O2PotionType potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
+        addIngredientsFor(cauldron, potionType);
+
+        PlayerMock player = mockServer.addPlayer();
+        TestCommon.setPlayerPotionExperience(testPlugin, player, potionType, 100);
+        player.getInventory().setItemInOffHand(new ItemStack(Material.GLASS_BOTTLE, 1));
+
+        Ollivanders2API.getPotions().brewPotion(player, cauldron);
+
+        assertEquals(Material.GLASS_BOTTLE, player.getInventory().getItemInOffHand().getType(),
+                "brewPotion should not consume the glass bottle when the cauldron is cold");
+        assertFalse(Ollivanders2API.getPotions().getIngredientsInCauldron(cauldron).isEmpty(),
+                "brewPotion should leave the ingredients in the cauldron when it is cold");
+    }
+
+    /**
+     * brewPotion() tells the player nothing happened and keeps their glass bottle when the cauldron is empty.
+     */
+    @Test
+    void brewPotionEmptyCauldronTest() {
+        Block cauldron = createHotCauldronAt(300);
+
+        PlayerMock player = mockServer.addPlayer();
+        player.getInventory().setItemInOffHand(new ItemStack(Material.GLASS_BOTTLE, 1));
+        TestCommon.clearMessageQueue(player);
+
+        Ollivanders2API.getPotions().brewPotion(player, cauldron);
+
+        assertEquals(Material.GLASS_BOTTLE, player.getInventory().getItemInOffHand().getType(),
+                "brewPotion should not consume the glass bottle when there is nothing to brew");
+
+        String message = TestCommon.getWholeMessage(player);
+        assertNotNull(message, "brewPotion should tell the player the cauldron is unchanged");
+        assertTrue(TestCommon.messageStartsWith("The cauldron appears unchanged", message),
+                "brewPotion should tell the player the cauldron is unchanged, got: " + message);
+    }
+
+    /**
+     * brewPotion() still consumes the ingredients and the glass bottle when the ingredients match no known recipe,
+     * handing the player a bad potion.
+     */
+    @Test
+    void brewPotionUnknownRecipeTest() {
+        Block cauldron = createHotCauldronAt(310);
+        Location location = cauldron.getLocation();
+
+        // ingredients that form no valid recipe
+        dropIngredientAt(location, O2ItemType.ACONITE, 1);
+        dropIngredientAt(location, O2ItemType.BEZOAR, 1);
+
+        PlayerMock player = mockServer.addPlayer();
+        player.getInventory().setItemInOffHand(new ItemStack(Material.GLASS_BOTTLE, 1));
+
+        Ollivanders2API.getPotions().brewPotion(player, cauldron);
+
+        assertBadPotion(player.getInventory().getItemInOffHand(), "unknown recipes");
+        assertTrue(Ollivanders2API.getPotions().getIngredientsInCauldron(cauldron).isEmpty(),
+                "brewPotion should remove the ingredients from the cauldron even for an unknown recipe");
+    }
+
+    /**
+     * Drop every ingredient a potion recipe requires, in the required amounts, at a cauldron.
+     *
+     * @param cauldron   the cauldron to drop the ingredients at
+     * @param potionType the potion whose recipe should be satisfied
+     */
+    void addIngredientsFor(@NotNull Block cauldron, @NotNull O2PotionType potionType) {
+        Location location = cauldron.getLocation();
+        Map<O2ItemType, Integer> ingredients = getIngredientsForPotion(potionType);
+
+        for (O2ItemType ingredientType : ingredients.keySet()) {
+            Integer amount = ingredients.get(ingredientType);
+            assertNotNull(amount, "Ingredient amount should not be null");
+            dropIngredientAt(location, ingredientType, amount);
+        }
+    }
+
+    /**
+     * Create a water cauldron at (x, 4, 0) standing on a heat source, as brewing requires.
+     *
+     * @param x the x-coordinate for the cauldron location
+     * @return the block set as a water cauldron
+     */
+    Block createHotCauldronAt(int x) {
+        Block cauldron = createCauldronAt(x);
+
+        // take the heat source from the plugin's own list so this test follows any change to it
+        List<Material> hotBlocks = Ollivanders2Common.getHotBlocks();
+        assertFalse(hotBlocks.isEmpty(), "Ollivanders2Common should define at least one hot block");
+        cauldron.getRelative(BlockFace.DOWN).setType(hotBlocks.get(0));
+
+        return cauldron;
+    }
+
+    /**
+     * onPlayerDrink() applies an O2 potion's effect when the player drinks it, and ignores a plain vanilla potion.
+     */
+    @Test
+    void onPlayerDrinkTest() {
+        World testWorld = mockServer.addSimpleWorld("onPlayerDrinkWorld");
+
+        // drinking a tagged O2 potion applies its effect (BABBLING_BEVERAGE grants the BABBLING effect)
+        PlayerMock drinker = mockServer.addPlayer();
+        drinker.setLocation(new Location(testWorld, 400, 4, 0));
+        testPlugin.getO2Player(drinker);
+
+        ItemStack potion = Ollivanders2API.getPotions().getPotionItemStackByType(O2PotionType.BABBLING_BEVERAGE, 1);
+        assertNotNull(potion, "should be able to build a BABBLING_BEVERAGE item");
+
+        mockServer.getPluginManager().callEvent(new PlayerItemConsumeEvent(drinker, potion, EquipmentSlot.HAND));
+        // the effect is applied on a delayed task; advance past the delay plus effect activation
+        mockServer.getScheduler().performTicks(OllivandersListener.getThreadDelay() + 20);
+
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(drinker.getUniqueId(), O2EffectType.BABBLING),
+                "onPlayerDrink should apply the potion's effect to the drinker");
+
+        // drinking a plain vanilla potion does nothing and does not error
+        PlayerMock muggle = mockServer.addPlayer();
+        muggle.setLocation(new Location(testWorld, 410, 4, 0));
+        testPlugin.getO2Player(muggle);
+
+        ItemStack plainPotion = new ItemStack(Material.POTION, 1);
+        PlayerItemConsumeEvent plainEvent = new PlayerItemConsumeEvent(muggle, plainPotion, EquipmentSlot.HAND);
+        mockServer.getPluginManager().callEvent(plainEvent);
+        mockServer.getScheduler().performTicks(OllivandersListener.getThreadDelay() + 20);
+
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.getEffects(muggle.getUniqueId()).isEmpty(),
+                "onPlayerDrink should do nothing for a plain vanilla potion");
+    }
+
+    /**
+     * onSplashPotion() dispatches an O2SplashPotion's impact effect synchronously, so an effect that adjusts the
+     * splash (HERBICIDE reduces per-entity intensity) still takes hold. Guards against re-deferring the handler, which
+     * would make {@link PotionSplashEvent#setIntensity} a no-op.
+     */
+    @Test
+    void onSplashPotionTest() {
+        World testWorld = mockServer.addSimpleWorld("onSplashPotionWorld");
+        Location location = new Location(testWorld, 420, 4, 0);
+
+        ItemStack herbicide = Ollivanders2API.getPotions().getPotionItemStackByType(O2PotionType.HERBICIDE_POTION, 1);
+        assertNotNull(herbicide, "should be able to build a HERBICIDE_POTION item");
+
+        ThrownPotion thrown = testWorld.spawn(location, ThrownPotion.class);
+        thrown.setItem(herbicide);
+
+        // a non-creeper entity in the splash should have its intensity reduced by the impact effect
+        PlayerMock affected = mockServer.addPlayer();
+        affected.setLocation(location);
+        double fullIntensity = 1.0;
+        HashMap<LivingEntity, Double> affectedEntities = new HashMap<>();
+        affectedEntities.put(affected, fullIntensity);
+
+        PotionSplashEvent event = new PotionSplashEvent(thrown, affectedEntities);
+        mockServer.getPluginManager().callEvent(event);
+
+        // no performTicks: the reduction must happen during event dispatch, not on a later tick
+        assertTrue(event.getIntensity(affected) < fullIntensity,
+                "onSplashPotion must reduce HERBICIDE intensity synchronously during the event");
+    }
+
+    /**
+     * onPotionBrewing() does nothing when the player is not sneaking.
+     *
+     * @implNote The sneaking-and-facing-a-cauldron path cannot be tested: it goes through
+     * {@code playerFacingBlockType}, which calls the MockBukkit-unimplemented {@code Player.getLineOfSight}.
+     */
+    @Test
+    void onPotionBrewingTest() {
+        World testWorld = mockServer.addSimpleWorld("onPotionBrewingWorld");
+        PlayerMock player = mockServer.addPlayer();
+        player.setLocation(new Location(testWorld, 430, 4, 0));
+        player.getInventory().setItemInOffHand(new ItemStack(Material.GLASS_BOTTLE, 1));
+
+        // not sneaking: the handler returns before touching the off-hand item
+        mockServer.getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+
+        assertEquals(Material.GLASS_BOTTLE, player.getInventory().getItemInOffHand().getType(),
+                "onPotionBrewing should not consume the off-hand item when the player is not sneaking");
+    }
+
+    /**
+     * addIngredientToCauldron() drops the player's off-hand item into the cauldron, clears the off-hand, and messages
+     * the player; it no-ops on an empty off-hand and falls back to the material name for an un-renamed item.
+     */
+    @Test
+    void addIngredientToCauldronTest() {
+        O2Potions potions = Ollivanders2API.getPotions();
+        Block cauldron = createCauldronAt(330);
+
+        PlayerMock player = mockServer.addPlayer();
+        player.setLocation(new Location(testWorld, 330, 4, 5));
+
+        // empty off-hand: nothing happens
+        TestCommon.clearMessageQueue(player);
+        potions.addIngredientToCauldron(player, cauldron);
+        assertNull(TestCommon.getWholeMessage(player), "adding with an empty off-hand should message nothing");
+        assertTrue(potions.getIngredientsInCauldron(cauldron).isEmpty(),
+                "an empty off-hand should add nothing to the cauldron");
+
+        // an O2 ingredient is dropped into the cauldron, the off-hand cleared, and the player messaged
+        player.getInventory().setItemInOffHand(O2ItemType.ACONITE.getItem(1));
+        TestCommon.clearMessageQueue(player);
+        potions.addIngredientToCauldron(player, cauldron);
+
+        assertEquals(Material.AIR, player.getInventory().getItemInOffHand().getType(),
+                "off-hand should be cleared after adding the ingredient");
+        String message = TestCommon.getWholeMessage(player);
+        assertNotNull(message, "player should be told the ingredient was added");
+        assertTrue(TestCommon.messageStartsWith("Added", message), "message should confirm the ingredient was added");
+        assertTrue(potions.getIngredientsInCauldron(cauldron).containsKey(O2ItemType.ACONITE),
+                "the ingredient should be in the cauldron after adding");
+
+        // an un-renamed item falls back to its material name in the message
+        Block cauldron2 = createCauldronAt(340);
+        PlayerMock plainPlayer = mockServer.addPlayer();
+        plainPlayer.setLocation(new Location(testWorld, 340, 4, 5));
+        plainPlayer.getInventory().setItemInOffHand(new ItemStack(Material.STICK, 1));
+        TestCommon.clearMessageQueue(plainPlayer);
+        potions.addIngredientToCauldron(plainPlayer, cauldron2);
+
+        assertEquals(Material.AIR, plainPlayer.getInventory().getItemInOffHand().getType(),
+                "off-hand should be cleared after adding a plain item");
+        String plainMessage = TestCommon.getWholeMessage(plainPlayer);
+        assertNotNull(plainMessage, "player should be messaged for a plain item");
+        assertTrue(plainMessage.contains(Material.STICK.name()),
+                "message should fall back to the material name for an un-renamed item");
     }
 
     /**
@@ -288,13 +609,13 @@ public class O2PotionsTest {
     /**
      * Assert the brewed result is a bad potion: non-null but not resolvable to a valid O2Potion.
      *
-     * @param result   the ItemStack result from brewPotion; a null result fails the assertion
+     * @param result   the ItemStack result from checkRecipeAndBrew; a null result fails the assertion
      * @param scenario description of the test scenario, used in assertion messages
      */
     void assertBadPotion(@Nullable ItemStack result, @NotNull String scenario) {
-        assertNotNull(result, "brewPotion should return a bad potion for " + scenario);
+        assertNotNull(result, "checkRecipeAndBrew should return a bad potion for " + scenario);
         O2Potion potion = Ollivanders2API.getPotions().findPotionByItemStack(result);
-        assertNull(potion, "brewPotion should return a bad potion (not a valid O2Potion) for " + scenario);
+        assertNull(potion, "checkRecipeAndBrew should return a bad potion (not a valid O2Potion) for " + scenario);
     }
 
     /**
@@ -363,7 +684,7 @@ public class O2PotionsTest {
      */
     @Test
     void findPotionByItemMetaTest() {
-        // happy path use cases covered by brewPotionTest()
+        // happy path use cases covered by checkRecipeAndBrewTest()
         ItemStack itemStack = new ItemStack(Material.POTION, 1);
 
         // empty meta

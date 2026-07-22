@@ -590,7 +590,7 @@ public class O2Effects implements Listener {
      *
      * @param event the player quit event
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
@@ -598,6 +598,8 @@ public class O2Effects implements Listener {
         for (O2Effect effect : activeEffects.values()) {
             effect.doOnPlayerQuitEvent(event);
         }
+
+        onQuit(event.getPlayer().getUniqueId());
     }
 
     /**
@@ -607,6 +609,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+        onJoin(event.getPlayer().getUniqueId());
+
         for (O2Effect effect : effectsData.getAllActiveEffects()) {
             effect.doOnPlayerJoinEvent(event);
         }
@@ -617,6 +621,8 @@ public class O2Effects implements Listener {
         for (O2Effect effect : effectsData.getAllActiveEffects()) {
             effect.doOnEntityDeathEvent(event);
         }
+
+        onDeath(event.getEntity().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

@@ -55,7 +55,6 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
         AddO2Effect addO2Effect = (AddO2Effect) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         List<O2EffectType> effects = addO2Effect.getEffectsToAdd();
         List<PotionEffectType> potionEffects = getPotionEffects();
-        assertNotNull(potionEffects);
 
         if (addsPotionEffect()) {
             assertNotNull(potionEffects);
@@ -70,16 +69,20 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
         else
             target = player;
 
-        if (addsPotionEffect())
+        if (addsPotionEffect()) {
+            assertNotNull(potionEffects);
             assertFalse(target.hasPotionEffect(potionEffects.getFirst()), "target already has potion effect");
+        }
         else
             assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effects.getFirst()), "target already has o2effect");
 
         mockServer.getScheduler().performTicks(20);
         assertTrue(addO2Effect.isKilled(), "spell did not hit target");
 
-        if (addsPotionEffect())
+        if (addsPotionEffect()) {
+            assertNotNull(potionEffects);
             assertTrue(target.hasPotionEffect(potionEffects.getFirst()), "target does not have potion effect");
+        }
         else
             assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effects.getFirst()), "target does not have o2effect");
 
@@ -90,8 +93,10 @@ abstract public class AddO2EffectTest extends O2SpellTestSuper {
             assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effects.getFirst()), "target no longer has o2effect when spell is permanent");
         }
         else {
-            if (addsPotionEffect())
+            if (addsPotionEffect()) {
+                assertNotNull(potionEffects);
                 assertFalse(target.hasPotionEffect(potionEffects.getFirst()), "target already still has potion effect after duration expired");
+            }
             else
                 assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effects.getFirst()), "target still has o2effect after duration expired");
         }

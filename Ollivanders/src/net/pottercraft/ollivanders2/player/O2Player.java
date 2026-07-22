@@ -889,16 +889,13 @@ public class O2Player {
      * Do player onJoin set up
      */
     public void onJoin() {
-        Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
         Ollivanders2API.getProphecies().onJoin(pid);
     }
 
     /**
      * Do player onQuit clean up
      */
-    public void onQuit() {
-        Ollivanders2API.getPlayers().playerEffects.onQuit(pid);
-    }
+    public void onQuit() {}
 
     /**
      * Do player onDeath actions
@@ -910,7 +907,6 @@ public class O2Player {
         }
 
         resetSouls();
-        Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
         setWandSpell(null);
     }
 

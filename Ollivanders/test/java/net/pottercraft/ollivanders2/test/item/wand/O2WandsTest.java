@@ -6,9 +6,15 @@ import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.item.wand.O2WandCoreType;
 import net.pottercraft.ollivanders2.item.wand.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
@@ -21,6 +27,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -160,25 +167,25 @@ public class O2WandsTest {
         PlayerMock player = mockServer.addPlayer();
 
         // empty hand
-        assertFalse(Ollivanders2API.getItems().getWands().holdsWand(player), "holdsWand() returned true for player with empty hand");
+        assertFalse(Ollivanders2API.getItems().getWands().holdsWandInPrimary(player), "holdsWand() returned true for player with empty hand");
 
         // wand in main hand
         ItemStack wand = Ollivanders2API.getItems().getWands().makeWand(O2WandWoodType.OAK.getLabel(), O2WandCoreType.UNICORN_HAIR.getLabel(), 1);
         assertNotNull(wand);
         player.getInventory().setItemInMainHand(wand);
-        assertTrue(Ollivanders2API.getItems().getWands().holdsWand(player), "holdsWand() returned false for player holding a wand in main hand");
+        assertTrue(Ollivanders2API.getItems().getWands().holdsWandInPrimary(player), "holdsWand() returned false for player holding a wand in main hand");
 
         // non-wand item in main hand
         player.getInventory().setItemInMainHand(new ItemStack(Material.APPLE, 1));
-        assertFalse(Ollivanders2API.getItems().getWands().holdsWand(player), "holdsWand() returned true for player holding Material.APPLE");
+        assertFalse(Ollivanders2API.getItems().getWands().holdsWandInPrimary(player), "holdsWand() returned true for player holding Material.APPLE");
 
         // wand in off-hand, main hand empty
         player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
         player.getInventory().setItemInOffHand(wand);
-        assertTrue(Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.OFF_HAND), "holdsWand() returned false for player holding a wand in off hand");
+        assertTrue(Ollivanders2API.getItems().getWands().holdsWandInOff(player), "holdsWand() returned false for player holding a wand in off hand");
 
         // default holdsWand only checks main hand
-        assertFalse(Ollivanders2API.getItems().getWands().holdsWand(player), "holdsWand() returned true for main hand when wand is only in off hand");
+        assertFalse(Ollivanders2API.getItems().getWands().holdsWandInPrimary(player), "holdsWand() returned true for main hand when wand is only in off hand");
     }
 
     /**
@@ -244,6 +251,63 @@ public class O2WandsTest {
         wand = Ollivanders2API.getItems().getWands().makeWand(o2p.getDestinedWandWood(), O2WandCoreType.VEELA_HAIR.getLabel(), 1);
         assertNotNull(wand);
         assertFalse(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, wand));
+    }
+
+    /**
+     * waveWand() reports the player has found their destined wand, and flags it on their player, only when the wand
+     * they hold is allied to them; any other wand fires the not-destined event instead.
+     */
+    @Test
+    void waveWandTest() {
+        World testWorld = mockServer.addSimpleWorld("waveWandWorld");
+
+        PlayerMock player = mockServer.addPlayer();
+        player.setLocation(new Location(testWorld, 100, 40, 100));
+
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+        assertNotNull(o2p);
+        o2p.setWandCore(O2WandCoreType.UNICORN_HAIR.getLabel());
+        o2p.setWandWood(O2WandWoodType.OAK.getLabel());
+
+        // the events are the only output of waveWand that a caller can observe, so listen for both
+        AtomicBoolean foundWandFired = new AtomicBoolean(false);
+        AtomicBoolean notDestinedFired = new AtomicBoolean(false);
+        mockServer.getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onFoundWand(OllivandersPlayerFoundWandEvent event) {
+                if (event.getPlayer().equals(player))
+                    foundWandFired.set(true);
+            }
+
+            @EventHandler
+            public void onNotDestinedWand(OllivandersPlayerNotDestinedWandEvent event) {
+                if (event.getPlayer().equals(player))
+                    notDestinedFired.set(true);
+            }
+        }, testPlugin);
+
+        // a wand that is not the player's destined wand is reported as such
+        ItemStack otherWand = Ollivanders2API.getItems().getWands().makeWand(O2WandWoodType.ACACIA.getLabel(), O2WandCoreType.VEELA_HAIR.getLabel(), 1);
+        assertNotNull(otherWand);
+        player.getInventory().setItemInMainHand(otherWand);
+
+        Ollivanders2API.getItems().getWands().waveWand(player);
+
+        assertTrue(notDestinedFired.get(), "waving a wand that is not the player's should fire the not-destined event");
+        assertFalse(foundWandFired.get(), "waving a wand that is not the player's should not fire the found wand event");
+        assertFalse(o2p.foundWand(), "waving a wand that is not the player's should not flag them as having found it");
+
+        // the player's destined wand is reported as found
+        notDestinedFired.set(false);
+        ItemStack destinedWand = Ollivanders2API.getItems().getWands().makeWand(o2p.getDestinedWandWood(), o2p.getDestinedWandCore(), 1);
+        assertNotNull(destinedWand);
+        player.getInventory().setItemInMainHand(destinedWand);
+
+        Ollivanders2API.getItems().getWands().waveWand(player);
+
+        assertTrue(foundWandFired.get(), "waving their destined wand should fire the found wand event");
+        assertFalse(notDestinedFired.get(), "waving their destined wand should not fire the not-destined event");
+        assertTrue(o2p.foundWand(), "waving their destined wand should flag them as having found it");
     }
 
     /**

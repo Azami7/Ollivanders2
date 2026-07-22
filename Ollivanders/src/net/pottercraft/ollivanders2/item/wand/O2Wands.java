@@ -6,8 +6,13 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -46,6 +51,11 @@ public class O2Wands {
      * Wand conjunction for wand lore
      */
     public static final String wandLoreConjunction = " and ";
+
+    /**
+     * Height above a player's feet to play the found-wand effect at, roughly eye level.
+     */
+    private static final double effectHeightOffset = 1.6;
 
     /**
      * Constructor
@@ -197,37 +207,58 @@ public class O2Wands {
      * @param player player to check.
      * @return true if the player holds a wand, false otherwise
      */
-    public boolean holdsWand(@NotNull Player player) {
-        return holdsWand(player, EquipmentSlot.HAND);
-    }
-
-    /**
-     * Does the player hold a wand item in their hand?
-     *
-     * @param player player to check.
-     * @param hand   the equipment slot to check for this player
-     * @return true if the player holds a wand, false otherwise
-     */
-    public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand) {
-        ItemStack held;
-        if (hand == EquipmentSlot.HAND) {
-            common.printDebugMessage("O2Wands.holdsWand: checking for wand in main hand", null, null, false);
-            held = player.getInventory().getItemInMainHand();
-        }
-        else if (hand == EquipmentSlot.OFF_HAND) {
-            common.printDebugMessage("O2Wands.holdsWand: checking for wand in off hand", null, null, false);
-            held = player.getInventory().getItemInOffHand();
-        }
-        else {
-            return false;
-        }
+    public boolean holdsWandInPrimary(@NotNull Player player) {
+        ItemStack held = player.getInventory().getItemInMainHand();
 
         if (held.getType() == Material.AIR) {
-            common.printDebugMessage("O2Wands.holdsWand: player not holding an item", null, null, false);
+            common.printDebugMessage("O2Wands.holdsWandInPrimary: player not holding an item", null, null, false);
             return false;
         }
 
         return isWand(held);
+    }
+
+    /**
+     * Does the player hold a wand item in their off hand?
+     *
+     * @param player player to check.
+     * @return true if the player holds a wand, false otherwise
+     */
+    public boolean holdsWandInOff(@NotNull Player player) {
+        ItemStack held = player.getInventory().getItemInOffHand();
+
+        if (held.getType() == Material.AIR) {
+            common.printDebugMessage("O2Wands.holdsWandInSecondary: player not holding an item", null, null, false);
+            return false;
+        }
+
+        return isWand(held);
+    }
+
+    /**
+     * Handle a player waving the wand in their primary hand with no spell to cast. If it is a wand that is allied to
+     * them, they have found their destined wand: play a sound and visual effect and flag it on their player, which
+     * fires an {@link OllivandersPlayerFoundWandEvent}. Otherwise fire an {@link OllivandersPlayerNotDestinedWandEvent}.
+     *
+     * <p>Assumes: the player is holding a wand in their primary hand.</p>
+     *
+     * @param player the player waving the wand
+     */
+    public void waveWand(@NotNull Player player) {
+        if (Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND) >= O2PlayerCommon.wrongWand) {
+            common.printDebugMessage("O2Wands.waveWand: not the player's destined wand", null, null, false);
+            p.getServer().getPluginManager().callEvent(new OllivandersPlayerNotDestinedWandEvent(player));
+            return;
+        }
+
+        // clone so that the effect offset does not move the player
+        Location location = player.getLocation().clone();
+        location.setY(location.getY() + effectHeightOffset);
+        player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
+        player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+
+        // setFoundWand fires the found wand event itself
+        p.getO2Player(player).setFoundWand(true);
     }
 
     /**
