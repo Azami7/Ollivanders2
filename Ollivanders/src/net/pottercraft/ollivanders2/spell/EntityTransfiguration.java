@@ -114,7 +114,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
                 continue;
 
             if (!canTransfigure(entity)) {
-                common.printDebugMessage("Cannot target entity " + entity.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("Cannot target entity " + entity.getName(), null, null, false);
                 continue;
             }
 
@@ -123,7 +123,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
 
             if (transfiguredEntity == null) {
                 kill();
-                common.printDebugMessage("Transfiguration failed in " + spellType.toString(), null, null, true);
+                Ollivanders2API.common.printDebugMessage("Transfiguration failed in " + spellType.toString(), null, null, true);
             }
             else {
                 customizeEntity();
@@ -146,7 +146,7 @@ public abstract class EntityTransfiguration extends Transfiguration {
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
-            common.printDebugMessage(caster.getName() + " failed success check in canTransfigure()", null, null, false);
+            Ollivanders2API.common.printDebugMessage(caster.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
 
@@ -204,18 +204,18 @@ public abstract class EntityTransfiguration extends Transfiguration {
 
         if (targetType != null && eType == targetType) // do not change if this entity is already the target type
         {
-            common.printDebugMessage("Target entity is same type as spell type.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Target entity is same type as spell type.", null, null, false);
             return false;
         }
         else if (entityBlockedList.contains(eType)) // do not change if this entity is in the blocked list
         {
-            common.printDebugMessage("EntityType is on the blocked list.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("EntityType is on the blocked list.", null, null, false);
             return false;
         }
         else if (!entityAllowedList.isEmpty()) // do not change if the allow list exists and this entity is not in it
         {
             if (!entityAllowedList.contains(eType)) {
-                common.printDebugMessage("EntityType is not on the allowed list.", null, null, false);
+                Ollivanders2API.common.printDebugMessage("EntityType is not on the allowed list.", null, null, false);
                 return false;
             }
         }

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
@@ -90,7 +91,7 @@ public abstract class ChangeEntitySize extends O2Spell {
                 return;
             }
 
-            common.printDebugMessage("Checking " + livingEntity.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Checking " + livingEntity.getName(), null, null, false);
 
             if (livingEntity.getUniqueId().equals(caster.getUniqueId()))
                 continue;
@@ -163,7 +164,7 @@ public abstract class ChangeEntitySize extends O2Spell {
         if (delta > maxSlimeSizeChange)
             delta = maxSlimeSizeChange;
 
-        common.printDebugMessage("Changing slime size by " + delta, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Changing slime size by " + delta, null, null, false);
 
         int newSize = slime.getSize();
         if (growing)

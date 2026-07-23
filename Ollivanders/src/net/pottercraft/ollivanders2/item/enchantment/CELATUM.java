@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -29,7 +30,7 @@ public class CELATUM extends Enchantment {
         enchantmentType = ItemEnchantmentType.CELATUM;
 
         if (args == null)
-            common.printDebugMessage("CELATUM enchantment created with null arguments", null, null, true);
+            Ollivanders2API.common.printDebugMessage("CELATUM enchantment created with null arguments", null, null, true);
     }
 
     @Override

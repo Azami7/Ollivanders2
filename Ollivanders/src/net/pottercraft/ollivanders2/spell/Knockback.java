@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Entity;
@@ -229,7 +230,7 @@ public abstract class Knockback extends O2Spell {
                 distance = distanceToSurface + 1;
         }
 
-        common.printDebugMessage("Knockback.calculateDistance: distance = " + distance, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Knockback.calculateDistance: distance = " + distance, null, null, false);
         return distance;
     }
 

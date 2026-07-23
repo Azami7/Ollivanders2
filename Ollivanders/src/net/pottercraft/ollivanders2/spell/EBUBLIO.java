@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -84,7 +85,7 @@ public class EBUBLIO extends ImmobilizePlayer {
             AttributeInstance scaleAttribute = target.getAttribute(Attribute.SCALE);
 
             if (scaleAttribute == null || scaleAttribute.getBaseValue() > 1.0) {
-                common.printDebugMessage("Ebublio.canTarget: player scale > 1.0", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Ebublio.canTarget: player scale > 1.0", null, null, false);
                 return false;
             }
         }

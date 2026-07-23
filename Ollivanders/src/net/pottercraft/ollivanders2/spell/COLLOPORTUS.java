@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.block.Block;
@@ -79,13 +80,13 @@ public final class COLLOPORTUS extends StationarySpell {
     protected O2StationarySpell createStationarySpell() {
         Block targetBlock = getTargetBlock();
         if (targetBlock == null) {
-            common.printDebugMessage("COLLOPORTUS.doCheckEffect: from block is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("COLLOPORTUS.doCheckEffect: from block is null", null, null, true);
             return null;
         }
 
 
         if (!Ollivanders2Common.isDoor(targetBlock) && !Ollivanders2Common.isChest(targetBlock)) {
-            common.printDebugMessage("block is not a door, trapdoor, or chest", null, null, true);
+            Ollivanders2API.common.printDebugMessage("block is not a door, trapdoor, or chest", null, null, true);
             return null;
         }
 

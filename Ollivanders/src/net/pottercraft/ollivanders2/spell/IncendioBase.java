@@ -117,7 +117,7 @@ public abstract class IncendioBase extends O2Spell {
         else {
             Block target = getTargetBlock();
             if (target == null) {
-                common.printDebugMessage("IncendioSuper.doCheckEffect: target block is null", null, null, true);
+                Ollivanders2API.common.printDebugMessage("IncendioSuper.doCheckEffect: target block is null", null, null, true);
                 kill();
                 return;
             }
@@ -138,7 +138,7 @@ public abstract class IncendioBase extends O2Spell {
             // items, we have to check the block above the target because items would be sitting on top of the target
             List<Item> items = EntityCommon.getItemsInRadius(target.getRelative(BlockFace.UP).getLocation(), entityRadius);
             for (Item item : items) {
-                common.printDebugMessage("IncendioSuper.doCheckEffect: found item " + item.getItemStack().getType(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("IncendioSuper.doCheckEffect: found item " + item.getItemStack().getType(), null, null, false);
                 item.setFireTicks(burnDuration);
 
                 if (!strafe)
@@ -148,7 +148,7 @@ public abstract class IncendioBase extends O2Spell {
             // entities, we have to check the block above the target because entities would be standing on top of the target
             List<LivingEntity> livingEntities = EntityCommon.getLivingEntitiesInRadius(target.getRelative(BlockFace.UP).getLocation(), entityRadius);
             for (LivingEntity livingEntity : livingEntities) {
-                common.printDebugMessage("IncendioSuper.doCheckEffect: found entity " + livingEntity.getType(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("IncendioSuper.doCheckEffect: found entity " + livingEntity.getType(), null, null, false);
                 livingEntity.setFireTicks(burnDuration);
 
                 if (!strafe)
@@ -232,7 +232,7 @@ public abstract class IncendioBase extends O2Spell {
                 Ollivanders2API.getBlocks().addTemporarilyChangedBlock(above, this);
             }
 
-            common.printDebugMessage("IncendioSuper.setBlockOnFire: setting " + block.getType() + " at " + block.getLocation().getX() + ", " + block.getLocation().getY() + ", " + block.getLocation().getZ() + " on fire", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IncendioSuper.setBlockOnFire: setting " + block.getType() + " at " + block.getLocation().getX() + ", " + block.getLocation().getY() + ", " + block.getLocation().getZ() + " on fire", null, null, false);
             above.setType(Material.FIRE);
         }
     }
@@ -248,26 +248,26 @@ public abstract class IncendioBase extends O2Spell {
 
         if (Ollivanders2API.getBlocks().isTemporarilyChangedBlock(above)) {
             // above block is already transfigured
-            common.printDebugMessage("IncendioSuper.canBurn: above block is already transfigured", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IncendioSuper.canBurn: above block is already transfigured", null, null, false);
             return false;
         }
         else if (!materialAllowList.isEmpty() && !materialAllowList.contains(block.getType())) { // can happen with radius > 1
             // this is not an allowed material
-            common.printDebugMessage("IncendioSuper.canBurn: block is not on the allow list", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IncendioSuper.canBurn: block is not on the allow list", null, null, false);
             return false;
         }
         else if (!materialBlockedList.isEmpty() && materialBlockedList.contains(block.getType())) { // can happen with radius > 1
             // this is a blocked material
-            common.printDebugMessage("IncendioSuper.canBurn: block is on the blocked list", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IncendioSuper.canBurn: block is on the blocked list", null, null, false);
             return false;
         }
         else if (projectilePassThrough.contains(block.getType())) {
             // do not try to set pass-though blocks on fire
-            common.printDebugMessage("IncendioSuper.canBurn: block is a pass-through block", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IncendioSuper.canBurn: block is a pass-through block", null, null, false);
             return false;
         }
         else if (above.getType() != Material.AIR && above.getType() != Material.CAVE_AIR) {
-            common.printDebugMessage("IncendioSuper.canBurn: above block is not air", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IncendioSuper.canBurn: above block is not air", null, null, false);
             return false;
         }
 

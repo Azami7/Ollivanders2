@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -110,9 +111,9 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
         boolean isMuggle = isMuggle(entity);
 
         if (isMuggle)
-            common.printDebugMessage(entity.getName() + " cannot see players in this area", null, null, false);
+            Ollivanders2API.common.printDebugMessage(entity.getName() + " cannot see players in this area", null, null, false);
         else
-            common.printDebugMessage(entity.getName() + " can see players in this area", null, null, false);
+            Ollivanders2API.common.printDebugMessage(entity.getName() + " can see players in this area", null, null, false);
 
         return !isMuggle;
     }

@@ -77,7 +77,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
             return;
 
         if (!canTransfigure(target)) {
-            common.printDebugMessage("Transfiguration not allowed", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Transfiguration not allowed", null, null, false);
             sendFailureMessage();
             kill();
             return;
@@ -102,7 +102,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
         }
         else {
             kill();
-            common.printDebugMessage("Entity type was null in " + spellType.toString(), null, null, true);
+            Ollivanders2API.common.printDebugMessage("Entity type was null in " + spellType.toString(), null, null, true);
             return;
         }
 

@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.effect;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +52,6 @@ public class MUTED_SPEECH extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("MUTED_SPEECH: cancelling AsyncPlayerChatEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("MUTED_SPEECH: cancelling AsyncPlayerChatEvent", null, null, false);
     }
 }

@@ -103,11 +103,11 @@ abstract public class ImmobilizePlayer extends O2Spell {
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
             if (target.getUniqueId().equals(caster.getUniqueId()) || !canTarget(target)) {
-                common.printDebugMessage("ImmobilizePlayerSuper.doCheckEffect: " + target.getName() + " cannot be targeting, skipping", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ImmobilizePlayerSuper.doCheckEffect: " + target.getName() + " cannot be targeting, skipping", null, null, false);
                 continue;
             }
 
-            common.printDebugMessage("ImmobilizePlayerSuper.doCheckEffect: targeting " + target.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("ImmobilizePlayerSuper.doCheckEffect: targeting " + target.getName(), null, null, false);
 
             calculateDuration();
             addImmobilizationEffect(target);
@@ -172,7 +172,7 @@ abstract public class ImmobilizePlayer extends O2Spell {
         if (prisonIsShell) {
             playerBoundingBox = target.getBoundingBox();
             if (playerBoundingBox == null) {
-                common.printDebugMessage("ImmobilizePlayer.imprisonPlayer: playerBoundingBox is null", null, null, true);
+                Ollivanders2API.common.printDebugMessage("ImmobilizePlayer.imprisonPlayer: playerBoundingBox is null", null, null, true);
                 return;
             }
         }
@@ -181,7 +181,7 @@ abstract public class ImmobilizePlayer extends O2Spell {
         for (Block block : blocks) {
             if (prisonIsShell) {
                 BoundingBox blockBox = new BoundingBox(block.getX(), block.getY(), block.getZ(), block.getX() + 1, block.getY() + 1, block.getZ() + 1);
-                if (playerBoundingBox.overlaps(blockBox))
+                if (playerBoundingBox.overlaps(blockBox)) // ignore npe linting warning here, if playerBoundingBox is null we return above
                     continue;
             }
 

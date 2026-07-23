@@ -4,6 +4,7 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -69,7 +70,7 @@ public abstract class EntityDisguise extends EntityTransfiguration {
     @Override
     public boolean canTransfigure(@NotNull Entity entity) {
         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(spellType)) {
-            common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
             return false;
         }
 

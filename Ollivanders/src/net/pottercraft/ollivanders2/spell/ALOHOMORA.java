@@ -72,7 +72,7 @@ public final class ALOHOMORA extends O2Spell {
         List<O2StationarySpell> colloportusSpellsAtLocation = Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(location, O2StationarySpellType.COLLOPORTUS);
 
         if (colloportusSpellsAtLocation.isEmpty()) {
-            common.printDebugMessage("No colloportus spells found at location", null, null, false);
+            Ollivanders2API.common.printDebugMessage("No colloportus spells found at location", null, null, false);
             sendFailureMessage();
             return;
         }

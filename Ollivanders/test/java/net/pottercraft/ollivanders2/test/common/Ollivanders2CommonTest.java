@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.common;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
@@ -44,7 +45,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Ollivanders2CommonTest {
     static ServerMock mockServer;
     static Ollivanders2 testPlugin;
-    static Ollivanders2Common o2common;
     Location origin;
     World testWorld;
     final String worldName = "world";
@@ -53,8 +53,6 @@ public class Ollivanders2CommonTest {
     static void globalSetUp() {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
-
-        o2common = new Ollivanders2Common(testPlugin);
     }
 
     @BeforeEach
@@ -69,7 +67,7 @@ public class Ollivanders2CommonTest {
     @Test
     void uuidFromStringTest() {
         String uuidString = "5d2bec8f-2402-4039-920b-bdbf348fa9a7";
-        UUID uuid = o2common.uuidFromString(uuidString);
+        UUID uuid = Ollivanders2API.common.uuidFromString(uuidString);
         assertNotNull(uuid, "o2common.uuidFromString() returned null for " + uuidString);
     }
 
@@ -79,7 +77,7 @@ public class Ollivanders2CommonTest {
     @Test
     void uuidFromStringBadStringTest() {
         String uuidBadString = "badstring";
-        UUID uuid = o2common.uuidFromString(uuidBadString);
+        UUID uuid = Ollivanders2API.common.uuidFromString(uuidBadString);
         assertNull(uuid, "o2common.uuidFromString(uuidBadString) did not return null");
     }
 
@@ -89,7 +87,7 @@ public class Ollivanders2CommonTest {
     @Test
     void integerFromStringTest() {
         String integerString = "12345";
-        Integer integer = o2common.integerFromString(integerString);
+        Integer integer = Ollivanders2API.common.integerFromString(integerString);
         assertNotNull(integer, "o2common.integerFromString() returned null for " + integerString);
     }
 
@@ -99,7 +97,7 @@ public class Ollivanders2CommonTest {
     @Test
     void integerFromStringBadStringTest() {
         String integerBadString = "badstring";
-        Integer integer = o2common.integerFromString(integerBadString);
+        Integer integer = Ollivanders2API.common.integerFromString(integerBadString);
         assertNull(integer, "o2common.integerFromString(uuidBadString) did not return null");
     }
 
@@ -109,7 +107,7 @@ public class Ollivanders2CommonTest {
     @Test
     void booleanFromStringTest() {
         String boolString = "true";
-        Boolean bool = o2common.booleanFromString(boolString);
+        Boolean bool = Ollivanders2API.common.booleanFromString(boolString);
         assertNotNull(bool, "o2common.booleanFromString() returned null for " + boolString);
     }
 
@@ -119,7 +117,7 @@ public class Ollivanders2CommonTest {
     @Test
     void booleanFromStringBadStringTest() {
         String boolBadString = "badstring";
-        Boolean bool = o2common.booleanFromString(boolBadString);
+        Boolean bool = Ollivanders2API.common.booleanFromString(boolBadString);
         assertFalse(bool, "o2common.booleanFromString(boolBadString) did not return false");
     }
 
@@ -174,7 +172,7 @@ public class Ollivanders2CommonTest {
     void serializeLocationTest() {
         String labelPrefix = "test";
 
-        Map<String, String> actual = o2common.serializeLocation(origin, labelPrefix);
+        Map<String, String> actual = Ollivanders2API.common.serializeLocation(origin, labelPrefix);
         assertNotNull(actual, "o2common.serializeLocation(origin, labelPrefix) returned null");
         assertTrue(actual.containsKey(labelPrefix + "_" + Ollivanders2Common.locationWorldLabel), "o2common.serializeLocation() does not contain " + labelPrefix + "_" + Ollivanders2Common.locationWorldLabel);
         assertEquals(worldName, actual.get(labelPrefix + "_" + Ollivanders2Common.locationWorldLabel), "");
@@ -186,7 +184,7 @@ public class Ollivanders2CommonTest {
     @Test
     void serializeLocationBadLocationTest() {
         Location badLocation = new Location(null, 0, 4, 0);
-        Map<String, String> actual = o2common.serializeLocation(badLocation, "test");
+        Map<String, String> actual = Ollivanders2API.common.serializeLocation(badLocation, "test");
         assertNull(actual, "o2common.serializeLocation(badLocation, \"test\") did not return null");
     }
 
@@ -196,10 +194,10 @@ public class Ollivanders2CommonTest {
     @Test
     void deserializeLocationTest() {
         String labelPrefix = "test";
-        Map<String, String> serializedLocation = o2common.serializeLocation(origin, labelPrefix);
+        Map<String, String> serializedLocation = Ollivanders2API.common.serializeLocation(origin, labelPrefix);
         assertNotNull(serializedLocation, "o2common.serializeLocation(origin, labelPrefix) returned null");
 
-        Location actual = o2common.deserializeLocation(serializedLocation, labelPrefix);
+        Location actual = Ollivanders2API.common.deserializeLocation(serializedLocation, labelPrefix);
         assertNotNull(actual, "o2common.deserializeLocation(serializedLocation, labelPrefix) returned null");
         World actualWorld = actual.getWorld();
         assertNotNull(actualWorld, "actual.getWorld() was null");
@@ -218,11 +216,11 @@ public class Ollivanders2CommonTest {
             put("test" + "_" + Ollivanders2Common.locationZLabel, "0");
         }};
 
-        Location actual = o2common.deserializeLocation(badLocation, "test");
+        Location actual = Ollivanders2API.common.deserializeLocation(badLocation, "test");
         assertNull(actual, "o2common.deserializeLocation(badLocation, \"test\") with null X coord did not return null");
 
         badLocation.remove("test" + "_" + Ollivanders2Common.locationXLabel);
-        actual = o2common.deserializeLocation(badLocation, "test");
+        actual = Ollivanders2API.common.deserializeLocation(badLocation, "test");
         assertNull(actual, "o2common.deserializeLocation(badLocation, \"test\") with missing X coord did not return null");
     }
 
@@ -395,7 +393,7 @@ public class Ollivanders2CommonTest {
 
         String debugMessage = "debug message";
         Ollivanders2.debug = true;
-        o2common.printDebugMessage(debugMessage, null, null, false);
+        Ollivanders2API.common.printDebugMessage(debugMessage, null, null, false);
         Ollivanders2.debug = false;
 
         assertEquals(1, logRecords.size(), "logRecords.size() did not increase");
@@ -413,7 +411,7 @@ public class Ollivanders2CommonTest {
         testPlugin.getLogger().addHandler(testLogHandler);
 
         String debugMessage = "no debug message";
-        o2common.printDebugMessage(debugMessage, null, null, false);
+        Ollivanders2API.common.printDebugMessage(debugMessage, null, null, false);
 
         assertEquals(0, logRecords.size(), "logRecords.size() changed when Ollivanders2Common.printDebugMessage() called but Ollivanders2.debug false");
     }
@@ -428,7 +426,7 @@ public class Ollivanders2CommonTest {
         testPlugin.getLogger().addHandler(testLogHandler);
 
         Ollivanders2.debug = true;
-        o2common.printDebugMessage("warning debug message", null, null, true);
+        Ollivanders2API.common.printDebugMessage("warning debug message", null, null, true);
         Ollivanders2.debug = false;
 
         assertEquals(1, logRecords.size(), "logRecords.size() did not increase");
@@ -446,7 +444,7 @@ public class Ollivanders2CommonTest {
         testPlugin.getLogger().addHandler(testLogHandler);
 
         String logMessage = "log message";
-        o2common.printLogMessage(logMessage, null, null, false);
+        Ollivanders2API.common.printLogMessage(logMessage, null, null, false);
 
         assertEquals(1, logRecords.size(), "logRecords.size() did not increase");
         String received = logRecords.getFirst().getMessage();
@@ -462,7 +460,7 @@ public class Ollivanders2CommonTest {
         Handler testLogHandler = logHandlerHelper(logRecords);
         testPlugin.getLogger().addHandler(testLogHandler);
 
-        o2common.printLogMessage("warning log message", null, null, true);
+        Ollivanders2API.common.printLogMessage("warning log message", null, null, true);
 
         assertEquals(1, logRecords.size(), "logRecords.size() did not increase");
         Level received = logRecords.getFirst().getLevel();

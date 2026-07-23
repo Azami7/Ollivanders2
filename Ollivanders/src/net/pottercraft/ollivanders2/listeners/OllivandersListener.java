@@ -60,11 +60,6 @@ public class OllivandersListener implements Listener {
     private final Ollivanders2 p;
 
     /**
-     * Common functions
-     */
-    private final Ollivanders2Common common;
-
-    /**
      * Number of ticks to delay thread start for
      */
     private static int threadDelay = (int) (Ollivanders2Common.ticksPerSecond * 0.5);
@@ -76,7 +71,6 @@ public class OllivandersListener implements Listener {
      */
     public OllivandersListener(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(plugin);
     }
 
     /**
@@ -104,7 +98,7 @@ public class OllivandersListener implements Listener {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
-        common.printDebugMessage("onPlayerChat: message = " + message, null, null, false);
+        Ollivanders2API.common.printDebugMessage("onPlayerChat: message = " + message, null, null, false);
 
         // Parse to see if they were casting a spell
         O2SpellType spellType = Ollivanders2API.getSpells().parseSpell(message);
@@ -171,13 +165,13 @@ public class OllivandersListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
-        common.printDebugMessage("onPlayerInteract: enter", null, null, false);
+        Ollivanders2API.common.printDebugMessage("onPlayerInteract: enter", null, null, false);
 
         //
         // A right or left click of the primary hand
         //
         if ((event.getHand() == EquipmentSlot.HAND)) {
-            common.printDebugMessage("onPlayerInteract: primary hand right or left click", null, null, false);
+            Ollivanders2API.common.printDebugMessage("onPlayerInteract: primary hand right or left click", null, null, false);
 
             new BukkitRunnable() {
                 @Override
@@ -187,7 +181,7 @@ public class OllivandersListener implements Listener {
             }.runTaskLater(p, threadDelay);
         }
         else {
-            common.printDebugMessage("onPlayerInteract: secondary hand action", null, null, false);
+            Ollivanders2API.common.printDebugMessage("onPlayerInteract: secondary hand action", null, null, false);
 
             new BukkitRunnable() {
                 @Override
@@ -230,13 +224,13 @@ public class OllivandersListener implements Listener {
         // A right or left click of the primary hand when holding a wand is used to make a magical action.
         //
         if ((Ollivanders2API.getItems().getWands().holdsWandInPrimary(player))) {
-            common.printDebugMessage("primaryHandInteractEvents: player holding a wand", null, null, false);
+            Ollivanders2API.common.printDebugMessage("primaryHandInteractEvents: player holding a wand", null, null, false);
 
             //
             // A left click of the primary hand is used to cast a spell
             //
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-                common.printDebugMessage("primaryHandInteractEvents: left click action", null, null, false);
+                Ollivanders2API.common.printDebugMessage("primaryHandInteractEvents: left click action", null, null, false);
                 Ollivanders2API.getSpells().castSpell(player);
             }
 
@@ -246,7 +240,7 @@ public class OllivandersListener implements Listener {
             // - to brew a potion if they are holding a glass bottle in their off-hand and facing a cauldron
             //
             else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-                common.printDebugMessage("primaryHandInteractEvents: right click action", null, null, false);
+                Ollivanders2API.common.printDebugMessage("primaryHandInteractEvents: right click action", null, null, false);
 
                 rightClickWand(player, Ollivanders2Common.playerFacingBlockType(player, Material.WATER_CAULDRON));
             }
@@ -264,12 +258,12 @@ public class OllivandersListener implements Listener {
      */
     public void rightClickWand(@NotNull Player player, @Nullable Block cauldron) {
         if (cauldron != null && player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE) {
-            common.printDebugMessage("rightClickWand: brewing potion", null, null, false);
+            Ollivanders2API.common.printDebugMessage("rightClickWand: brewing potion", null, null, false);
             Ollivanders2API.getPotions().brewPotion(player, cauldron);
             return;
         }
 
-        common.printDebugMessage("rightClickWand: waving wand", null, null, false);
+        Ollivanders2API.common.printDebugMessage("rightClickWand: waving wand", null, null, false);
         Ollivanders2API.getItems().getWands().waveWand(player);
     }
 
@@ -377,7 +371,7 @@ public class OllivandersListener implements Listener {
         if (target instanceof Player) {
             if (O2PlayerCommon.hasPotionEffect((Player) target, PotionEffectType.INVISIBILITY)) {
                 event.setCancelled(true);
-                common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
+                Ollivanders2API.common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
             }
         }
     }
@@ -394,7 +388,7 @@ public class OllivandersListener implements Listener {
         if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop) {
             ItemStack wand = Ollivanders2API.getItems().getWands().createRandomWand();
             if (wand == null) {
-                common.printDebugMessage("OllivandersListener.witchWandDrop: wand is null", null, null, false);
+                Ollivanders2API.common.printDebugMessage("OllivandersListener.witchWandDrop: wand is null", null, null, false);
                 return;
             }
 

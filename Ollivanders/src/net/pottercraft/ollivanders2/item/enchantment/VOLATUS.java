@@ -47,7 +47,7 @@ public class VOLATUS extends Enchantment {
     @Override
     public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         if (!EnchantedItems.areBroomsEnabled()) {
-            common.printDebugMessage("VOLATUS.doEntityPickupItem: brooms not enabled", null, null, false);
+            Ollivanders2API.common.printDebugMessage("VOLATUS.doEntityPickupItem: brooms not enabled", null, null, false);
             return;
         }
 
@@ -83,7 +83,7 @@ public class VOLATUS extends Enchantment {
     @Override
     public void doItemDrop(@NotNull PlayerDropItemEvent event) {
         if (!EnchantedItems.areBroomsEnabled()) {
-            common.printDebugMessage("VOLATUS.doItemDrop: brooms not enabled", null, null, false);
+            Ollivanders2API.common.printDebugMessage("VOLATUS.doItemDrop: brooms not enabled", null, null, false);
             return;
         }
 
@@ -105,7 +105,7 @@ public class VOLATUS extends Enchantment {
     @Override
     public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
         if (!EnchantedItems.areBroomsEnabled()) {
-            common.printDebugMessage("VOLATUS.doItemHeld: brooms not enabled", null, null, false);
+            Ollivanders2API.common.printDebugMessage("VOLATUS.doItemHeld: brooms not enabled", null, null, false);
             return;
         }
 
@@ -127,18 +127,18 @@ public class VOLATUS extends Enchantment {
      */
     void checkBroomStatus(Player player) {
         if (!EnchantedItems.areBroomsEnabled()) {
-            common.printDebugMessage("VOLATUS.doItemHeld: checkBroomStatus", null, null, false);
+            Ollivanders2API.common.printDebugMessage("VOLATUS.doItemHeld: checkBroomStatus", null, null, false);
             return;
         }
 
         // do they have a broom in either hand?
         if (isHoldingEnchantedItem(player)) {
-            common.printDebugMessage(player.getDisplayName() + " is holding a broom", null, null, false);
+            Ollivanders2API.common.printDebugMessage(player.getDisplayName() + " is holding a broom", null, null, false);
             BROOM_FLYING effect = new BROOM_FLYING(p, 5, true, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
         else {
-            common.printDebugMessage(player.getDisplayName() + " is not holding a broom", null, null, false);
+            Ollivanders2API.common.printDebugMessage(player.getDisplayName() + " is not holding a broom", null, null, false);
             Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BROOM_FLYING);
         }
     }

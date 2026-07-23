@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
@@ -44,11 +43,6 @@ public abstract class Enchantment {
     protected String args;
 
     /**
-     * Common functions
-     */
-    protected Ollivanders2Common common;
-
-    /**
      * Constructor
      *
      * @param plugin   the Ollivanders2 plugin instance
@@ -61,8 +55,6 @@ public abstract class Enchantment {
         magnitude = mag;
         lore = itemLore;
         this.args = args;
-
-        common = new Ollivanders2Common(p);
     }
 
     /**

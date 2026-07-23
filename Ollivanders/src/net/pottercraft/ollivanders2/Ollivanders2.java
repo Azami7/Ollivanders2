@@ -5,9 +5,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -41,7 +39,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
@@ -236,9 +233,7 @@ public class Ollivanders2 extends JavaPlugin {
     public static boolean archivePreviousBackup;
 
     /**
-     * Turns on translations for strings that support them.
-     *
-     * Whether to load localization strings from the config file
+     * Turns on translations for strings that support them and that have translations config.yml
      */
     public static boolean useTranslations;
 
@@ -289,23 +284,39 @@ public class Ollivanders2 extends JavaPlugin {
      * <li>Ensure plugin config file exists</li>
      * <li>Log plugin shutdown completion</li>
      * </ul>
+     *
+     * <p>Safe to call even if {@link #onEnable()} did not complete - managers that were never created are skipped.</p>
      */
     public void onDisable() {
-        // call on disable for all resources
-        spells.onDisable();
-        potions.onDisable();
-        books.onDisable();
-        items.onDisable();
-        houses.onDisable();
-        players.onDisable();
-        stationarySpells.onDisable();
-        prophecies.onDisable();
-        owlPost.onDisable();
-        blocks.onDisable(); // needs to be done last
+        // call on disable for all resources - the managers can be null if onEnable did not complete or if this
+        // plugin instance was already shut down
+        if (spells != null)
+            spells.onDisable();
+        if (potions != null)
+            potions.onDisable();
+        if (books != null)
+            books.onDisable();
+        if (items != null)
+            items.onDisable();
+        if (houses != null)
+            houses.onDisable();
+        if (players != null)
+            players.onDisable();
+        if (stationarySpells != null)
+            stationarySpells.onDisable();
+        if (prophecies != null)
+            prophecies.onDisable();
+        if (owlPost != null)
+            owlPost.onDisable();
+        if (blocks != null)
+            blocks.onDisable(); // needs to be done last
 
         APPARATE.saveApparateLocations();
 
         savePluginConfig();
+
+        // after this the API will no longer hand out managers, so it has to be last
+        Ollivanders2API.shutdown();
 
         getLogger().info(this + " is now disabled!");
     }
@@ -360,6 +371,8 @@ public class Ollivanders2 extends JavaPlugin {
      * </ul>
      */
     public void onEnable() {
+        Ollivanders2API.init(this);
+
         spells = new O2Spells(this);
         potions = new O2Potions(this);
         books = new O2Books(this);
@@ -370,8 +383,6 @@ public class Ollivanders2 extends JavaPlugin {
         prophecies = new O2Prophecies(this);
         owlPost = new Ollivanders2OwlPost(this);
         blocks = new O2Blocks(this);
-
-        Ollivanders2API.init(this);
 
         // check for plugin data directory and config
         if (new File(pluginDir).mkdirs())

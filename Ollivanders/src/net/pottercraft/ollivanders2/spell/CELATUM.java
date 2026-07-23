@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -87,7 +88,7 @@ public final class CELATUM extends ItemEnchant {
         }
 
         enchantmentArgs = argBuilder.toString();
-        common.printDebugMessage("Celatum args = " + enchantmentArgs, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Celatum args = " + enchantmentArgs, null, null, false);
     }
 
     /**

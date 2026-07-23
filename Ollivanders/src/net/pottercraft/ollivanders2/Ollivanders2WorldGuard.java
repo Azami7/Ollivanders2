@@ -10,7 +10,6 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -24,11 +23,10 @@ import org.jetbrains.annotations.Nullable;
  * will short circuit to allow actions.
  *
  * @author Azami7
- * @see <a href = "https://worldguard.enginehub.org/en/latest/developer/">https://worldguard.enginehub.org/en/latest/developer/</a>
+ * @see <a href="https://worldguard.enginehub.org/en/latest/developer/">https://worldguard.enginehub.org/en/latest/developer/</a>
  * @since 2.2.5
  */
 public class Ollivanders2WorldGuard {
-    private Ollivanders2Common common;
     private WorldGuardPlugin worldGuard;
     final private Ollivanders2 p;
 
@@ -36,12 +34,11 @@ public class Ollivanders2WorldGuard {
      * Constructor.
      *
      * @param o2plugin a callback to the ollivanders plugin
-     * @see <a href = "https://worldguard.enginehub.org/en/latest/developer/dependency/">https://worldguard.enginehub.org/en/latest/developer/dependency/</a>
+     * @see <a href="https://worldguard.enginehub.org/en/latest/developer/dependency/">https://worldguard.enginehub.org/en/latest/developer/dependency/</a>
      */
     public Ollivanders2WorldGuard(@NotNull Ollivanders2 o2plugin) {
         p = o2plugin;
         worldGuard = null;
-        common = new Ollivanders2Common(p);
 
         Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 
@@ -105,13 +102,13 @@ public class Ollivanders2WorldGuard {
         RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
         if (regionContainer == null) {
-            common.printDebugMessage("Failed to get RegionContainer...", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Failed to get RegionContainer...", null, null, false);
             return null;
         }
 
         RegionQuery query = regionContainer.createQuery();
         if (query == null) {
-            common.printDebugMessage("Failed to get RegionQuery...", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Failed to get RegionQuery...", null, null, false);
             return null;
         }
 

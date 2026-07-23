@@ -138,7 +138,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
         fireType = location.getBlock().getType();
 
         flooNetworkLocations.add(this);
-        common.printDebugMessage("Creating aliquam floo stationary spell with a floo name of " + flooName, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating aliquam floo stationary spell with a floo name of " + flooName, null, null, false);
     }
 
     /**
@@ -192,7 +192,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
 
             if (cooldown <= 0) {
                 stopWorking();
-                common.printDebugMessage("Turning off floo " + flooName, null, null, false);
+                Ollivanders2API.common.printDebugMessage("Turning off floo " + flooName, null, null, false);
             }
         }
         else {
@@ -203,7 +203,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
                 item.remove();
                 turnOnFlooFireEffect();
 
-                common.printDebugMessage("Turning on floo " + flooName, null, null, false);
+                Ollivanders2API.common.printDebugMessage("Turning on floo " + flooName, null, null, false);
 
                 cooldown = Ollivanders2Common.ticksPerSecond * 30;
             }
@@ -394,7 +394,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
 
         if (isLocationInside(entityLocation)) {
             event.setCancelled(true);
-            common.printDebugMessage("ALIQUAM_FLOO: canceled EntityCombustEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("ALIQUAM_FLOO: canceled EntityCombustEvent", null, null, false);
         }
     }
 
@@ -411,7 +411,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
         if (event.getCause() == EntityDamageEvent.DamageCause.CAMPFIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
             if (isLocationInside(entityLocation)) {
                 event.setCancelled(true);
-                common.printDebugMessage("ALIQUAM_FLOO: canceled EntityDamageEvent", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ALIQUAM_FLOO: canceled EntityDamageEvent", null, null, false);
             }
         }
     }

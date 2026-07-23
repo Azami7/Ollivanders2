@@ -148,7 +148,7 @@ public class LYCANTHROPY extends ShapeShift {
         if (!event.getDamager().getUniqueId().equals(targetID))
             return;
 
-        common.printDebugMessage("doOnEntityDamageByEntityEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("doOnEntityDamageByEntityEvent", null, null, false);
 
         // if something, like a protective effect, canceled this effect, we do nothing
         if (event.isCancelled())
@@ -156,19 +156,19 @@ public class LYCANTHROPY extends ShapeShift {
 
         // make sure lycanthropy is enabled
         if (!O2EffectType.LYCANTHROPY.isEnabled()) {
-            common.printDebugMessage("lycanthropy not enabled", null, null, false);
+            Ollivanders2API.common.printDebugMessage("lycanthropy not enabled", null, null, false);
             return;
         }
 
         // make sure the damaged entity is a player
         if (!(event.getEntity() instanceof Player)) {
-            common.printDebugMessage("attacked entity not a player", null, null, false);
+            Ollivanders2API.common.printDebugMessage("attacked entity not a player", null, null, false);
             return;
         }
 
         // if this effect's target is currently transformed, infect the damaged player
         if (transformed) {
-            common.printDebugMessage("infecting player", null, null, false);
+            Ollivanders2API.common.printDebugMessage("infecting player", null, null, false);
             new BukkitRunnable() {
                 @Override
                 public void run() {

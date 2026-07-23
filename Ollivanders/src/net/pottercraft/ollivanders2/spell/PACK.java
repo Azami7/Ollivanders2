@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -123,19 +124,19 @@ public final class PACK extends O2Spell {
             return;
 
         kill();
-        common.printDebugMessage("Packing chest", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Packing chest", null, null, false);
 
         // get nearby items
         List<Item> nearbyItems = EntityCommon.getItemsInRadius(location, radius);
 
         Block targetBlock = getTargetBlock();
         if (targetBlock == null) {
-            common.printDebugMessage("PACK.doCheckEffect: target block is null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("PACK.doCheckEffect: target block is null", null, null, false);
             return;
         }
 
         for (Item item : nearbyItems) {
-            common.printDebugMessage("Adding " + item.getItemStack().getType().name() + " to chest", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Adding " + item.getItemStack().getType().name() + " to chest", null, null, false);
 
             HashMap<Integer, ItemStack> overflow;
 
@@ -155,7 +156,7 @@ public final class PACK extends O2Spell {
                     overflow = chestState.getInventory().addItem(item.getItemStack());
             }
             else {
-                common.printDebugMessage("PACK.doCheckEffect: block is not a chest or shulker box - material allowList flaw", null, null, true);
+                Ollivanders2API.common.printDebugMessage("PACK.doCheckEffect: block is not a chest or shulker box - material allowList flaw", null, null, true);
                 return;
             }
 

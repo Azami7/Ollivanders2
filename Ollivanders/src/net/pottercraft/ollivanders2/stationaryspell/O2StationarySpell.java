@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.Collection;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
@@ -81,8 +82,6 @@ public abstract class O2StationarySpell implements Serializable {
 
     Ollivanders2 p;
 
-    final Ollivanders2Common common;
-
     /**
      * The UUID of the player who cast this spell.
      */
@@ -119,7 +118,6 @@ public abstract class O2StationarySpell implements Serializable {
      */
     public O2StationarySpell(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         initRadiusAndDurationMinMax();
     }
@@ -133,7 +131,6 @@ public abstract class O2StationarySpell implements Serializable {
      */
     public O2StationarySpell(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         initRadiusAndDurationMinMax();
 
@@ -142,7 +139,7 @@ public abstract class O2StationarySpell implements Serializable {
 
         world = location.getWorld();
         if (world == null) {
-            common.printLogMessage("O2StationarySpell: null world", null, null, true);
+            Ollivanders2API.common.printLogMessage("O2StationarySpell: null world", null, null, true);
             kill();
         }
     }
@@ -195,7 +192,7 @@ public abstract class O2StationarySpell implements Serializable {
      */
     void setRadius(int radius) {
         if (minRadius == 0 || maxRadius == 0) {
-            common.printDebugMessage("Min or max radius not set in " + spellType.getSpellName(), null, null, true);
+            Ollivanders2API.common.printDebugMessage("Min or max radius not set in " + spellType.getSpellName(), null, null, true);
         }
         else {
             if (radius < minRadius)
@@ -219,7 +216,7 @@ public abstract class O2StationarySpell implements Serializable {
         radius = radius + increase;
 
         if (maxRadius == 0) {
-            common.printDebugMessage("Max radius not set in " + spellType.getSpellName(), null, null, true);
+            Ollivanders2API.common.printDebugMessage("Max radius not set in " + spellType.getSpellName(), null, null, true);
         }
         else {
             if (radius > maxRadius)
@@ -239,7 +236,7 @@ public abstract class O2StationarySpell implements Serializable {
         radius = radius - decrease;
 
         if (minRadius == 0) {
-            common.printDebugMessage("Min radius not set in " + spellType.getSpellName(), null, null, true);
+            Ollivanders2API.common.printDebugMessage("Min radius not set in " + spellType.getSpellName(), null, null, true);
         }
         else {
             if (radius < minRadius)
@@ -256,7 +253,7 @@ public abstract class O2StationarySpell implements Serializable {
         duration = duration + increase;
 
         if (maxDuration == 0) {
-            common.printDebugMessage("Max duration not set in " + spellType.getSpellName(), null, null, true);
+            Ollivanders2API.common.printDebugMessage("Max duration not set in " + spellType.getSpellName(), null, null, true);
         }
         else {
             if (duration > maxDuration)
@@ -274,7 +271,7 @@ public abstract class O2StationarySpell implements Serializable {
 
         world = location.getWorld();
         if (world == null) {
-            common.printLogMessage("O2StationarySpell.setLocation: null world", null, null, true);
+            Ollivanders2API.common.printLogMessage("O2StationarySpell.setLocation: null world", null, null, true);
             kill();
         }
     }

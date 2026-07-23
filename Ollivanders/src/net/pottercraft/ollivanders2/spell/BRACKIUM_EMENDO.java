@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -90,7 +91,7 @@ public final class BRACKIUM_EMENDO extends O2Spell {
                     PotionEffect effect = new PotionEffect(PotionEffectType.INSTANT_HEALTH, 10, 1);
                     entity.addPotionEffect(effect);
 
-                    common.printDebugMessage("Adding instant health effect to " + entity.getName(), null, null, false);
+                    Ollivanders2API.common.printDebugMessage("Adding instant health effect to " + entity.getName(), null, null, false);
 
                     kill();
                     break;

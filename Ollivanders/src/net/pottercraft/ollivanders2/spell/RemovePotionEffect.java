@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -114,7 +115,7 @@ public abstract class RemovePotionEffect extends O2Spell {
     void removePotionEffects(@NotNull LivingEntity target) {
         for (PotionEffectType potionEffectType : potionEffectTypes) {
             if (checkSuccess()) {
-                common.printDebugMessage("Removing " + potionEffectType.getName() + " from " + target.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("Removing " + potionEffectType.getName() + " from " + target.getName(), null, null, false);
                 target.removePotionEffect(potionEffectType);
             }
         }

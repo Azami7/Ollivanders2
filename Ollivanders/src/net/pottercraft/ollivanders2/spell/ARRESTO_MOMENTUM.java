@@ -6,6 +6,7 @@ import java.util.List;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.player.Year;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -119,10 +120,10 @@ public final class ARRESTO_MOMENTUM extends O2Spell {
         else
             velocityMultiplier = 0.6;
 
-        common.printDebugMessage("current speed = " + entity.getVelocity().length(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("current speed = " + entity.getVelocity().length(), null, null, false);
 
         entity.setVelocity(entity.getVelocity().multiply(velocityMultiplier));
 
-        common.printDebugMessage("new speed = " + entity.getVelocity().length(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("new speed = " + entity.getVelocity().length(), null, null, false);
     }
 }

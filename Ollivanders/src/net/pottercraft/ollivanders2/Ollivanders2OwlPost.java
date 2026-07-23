@@ -173,7 +173,7 @@ public class Ollivanders2OwlPost {
 
         // the sender has to be near an owl to hand their package to
         List<Entity> nearbyEntities = EntityCommon.getNearbyEntitiesByType(player.getLocation(), 5, owlPostEntityType);
-        if (nearbyEntities.size() < 1) {
+        if (nearbyEntities.isEmpty()) {
             player.sendMessage(Ollivanders2.chatColor + "No owl was found nearby.");
             return;
         }
@@ -185,7 +185,7 @@ public class Ollivanders2OwlPost {
         }
 
         // clone the item so the queued delivery is not affected by clearing the player's hand
-        addDelivery(player, recipient.getID(), nearbyEntities.get(0), held.clone());
+        addDelivery(player, recipient.getID(), nearbyEntities.getFirst(), held.clone());
         Ollivanders2API.common.printDebugMessage("Added owl post delivery from " + player.getName() + " to " + recipient.getPlayerName(), null, null, false);
 
         player.getInventory().setItemInMainHand(null);

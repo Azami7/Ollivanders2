@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
@@ -84,7 +85,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -140,7 +141,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
 
         if (Ollivanders2Common.isInside(toLoc, location, radius)) {
             event.setCancelled(true);
-            common.printDebugMessage("PROTEGO_TOTALUM: canceled PlayerMoveEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("PROTEGO_TOTALUM: canceled PlayerMoveEvent", null, null, false);
 
             new BukkitRunnable() {
                 @Override
@@ -165,7 +166,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
 
         if (isLocationInside(entity.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
         }
     }
 

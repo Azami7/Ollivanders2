@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -81,7 +82,7 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
 
         // make sure material type is set either at the spell level (so for any entity type) or from the transfiguration map
         if (targetMaterial == null) {
-            common.printDebugMessage("LivingEntityToItemTransfiguratio: targetMaterial is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("LivingEntityToItemTransfiguratio: targetMaterial is null", null, null, true);
             return null;
         }
 
@@ -106,12 +107,12 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
             return false;
 
         if (!(entity instanceof LivingEntity)) {
-            common.printDebugMessage(entity.getName() + " is not a living entity", null, null, false);
+            Ollivanders2API.common.printDebugMessage(entity.getName() + " is not a living entity", null, null, false);
             return false;
         }
 
         if (!transfigurationMap.isEmpty() && !transfigurationMap.containsKey(entity.getType())) {
-            common.printDebugMessage(spellType.toString() + ": cannot transform entity tyoe " + entity.getType(), null, null, false);
+            Ollivanders2API.common.printDebugMessage(spellType.toString() + ": cannot transform entity tyoe " + entity.getType(), null, null, false);
             return false;
         }
 

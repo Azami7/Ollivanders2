@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -101,7 +102,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -137,7 +138,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
                 Location projectileLocation = projectile.getLocation();
 
                 if (isLocationInside(projectileLocation)) {
-                    common.printDebugMessage("projectile in shield area", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("projectile in shield area", null, null, false);
                     projectile.remove();
 
                     if (!Ollivanders2.testMode)
@@ -205,7 +206,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
         EntityType type = event.getEntityType();
 
         if (Ollivanders2Common.isInside(location, projectile.getLocation(), maxDistance)) {
-            common.printDebugMessage("adding projectile " + type, null, null, false);
+            Ollivanders2API.common.printDebugMessage("adding projectile " + type, null, null, false);
             projectiles.add(projectile);
         }
     }

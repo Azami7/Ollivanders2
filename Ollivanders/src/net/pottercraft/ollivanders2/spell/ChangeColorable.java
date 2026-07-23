@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -78,7 +79,7 @@ public abstract class ChangeColorable extends O2Spell {
 
             Block target = getTargetBlock();
             if (target == null) {
-                common.printDebugMessage("ChangeColorable.doCheckEffect: target block is null", null, null, true);
+                Ollivanders2API.common.printDebugMessage("ChangeColorable.doCheckEffect: target block is null", null, null, true);
                 return;
             }
 

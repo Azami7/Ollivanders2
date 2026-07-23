@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.List;
 
 import net.pottercraft.ollivanders2.house.O2HouseType;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,13 @@ public interface GenericDAO {
     void writeSaveData(@NotNull List<Map<String, String>> list, String filename);
 
     /**
+     * Write the apparate locations
+     *
+     * @param locations a map of location names to the location they name
+     */
+    void writeApparateData(@NotNull HashMap<String, Location> locations);
+
+    /**
      * Read saved house sort data
      *
      * @return a map of player IDs and the houses they are sorted to
@@ -66,6 +74,14 @@ public interface GenericDAO {
      */
     @Nullable
     Map<O2HouseType, Integer> readHousePoints();
+
+    /**
+     * Read the saved apparate locations
+     *
+     * @return a map of location names to the location they name, or null if the data could not be read
+     */
+    @Nullable
+    HashMap<String, Location> readApparateLocations();
 
     /**
      * Data reader

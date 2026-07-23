@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.Location;
 import org.bukkit.attribute.AttributeInstance;
@@ -29,11 +28,6 @@ public final class O2PlayerCommon {
      * Reference to the plugin
      */
     final Ollivanders2 p;
-
-    /**
-     * Common functions
-     */
-    final Ollivanders2Common common;
 
     /**
      * Multiplier for spell casting, when using their destined wand, this is 1, so no effect.
@@ -57,7 +51,6 @@ public final class O2PlayerCommon {
      */
     public O2PlayerCommon(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(plugin);
     }
 
     /**
@@ -97,7 +90,7 @@ public final class O2PlayerCommon {
     /**
      * Animagus forms that can only be used when config is set.
      *
-     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi</p>
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi">Ollivanders2 wiki: Configuration.hostile-mob-animagi</a>
      */
     private static final List<EntityType> hostileAnimagusShapes = new ArrayList<>() {{
         add(EntityType.SPIDER);
@@ -215,18 +208,18 @@ public final class O2PlayerCommon {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         if (o2p == null) {
             // not a player
-            common.printDebugMessage("O2Player is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Player is null", null, null, true);
             return -1;
         }
 
         if (!(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, itemStack))) {
             // not the player's destined wand
-            common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds a wand which is not their destined wand", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds a wand which is not their destined wand", null, null, false);
             return O2PlayerCommon.wrongWand;
         }
 
         // player's destined wand
-        common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds their destined wand", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds their destined wand", null, null, false);
         return O2PlayerCommon.rightWand;
     }
 

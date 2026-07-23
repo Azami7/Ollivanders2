@@ -66,7 +66,7 @@ public class IMMOBILIZE extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("IMMOBILIZE: cancelling PlayerInteractEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("IMMOBILIZE: cancelling PlayerInteractEvent", null, null, false);
     }
 
     /**
@@ -80,7 +80,7 @@ public class IMMOBILIZE extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleFlightEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleFlightEvent", null, null, false);
     }
 
     /**
@@ -94,7 +94,7 @@ public class IMMOBILIZE extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSneakEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSneakEvent", null, null, false);
     }
 
     /**
@@ -108,7 +108,7 @@ public class IMMOBILIZE extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSprintEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSprintEvent", null, null, false);
     }
 
     /**
@@ -122,7 +122,7 @@ public class IMMOBILIZE extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("IMMBOLIZE: cancelling PlayerVelocityEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("IMMBOLIZE: cancelling PlayerVelocityEvent", null, null, false);
     }
 
     /**
@@ -142,7 +142,7 @@ public class IMMOBILIZE extends O2Effect {
         boolean cancel = false;
 
         if (allowRotation) {
-            common.printDebugMessage("IMMBOLIZE: allowRotation", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IMMBOLIZE: allowRotation", null, null, false);
             if ((toLocation.getX() != fromLocation.getX()) || (toLocation.getY() != fromLocation.getY()) || (toLocation.getZ() != fromLocation.getZ())) {
                 cancel = true;
             }
@@ -154,7 +154,7 @@ public class IMMOBILIZE extends O2Effect {
 
         if (cancel) {
             event.setCancelled(true);
-            common.printDebugMessage("IMMBOLIZE: cancelling PlayerMoveEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("IMMBOLIZE: cancelling PlayerMoveEvent", null, null, false);
         }
     }
 

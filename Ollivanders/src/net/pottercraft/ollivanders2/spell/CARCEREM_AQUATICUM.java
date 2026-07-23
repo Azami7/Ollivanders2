@@ -89,7 +89,7 @@ public class CARCEREM_AQUATICUM extends ImmobilizePlayer {
             AttributeInstance scaleAttribute = target.getAttribute(Attribute.SCALE);
 
             if (scaleAttribute == null || scaleAttribute.getBaseValue() > 1.0) {
-                common.printDebugMessage("CarceremAquaticum.canTarget: player scale > 1.0", null, null, false);
+                Ollivanders2API.common.printDebugMessage("CarceremAquaticum.canTarget: player scale > 1.0", null, null, false);
                 return false;
             }
         }

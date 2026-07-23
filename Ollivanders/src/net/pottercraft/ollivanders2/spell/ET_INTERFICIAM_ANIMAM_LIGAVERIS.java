@@ -102,7 +102,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
 
             // check to see if they can create a horcrux
             if (!canCreateHorcrux()) {
-                common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player not able to create a horcrux", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player not able to create a horcrux", null, null, false);
                 kill();
                 return;
             }
@@ -110,7 +110,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
             // reduce their health and decrement a soul
             AttributeInstance healthAttribute = caster.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
             if (healthAttribute == null) {
-                common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
+                Ollivanders2API.common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
                 kill();
                 return;
             }
@@ -157,7 +157,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
         // does the player have enough health to create a new horcrux?
         AttributeInstance healthAttribute = caster.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
         if (healthAttribute == null) {
-            common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
             return false;
         }
         futureHealth = healthAttribute.getBaseValue() / 2;

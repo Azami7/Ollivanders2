@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.block.BlockCommon;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -88,7 +89,7 @@ public final class FINESTRA extends O2Spell {
 
         Block target = getTargetBlock();
         if (target == null) {
-            common.printDebugMessage("FINESTRA.doCheckEffect: target block is null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("FINESTRA.doCheckEffect: target block is null", null, null, false);
             return;
         }
 

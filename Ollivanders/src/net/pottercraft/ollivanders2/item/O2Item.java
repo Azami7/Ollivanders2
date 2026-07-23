@@ -1,7 +1,7 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,8 +43,7 @@ public class O2Item {
      */
     @Nullable
     public ItemStack getItem(int amount) {
-        Ollivanders2Common common = new Ollivanders2Common(p);
-        common.printDebugMessage("Getting item " + itemType.getName(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Getting item " + itemType.getName(), null, null, false);
 
         return itemType.getItem(amount);
     }

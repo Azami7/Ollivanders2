@@ -38,8 +38,6 @@ import java.util.Map;
 public class O2Spells {
     private final Ollivanders2 p;
 
-    private final Ollivanders2Common common;
-
     final private List<O2Spell> activeSpells = new ArrayList<>();
 
     /**
@@ -77,7 +75,6 @@ public class O2Spells {
      */
     public O2Spells(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(plugin);
     }
 
     /**
@@ -172,13 +169,13 @@ public class O2Spells {
 
         for (String zone : zoneConfig.getKeys(false)) {
             if (zone.equalsIgnoreCase(SpellZone.globalZoneName)) {
-                common.printDebugMessage("Loading global zone config:", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Loading global zone config:", null, null, false);
 
                 globalAllowedSpells = getSpellsForZone(zone, SpellZone.allowedList);
                 globalDisallowedSpells = getSpellsForZone(zone, SpellZone.disallowList);
             }
             else {
-                common.printDebugMessage("Loading zone config for " + zone + ":", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Loading zone config for " + zone + ":", null, null, false);
 
                 loadZoneConfig(zone);
             }
@@ -200,7 +197,7 @@ public class O2Spells {
             type = SpellZone.SpellZoneType.valueOf(typeString.toUpperCase());
         }
         catch (Exception e) {
-            common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid type " + typeString, null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid type " + typeString, null, null, true);
             return;
         }
 
@@ -209,7 +206,7 @@ public class O2Spells {
             world = zoneConfig.getString(zoneName + "." + "world");
 
             if (world == null || world.isEmpty()) {
-                common.printDebugMessage("O2Spells.loadZoneConfig: world or cuboid zone " + zoneName + " with no world name set, ignored.", null, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Spells.loadZoneConfig: world or cuboid zone " + zoneName + " with no world name set, ignored.", null, null, true);
                 return;
             }
         }
@@ -220,13 +217,13 @@ public class O2Spells {
             String areaString = zoneConfig.getString(zoneName + "." + "area");
 
             if (areaString == null || areaString.isEmpty()) {
-                common.printDebugMessage("O2Spells.loadZoneConfig: cuboid zone " + zoneName + " with no area coordinates set, ignored", null, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Spells.loadZoneConfig: cuboid zone " + zoneName + " with no area coordinates set, ignored", null, null, true);
                 return;
             }
 
             area = Cuboid.parseArea(areaString);
             if (area == null) {
-                common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid area " + areaString, null, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid area " + areaString, null, null, true);
                 return;
             }
         }
@@ -250,19 +247,19 @@ public class O2Spells {
     private ArrayList<O2SpellType> getSpellsForZone(@NotNull String zoneName, @NotNull String listName) {
         ArrayList<O2SpellType> spellList = new ArrayList<>();
 
-        common.printDebugMessage(listName + ":", null, null, false);
+        Ollivanders2API.common.printDebugMessage(listName + ":", null, null, false);
 
         for (String spell : zoneConfig.getStringList(zoneName + "." + listName)) {
             O2SpellType spellType = O2SpellType.spellTypeFromString(spell.toUpperCase());
             if (spellType != null && isLoaded(spellType)) {
-                common.printDebugMessage(" - " + spellType, null, null, false);
+                Ollivanders2API.common.printDebugMessage(" - " + spellType, null, null, false);
 
                 spellList.add(spellType);
             }
             else if (spellType == null)
-                common.printDebugMessage("invalid spell " + spell, null, null, false);
+                Ollivanders2API.common.printDebugMessage("invalid spell " + spell, null, null, false);
             else if (!isLoaded(spellType))
-                common.printDebugMessage(spell + " not loaded", null, null, false);
+                Ollivanders2API.common.printDebugMessage(spell + " not loaded", null, null, false);
         }
 
         return spellList;
@@ -290,7 +287,7 @@ public class O2Spells {
 
             World world = location.getWorld();
             if (world == null) {
-                common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
                 return false;
             }
 
@@ -338,7 +335,7 @@ public class O2Spells {
 
             World world = location.getWorld();
             if (world == null) {
-                common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
                 return true;
             }
 
@@ -404,7 +401,7 @@ public class O2Spells {
      */
     @Nullable
     public O2Spell createSpell(@NotNull Player player, @NotNull O2SpellType name, double wandC) {
-        common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
+        Ollivanders2API.common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
 
         //spells go here, using any of the three types of magic
         String spellClass = "net.pottercraft.ollivanders2.spell." + name;
@@ -414,7 +411,7 @@ public class O2Spells {
             c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Double.class);
         }
         catch (Exception e) {
-            common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell constructor", e, null, true);
+            Ollivanders2API.common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell constructor", e, null, true);
             return null;
         }
 
@@ -424,7 +421,7 @@ public class O2Spells {
             spell = (O2Spell) c.newInstance(p, player, wandC);
         }
         catch (Exception e) {
-            common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell", e, null, true);
+            Ollivanders2API.common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell", e, null, true);
             return null;
         }
 
@@ -463,10 +460,10 @@ public class O2Spells {
         }
 
         if (spellType != null) {
-            common.printDebugMessage("Spell is " + spellType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("Spell is " + spellType, null, null, false);
         }
         else {
-            common.printDebugMessage("No spell found", null, null, false);
+            Ollivanders2API.common.printDebugMessage("No spell found", null, null, false);
         }
 
         return spellType;
@@ -487,13 +484,13 @@ public class O2Spells {
      */
     public void speakIncantation(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull String[] words) {
         if (!p.canCast(player, spellType, true)) {
-            common.printDebugMessage("O2Spells.speakIncantation: Either no spell cast attempted or spell not allowed", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: Either no spell cast attempted or spell not allowed", null, null, false);
             return;
         }
 
         if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1) {
             // if bookLearning is set to true then spell count must be > 0 to cast this spell
-            common.printDebugMessage("O2Spells.speakIncantation: bookLearning enforced", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: bookLearning enforced", null, null, false);
             player.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
             return;
@@ -502,26 +499,26 @@ public class O2Spells {
         // wand check
         boolean wandCheck;
         if (wandlessSpells.contains(spellType)) {
-            common.printDebugMessage("O2Spells.speakIncantation: allow wandless casting of " + spellType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: allow wandless casting of " + spellType, null, null, false);
             wandCheck = true;
         }
         else {
             if (!Ollivanders2API.getItems().getWands().holdsWandInPrimary(player)) {
-                common.printDebugMessage("O2Spells.speakIncantation: player not holding a wand", null, null, false);
+                Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: player not holding a wand", null, null, false);
                 wandCheck = false;
             }
             else {
                 ItemStack held = player.getInventory().getItemInMainHand();
                 if (Ollivanders2API.getItems().getWands().isDestinedWand(player, held)) {
-                    common.printDebugMessage("O2Spells.speakIncantation: player holds destined wand", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: player holds destined wand", null, null, false);
                     wandCheck = true;
                 }
                 else if (O2ItemType.ELDER_WAND.isItemThisType(held)) {
-                    common.printDebugMessage("O2Spells.speakIncantation: player holds elder wand", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: player holds elder wand", null, null, false);
                     wandCheck = true;
                 }
                 else {
-                    common.printDebugMessage("O2Spells.speakIncantation: player not holding destined wand or elder wand", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: player not holding destined wand or elder wand", null, null, false);
                     int uses = p.getO2Player(player).getSpellCount(spellType);
 
                     // success chance rises with experience: ~1% at 1 cast, ~50% at 100, approaching 100%.
@@ -538,7 +535,7 @@ public class O2Spells {
         }
 
         if (wandCheck) {
-            common.printDebugMessage("O2Spells.speakIncantation: Incantation spoken for " + spellType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.speakIncantation: Incantation spoken for " + spellType, null, null, false);
 
             if (spellType == O2SpellType.APPARATE)
                 addSpell(player, new APPARATE(p, player, 1.0, words));
@@ -563,7 +560,7 @@ public class O2Spells {
      * @param words     the caster's chat message split on spaces; the last element is the target player's name
      */
     private void divine(@NotNull O2SpellType spellType, @NotNull Player sender, @NotNull String[] words) {
-        common.printDebugMessage("Casting divination spell", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Casting divination spell", null, null, false);
 
         // parse the words for the target player's name
         if (words.length < 2) {
@@ -603,7 +600,7 @@ public class O2Spells {
     public void castSpell(@NotNull Player player) {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         if (o2p == null) {
-            common.printDebugMessage("O2Spells.castSpell: Unable to find o2player casting spell.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.castSpell: Unable to find o2player casting spell.", null, null, false);
             return;
         }
 
@@ -617,15 +614,15 @@ public class O2Spells {
         }
 
         if (spellType == null) {
-            common.printDebugMessage("O2Spells.castSpell: spellType is null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.castSpell: spellType is null", null, null, false);
             return;
         }
 
         if (!Ollivanders2API.getItems().getWands().holdsWandInPrimary(player)) {
-            common.printDebugMessage("O2Spells.castSpell: player does not hold a wand in their primary hand", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spells.castSpell: player does not hold a wand in their primary hand", null, null, false);
             return;
         }
-        common.printDebugMessage("O2Spells.castSpell: player holds a wand in their primary hand", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Spells.castSpell: player holds a wand in their primary hand", null, null, false);
 
         double wandCheck = Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND);
 
@@ -641,7 +638,7 @@ public class O2Spells {
             o2p.setPriorIncantatem(spellType);
         }
 
-        common.printDebugMessage("O2Spells.castSpell: " + player.getName() + " cast " + spell.getName(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Spells.castSpell: " + player.getName() + " cast " + spell.getName(), null, null, false);
 
         o2p.setWandSpell(null);
     }
@@ -661,7 +658,7 @@ public class O2Spells {
         if (!Ollivanders2.enableNonVerbalSpellCasting)
             return;
 
-        common.printDebugMessage("Rotating mastered spells for non-verbal casting.", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Rotating mastered spells for non-verbal casting.", null, null, false);
 
         if (!Ollivanders2API.getItems().getWands().holdsWandInOff(player))
             return;
@@ -670,10 +667,10 @@ public class O2Spells {
         if (o2p == null)
             return;
 
-        boolean reverse = false;
         // right click rotates through spells backwards
-        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
-            reverse = true;
+        boolean reverse = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK);
+        //if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
+            //reverse = true;
 
         o2p.shiftMasterSpell(reverse);
         O2SpellType spell = o2p.getMasterSpell();

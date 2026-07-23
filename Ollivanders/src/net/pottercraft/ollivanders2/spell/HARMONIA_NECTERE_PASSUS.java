@@ -105,7 +105,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
         }
 
         if (signBlock == null) {
-            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: sign block not found", null, null, true);
+            Ollivanders2API.common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: sign block not found", null, null, true);
             failureMessage = "Nothing seems to happen";
             sendFailureMessage();
             return;
@@ -114,7 +114,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
         // determine the location of the other vanishing cabinet
         Location twinLocation = getTwinLocation(signBlock);
         if (twinLocation == null) {
-            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: Unable to get twinLocation from sign.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: Unable to get twinLocation from sign.", null, null, false);
             failureMessage = "The twin location on the sign is malformed.";
             sendFailureMessage();
             return;
@@ -129,7 +129,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
             }
         }
         if (toLoc == null) {
-            common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: sign not found at twin location.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: sign not found at twin location.", null, null, false);
             failureMessage = "A sign was not found at the twin location.";
             sendFailureMessage();
             return;
@@ -137,7 +137,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
 
         Location fromLoc = signBlock.getLocation(); // this can be different from the location of the projectile by up to half a block
         if (Ollivanders2Common.locationEquals(toLoc, fromLoc)) {
-            common.printDebugMessage("Vanishing cabinet to and from locations are the same", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Vanishing cabinet to and from locations are the same", null, null, false);
             failureMessage = "To and from locations on vanishing cabinet signs are the same.";
             sendFailureMessage();
             return;
@@ -189,7 +189,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
                 z = Integer.parseInt(lines[3]);
             }
             catch (NumberFormatException e) {
-                common.printDebugMessage("Unable to parse coordinates from sign.", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Unable to parse coordinates from sign.", null, null, false);
                 return null;
             }
 

@@ -83,7 +83,7 @@ public final class APARECIUM extends O2Spell {
                     ItemStack newBook = revealText(item.getItemStack());
 
                     if (newBook == null) {
-                        common.printDebugMessage("APARECIUM: failed to reveal text", null, null, false);
+                        Ollivanders2API.common.printDebugMessage("APARECIUM: failed to reveal text", null, null, false);
                         sendFailureMessage();
 
                         kill();
@@ -97,7 +97,7 @@ public final class APARECIUM extends O2Spell {
                     ItemStack disenchantedItemStack = Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
 
                     if (Ollivanders2API.getItems().enchantedItems.isEnchanted(disenchantedItemStack)) {
-                        common.printDebugMessage("APARECIUM.doCheckEffect: item still enchanted after removeEnchantment", null, null, true);
+                        Ollivanders2API.common.printDebugMessage("APARECIUM.doCheckEffect: item still enchanted after removeEnchantment", null, null, true);
                     }
 
                     item.remove();
@@ -120,7 +120,7 @@ public final class APARECIUM extends O2Spell {
     @Nullable
     private ItemStack revealText(ItemStack bookItem) {
         if (bookItem.getType() != Material.WRITTEN_BOOK) {
-            common.printDebugMessage("APARECIUM: celatum cast on a non-book item", null, null, true);
+            Ollivanders2API.common.printDebugMessage("APARECIUM: celatum cast on a non-book item", null, null, true);
             return null;
         }
 
@@ -131,7 +131,7 @@ public final class APARECIUM extends O2Spell {
 
         String bookText = Ollivanders2API.getItems().enchantedItems.getEnchantmentArgs(bookItem);
         if (bookText == null) {
-            common.printDebugMessage("APARECIUM: celatum enchantment args are empty", null, null, true);
+            Ollivanders2API.common.printDebugMessage("APARECIUM: celatum enchantment args are empty", null, null, true);
             return null;
         }
 

@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -179,7 +180,7 @@ public abstract class AddPotionEffect extends O2Spell {
             org.bukkit.potion.PotionEffect effect = new org.bukkit.potion.PotionEffect(effectType, durationInTicks, amplifier);
             target.addPotionEffect(effect);
 
-            common.printDebugMessage("Added " + effectType + " to " + target.getName() + " with amplifier of " + amplifier + " and duration of " + durationInSeconds + " seconds", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Added " + effectType + " to " + target.getName() + " with amplifier of " + amplifier + " and duration of " + durationInSeconds + " seconds", null, null, false);
         }
     }
 

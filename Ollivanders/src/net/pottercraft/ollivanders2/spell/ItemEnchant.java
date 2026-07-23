@@ -110,7 +110,7 @@ public abstract class ItemEnchant extends O2Spell {
         else if (magnitude > maxMagnitude)
             magnitude = maxMagnitude;
 
-        common.printDebugMessage("Magnitude for enchantment = " + magnitude, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Magnitude for enchantment = " + magnitude, null, null, false);
     }
 
     /**
@@ -151,7 +151,7 @@ public abstract class ItemEnchant extends O2Spell {
 
         // make sure they are actually holding something and that it can be enchanted
         if ((targetItem.getType() == Material.AIR) || !canBeEnchanted(targetItem)) {
-            common.printDebugMessage("ItemStackEnchant: no item in off hand or item cannot be enchanted", null, null, false);
+            Ollivanders2API.common.printDebugMessage("ItemStackEnchant: no item in off hand or item cannot be enchanted", null, null, false);
         }
         else {
             // enchant the item
@@ -169,13 +169,13 @@ public abstract class ItemEnchant extends O2Spell {
     public boolean canBeEnchanted(@NotNull ItemStack itemStack) {
         // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
         if (Ollivanders2API.getItems().getWands().isWand(itemStack) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(itemStack))) {
-            common.printDebugMessage("ItemEnchant.canBeEnchanted: item is a wand or an enchanted item", null, null, false);
+            Ollivanders2API.common.printDebugMessage("ItemEnchant.canBeEnchanted: item is a wand or an enchanted item", null, null, false);
             return false;
         }
 
         // this is not an unbreakable material
         if (Ollivanders2Common.getUnbreakableMaterials().contains(itemStack.getType())) {
-            common.printDebugMessage("ItemEnchant.canBeEnchanted: item stack is an unbreakable material type", null, null, false);
+            Ollivanders2API.common.printDebugMessage("ItemEnchant.canBeEnchanted: item stack is an unbreakable material type", null, null, false);
             return false;
         }
 
@@ -183,7 +183,7 @@ public abstract class ItemEnchant extends O2Spell {
         if (!o2ItemTypeAllowList.isEmpty()) {
             O2ItemType itemType = O2Item.getItemType(itemStack);
             if (itemType == null || !(o2ItemTypeAllowList.contains(itemType))) {
-                common.printDebugMessage("ItemEnchant.canBeEnchanted: item type " + itemType + " cannot be targeted by this spell", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ItemEnchant.canBeEnchanted: item type " + itemType + " cannot be targeted by this spell", null, null, false);
                 return false;
             }
         }
@@ -191,7 +191,7 @@ public abstract class ItemEnchant extends O2Spell {
         if (!itemTypeAllowlist.isEmpty()) {
             Material material = itemStack.getType();
             if (!(itemTypeAllowlist.contains(material))) {
-                common.printDebugMessage("ItemEnchant.canBeEnchanted: material type " + material + " cannot be targeted by this spell", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ItemEnchant.canBeEnchanted: material type " + material + " cannot be targeted by this spell", null, null, false);
                 return false;
             }
         }
@@ -231,8 +231,8 @@ public abstract class ItemEnchant extends O2Spell {
      * @param itemStack the ItemStack to enchant
      */
     private void enchantItem(@NotNull ItemStack itemStack) {
-        common.printDebugMessage("ItemEnchant.enchantItem: enchanting " + itemStack.getType(), null, null, false);
-        common.printDebugMessage("original item stack amount = " + itemStack.getAmount(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("ItemEnchant.enchantItem: enchanting " + itemStack.getType(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("original item stack amount = " + itemStack.getAmount(), null, null, false);
 
         // create the enchantment args
         createEnchantmentArgs(itemStack);
@@ -242,7 +242,7 @@ public abstract class ItemEnchant extends O2Spell {
 
         // reduce the original item stack size by 1
         itemStack.setAmount(itemStack.getAmount() - 1);
-        common.printDebugMessage("original item stack amount now = " + itemStack.getAmount(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("original item stack amount now = " + itemStack.getAmount(), null, null, false);
 
         // set the amount to 1
         enchantedItemStack.setAmount(1);
@@ -254,7 +254,7 @@ public abstract class ItemEnchant extends O2Spell {
         enchantedItem = alterItem(enchantedItem);
 
         Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, enchantmentArgs);
-        common.printDebugMessage("ItemEnchant.enchantItem: added enchantment " + enchantmentType.getName(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("ItemEnchant.enchantItem: added enchantment " + enchantmentType.getName(), null, null, false);
 
         // drop the remainder of the original stack in world where the player is
         if (itemStack.getAmount() > 0) {

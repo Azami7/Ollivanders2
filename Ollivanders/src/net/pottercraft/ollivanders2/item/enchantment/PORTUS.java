@@ -73,7 +73,7 @@ public class PORTUS extends Enchantment {
         double z;
 
         if (split.length != 4) {
-            common.printDebugMessage("Invalid coordinates on Portkey", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Invalid coordinates on Portkey", null, null, false);
             return;
         }
 
@@ -83,7 +83,7 @@ public class PORTUS extends Enchantment {
             z = Double.parseDouble(split[3]);
         }
         catch (Exception e) {
-            common.printDebugMessage("Failed to parse coordinates on Portkey", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Failed to parse coordinates on Portkey", null, null, false);
             return;
         }
 
@@ -115,7 +115,7 @@ public class PORTUS extends Enchantment {
 
         // portkey must have a valid destination
         if (destination == null) {
-            common.printDebugMessage("Portkey has null destination", null, null, true);
+            Ollivanders2API.common.printDebugMessage("Portkey has null destination", null, null, true);
             return;
         }
 

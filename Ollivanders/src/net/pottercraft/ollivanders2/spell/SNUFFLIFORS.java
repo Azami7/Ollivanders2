@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
@@ -106,6 +107,6 @@ public class SNUFFLIFORS extends ItemToEntityTransfiguration
         if (transfiguredEntity instanceof Ageable)
             ((Ageable) transfiguredEntity).setBaby();
         else
-            common.printDebugMessage("transfigured entity is not ageable in SNUFFLIFORS.customizeEntity()", null, null, false);
+            Ollivanders2API.common.printDebugMessage("transfigured entity is not ageable in SNUFFLIFORS.customizeEntity()", null, null, false);
     }
 }

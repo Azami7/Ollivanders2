@@ -88,7 +88,7 @@ public abstract class PlayerChangeSize extends O2Effect {
     private void changePlayerSize() {
         AttributeInstance scaleAttribute = getScaleAttribute();
         if (scaleAttribute == null) {
-            common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): Player's scale attribute was null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): Player's scale attribute was null", null, null, false);
             kill();
             return;
         }
@@ -105,7 +105,7 @@ public abstract class PlayerChangeSize extends O2Effect {
 
         // Make player the new size
         scaleAttribute.setBaseValue(newScale);
-        common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): new scale is " + newScale, null, null, false);
+        Ollivanders2API.common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): new scale is " + newScale, null, null, false);
 
         // already at normal size, so end the effect rather than have doRemove reset it again
         if (newScale == 1.0) {
@@ -125,14 +125,14 @@ public abstract class PlayerChangeSize extends O2Effect {
     private AttributeInstance getScaleAttribute() {
         Player player = p.getServer().getPlayer(targetID);
         if (player == null) {
-            common.printLogMessage("SWELLING.checkEffect: player is null", null, null, true);
+            Ollivanders2API.common.printLogMessage("SWELLING.checkEffect: player is null", null, null, true);
             kill();
             return null;
         }
 
         AttributeInstance scaleAttribute = player.getAttribute(Attribute.SCALE);
         if (scaleAttribute == null) {
-            common.printLogMessage("SWELLING.checkEffect: Attribute.SCALE is null", null, null, true);
+            Ollivanders2API.common.printLogMessage("SWELLING.checkEffect: Attribute.SCALE is null", null, null, true);
             kill();
             return null;
         }

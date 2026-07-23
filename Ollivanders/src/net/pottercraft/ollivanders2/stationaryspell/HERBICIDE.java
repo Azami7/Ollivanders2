@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.stationaryspell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.block.BlockCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
@@ -228,12 +229,12 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
                 Material blockType = block.getType();
                 if (blocksReplacements.containsKey(blockType)) {
                     block.setType(blocksReplacements.get(blockType));
-                    common.printDebugMessage("HERBICIDE: changing " + blockType + " to " + block.getType(), null, null, false);
+                    Ollivanders2API.common.printDebugMessage("HERBICIDE: changing " + blockType + " to " + block.getType(), null, null, false);
                     continue;
                 }
                 else if (blocksToItemReplacements.containsKey(blockType)) {
                     Item item = world.dropItemNaturally(block.getLocation(), new ItemStack(blocksToItemReplacements.get(blockType)));
-                    common.printDebugMessage("HERBICIDE: replacing " + blockType + " with " + item.getItemStack().getType(), null, null, false);
+                    Ollivanders2API.common.printDebugMessage("HERBICIDE: replacing " + blockType + " with " + item.getItemStack().getType(), null, null, false);
                     block.setType(Material.AIR);
                     continue;
                 }

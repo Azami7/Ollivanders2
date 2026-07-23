@@ -117,7 +117,7 @@ public final class FIENDFYRE extends O2Spell
      */
     private void spawnCreatures()
     {
-        common.printDebugMessage("spawning " + numCreatures + " fiendfyre creatures...", null, null, false);
+        Ollivanders2API.common.printDebugMessage("spawning " + numCreatures + " fiendfyre creatures...", null, null, false);
 
         if (usesModifier > 100)
         {

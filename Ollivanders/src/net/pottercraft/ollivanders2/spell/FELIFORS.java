@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -109,7 +110,7 @@ public class FELIFORS extends ItemToEntityTransfiguration {
             cat.setCollarColor(O2Color.getRandomDyeableColor().getDyeColor());
         }
         else
-            common.printDebugMessage("transfigured entity is not a cat in FELIFORS.customizeEntity()", null, null, false);
+            Ollivanders2API.common.printDebugMessage("transfigured entity is not a cat in FELIFORS.customizeEntity()", null, null, false);
     }
 
 

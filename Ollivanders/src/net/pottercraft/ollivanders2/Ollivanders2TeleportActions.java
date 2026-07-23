@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2;
 
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,13 +15,12 @@ import java.util.List;
  * @since 2.4
  */
 public class Ollivanders2TeleportActions {
-    final private Ollivanders2 p;
-    final private Ollivanders2Common common;
-
     /**
      * The list of all queued teleport actions
      */
     final private List<O2TeleportAction> teleportActions = new ArrayList<>();
+
+    private Ollivanders2 p;
 
     /**
      * A teleport action
@@ -123,7 +121,6 @@ public class Ollivanders2TeleportActions {
      */
     public Ollivanders2TeleportActions(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -158,7 +155,7 @@ public class Ollivanders2TeleportActions {
     public void addTeleportEvent(@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport) {
         O2TeleportAction teleportEvent = new O2TeleportAction(player, from, to, explosionOnTeleport);
 
-        common.printDebugMessage("Created teleport action: " + player.getName() + " from " + from + " to " + to, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Created teleport action: " + player.getName() + " from " + from + " to " + to, null, null, false);
         teleportActions.add(teleportEvent);
 
         to.getChunk().load();
@@ -171,11 +168,11 @@ public class Ollivanders2TeleportActions {
      */
     public void removeTeleportEvent(@NotNull Ollivanders2TeleportActions.O2TeleportAction teleportAction) {
         if (teleportActions.contains(teleportAction)) {
-            common.printDebugMessage("Removing teleport action for " + teleportAction.getPlayer().getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Removing teleport action for " + teleportAction.getPlayer().getName(), null, null, false);
             teleportActions.remove(teleportAction);
         }
         else {
-            common.printDebugMessage("Unable to remove teleport action, not found.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Unable to remove teleport action, not found.", null, null, false);
         }
     }
 }

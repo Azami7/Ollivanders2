@@ -41,11 +41,6 @@ public abstract class O2Potion {
     Ollivanders2 p;
 
     /**
-     * Common functions
-     */
-    Ollivanders2Common common;
-
-    /**
      * The type this potion is.
      */
     protected O2PotionType potionType;
@@ -103,7 +98,6 @@ public abstract class O2Potion {
     public O2Potion(@NotNull Ollivanders2 plugin) {
         p = plugin;
         potionType = O2PotionType.BABBLING_BEVERAGE;
-        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -221,11 +215,11 @@ public abstract class O2Potion {
      * @return true if the ingredient list matches this potion recipe exactly, false otherwise
      */
     public boolean checkRecipe(@NotNull Map<O2ItemType, Integer> cauldronIngredients) {
-        common.printDebugMessage("Checking " + potionType.getPotionName() + " recipe", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Checking " + potionType.getPotionName() + " recipe", null, null, false);
 
         // are there the right number of ingredients?
         if (ingredients.size() != cauldronIngredients.size()) {
-            common.printDebugMessage("   expected " + ingredients.size() + " ingredients, got " + cauldronIngredients.size(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("   expected " + ingredients.size() + " ingredients, got " + cauldronIngredients.size(), null, null, false);
             return false;
         }
 
@@ -235,18 +229,18 @@ public abstract class O2Potion {
 
             // is this ingredient in the recipe?
             if (!cauldronIngredients.containsKey(ingredientType)) {
-                common.printDebugMessage("   cauldron does not contain " + ingredientType.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("   cauldron does not contain " + ingredientType.getName(), null, null, false);
                 return false;
             }
 
             // is the amount of the ingredient correct?
             if (cauldronIngredients.get(ingredientType).intValue() != count.intValue()) {
-                common.printDebugMessage("   recipe needs " + count + " " + ingredientType.getName() + ", got " + cauldronIngredients.get(ingredientType), null, null, false);
+                Ollivanders2API.common.printDebugMessage("   recipe needs " + count + " " + ingredientType.getName() + ", got " + cauldronIngredients.get(ingredientType), null, null, false);
                 return false;
             }
         }
 
-        common.printDebugMessage("   matches", null, null, false);
+        Ollivanders2API.common.printDebugMessage("   matches", null, null, false);
         return true;
     }
 
@@ -285,7 +279,7 @@ public abstract class O2Potion {
         PotionMeta meta = (PotionMeta) potion.getItemMeta();
 
         if (meta == null) {
-            common.printDebugMessage("O2Potion.brew: item meta is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Potion.brew: item meta is null", null, null, true);
             potion = brewBadPotion();
         }
         else {
@@ -328,7 +322,7 @@ public abstract class O2Potion {
 
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(brewer.getUniqueId());
         if (o2p == null) {
-            common.printDebugMessage("O2Potion.canBrew: failed to find O2Player", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Potion.canBrew: failed to find O2Player", null, null, true);
             return false;
         }
 

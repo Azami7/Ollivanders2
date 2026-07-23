@@ -162,7 +162,7 @@ public abstract class Transfiguration extends O2Spell {
 
         // if a target has not transfigured, look for one to transfigure otherwise move the projectile on
         if (!isTransfigured()) {
-            common.printDebugMessage("transfiguration base: checking block " + location.getBlock().getType(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("transfiguration base: checking block " + location.getBlock().getType(), null, null, false);
             transfigure();
 
             if (isTransfigured) {
@@ -186,7 +186,7 @@ public abstract class Transfiguration extends O2Spell {
 
         if (hasHitBlock() && !isTransfigured) {
             // we've hit a block and the projectile is stopped, but we didn't find anything to transfigure
-            common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
             sendFailureMessage();
 
             kill();
@@ -216,7 +216,7 @@ public abstract class Transfiguration extends O2Spell {
         for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof Transfiguration) {
                 if (((Transfiguration) spell).isTransfigured(entity) && !((Transfiguration) spell).isPermanent()) {
-                    common.printDebugMessage(entity.getName() + " is already transfigured", null, null, false);
+                    Ollivanders2API.common.printDebugMessage(entity.getName() + " is already transfigured", null, null, false);
                     return false;
                 }
             }

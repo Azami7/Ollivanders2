@@ -96,7 +96,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
             // make a stack of coreless wands
             O2WandWoodType woodType = O2WandWoodType.getWandWoodTypeByMaterial(blockType);
             if (woodType == null) {
-                common.printDebugMessage("Frange Lignea: null woodType", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Frange Lignea: null woodType", null, null, false);
                 return;
             }
 
@@ -110,7 +110,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
             ItemStack corelessWands = Ollivanders2API.getItems().getWands().createCorelessWand(woodType, amount);
 
             if (corelessWands == null) {
-                common.printDebugMessage("Frange Lignea: failed to create coreless wands", null, null, true);
+                Ollivanders2API.common.printDebugMessage("Frange Lignea: failed to create coreless wands", null, null, true);
                 return;
             }
 
@@ -120,7 +120,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
             world.dropItemNaturally(location, corelessWands);
         }
         else {
-            common.printDebugMessage(blockType + " is not a natural log type", null, null, false);
+            Ollivanders2API.common.printDebugMessage(blockType + " is not a natural log type", null, null, false);
             sendFailureMessage();
         }
     }
