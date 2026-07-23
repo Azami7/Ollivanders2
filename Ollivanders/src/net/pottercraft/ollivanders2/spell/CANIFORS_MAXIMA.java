@@ -19,9 +19,9 @@ public class CANIFORS_MAXIMA extends AddO2Effect {
         super(plugin);
 
         spellType = O2SpellType.CANIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
-        text = "Jinx that turns the target player in to a dog.";
+        text = "Jinx that turns the target player in to a dog in appearance and behavior.";
     }
 
     /**
@@ -34,7 +34,7 @@ public class CANIFORS_MAXIMA extends AddO2Effect {
     public CANIFORS_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.CANIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
         effectsToAdd.add(O2EffectType.CANIFORS_MAXIMA);
         strengthModifier = 1;

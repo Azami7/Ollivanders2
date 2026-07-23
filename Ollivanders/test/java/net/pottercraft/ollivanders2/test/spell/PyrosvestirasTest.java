@@ -91,13 +91,7 @@ public class PyrosvestirasTest extends BlockTransfigurationTest {
     /**
      * Tests that PYROSVESTIRAS effect radius scales correctly with player skill.
      *
-     * <p>PYROSVESTIRAS uses the formula: radius = (usesModifier / 10), limited to [1, 10].
-     * This test verifies radius calculation at multiple skill levels:
-     * </p>
-     * <ul>
-     * <li>Skill 5: radius = 0 (limited to min = 1)</li>
-     * <li>Skill 30: radius = 3</li>
-     * <li>Skill 200: radius = 20 (limited to max = 10)</li>
+     * <p>PYROSVESTIRAS uses the formula: radius = (usesModifier * 0.1), limited to [1, 10].
      * </ul>
      */
     @Test
@@ -116,19 +110,13 @@ public class PyrosvestirasTest extends BlockTransfigurationTest {
         testWorld.getBlockAt(targetLocation).setType(Material.CAMPFIRE);
         pyrosvestiras = (PYROSVESTIRAS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 30);
         mockServer.getScheduler().performTicks(20);
-        assertEquals(3, pyrosvestiras.getEffectRadius(), "radius not set to 1 when skill < 10");
-        pyrosvestiras.kill();
-
-        testWorld.getBlockAt(targetLocation).setType(Material.CAMPFIRE);
-        pyrosvestiras = (PYROSVESTIRAS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 30);
-        mockServer.getScheduler().performTicks(20);
-        assertEquals(3, pyrosvestiras.getEffectRadius(), "radius not set to 1 when skill < 10");
+        assertEquals(3, pyrosvestiras.getEffectRadius(), "radius not set to 3 when skill = 30");
         pyrosvestiras.kill();
 
         testWorld.getBlockAt(targetLocation).setType(Material.CAMPFIRE);
         pyrosvestiras = (PYROSVESTIRAS) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, 200);
         mockServer.getScheduler().performTicks(20);
-        assertEquals(pyrosvestiras.getMaxRadius(), pyrosvestiras.getEffectRadius(), "radius not set to 1 when skill < 10");
+        assertEquals(pyrosvestiras.getMaxRadius(), pyrosvestiras.getEffectRadius(), "radius not set to 10 when skill = 200");
         pyrosvestiras.kill();
     }
 }

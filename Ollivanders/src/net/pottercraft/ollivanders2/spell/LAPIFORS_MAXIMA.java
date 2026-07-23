@@ -19,9 +19,9 @@ public class LAPIFORS_MAXIMA extends AddO2Effect {
         super(plugin);
 
         spellType = O2SpellType.LAPIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
-        text = "Jinx that changes the target player in to a rabbit.";
+        text = "Jinx that changes the target player in to a rabbit in appearance and behavior.";
     }
 
     /**
@@ -34,7 +34,7 @@ public class LAPIFORS_MAXIMA extends AddO2Effect {
     public LAPIFORS_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.LAPIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
         effectsToAdd.add(O2EffectType.LAPIFORS_MAXIMA);
         strengthModifier = 1;

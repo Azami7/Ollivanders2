@@ -169,10 +169,10 @@ public abstract class O2Spell {
     Material moveEffectData = Material.GLOWSTONE;
 
     /**
-     * The cooldown for this spell. Spells take mental and physical energy for the caster and cannot be cast in rapid
-     * succession.
+     * The default cooldown for a spell, in milliseconds. Spells take mental and physical energy for the caster and
+     * cannot be cast in rapid succession.
      */
-    static final long DEFAULT_COOLDOWN = Ollivanders2Common.ticksPerSecond * 45;
+    static final long DEFAULT_COOLDOWN = 45 * 1000;
 
     /**
      * The branch of magic this spell is
@@ -718,12 +718,12 @@ public abstract class O2Spell {
     }
 
     /**
-     * Get the spell's casting cooldown
+     * Get the spell's casting cooldown.
      *
-     * @return the cool-down time for this spell in ticks
+     * @return the cooldown time for this spell, in milliseconds
      */
     public long getCoolDown() {
-        return DEFAULT_COOLDOWN;
+        return spellType.getCooldown();
     }
 
     /**

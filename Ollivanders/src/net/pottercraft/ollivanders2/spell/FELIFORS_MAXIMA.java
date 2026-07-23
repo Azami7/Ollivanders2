@@ -25,9 +25,9 @@ public class FELIFORS_MAXIMA extends AddO2Effect {
         super(plugin);
 
         spellType = O2SpellType.FELIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
-        text = "Jinx that transforms the target player in to a cat.";
+        text = "Jinx that transforms the target player in to a cat in appearance and behavior.";
     }
 
     /**
@@ -40,7 +40,7 @@ public class FELIFORS_MAXIMA extends AddO2Effect {
     public FELIFORS_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.FELIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
         effectsToAdd.add(O2EffectType.FELIFORS_MAXIMA);
         strengthModifier = 1;

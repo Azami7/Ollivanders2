@@ -19,9 +19,9 @@ public class DUCKLIFORS_MAXIMA extends AddO2Effect {
         super(plugin);
 
         spellType = O2SpellType.DUCKLIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
-        text = "Jinx that turns the target player in to a chicken.";
+        text = "Jinx that turns the target player in to a chicken in appearance and behavior.";
     }
 
     /**
@@ -34,7 +34,7 @@ public class DUCKLIFORS_MAXIMA extends AddO2Effect {
     public DUCKLIFORS_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DUCKLIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
         effectsToAdd.add(O2EffectType.DUCKLIFORS_MAXIMA);
         strengthModifier = 1;

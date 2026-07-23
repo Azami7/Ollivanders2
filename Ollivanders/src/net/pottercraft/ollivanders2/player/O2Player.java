@@ -1,7 +1,5 @@
 package net.pottercraft.ollivanders2.player;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +15,11 @@ import net.pottercraft.ollivanders2.item.wand.O2WandCoreType;
 import net.pottercraft.ollivanders2.item.wand.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
-import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fox;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -143,6 +139,12 @@ public class O2Player {
     private final O2PlayerCommon o2PlayerCommon;
 
     /**
+     * Whether per-spell casting cooldowns are enforced, from the "spellCooldown" config. When false, a 1-second
+     * cooldown still applies to protect server performance.
+     */
+    private static boolean spellCooldownEnabled = true;
+
+    /**
      * Constructor.
      *
      * @param id     the UUID of the player
@@ -158,6 +160,9 @@ public class O2Player {
 
         // set destined wand
         initDestinedWand();
+
+        if (p.getConfig().isSet("spellCooldown"))
+            spellCooldownEnabled = p.getConfig().getBoolean("spellCooldown");
     }
 
     /**
@@ -398,28 +403,19 @@ public class O2Player {
     }
 
     /**
-     * Set the most recent cast time for a spell. This will override the existing values for this spell.
+     * Set the cooldown expiry time for a spell to now plus the spell's cooldown, overwriting any previous value. When
+     * spell cooldowns are disabled in config, a 1-second cooldown is used instead. Also records this as the player's
+     * last-cast spell.
      *
-     * @param spellType the spell to set the time for
+     * @param spellType the spell that was cast
      */
     public void setSpellRecentCastTime(@NotNull O2SpellType spellType) {
-        String spellClass = "net.pottercraft.ollivanders2.spell." + spellType;
+        if (spellCooldownEnabled)
+            recentSpells.put(spellType, System.currentTimeMillis() + spellType.getCooldown());
+        else
+            recentSpells.put(spellType, System.currentTimeMillis() + 1000); // 1 second cooldown to protect server performance
 
-        Constructor<?> c;
-        try {
-            c = Class.forName(spellClass).getConstructor(Ollivanders2.class);
-            O2Spell s = (O2Spell) c.newInstance(p);
-
-            recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
-
-            setLastSpell(spellType);
-        }
-        catch (InvocationTargetException e) {
-            e.getCause().printStackTrace();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        setLastSpell(spellType);
     }
 
     /**
@@ -663,7 +659,7 @@ public class O2Player {
         int lineCount = 2;
         for (Entry<O2SpellType, Integer> e : knownSpells.entrySet()) {
             // if we have done 14 lines, make a new page
-            if (lineCount == 14) {
+            if (lineCount >= 14) {
                 bookMeta.addPage(content.toString());
                 lineCount = 0;
                 content = new StringBuilder();
@@ -798,12 +794,8 @@ public class O2Player {
                 animagusColor = EntityCommon.getRandomHorseColor(pid.hashCode()).toString();
             else if (animagusForm == EntityType.LLAMA)
                 animagusColor = EntityCommon.getRandomLlamaColor(pid.hashCode()).toString();
-            else if (animagusForm == EntityType.FOX) {
-                if ((pid.hashCode() % 10) == 1)
-                    animagusColor = Fox.Type.SNOW.toString();
-                else
-                    animagusColor = Fox.Type.RED.toString();
-            }
+            else if (animagusForm == EntityType.FOX)
+                animagusColor = EntityCommon.getRandomFoxType(pid.hashCode()).toString();
             else if (animagusForm == EntityType.SHEEP)
                 animagusColor = EntityCommon.getRandomNaturalSheepColor(pid.hashCode()).toString();
 

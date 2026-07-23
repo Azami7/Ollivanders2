@@ -33,6 +33,8 @@ maxApparateDistance: 10000
 enableLycanthropy: true
 # Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
 fastSpells: false
+# Spell cooldown: This enforces a cooldown, default 45 seconds, between spell casting so players do not have unlimited mana/energy.
+spellCooldown: true
 
 # Houses
 #
