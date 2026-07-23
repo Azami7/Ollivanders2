@@ -16,6 +16,7 @@ import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -422,6 +423,38 @@ public class EntityCommon {
     @NotNull
     static public Cat.Type getRandomCatType() {
         return getRandomCatType((int) TimeCommon.getDefaultWorldTime());
+    }
+
+    /**
+     * Get a random fox type. Odds are 1/10 to get a snow fox.
+     *
+     * @param seed the base value that the percentile check will use
+     * @return the fox type
+     */
+    @NotNull
+    static public Fox.Type getRandomFoxType(int seed) {
+        // nextInt() rejects zero and negative bounds, so force seed to a positive, non-zero value
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
+        // Mod 10 to make SNOW rare (1/10 chance)
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 10;
+
+        if (rand == 0)
+            return Fox.Type.SNOW;
+
+        return Fox.Type.RED;
+    }
+
+    /**
+     * Get a random fox type. Odds are 1/10 to get a snow fox.
+     *
+     * @return the fox type
+     */
+    @NotNull
+    static public Fox.Type getRandomFoxType() {
+        return getRandomFoxType((int) TimeCommon.getDefaultWorldTime());
     }
 
     /**

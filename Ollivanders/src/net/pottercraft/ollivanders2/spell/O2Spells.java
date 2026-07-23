@@ -5,10 +5,16 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.common.Cuboid;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
+import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -423,5 +429,261 @@ public class O2Spells {
         }
 
         return spell;
+    }
+
+    /**
+     * Identify the spell a player named in a chat message. Matches the whole message as a spell name first, then the
+     * shortest run of leading words that names a spell, so any trailing words (an APPARATE destination, a divination
+     * target) are ignored.
+     *
+     * @param message the words the player chatted
+     * @return the matching spell type, or null if no spell name matches
+     */
+    @Nullable
+    public O2SpellType parseSpell(@NotNull String message) {
+        O2SpellType spellType;
+
+        // an exact whole-message match takes priority over a shorter leading-word match
+        spellType = getSpellTypeByName(message);
+
+        if (spellType != null)
+            return spellType;
+
+        String[] words = message.split(" ");
+
+        StringBuilder spellName = new StringBuilder();
+        for (String word : words) {
+            spellName.append(word);
+            spellType = getSpellTypeByName(spellName.toString());
+
+            if (spellType != null)
+                break;
+
+            spellName.append(" ");
+        }
+
+        if (spellType != null) {
+            common.printDebugMessage("Spell is " + spellType, null, null, false);
+        }
+        else {
+            common.printDebugMessage("No spell found", null, null, false);
+        }
+
+        return spellType;
+    }
+
+    /**
+     * Speak the incantation for the spell. APPARATE, the animagus toggle, and divinations are cast immediately;
+     * every other spell is queued on the player to fire when they next swing their wand.
+     * <p>
+     * No-ops if the player may not cast the spell, has not learned it while bookLearning is enabled, or fails the wand
+     * check. Wandless spells always pass the wand check; otherwise the player must hold their destined wand or the
+     * elder wand, and any other wand passes with a probability that rises with their experience in the spell.
+     * </p>
+     *
+     * @param player    the player casting
+     * @param spellType the spell the player spoke
+     * @param words     the chat message split on spaces, supplying APPARATE and divination arguments
+     */
+    public void speakIncantation(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull String[] words) {
+        if (!p.canCast(player, spellType, true)) {
+            common.printDebugMessage("O2Spells.speakIncantation: Either no spell cast attempted or spell not allowed", null, null, false);
+            return;
+        }
+
+        if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1) {
+            // if bookLearning is set to true then spell count must be > 0 to cast this spell
+            common.printDebugMessage("O2Spells.speakIncantation: bookLearning enforced", null, null, false);
+            player.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
+
+            return;
+        }
+
+        // wand check
+        boolean wandCheck;
+        if (wandlessSpells.contains(spellType)) {
+            common.printDebugMessage("O2Spells.speakIncantation: allow wandless casting of " + spellType, null, null, false);
+            wandCheck = true;
+        }
+        else {
+            if (!Ollivanders2API.getItems().getWands().holdsWandInPrimary(player)) {
+                common.printDebugMessage("O2Spells.speakIncantation: player not holding a wand", null, null, false);
+                wandCheck = false;
+            }
+            else {
+                ItemStack held = player.getInventory().getItemInMainHand();
+                if (Ollivanders2API.getItems().getWands().isDestinedWand(player, held)) {
+                    common.printDebugMessage("O2Spells.speakIncantation: player holds destined wand", null, null, false);
+                    wandCheck = true;
+                }
+                else if (O2ItemType.ELDER_WAND.isItemThisType(held)) {
+                    common.printDebugMessage("O2Spells.speakIncantation: player holds elder wand", null, null, false);
+                    wandCheck = true;
+                }
+                else {
+                    common.printDebugMessage("O2Spells.speakIncantation: player not holding destined wand or elder wand", null, null, false);
+                    int uses = p.getO2Player(player).getSpellCount(spellType);
+
+                    // success chance rises with experience: ~1% at 1 cast, ~50% at 100, approaching 100%.
+                    // in test mode a cast at or above spell mastery always succeeds so tests are deterministic, while
+                    // the random roll is still exercised at lower skill levels.
+                    if (Ollivanders2.testMode && uses >= O2Spell.spellMasteryLevel)
+                        wandCheck = true;
+                    else if (uses > 0)
+                        wandCheck = Ollivanders2Common.random.nextDouble() < (1.0 - (100.0 / (uses + 101.0)));
+                    else
+                        wandCheck = false;
+                }
+            }
+        }
+
+        if (wandCheck) {
+            common.printDebugMessage("O2Spells.speakIncantation: Incantation spoken for " + spellType, null, null, false);
+
+            if (spellType == O2SpellType.APPARATE)
+                addSpell(player, new APPARATE(p, player, 1.0, words));
+            else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+                addSpell(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
+            else if (Divination.divinationSpells.contains(spellType)) {
+                divine(spellType, player, words);
+            }
+            else {
+                O2Player o2p = p.getO2Player(player);
+                o2p.setWandSpell(spellType);
+            }
+        }
+    }
+
+    /**
+     * Cast a divination spell, taking the target player's name from the last word the caster spoke. Messages the
+     * caster and does nothing if no name was given or no online player matches it.
+     *
+     * @param spellType the divination spell type
+     * @param sender    the player casting the divination
+     * @param words     the caster's chat message split on spaces; the last element is the target player's name
+     */
+    private void divine(@NotNull O2SpellType spellType, @NotNull Player sender, @NotNull String[] words) {
+        common.printDebugMessage("Casting divination spell", null, null, false);
+
+        // parse the words for the target player's name
+        if (words.length < 2) {
+            sender.sendMessage(Ollivanders2.chatColor + "You must say the name of the player. Example: 'astrologia steve'.");
+            return;
+        }
+
+        // name should be the last word the player said
+        String targetName = words[words.length - 1];
+        Player target = p.getServer().getPlayer(targetName);
+
+        if (target == null) {
+            sender.sendMessage(Ollivanders2.chatColor + "Unable to find player named " + targetName + ".");
+            return;
+        }
+
+        O2Spell spell = createSpell(sender, spellType, O2PlayerCommon.rightWand);
+
+        if (!(spell instanceof Divination))
+            return;
+
+        ((Divination) spell).setTarget(target);
+        addSpell(sender, spell);
+    }
+
+    /**
+     * Cast the spell the player queued by speaking its incantation, or their selected master spell if none is queued
+     * and non-verbal casting is enabled. Consumes the queued spell on a successful cast.
+     * <p>
+     * No-ops if the player has no O2Player record, has neither a queued nor a master spell, or is not holding a wand
+     * in their primary hand. On success adds the active spell, records the cast time, and — for a spoken spell — sets
+     * prior incantatem.
+     * </p>
+     *
+     * @param player the player casting
+     */
+    public void castSpell(@NotNull Player player) {
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+        if (o2p == null) {
+            common.printDebugMessage("O2Spells.castSpell: Unable to find o2player casting spell.", null, null, false);
+            return;
+        }
+
+        O2SpellType spellType = o2p.getWandSpell();
+
+        // if no spell set, check to see if they have a master spell
+        boolean nonverbal = false;
+        if (spellType == null && Ollivanders2.enableNonVerbalSpellCasting) {
+            spellType = o2p.getMasterSpell();
+            nonverbal = true;
+        }
+
+        if (spellType == null) {
+            common.printDebugMessage("O2Spells.castSpell: spellType is null", null, null, false);
+            return;
+        }
+
+        if (!Ollivanders2API.getItems().getWands().holdsWandInPrimary(player)) {
+            common.printDebugMessage("O2Spells.castSpell: player does not hold a wand in their primary hand", null, null, false);
+            return;
+        }
+        common.printDebugMessage("O2Spells.castSpell: player holds a wand in their primary hand", null, null, false);
+
+        double wandCheck = Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND);
+
+        O2Spell spell = createSpell(player, spellType, wandCheck);
+        if (spell == null) {
+            return;
+        }
+
+        addSpell(player, spell);
+
+        o2p.setSpellRecentCastTime(spellType);
+        if (!nonverbal) {
+            o2p.setPriorIncantatem(spellType);
+        }
+
+        common.printDebugMessage("O2Spells.castSpell: " + player.getName() + " cast " + spell.getName(), null, null, false);
+
+        o2p.setWandSpell(null);
+    }
+
+    /**
+     * Rotate the player's selected master spell for non-verbal casting and tell them the new selection. A left click
+     * advances the selection, a right click reverses it.
+     * <p>
+     * No-ops if non-verbal casting is disabled, the player is not holding a wand in their off-hand, or has no O2Player
+     * record.
+     * </p>
+     *
+     * @param player the player rotating their master spell
+     * @param action the click that triggered the rotation; a right click reverses direction
+     */
+    public void rotateNonVerbalSpell(@NotNull Player player, @NotNull Action action) {
+        if (!Ollivanders2.enableNonVerbalSpellCasting)
+            return;
+
+        common.printDebugMessage("Rotating mastered spells for non-verbal casting.", null, null, false);
+
+        if (!Ollivanders2API.getItems().getWands().holdsWandInOff(player))
+            return;
+
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+        if (o2p == null)
+            return;
+
+        boolean reverse = false;
+        // right click rotates through spells backwards
+        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
+            reverse = true;
+
+        o2p.shiftMasterSpell(reverse);
+        O2SpellType spell = o2p.getMasterSpell();
+        if (spell != null) {
+            String spellName = spell.getSpellName();
+            player.sendMessage(Ollivanders2.chatColor + "Wand master spell set to " + spellName);
+        }
+        // only in debug: an errant off-hand click with no mastered spells shouldn't nag the player on every click
+        else if (Ollivanders2.debug) {
+            player.sendMessage(Ollivanders2.chatColor + "You have not mastered any spells.");
+        }
     }
 }

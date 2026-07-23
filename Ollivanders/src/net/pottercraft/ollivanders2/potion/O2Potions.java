@@ -12,11 +12,23 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
+import net.pottercraft.ollivanders2.listeners.OllivandersListener;
+import org.bukkit.Effect;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,6 +36,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * @see O2PotionType enumeration of all available potion types
  * @see O2Potion abstract base class for all potion implementations
  */
-public class O2Potions {
+public class O2Potions implements Listener {
     /**
      * Reference to the Ollivanders2 plugin instance.
      */
@@ -186,6 +200,8 @@ public class O2Potions {
 
         common = new Ollivanders2Common(p);
         potionTypeKey = new NamespacedKey(p, "o2potion_type");
+
+        p.getServer().getPluginManager().registerEvents(this, p);
     }
 
     /**
@@ -257,6 +273,50 @@ public class O2Potions {
     }
 
     /**
+     * Brew a potion from the ingredients in a cauldron and put it in the player's off-hand.
+     *
+     * @param player   the player brewing the potion
+     * @param cauldron the cauldron of ingredients
+     * @apiNote No-ops unless the player holds a glass bottle in their off-hand and the cauldron is over a hot block.
+     * Consumes one glass bottle and removes all dropped items within 1 block of the cauldron.
+     */
+    public void brewPotion(@NotNull Player player, @NotNull Block cauldron) {
+        common.printDebugMessage("O2Potions.brewPotion: enter", null, null, false);
+
+        ItemStack emptyBottle = player.getInventory().getItemInOffHand();
+        if (emptyBottle.getType() != Material.GLASS_BOTTLE) {
+            common.printDebugMessage("O2Potions.brewPotion: player not holding a glass bottle in off-hand", null, null, false);
+            return;
+        }
+
+        if (!Ollivanders2Common.isHotBlock(cauldron.getRelative(BlockFace.DOWN))) {
+            common.printDebugMessage("O2Potions.brewPotion: cauldron is not over a hot block", null, null, false);
+            return;
+        }
+
+        ItemStack potion = checkRecipeAndBrew(cauldron, player);
+
+        if (potion == null) {
+            player.sendMessage(Ollivanders2.chatColor + "The cauldron appears unchanged. Perhaps you should check your recipe");
+            return;
+        }
+
+        // remove ingredients from cauldron
+        for (Entity e : cauldron.getWorld().getNearbyEntities(cauldron.getLocation(), 1, 1, 1)) {
+            if (e instanceof Item)
+                e.remove();
+        }
+
+        player.getWorld().playEffect(cauldron.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 1);
+
+        int extraBottles = emptyBottle.getAmount() - 1;
+        player.getInventory().setItemInOffHand(potion);
+        if (extraBottles > 0)
+            player.getInventory().addItem(new ItemStack(Material.GLASS_BOTTLE, extraBottles));
+    }
+
+    /**
      * Brew a potion from a cauldron's ingredients. Sends the brewer a message and returns a bad potion if the
      * ingredients match no known recipe.
      *
@@ -266,7 +326,7 @@ public class O2Potions {
      * water cauldron or is empty
      */
     @Nullable
-    public ItemStack brewPotion(@NotNull Block cauldron, @NotNull Player brewer) {
+    public ItemStack checkRecipeAndBrew(@NotNull Block cauldron, @NotNull Player brewer) {
         if (cauldron.getType() != Material.WATER_CAULDRON)
             return null;
 
@@ -469,7 +529,7 @@ public class O2Potions {
 
     /**
      * Create a potion ItemStack directly, bypassing all brewing and experience checks. For player-initiated brewing
-     * use {@link #brewPotion(Block, Player)} instead.
+     * use {@link #checkRecipeAndBrew(Block, Player)} instead.
      *
      * @param potionType the type of potion to create
      * @param amount the number of potions in the ItemStack
@@ -482,5 +542,128 @@ public class O2Potions {
             return null;
 
         return potion.createPotionItemStack(amount);
+    }
+
+    /**
+     * Apply an Ollivanders2 potion's effect when a player drinks it. Ignores anything that is not a tagged O2 potion,
+     * and skips potions whose optional dependency (e.g. LibsDisguises) is not loaded. The effect is applied after a
+     * short delay and only if the consume was not cancelled.
+     *
+     * @param event the player item consume event
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerDrink(@NotNull PlayerItemConsumeEvent event) {
+        ItemStack item = event.getItem();
+
+        if (item.getType() == Material.POTION) {
+            Player player = event.getPlayer();
+            common.printDebugMessage("O2Potions.onPlayerDrink: " + player.getDisplayName() + " drank a potion.", null, null, false);
+
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null)
+                return;
+
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+
+            if (container.has(potionTypeKey, PersistentDataType.STRING) || meta.hasLore()) {
+                O2Potion potion = findPotionByItemMeta(meta);
+                if (potion != null) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (!event.isCancelled()) {
+                                if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(potion.getPotionType()))
+                                    return;
+
+                                potion.drink(player);
+                            }
+                        }
+                    }.runTaskLater(p, OllivandersListener.getThreadDelay());
+                }
+            }
+        }
+    }
+
+    /**
+     * Apply an {@link O2SplashPotion}'s impact effect when its thrown potion breaks. Does nothing for a splash potion
+     * that is not an O2 splash potion.
+     *
+     * @param event the potion splash event
+     * @apiNote Must run synchronously during the event: the impact effect may modify the splash (e.g. adjust per-entity
+     * intensity), which has no effect once the event has been dispatched.
+     */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onSplashPotion(@NotNull PotionSplashEvent event) {
+        ThrownPotion thrown = event.getEntity();
+        ItemMeta meta = thrown.getItem().getItemMeta();
+        if (meta == null)
+            return;
+
+        O2Potion potion = findPotionByItemMeta(meta);
+
+        if (potion != null) {
+            if (potion instanceof O2SplashPotion) {
+                ((O2SplashPotion) potion).doOnPotionSplashEvent(event);
+            }
+        }
+    }
+
+    /**
+     * Add an ingredient to a cauldron: when a player sneaks while facing a water cauldron, drop the item in their
+     * off-hand into it. No-ops if the player is not sneaking, not facing a water cauldron, or has an empty off-hand.
+     * On success drops the item as an entity in the cauldron, clears the player's off-hand, and messages them.
+     *
+     * @param event the player toggle sneak event
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPotionBrewing(@NotNull PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
+
+        // is the player sneaking
+        if (!event.isSneaking())
+            return;
+
+        Block cauldron = Ollivanders2Common.playerFacingBlockType(player, Material.WATER_CAULDRON);
+        if (cauldron == null)
+            return;
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!event.isCancelled())
+                    addIngredientToCauldron(player, cauldron);
+            }
+        }.runTaskLater(p, 5);
+    }
+
+    /**
+     * Add the item in the player's off-hand to a cauldron as a potion ingredient: drop it into the cauldron, clear the
+     * player's off-hand, and message them. No-ops if the off-hand is empty.
+     *
+     * @param player   the player adding the ingredient
+     * @param cauldron the cauldron to add the ingredient to
+     */
+    public void addIngredientToCauldron(@NotNull Player player, @NotNull Block cauldron) {
+        ItemStack heldItem = player.getInventory().getItemInOffHand();
+        if (heldItem.getType() == Material.AIR || heldItem.getAmount() == 0)
+            return;
+
+        ItemMeta meta = heldItem.getItemMeta();
+        if (meta == null)
+            return;
+
+        // fall back to the material name for an un-renamed item, whose display name is empty
+        String ingredientName = meta.getDisplayName();
+        if (ingredientName.isEmpty())
+            ingredientName = heldItem.getType().name();
+
+        Location spawnLoc = cauldron.getLocation().clone();
+        World world = cauldron.getWorld();
+
+        Item item = world.dropItem(spawnLoc.add(0.5, 0.5, 0.5), heldItem.clone());
+        player.sendMessage(Ollivanders2.chatColor + "Added " + ingredientName);
+
+        item.setVelocity(new Vector(0, 0, 0));
+        player.getInventory().setItemInOffHand(null);
     }
 }

@@ -31,7 +31,7 @@ public class O2Players {
     /**
      * A map of MC player UUIDs and the player O2Player object.
      */
-    private Map<UUID, O2Player> O2PlayerMap = new HashMap<>();
+    private Map<UUID, O2Player> playerMap = new HashMap<>();
 
     /**
      * Effects manager for player effects.
@@ -57,20 +57,20 @@ public class O2Players {
     /**
      * Labels for serializing player data
      */
-    private final String nameLabel = "Name";
-    private final String woodLabel = "Wood";
-    private final String coreLabel = "Core";
-    private final String soulsLabel = "Souls";
-    private final String foundWandLabel = "Found_Wand";
-    private final String masterSpellLabel = "Master_Spell";
-    private final String animagusLabel = "Animagus";
-    private final String animagusColorLabel = "Animagus_Color";
-    private final String muggleLabel = "Muggle";
-    private final String yearLabel = "Year";
-    private final String spellLabelPrefix = "Spell_";
-    private final String potionLabelPrefix = "Potion_";
-    private final String priorIncantatumLabel = "Prior_Incantatum";
-    private final String lastSpellLabel = "Last_Spell";
+    private static final String nameLabel = "Name";
+    private static final String woodLabel = "Wood";
+    private static final String coreLabel = "Core";
+    private static final String soulsLabel = "Souls";
+    private static final String foundWandLabel = "Found_Wand";
+    private static final String masterSpellLabel = "Master_Spell";
+    private static final String animagusLabel = "Animagus";
+    private static final String animagusColorLabel = "Animagus_Color";
+    private static final String muggleLabel = "Muggle";
+    private static final String yearLabel = "Year";
+    private static final String spellLabelPrefix = "Spell_";
+    private static final String potionLabelPrefix = "Potion_";
+    private static final String priorIncantatumLabel = "Prior_Incantatum";
+    private static final String lastSpellLabel = "Last_Spell";
 
     /**
      * Constructor
@@ -113,7 +113,7 @@ public class O2Players {
      * @see O2Effects#onDisable() for player effect cleanup and persistence
      */
     public void onDisable() {
-        p.getLogger().info("Saving " + O2PlayerMap.size() + " players.");
+        p.getLogger().info("Saving " + playerMap.size() + " players.");
         saveO2Players();
 
         playerEffects.onDisable();
@@ -142,7 +142,7 @@ public class O2Players {
      * @param o2p the O2Player object for this player
      */
     public synchronized void updatePlayer(@NotNull UUID pid, @NotNull O2Player o2p) {
-        O2PlayerMap.put(pid, o2p);
+        playerMap.put(pid, o2p);
     }
 
     /**
@@ -153,7 +153,7 @@ public class O2Players {
      */
     @Nullable
     public O2Player getPlayer(@NotNull UUID pid) {
-        return O2PlayerMap.getOrDefault(pid, null);
+        return playerMap.getOrDefault(pid, null);
     }
 
     /**
@@ -164,21 +164,12 @@ public class O2Players {
      */
     @Nullable
     public O2Player getPlayer(@NotNull String playerName) {
-        for (Entry<UUID, O2Player> entry : O2PlayerMap.entrySet()) {
+        for (Entry<UUID, O2Player> entry : playerMap.entrySet()) {
             if (entry.getValue().getPlayerName().equalsIgnoreCase(playerName))
                 return entry.getValue();
         }
 
         return null;
-    }
-
-    /**
-     * Remove a player
-     *
-     * @param pid the id of the player to remove
-     */
-    public void removePlayer(@NotNull UUID pid) {
-        O2PlayerMap.remove(pid);
     }
 
     /**
@@ -188,7 +179,7 @@ public class O2Players {
      */
     @NotNull
     public ArrayList<UUID> getPlayerIDs() {
-        return new ArrayList<>(O2PlayerMap.keySet());
+        return new ArrayList<>(playerMap.keySet());
     }
 
     /**
@@ -196,7 +187,7 @@ public class O2Players {
      */
     public void saveO2Players() {
         // serialize the player map
-        Map<String, Map<String, String>> serializedMap = serializeO2Players(O2PlayerMap);
+        Map<String, Map<String, String>> serializedMap = serializeO2Players(playerMap);
         if (serializedMap == null) {
             p.getLogger().warning("Something went wrong serializing players, no records will be saved.");
             return;
@@ -219,9 +210,9 @@ public class O2Players {
             Map<UUID, O2Player> deserializedMap = deserializeO2Players(serializedMap);
 
             if (deserializedMap != null && !deserializedMap.isEmpty())
-                O2PlayerMap = deserializedMap;
+                playerMap = deserializedMap;
 
-            p.getLogger().info("Loaded " + O2PlayerMap.size() + " saved players.");
+            p.getLogger().info("Loaded " + playerMap.size() + " saved players.");
         }
         else {
             p.getLogger().info("No saved O2Players.");
@@ -553,7 +544,7 @@ public class O2Players {
      * @return true if the command succeeded
      */
     public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (args.length == 1) {
+        if (args.length == 1 && sender instanceof Player) {
             common.printDebugMessage("Running playerSummary for sender: " + sender.getName(), null, null, false);
             playerSummary(sender, (Player) sender);
             return true;
@@ -688,8 +679,12 @@ public class O2Players {
 
         Year year = stringToYear(targetYear);
 
-        if (year != null)
+        if (year != null) {
             o2p.setYear(year);
+            sender.sendMessage(Ollivanders2.chatColor + targetPlayer + " set to year " + year.getDisplayText() + ".\n");
+        }
+        else
+            sender.sendMessage(Ollivanders2.chatColor + targetYear + " is not a valid year.\n");
 
         return true;
     }
@@ -717,9 +712,15 @@ public class O2Players {
         if (y >= 0 && y < 7) {
             Year year = Year.getYearByValue(y);
 
-            if (year != null)
+            if (year != null) {
                 o2p.setYear(year);
+                sender.sendMessage(Ollivanders2.chatColor + targetPlayer + " set to year " + year.getDisplayText() + ".\n");
+            }
+            // else case cannot happen because of range check above
         }
+        else
+            sender.sendMessage(Ollivanders2.chatColor + Integer.toString(y + 1) + " is not a valid year.\n");
+
         return true;
     }
 
@@ -741,7 +742,7 @@ public class O2Players {
 
         if (y < 1 || y > 7)
             return null;
-        return Year.getYearByValue(y);
+        return Year.getYearByValue(y - 1); // Year is 0-based
     }
 
     /**

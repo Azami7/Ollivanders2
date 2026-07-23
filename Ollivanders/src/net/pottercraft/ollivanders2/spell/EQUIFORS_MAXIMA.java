@@ -19,9 +19,9 @@ public class EQUIFORS_MAXIMA extends AddO2Effect {
         super(plugin);
 
         spellType = O2SpellType.EQUIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
-        text = "Jinx that turns the target player in to a horse.";
+        text = "Jinx that turns the target player in to a horse in appearance and behavior.";
     }
 
     /**
@@ -34,7 +34,7 @@ public class EQUIFORS_MAXIMA extends AddO2Effect {
     public EQUIFORS_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.EQUIFORS_MAXIMA;
-        branch = O2MagicBranch.TRANSFIGURATION;
+        branch = O2MagicBranch.JINX;
 
         effectsToAdd.add(O2EffectType.EQUIFORS_MAXIMA);
         strengthModifier = 1;

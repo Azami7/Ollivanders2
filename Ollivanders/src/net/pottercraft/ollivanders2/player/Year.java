@@ -70,7 +70,7 @@ public enum Year {
     /**
      * Get the year that has the corresponding value
      *
-     * @param value the value to get
+     * @param value the value to get, 0-6 (0-based index)
      * @return the Year if exists, null otherwise
      */
     @Nullable

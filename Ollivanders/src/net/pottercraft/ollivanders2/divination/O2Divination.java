@@ -138,10 +138,10 @@ public abstract class O2Divination {
         O2EffectType effectType = getProphecyEffect();
 
         // determine the number of days until fulfillment of the prophecy - 0 means tomorrow
-        int numDays = (Math.abs(Ollivanders2Common.random.nextInt()) % maxDelayDays);
+        int numDays = Ollivanders2Common.random.nextInt(maxDelayDays);
 
         // determine the time of day
-        TimeCommon timeOfDay = TimeCommon.values()[(Math.abs(Ollivanders2Common.random.nextInt()) % TimeCommon.values().length)];
+        TimeCommon timeOfDay = TimeCommon.values()[Ollivanders2Common.random.nextInt(TimeCommon.values().length)];
 
         // how many ticks until this time comes
         long delayTicks = getDelayTicks(numDays, timeOfDay);

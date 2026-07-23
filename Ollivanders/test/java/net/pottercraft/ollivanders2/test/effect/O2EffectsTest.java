@@ -7,7 +7,11 @@ import net.pottercraft.ollivanders2.effect.INVISIBILITY;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +22,7 @@ import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -92,6 +97,9 @@ public class O2EffectsTest {
         testUpkeep();
         testGetAllActiveEffects();
         testRemoveAllEffects();
+        testOnPlayerQuitSavesAndOnJoinRestores();
+        testKilledEffectNotSavedOnQuit();
+        testOnEntityDeathClearsEffects();
     }
 
     /**
@@ -327,6 +335,72 @@ public class O2EffectsTest {
                 "Player 1 effects should be cleared");
         assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffects(player2.getUniqueId()),
                 "Player 2 effects should be cleared");
+    }
+
+    /**
+     * onPlayerQuitEvent moves a player's active effects into saved storage; onPlayerJoinEvent restores them on rejoin.
+     */
+    private void testOnPlayerQuitSavesAndOnJoinRestores() {
+        PlayerMock player = mockServer.addPlayer();
+        Ollivanders2API.getPlayers().playerEffects.addEffect(new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId()));
+        mockServer.getScheduler().performTicks(20);
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
+                "effect should be active before quit");
+
+        // quitting moves the active effect to saved storage and clears it from the active list
+        player.disconnect();
+        mockServer.getScheduler().performTicks(1);
+        assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
+                "quit should move the effect out of the active list");
+
+        // rejoining restores the saved effect to active
+        player.reconnect();
+        mockServer.getScheduler().performTicks(5);
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
+                "join should restore the saved effect to active");
+    }
+
+    /**
+     * An effect killed before quit (as a shield kills itself in its quit handler) is not saved, so it does not return
+     * when the player rejoins.
+     */
+    private void testKilledEffectNotSavedOnQuit() {
+        PlayerMock player = mockServer.addPlayer();
+        Ollivanders2API.getPlayers().playerEffects.addEffect(new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId()));
+        mockServer.getScheduler().performTicks(20);
+
+        O2Effect effect = Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL);
+        assertNotNull(effect, "effect should be active before it is killed");
+
+        // kill the effect but leave it in the active list, then quit before any tick removes it
+        effect.kill();
+        player.disconnect();
+        mockServer.getScheduler().performTicks(1);
+        player.reconnect();
+        mockServer.getScheduler().performTicks(5);
+
+        assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
+                "a killed effect should not be saved on quit, so it does not return on join");
+    }
+
+    /**
+     * onEntityDeathEvent resets a player's active effects so they respawn clean.
+     */
+    private void testOnEntityDeathClearsEffects() {
+        PlayerMock player = mockServer.addPlayer();
+        player.setLocation(new Location(testWorld, 0, 4, 0));
+        Ollivanders2API.getPlayers().playerEffects.addEffect(new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId()));
+        mockServer.getScheduler().performTicks(20);
+        assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
+                "effect should be active before death");
+
+        DamageSource damageSource = DamageSource.builder(DamageType.IN_FIRE).withDamageLocation(player.getLocation()).build();
+        PlayerDeathEvent event = new PlayerDeathEvent(player, damageSource, new ArrayList<>(), 0, 0, 0, 0, "died");
+        mockServer.getPluginManager().callEvent(event);
+        mockServer.getScheduler().performTicks(1);
+
+        assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
+                "death should reset the player's active effects");
     }
 
     @AfterAll
