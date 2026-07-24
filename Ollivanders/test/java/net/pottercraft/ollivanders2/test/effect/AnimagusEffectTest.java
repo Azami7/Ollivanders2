@@ -3,6 +3,8 @@ package net.pottercraft.ollivanders2.test.effect;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.ANIMAGUS_EFFECT;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.spell.O2SpellType;
+import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -52,7 +55,8 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
 
     /**
      * Covers the effect's behavior that does not require LibsDisguises: killed when the player has no animagus form,
-     * form preserved through application, transformed on the first tick and staying transformed, and killable.
+     * form preserved through application, transformed on the first tick and staying transformed, spell casting
+     * blocked while transformed (except the animagus toggle spell), and killable.
      */
     @Override
     void checkEffectTest() {
@@ -97,7 +101,17 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
         mockServer.getScheduler().performTicks(10);
         assertTrue(effect5.isTransformed(), "Effect5 should remain transformed after third tick cycle");
 
-        // Test 5: Effect removal and cleanup behavior
+        // Test 5: Players cannot cast spells while in animagus form, except the spell that toggles the form
+        TestCommon.clearMessageQueue(target5);
+        assertFalse(testPlugin.canCast(target5, O2SpellType.LUMOS, true),
+                "A transformed player should not be able to cast spells");
+        String message = target5.nextMessage();
+        assertNotNull(message, "A transformed player should be told why they cannot cast");
+        assertTrue(message.contains("animagus form"), "The message should say the block is the animagus form");
+        assertTrue(testPlugin.canCast(target5, O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS, true),
+                "A transformed player should be able to cast the animagus toggle spell");
+
+        // Test 6: Effect removal and cleanup behavior
         PlayerMock target6 = mockServer.addPlayer();
         O2Player o2p6 = Ollivanders2API.getPlayers().getPlayer(target6.getUniqueId());
         assertNotNull(o2p6, "O2Player should exist for target6");

@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.house.events.OllivandersPlayerSortedEvent;
+import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.World;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -203,6 +204,155 @@ public class O2HousesTest {
         // subtract points
         assertTrue(testHouses.subtractHousePoints(O2HouseType.HUFFLEPUFF, 5), "Should be able to subtract 5 points from Hufflepuff");
         assertHouseScore(O2HouseType.HUFFLEPUFF, 5, "Hufflepuff should have 5 points after subtracting 5");
+    }
+
+    /**
+     * Test the house points command: set, add, subtract, and reset change the scores, while an invalid house
+     * name, an unparseable value, and a missing option show the usage message and change nothing.
+     */
+    @Test
+    void housePointsCommandTest() {
+        PlayerMock admin = mockServer.addPlayer();
+        admin.setOp(true); // house commands require admin permission
+
+        // set, add, and subtract change the house score
+        assertTrue(admin.performCommand("Ollivanders2 house points set Ravenclaw 15"), "house points set failed");
+        assertHouseScore(O2HouseType.RAVENCLAW, 15, "Ravenclaw should have 15 points after set");
+
+        assertTrue(admin.performCommand("Ollivanders2 house points add Ravenclaw 10"), "house points add failed");
+        assertHouseScore(O2HouseType.RAVENCLAW, 25, "Ravenclaw should have 25 points after adding 10");
+
+        assertTrue(admin.performCommand("Ollivanders2 house points subtract Ravenclaw 5"), "house points subtract failed");
+        assertHouseScore(O2HouseType.RAVENCLAW, 20, "Ravenclaw should have 20 points after subtracting 5");
+
+        // an invalid house name shows usage and changes nothing
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house points add Durmstrang 5"), "invalid house name failed the command");
+        String message = admin.nextMessage();
+        assertNotNull(message, "An invalid house name should show the usage message");
+        assertTrue(message.contains("house points"), "The usage message should describe the house points command");
+        assertHouseScore(O2HouseType.RAVENCLAW, 20, "No score should change for an invalid house name");
+
+        // an unparseable point value shows usage and changes nothing
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house points add Ravenclaw five"), "unparseable value failed the command");
+        message = admin.nextMessage();
+        assertNotNull(message, "An unparseable value should show the usage message");
+        assertTrue(message.contains("house points"), "The usage message should describe the house points command");
+        assertHouseScore(O2HouseType.RAVENCLAW, 20, "No score should change for an unparseable value");
+
+        // a missing option shows usage
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house points"), "missing option failed the command");
+        assertNotNull(admin.nextMessage(), "A missing option should show the usage message");
+
+        // reset sets all scores back to 0
+        assertTrue(admin.performCommand("Ollivanders2 house points reset"), "house points reset failed");
+        assertHouseScore(O2HouseType.RAVENCLAW, INITIAL_POINTS, "Ravenclaw should have 0 points after reset");
+    }
+
+    /**
+     * Test the house list command: with no house it lists every house name, with a house it lists that house's
+     * members (or that it has none), and an invalid house name is reported.
+     */
+    @Test
+    void houseListCommandTest() {
+        PlayerMock admin = mockServer.addPlayer();
+        admin.setOp(true); // house commands require admin permission
+
+        // with no house name, every house is listed
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house list"), "house list failed");
+        String message = admin.nextMessage();
+        assertNotNull(message, "house list should message the sender");
+        for (String houseName : testHouses.getAllHouseNames()) {
+            assertTrue(message.contains(houseName), "house list should contain " + houseName);
+        }
+
+        // a house with no members reports that
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house list Gryffindor"), "house list Gryffindor failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "house member list should message the sender");
+        assertTrue(message.contains("no members"), "An empty house should report it has no members");
+
+        // a house with a member lists them
+        PlayerMock member = mockServer.addPlayer();
+        assertTrue(testHouses.sort(member, O2HouseType.GRYFFINDOR), "member should sort into Gryffindor");
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house list Gryffindor"), "house list Gryffindor failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "house member list should message the sender");
+        assertTrue(message.contains(member.getName()), "The house member list should contain the sorted player");
+
+        // an invalid house name is reported
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house list Durmstrang"), "invalid house list failed the command");
+        message = admin.nextMessage();
+        assertNotNull(message, "An invalid house name should message the sender");
+        assertTrue(message.contains("Invalid house name"), "An invalid house name should be reported");
+    }
+
+    /**
+     * Test the house sort and reset commands: sorting a player by command, the error paths (missing args,
+     * unknown player, invalid house, already sorted), forcesort overriding an existing sort, and reset
+     * clearing all membership.
+     */
+    @Test
+    void houseSortCommandTest() {
+        PlayerMock admin = mockServer.addPlayer();
+        admin.setOp(true); // house commands require admin permission
+        PlayerMock target = mockServer.addPlayer();
+
+        // too few args shows the sort usage message
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house sort"), "house sort with no args failed the command");
+        String message = admin.nextMessage();
+        assertNotNull(message, "house sort with no args should show the usage message");
+        assertTrue(message.contains("house sort"), "The usage message should describe the house sort command");
+
+        // an unknown player is reported
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house sort NoSuchPlayer Gryffindor"), "unknown player sort failed the command");
+        message = admin.nextMessage();
+        assertNotNull(message, "An unknown player should message the sender");
+        assertTrue(message.contains("Unable to find a player"), "An unknown player should be reported");
+
+        // an invalid house name is reported
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house sort " + target.getName() + " Durmstrang"), "invalid house sort failed the command");
+        message = admin.nextMessage();
+        assertNotNull(message, "An invalid house should message the sender");
+        assertTrue(message.contains("not a valid house name"), "An invalid house should be reported");
+
+        // a valid sort puts the player in the house
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house sort " + target.getName() + " Gryffindor"), "house sort failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "A successful sort should message the sender");
+        assertTrue(message.contains("successfully sorted"), "A successful sort should be confirmed");
+        assertPlayerInHouse(target, O2HouseType.GRYFFINDOR, "The sort command should put the player in Gryffindor");
+
+        // sorting an already-sorted player is rejected
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house sort " + target.getName() + " Ravenclaw"), "re-sort failed the command");
+        message = admin.nextMessage();
+        assertNotNull(message, "Sorting a sorted player should message the sender");
+        assertTrue(message.contains("already a member"), "Sorting a sorted player should say they are already sorted");
+        assertPlayerInHouse(target, O2HouseType.GRYFFINDOR, "A rejected sort should not change the player's house");
+
+        // forcesort overrides the existing sort
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 house forcesort " + target.getName() + " Ravenclaw"), "house forcesort failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "A forcesort should message the sender");
+        assertTrue(message.contains("successfully sorted"), "A forcesort should be confirmed");
+        assertPlayerInHouse(target, O2HouseType.RAVENCLAW, "The forcesort command should move the player to Ravenclaw");
+        assertPlayerNotInHouse(target, O2HouseType.GRYFFINDOR, "The forcesort command should remove the player from Gryffindor");
+
+        // reset clears all house membership
+        assertTrue(admin.performCommand("Ollivanders2 house reset"), "house reset failed");
+        assertFalse(testHouses.isSorted(target), "house reset should unsort all players");
     }
 
     /**

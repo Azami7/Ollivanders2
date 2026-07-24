@@ -67,9 +67,10 @@ public class O2PropheciesTest {
 
     /**
      * Exercise the manager in order: an added prophecy is retrievable by target and by prophet but not by the wrong
-     * player; it ages out after its delay; a batch survives save, reset, and load intact; a disconnecting target's
-     * prophecy moves to the offline list and returns to active on reconnect; and getProphecy finds a prophecy whether
-     * its target is online, offline, or has just aged into the offline list.
+     * player; it ages out after its delay; a batch survives save, reset, and load intact; the prophecy command lists
+     * every unfulfilled prophecy; a disconnecting target's prophecy moves to the offline list and returns to active
+     * on reconnect; and getProphecy finds a prophecy whether its target is online, offline, or has just aged into
+     * the offline list.
      */
     @Test
     void propheciesTest() {
@@ -149,6 +150,16 @@ public class O2PropheciesTest {
         prophecy = prophecies.getProphecyByPlayer(prophet2.getUniqueId());
         assertNotNull(prophecy, "prophecies.getProphecyByPlayer(prophet2.getUniqueId()) was null after prophecies.loadProphecies()");
         assertTrue(prophecy.getProphecyMessage().contains(message2), "prophecy did not have expected message");
+
+        // test the prophecy command - it lists every unfulfilled prophecy while we have two active
+        prophet1.setOp(true); // the prophecy command requires admin permission
+        TestCommon.clearMessageQueue(prophet1);
+        assertTrue(testPlugin.runProphecies(prophet1), "runProphecies should succeed for an admin");
+        String prophecyList = prophet1.nextMessage();
+        assertNotNull(prophecyList, "runProphecies should message the sender");
+        assertTrue(prophecyList.contains("Prophecies:"), "The prophecy list should start with the header");
+        assertTrue(prophecyList.contains(message1), "The prophecy list should contain the first prophecy");
+        assertTrue(prophecyList.contains(message2), "The prophecy list should contain the second prophecy");
 
         // test onJoin
         // disconnect target1

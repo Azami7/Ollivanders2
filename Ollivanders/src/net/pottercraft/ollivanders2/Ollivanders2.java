@@ -49,12 +49,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Ollivanders2 plugin - Main plugin class for Ollivanders2.
- *
- * <p>Manages the lifecycle of the Ollivanders2 plugin including initialization, configuration,
- * and shutdown. Coordinates all resource managers (spells, potions, books, items, houses, players,
- * stationary spells, prophecies, and owl post). Handles player spell casting permissions, cooldowns,
- * and animagus form restrictions.</p>
+ * Main plugin class for Ollivanders2. Owns the plugin lifecycle and configuration, coordinates the
+ * resource managers (spells, potions, books, items, houses, players, stationary spells, prophecies,
+ * owl post, and blocks), handles the /ollivanders2 admin command, and gates spell casting on
+ * permissions, cooldowns, and animagus form.
  *
  * @author Azami7
  */
@@ -116,7 +114,9 @@ public class Ollivanders2 extends JavaPlugin {
 
     // file config
     /**
-     * See <a href="https://https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff">https://https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff</a>
+     * The distance, in blocks, within which players can hear another player's chat.
+     *
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff">https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff</a>
      */
     public static int chatDropoff = 15;
 
@@ -270,20 +270,8 @@ public class Ollivanders2 extends JavaPlugin {
     public static boolean testMode = false;
 
     /**
-     * Cleanup when the Minecraft server shuts down.
-     *
-     * <p>Called when the Ollivanders2 plugin is being disabled. Orchestrates the complete shutdown
-     * process by delegating cleanup to all resource managers, saving persistent data, and reverting
-     * temporary world changes.</p>
-     *
-     * <p>Shutdown Operations:</p>
-     * <ul>
-     * <li>Delegate shutdown to all resource managers (spells, potions, books, items, houses, players, stationary spells, prophecies, owl post)</li>
-     * <li>Save APPARATE teleport locations</li>
-     * <li>Revert all temporary block changes made by spells</li>
-     * <li>Ensure plugin config file exists</li>
-     * <li>Log plugin shutdown completion</li>
-     * </ul>
+     * Plugin shutdown - each resource manager saves its persistent data and reverts its temporary world
+     * changes, then the API stops handing out managers.
      *
      * <p>Safe to call even if {@link #onEnable()} did not complete - managers that were never created are skipped.</p>
      */
@@ -344,7 +332,7 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Save plugin config
+     * Write the default config file if none exists, so config is present for the next start.
      */
     private void savePluginConfig() {
         if (!(new File(pluginDir + "config.yml").exists())) {
@@ -353,22 +341,9 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Plugin initialization when the Minecraft server is starting up.
-     *
-     * <p>Orchestrates the complete plugin startup process:</p>
-     * <ul>
-     * <li>Initializes all resource managers (spells, potions, books, items, houses, players, stationary spells, prophecies, owl post)</li>
-     * <li>Loads and initializes the plugin API</li>
-     * <li>Ensures plugin data directory exists</li>
-     * <li>Reads and applies configuration settings</li>
-     * <li>Registers event listeners</li>
-     * <li>Schedules the main plugin scheduler</li>
-     * <li>Loads dependency plugins (LibsDisguises, WorldGuard)</li>
-     * <li>Initializes player data and houses</li>
-     * <li>Initializes items, stationary spells, and spells</li>
-     * <li>Initializes potions and books</li>
-     * <li>Logs plugin startup completion</li>
-     * </ul>
+     * Plugin startup - initializes the API, creates and enables all resource managers, reads config,
+     * registers event listeners, starts the plugin scheduler, and hooks up dependency plugins
+     * (LibsDisguises, WorldGuard).
      */
     public void onEnable() {
         Ollivanders2API.init(this);
@@ -390,14 +365,6 @@ public class Ollivanders2 extends JavaPlugin {
 
         // read configuration
         initConfig();
-
-        // set up event listeners
-        OllivandersListener ollivandersListener = new OllivandersListener(this);
-        ollivandersListener.onEnable();
-
-        // set up scheduler
-        Ollivanders2Schedule schedule = new Ollivanders2Schedule(this);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
         // set up dependencies
         loadDependencyPlugins();
@@ -423,11 +390,19 @@ public class Ollivanders2 extends JavaPlugin {
         // books
         books.onEnable();
 
-        // teleport events
+        // teleport actions
         teleportActions = new Ollivanders2TeleportActions();
 
         // blocks
         blocks.onEnable();
+
+        // set up event listeners
+        OllivandersListener ollivandersListener = new OllivandersListener(this);
+        ollivandersListener.onEnable();
+
+        // set up scheduler
+        Ollivanders2Schedule schedule = new Ollivanders2Schedule(this);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
         getLogger().info(this + " is now enabled!");
     }
@@ -594,8 +569,7 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Load dependency plugins or turn of the features that require them if
-     * they are not present.
+     * Load dependency plugins or turn off the features that require them if they are not present.
      */
     private void loadDependencyPlugins() {
         // set up libDisguises
@@ -604,9 +578,10 @@ public class Ollivanders2 extends JavaPlugin {
             libsDisguisesEnabled = true;
             getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
         }
-        else if (Ollivanders2.testMode)
+        else if (Ollivanders2.testMode) {
             libsDisguisesEnabled = true;
-        getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
+            getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
+        }
 
         // set up WorldGuard manager
         Plugin worldGuard = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
@@ -630,17 +605,17 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Handle command events
+     * Handle the /ollivanders2 command.
      *
-     * @param sender       the player who issued the command
-     * @param cmd          the command entered by the player
-     * @param commandLabel required arg for the plugin onCommand call from the server
+     * @param sender       who issued the command - a player or the console
+     * @param cmd          the command entered
+     * @param commandLabel the alias the command was invoked with
      * @param args         the arguments to the command, if any
      * @return true if the command was successful, false otherwise
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, @NotNull String[] args) {
-        if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
+        if (cmd.getName().equalsIgnoreCase("Ollivanders2"))
             return runOllivanders(sender, args);
 
         return false;
@@ -798,7 +773,6 @@ public class Ollivanders2 extends JavaPlugin {
                     + "\nbooks - books commands"
                     + "\nitems - item commands"
                     + "\npotions - potions commands"
-                    // + "\nquidd - creates a quidditch pitch"
                     + "\nhouse - house commands"
                     + "\nyear - year commands"
                     + "\neffect - effects commands"
@@ -809,7 +783,7 @@ public class Ollivanders2 extends JavaPlugin {
                     + "\nreload - reload the Ollivanders2 configs"
                     + "\ndebug - toggles Ollivanders2 plugin debug output\n"
                     + "\n" + "To run a command, type '/ollivanders2 [command]'."
-                    + "\nFor example, '/ollivanders2 wands\n");
+                    + "\nFor example, '/ollivanders2 wands'\n");
         }
         else
             players.usageSummaryPlayer(sender);
@@ -828,7 +802,7 @@ public class Ollivanders2 extends JavaPlugin {
 
         if (!O2Houses.useHouses) {
             sender.sendMessage(chatColor
-                    + "House are not currently enabled for your server."
+                    + "Houses are not currently enabled for your server."
                     + "\nTo enable houses, update the Ollivanders2 config.yml setting to true and restart your server."
                     + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
 
@@ -1116,7 +1090,7 @@ public class Ollivanders2 extends JavaPlugin {
      * Toggle debug mode.
      *
      * @param sender the player that issued the command
-     * @return true unless and error occurred
+     * @return true unless an error occurred
      */
     private boolean toggleDebug(@NotNull CommandSender sender) {
         if (!sender.hasPermission("Ollivanders2.admin"))
@@ -1137,7 +1111,8 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Reload the game configs if the command caller is an op.
+     * Reload the plugin config file and re-read the config values this class owns. Config read by other
+     * subsystems at enable time is not re-read until restart.
      *
      * @param sender the player that issued the command
      * @return true unless an error occurred
@@ -1154,9 +1129,10 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Give a player an item.
+     * The items subcommand - list all items or give a player an item.
      *
-     * @param sender the player to give item to
+     * @param sender the player that issued the command
+     * @param args   the arguments for the command, if any
      * @return true unless an error occurred
      */
     private boolean runItems(@NotNull Player sender, @NotNull String[] args) {
@@ -1167,15 +1143,16 @@ public class Ollivanders2 extends JavaPlugin {
 
         if (args.length < 2)
             usageMessageItem(sender);
-        else if (args[1].equals("list"))
+        else if (args[1].equalsIgnoreCase("list"))
             sender.sendMessage("\n" + listAllItems());
-        else if (args[1].equals("give") && args.length >= 4) {
+        else if (args[1].equalsIgnoreCase("give") && args.length >= 4) {
             int amount = 0;
             try {
                 amount = Integer.parseInt(args[2]);
             }
             catch (Exception e) {
                 sender.sendMessage("Unable to parse amount " + args[2]);
+                return false;
             }
 
             if (amount > 64)
@@ -1214,9 +1191,9 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Build a list of all O2Items
+     * Build a display string listing all O2Items.
      *
-     * @return the list of items
+     * @return the item list, one item per line
      */
     @NotNull
     private String listAllItems() {
@@ -1264,7 +1241,7 @@ public class Ollivanders2 extends JavaPlugin {
     /**
      * Get all pending teleport actions.
      *
-     * @return a list of teleport actions
+     * @return a copy of the pending teleport action list; changes to it do not affect the queue
      */
     @NotNull
     public List<Ollivanders2TeleportActions.O2TeleportAction> getTeleportActions() {
@@ -1272,7 +1249,7 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Add a teleport action to the queue
+     * Queue a teleport of a player from their current location, with no explosion effect.
      *
      * @param p  the player to teleport
      * @param to teleport destination
@@ -1282,18 +1259,18 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Add a teleport action with an explosion effect
+     * Queue a teleport of a player from their current location.
      *
      * @param p                   the player to teleport
      * @param to                  teleport destination
-     * @param explosionOnTeleport whether to do an explosion effect
+     * @param explosionOnTeleport whether to do an explosion effect on teleport
      */
     public void addTeleportAction(@NotNull Player p, @NotNull Location to, boolean explosionOnTeleport) {
         teleportActions.addTeleportAction(p, p.getLocation(), to, explosionOnTeleport);
     }
 
     /**
-     * Remove a teleport action.
+     * Remove a teleport action from the queue; does nothing if the action is not queued.
      *
      * @param action the action to remove
      */
@@ -1338,7 +1315,6 @@ public class Ollivanders2 extends JavaPlugin {
      * @return the incremented use count for this player for this spell
      */
     public int incrementSpellCount(@NotNull Player player, @NotNull O2SpellType spell) {
-        //returns the incremented spell count
         UUID pid = player.getUniqueId();
         O2Player o2p = getO2Player(player);
 
@@ -1349,10 +1325,10 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Gets the O2Player associated with the Player
+     * Get the O2Player for a player, creating and registering one if the player has none yet.
      *
      * @param player the player to get
-     * @return O2Player object for this player
+     * @return the O2Player for this player
      */
     @NotNull
     public O2Player getO2Player(@NotNull Player player) {
@@ -1367,10 +1343,10 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Sets the player's OPlayer by their player name
+     * Update the O2Player record for a player; does nothing if the player is an NPC.
      *
      * @param player the player
-     * @param o2p    the OPlayer associated with the player
+     * @param o2p    the O2Player associated with the player
      */
     public void setO2Player(@NotNull Player player, @NotNull O2Player o2p) {
         if (!(player instanceof NPC))
@@ -1378,9 +1354,9 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Gets the set of all player UUIDs.
+     * Get the UUIDs of all players known to the plugin.
      *
-     * @return a list of all player MC UUIDs
+     * @return a copy of the list of player UUIDs
      */
     @NotNull
     public ArrayList<UUID> getO2PlayerIDs() {
@@ -1420,8 +1396,7 @@ public class Ollivanders2 extends JavaPlugin {
         if (p == null)
             return false;
 
-        // Check cooldown: if the current time is less than the spell's last cast time (plus cooldown duration),
-        // the spell is still on cooldown
+        // the stored time is when the spell's cooldown expires, so earlier than that means still cooling down
         boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
 
         if (coolDown) {
@@ -1737,7 +1712,7 @@ public class Ollivanders2 extends JavaPlugin {
 
         if (!apparateLocations) {
             sender.sendMessage(chatColor
-                    + "Apprate locations are not currently enabled for your server."
+                    + "Apparate locations are not currently enabled for your server."
                     + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
                     + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations"
             );

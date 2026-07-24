@@ -66,7 +66,7 @@ public class Ollivanders2TeleportActionsTest {
         List<Ollivanders2TeleportActions.O2TeleportAction> pending = teleportActions.getTeleportActions();
         assertEquals(1, pending.size(), "Adding an action should make it pending");
 
-        Ollivanders2TeleportActions.O2TeleportAction action = pending.get(0);
+        Ollivanders2TeleportActions.O2TeleportAction action = pending.getFirst();
         assertEquals(player, action.getPlayer(), "The action should keep the player it was created with");
         assertEquals(from, action.getFromLocation(), "The action should keep the from location it was created with");
         assertEquals(to, action.getToLocation(), "The action should keep the to location it was created with");
@@ -109,7 +109,7 @@ public class Ollivanders2TeleportActionsTest {
         teleportActions.addTeleportAction(player, from, to, false);
 
         List<Ollivanders2TeleportActions.O2TeleportAction> pending = teleportActions.getTeleportActions();
-        Ollivanders2TeleportActions.O2TeleportAction removed = pending.get(0);
+        Ollivanders2TeleportActions.O2TeleportAction removed = pending.getFirst();
 
         teleportActions.removeTeleportAction(removed);
         assertEquals(1, teleportActions.getTeleportActions().size(), "Removing an action should leave the rest queued");
