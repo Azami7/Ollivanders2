@@ -60,7 +60,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Ollivanders2 extends JavaPlugin {
     /**
-     * All pending teleport events
+     * All pending teleport actions
      */
     private Ollivanders2TeleportActions teleportActions;
 
@@ -424,7 +424,7 @@ public class Ollivanders2 extends JavaPlugin {
         books.onEnable();
 
         // teleport events
-        teleportActions = new Ollivanders2TeleportActions(this);
+        teleportActions = new Ollivanders2TeleportActions();
 
         // blocks
         blocks.onEnable();
@@ -616,7 +616,6 @@ public class Ollivanders2 extends JavaPlugin {
             try {
                 if (worldGuard instanceof WorldGuardPlugin) {
                     worldGuardO2 = new Ollivanders2WorldGuard(this);
-                    worldGuardEnabled = true;
                 }
             }
             catch (Exception e) {
@@ -624,10 +623,10 @@ public class Ollivanders2 extends JavaPlugin {
             }
         }
 
-        if (worldGuard != null)
-            getLogger().info("WorldGuard found, enabled WorldGuard features.");
+        if (worldGuardEnabled)
+            getLogger().info("enabled WorldGuard features.");
         else
-            getLogger().info("WorldGuard not found, disabled WorldGuard features.");
+            getLogger().info("disabled WorldGuard features.");
     }
 
     /**
@@ -1290,7 +1289,7 @@ public class Ollivanders2 extends JavaPlugin {
      * @param explosionOnTeleport whether to do an explosion effect
      */
     public void addTeleportAction(@NotNull Player p, @NotNull Location to, boolean explosionOnTeleport) {
-        teleportActions.addTeleportEvent(p, p.getLocation(), to, explosionOnTeleport);
+        teleportActions.addTeleportAction(p, p.getLocation(), to, explosionOnTeleport);
     }
 
     /**
@@ -1299,7 +1298,7 @@ public class Ollivanders2 extends JavaPlugin {
      * @param action the action to remove
      */
     public void removeTeleportAction(@NotNull Ollivanders2TeleportActions.O2TeleportAction action) {
-        teleportActions.removeTeleportEvent(action);
+        teleportActions.removeTeleportAction(action);
     }
 
     /**

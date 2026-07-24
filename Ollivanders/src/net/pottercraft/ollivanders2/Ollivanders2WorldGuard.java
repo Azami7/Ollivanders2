@@ -19,21 +19,28 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Handles all WorldGuard support for Ollivanders2.  If WorldGuard is not enabled on the server, all calls
- * will short circuit to allow actions.
+ * Handles all WorldGuard support for Ollivanders2. When WorldGuard is not usable, permission checks short
+ * circuit to allow the action; region-name lookups short circuit to "not in the region".
  *
  * @author Azami7
  * @see <a href="https://worldguard.enginehub.org/en/latest/developer/">https://worldguard.enginehub.org/en/latest/developer/</a>
- * @since 2.2.5
  */
 public class Ollivanders2WorldGuard {
+    /**
+     * The WorldGuard plugin, or null when it is absent or disabled - all checks short circuit when null.
+     */
     private WorldGuardPlugin worldGuard;
+
+    /**
+     * Reference to the plugin for logging
+     */
     final private Ollivanders2 p;
 
     /**
-     * Constructor.
+     * Locate the WorldGuard plugin and set {@link Ollivanders2#worldGuardEnabled} to whether it is present
+     * and enabled.
      *
-     * @param o2plugin a callback to the ollivanders plugin
+     * @param o2plugin reference to the plugin
      * @see <a href="https://worldguard.enginehub.org/en/latest/developer/dependency/">https://worldguard.enginehub.org/en/latest/developer/dependency/</a>
      */
     public Ollivanders2WorldGuard(@NotNull Ollivanders2 o2plugin) {
@@ -45,13 +52,15 @@ public class Ollivanders2WorldGuard {
         if (wg != null) {
             try {
                 if (wg instanceof WorldGuardPlugin && wg.isEnabled()) {
-                    if (wg.getDescription().getVersion().startsWith("7")) {
-                        worldGuard = (WorldGuardPlugin) wg;
-                    }
+                    worldGuard = (WorldGuardPlugin) wg;
                 }
+
+                Ollivanders2.worldGuardEnabled = true;
             }
             catch (Exception e) {
                 p.getLogger().info("Failed to get WorldGuard plugin, WorldGuard features will be disabled.");
+
+                Ollivanders2.worldGuardEnabled = false;
             }
         }
 
@@ -60,10 +69,12 @@ public class Ollivanders2WorldGuard {
     }
 
     /**
-     * Test the state of a specific WorldGuard protection.
+     * Test a WorldGuard state flag for a player at a location. Allows the action unless a region at the
+     * location explicitly denies the flag - no regions, an unset flag, or WorldGuard unavailable all allow.
      *
-     * @param player the player to check for
-     * @param flag   the state flag for this region
+     * @param player   the player to check for
+     * @param location the location to check
+     * @param flag     the state flag to check
      * @return true if the player can take the action, false otherwise
      */
     private boolean wgTestState(@NotNull Player player, @NotNull Location location, @NotNull StateFlag flag) {
@@ -85,10 +96,11 @@ public class Ollivanders2WorldGuard {
     }
 
     /**
-     * Get the regions in this location.
+     * Get the WorldGuard regions at a location.
      *
-     * @param location the locationto check
-     * @return the set of regions for this location or null if there is no set.
+     * @param location the location to check
+     * @return the applicable region set (which may be empty), or null if WorldGuard is unavailable or the
+     * location has no world
      */
     @Nullable
     public ApplicableRegionSet getWGRegionSet(@NotNull Location location) {
@@ -119,27 +131,25 @@ public class Ollivanders2WorldGuard {
     }
 
     /**
-     * If WorldGuard is enabled, determine if player is allowed a specific permission.  This is done so that
-     * Ollivanders2 actions do not complete partially, such as mob transfiguration spells, and then cannot
-     * complete because WorldGuard is enabled.
+     * Determine if a player is allowed an action at a location, so actions can be permission-checked up front
+     * rather than failing partway through, such as mid-transfiguration.
      *
      * @param player   the player to check for
      * @param location the location to check (since it may not be where the player is)
      * @param flag     the flag to check
-     * @return true if the player has this permission at this location, false otherwise
+     * @return true if the player has this permission at this location or WorldGuard is unavailable, false otherwise
      */
     public boolean checkWGFlag(@NotNull Player player, @NotNull Location location, @NotNull StateFlag flag) {
         return wgTestState(player, location, flag);
     }
 
     /**
-     * If WorldGuard is enabled, determine if the player has build permissions.  This is done so that
-     * Ollivanders2 actions do not complete partially, such as object transformation spells, and then
-     * cannot complete because WorldGuard is enabled.
+     * Determine if a player has build permission at a location, so actions can be permission-checked up front
+     * rather than failing partway through, such as mid-transfiguration.
      *
-     * @param player   the player to check WG for
+     * @param player   the player to check for
      * @param location the location to check (since it may not be where the player is)
-     * @return true if the player has permissions to build at their location, false otherwise
+     * @return true if the player can build at this location or WorldGuard is unavailable, false otherwise
      */
     public boolean checkWGBuild(@NotNull Player player, @NotNull Location location) {
         if (worldGuard == null)
@@ -154,13 +164,13 @@ public class Ollivanders2WorldGuard {
     }
 
     /**
-     * Determine if a location is in a region by name
+     * Determine if a location is inside a named WorldGuard region.
      *
-     * @param regionName the name of the region to check
+     * @param regionName the region id to check, case-insensitive
      * @param location   the location to check
-     * @return true if it is inside a region with this name, false otherwise
+     * @return true if a region with this id contains the location, false otherwise or if WorldGuard is unavailable
      */
-    public boolean isLocationInRegionByName(String regionName, Location location) {
+    public boolean isLocationInRegionByName(@NotNull String regionName, @NotNull Location location) {
         ApplicableRegionSet regionSet = getWGRegionSet(location);
 
         if (regionSet == null || regionSet.size() < 1)
