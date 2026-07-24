@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -84,7 +85,7 @@ public class CISTEM_APERIO extends O2Spell {
 
         BlockState blockState = target.getState();
         if (!(blockState instanceof Container)) {
-            common.printDebugMessage("cistem aperio: target block not a container", null, null, false);
+            Ollivanders2API.common.printDebugMessage("cistem aperio: target block not a container", null, null, false);
             return;
         }
 
@@ -92,7 +93,7 @@ public class CISTEM_APERIO extends O2Spell {
         failureMessage = containerShakesMessage;
 
         if (inventory.isEmpty()) {
-            common.printDebugMessage("cistem aperio: container empty", null, null, false);
+            Ollivanders2API.common.printDebugMessage("cistem aperio: container empty", null, null, false);
             sendFailureMessage();
             return;
         }

@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.house.O2HouseType;
@@ -19,19 +20,33 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 /**
- * GSON data persistance layer
+ * GSON data persistence layer, which reads and writes the plugin's save files as JSON under
+ * {@link Ollivanders2#pluginDir}.
+ * <p>
+ * Save data is best-effort: writes that fail are logged and dropped, reads of a missing or unreadable file return
+ * null, and entries within a file that cannot be parsed are skipped so one bad record does not cost the whole file.
+ * </p>
  */
 public class GsonDAO implements GenericDAO {
+    /**
+     * The serializer for all save files, configured to write human-readable JSON
+     */
     final private Gson gson;
 
-    private static final String archiveDirectory = "plugins/Ollivanders2/archive";
+    /**
+     * Where previous save files are moved to when {@link Ollivanders2#archivePreviousBackup} is on
+     */
+    private static final String archiveDirectory = Ollivanders2.pluginDir + "archive";
 
     /**
-     * the house points save file name
+     * the house sort save file name
      */
     public static final String housesJSONFile = "O2Houses.txt";
 
@@ -66,20 +81,20 @@ public class GsonDAO implements GenericDAO {
     public static final String o2EffectsJSONFile = "O2Effects.txt";
 
     /**
-     * Constructor
+     * Constructor.
      */
     public GsonDAO() {
         gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     /**
-     * Write the house sort data
+     * Write the house sort data, replacing any previously saved house sort file.
      *
-     * @param map a map of player and house data as strings
+     * @param map the house each player is sorted to
      */
     @Override
     public void writeHouses(@NotNull Map<UUID, O2HouseType> map) {
-        // convert to something that can be properly serialized
+        // UUID and O2HouseType keys have no useful json representation, so save them by name
         Map<String, String> strMap = new HashMap<>();
         for (Entry<UUID, O2HouseType> e : map.entrySet()) {
             strMap.put(e.getKey().toString(), e.getValue().toString());
@@ -90,9 +105,9 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Write house points
+     * Write the house points, replacing any previously saved house points file.
      *
-     * @param map a map of the house points data as strings
+     * @param map the points each house has
      */
     @Override
     public void writeHousePoints(@NotNull Map<O2HouseType, Integer> map) {
@@ -106,15 +121,25 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Save the apparate locations
+     * Write the apparate locations, replacing any previously saved apparate locations file. Locations whose world is
+     * not loaded cannot be saved and are left out.
      *
-     * @param locations the map of location names to Locations
+     * @param locations a map of location names to the location they name
      */
+    @Override
     public void writeApparateData(@NotNull HashMap<String, Location> locations) {
         Map<String, String[]> serializedLocations = new HashMap<>();
         for (Entry<String, Location> entry : locations.entrySet()) {
             Location location = entry.getValue();
-            String[] locationAsArray = {location.getWorld().getName(), String.valueOf(location.getX()), String.valueOf(location.getY()), String.valueOf(location.getZ())};
+            World world = location.getWorld();
+
+            // a location in an unloaded world cannot be saved, skip it rather than losing the whole file
+            if (world == null) {
+                Ollivanders2API.common.printDebugMessage("GsonDAO.writeApparateData: no world for location " + entry.getKey(), null, null, true);
+                continue;
+            }
+
+            String[] locationAsArray = {world.getName(), String.valueOf(location.getX()), String.valueOf(location.getY()), String.valueOf(location.getZ())};
             serializedLocations.put(entry.getKey(), locationAsArray);
         }
 
@@ -123,10 +148,10 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Write save data serialized in to a hashmap of String, String pairs
+     * Write save data, replacing any previously saved file of the same name.
      *
-     * @param map      the map of saved data
-     * @param filename the file to write to
+     * @param map      the data to write
+     * @param filename the name of the save file, relative to the plugin directory
      */
     @Override
     public void writeSaveData(@NotNull HashMap<String, String> map, @NotNull String filename) {
@@ -135,9 +160,10 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Write save data serialized in to a map of String, Map pairs
+     * Write save data, replacing any previously saved file of the same name.
      *
-     * @param map a map of the player data as strings
+     * @param map      the data to write
+     * @param filename the name of the save file, relative to the plugin directory
      */
     @Override
     public void writeSaveData(@NotNull Map<String, Map<String, String>> map, @NotNull String filename) {
@@ -146,20 +172,21 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Write the prophecies to json file
+     * Write save data, replacing any previously saved file of the same name.
      *
-     * @param map a map of prophecy data as strings
+     * @param list     the data to write
+     * @param filename the name of the save file, relative to the plugin directory
      */
     @Override
-    public void writeSaveData(@NotNull List<Map<String, String>> map, @NotNull String filename) {
-        String json = gson.toJson(map);
+    public void writeSaveData(@NotNull List<Map<String, String>> list, @NotNull String filename) {
+        String json = gson.toJson(list);
         writeJSON(json, filename);
     }
 
     /**
-     * Read the house sort data from json
+     * Read the house sort data. Players whose saved id or house cannot be parsed are left out.
      *
-     * @return a map of player UUIDs and their house
+     * @return the house each player is sorted to, or null if the save file is missing or unreadable
      */
     @Override
     @Nullable
@@ -168,9 +195,19 @@ public class GsonDAO implements GenericDAO {
         if (json == null)
             return null;
 
-        Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>() {
-        }.getType());
+        Map<String, String> strMap;
 
+        try {
+            strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>() {
+            }.getType());
+        }
+        catch (JsonSyntaxException e) {
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readHouses: unable to parse " + housesJSONFile, null, e, true);
+            return null;
+        }
+
+        if (strMap == null)
+            return null;
 
         Map<UUID, O2HouseType> map = new HashMap<>();
         for (Entry<String, String> entry : strMap.entrySet()) {
@@ -191,9 +228,7 @@ public class GsonDAO implements GenericDAO {
                 hType = O2HouseType.valueOf(house);
             }
             catch (Exception e) {
-                if (Ollivanders2.debug)
-                    e.printStackTrace();
-
+                Ollivanders2API.common.printDebugMessage("GsonDAO.readHouses: unknown house " + house, e, null, true);
                 continue;
             }
 
@@ -204,9 +239,9 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * read the house points json data
+     * Read the house points. Entries whose saved house or points cannot be parsed are left out.
      *
-     * @return a map of houses and their points
+     * @return the points each house has, or null if the save file is missing or unreadable
      */
     @Override
     @Nullable
@@ -215,8 +250,19 @@ public class GsonDAO implements GenericDAO {
         if (json == null)
             return null;
 
-        Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>() {
-        }.getType());
+        Map<String, String> strMap;
+
+        try {
+            strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>() {
+            }.getType());
+        }
+        catch (JsonSyntaxException e) {
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readHousePoints: unable to parse " + housePointsJSONFile, null, e, true);
+            return null;
+        }
+
+        if (strMap == null)
+            return null;
 
         Map<O2HouseType, Integer> map = new HashMap<>();
         for (Entry<String, String> entry : strMap.entrySet()) {
@@ -233,9 +279,7 @@ public class GsonDAO implements GenericDAO {
                 hType = O2HouseType.valueOf(house);
             }
             catch (Exception e) {
-                if (Ollivanders2.debug)
-                    e.printStackTrace();
-
+                Ollivanders2API.common.printDebugMessage("GsonDAO.readHousePoints: unknown house " + house, e, null, true);
                 continue;
             }
 
@@ -251,34 +295,45 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Read the apparate locations
+     * Read the apparate locations. Locations that are incomplete, unparseable, or in a world that is not loaded are
+     * left out.
      *
-     * @return a map of apparate locations or null if load failed
+     * @return a map of location names to the location they name, or null if the save file is missing or unreadable
      */
+    @Override
     @Nullable
-    public HashMap<String, Location> readApparateLocation() {
+    public HashMap<String, Location> readApparateLocations() {
         String json = readJSON(apparateLocationsJSONFile);
         if (json == null) {
             return null;
         }
 
-        Map<String, String[]> serializedLocations = new HashMap<>();
-        serializedLocations = gson.fromJson(json, new TypeToken<Map<String, String[]>>() {
-        }.getType());
+        Map<String, String[]> serializedLocations;
+
+        try {
+            serializedLocations = gson.fromJson(json, new TypeToken<Map<String, String[]>>() {
+            }.getType());
+        }
+        catch (JsonSyntaxException e) {
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readApparateLocations: unable to parse " + apparateLocationsJSONFile, null, e, true);
+            return null;
+        }
+
+        if (serializedLocations == null)
+            return null;
 
         HashMap<String, Location> locations = new HashMap<>();
         for (Entry<String, String[]> entry : serializedLocations.entrySet()) {
-            // get location name
             String locationName = entry.getKey();
-            if (locationName == null || locationName.length() < 1) {
+            if (locationName == null || locationName.isEmpty()) {
                 continue;
             }
 
+            // a location is saved as world name plus x, y, and z, so anything else is not one we can restore
             if (entry.getValue().length != 4) {
                 continue;
             }
 
-            // get world
             String worldName = entry.getValue()[0];
             World world = Bukkit.getServer().getWorld(worldName);
             if (world == null) {
@@ -308,9 +363,10 @@ public class GsonDAO implements GenericDAO {
     }
 
     /**
-     * Read a serilaized map of strings and maps from json file
+     * Read save data written as a map of maps.
      *
-     * @return a map of the player json data
+     * @param filename the name of the save file, relative to the plugin directory
+     * @return the saved data, or null if the file is missing, unreadable, or not valid json
      */
     @Override
     @Nullable
@@ -320,16 +376,25 @@ public class GsonDAO implements GenericDAO {
         if (json == null)
             return null;
 
-        Map<String, Map<String, String>> strMap = new HashMap<>();
-        strMap = (Map<String, Map<String, String>>) gson.fromJson(json, strMap.getClass());
+        Map<String, Map<String, String>> strMap;
+
+        try {
+            strMap = gson.fromJson(json, new TypeToken<Map<String, Map<String, String>>>() {
+            }.getType());
+        }
+        catch (JsonSyntaxException e) {
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readSavedDataMapStringMap: unable to parse " + filename, null, e, true);
+            return null;
+        }
 
         return strMap;
     }
 
     /**
-     * Read a serilized list of maps from json file
+     * Read save data written as a list of maps.
      *
-     * @return a list of the serialized stationary spells
+     * @param filename the name of the save file, relative to the plugin directory
+     * @return the saved data, or null if the file is missing, unreadable, or not valid json
      */
     @Override
     @Nullable
@@ -339,17 +404,27 @@ public class GsonDAO implements GenericDAO {
         if (json == null)
             return null;
 
-        List<Map<String, String>> strList = new ArrayList<>();
-        strList = (List<Map<String, String>>) gson.fromJson(json, strList.getClass());
+        List<Map<String, String>> strList;
+
+        try {
+            strList = gson.fromJson(json, new TypeToken<List<Map<String, String>>>() {
+            }.getType());
+        }
+        catch (JsonSyntaxException e) {
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readSavedDataListMap: unable to parse " + filename, null, e, true);
+            return null;
+        }
 
         return strList;
     }
 
     /**
-     * Write json data to a file.
+     * Write json data to a save file, replacing any file already there. Depending on
+     * {@link Ollivanders2#archivePreviousBackup} the previous file is either moved to the archive directory or
+     * deleted. Failures are logged and the data is dropped rather than thrown.
      *
      * @param json the json data to write
-     * @param path the path to the json file
+     * @param path the name of the save file, relative to the plugin directory
      */
     private synchronized void writeJSON(@NotNull String json, @NotNull String path) {
         String saveFile = Ollivanders2.pluginDir + path;
@@ -358,107 +433,90 @@ public class GsonDAO implements GenericDAO {
         File dir = new File(Ollivanders2.pluginDir);
 
         try {
-            // if the file exists and archiving is turned on, we want to move it, otherwise delete it so we can write a new one
+            // the previous save has to be moved out of the way, either to the archive or to the trash
             if (file.exists()) {
                 try {
                     if (Ollivanders2.archivePreviousBackup) {
                         File archiveDir = new File(archiveDirectory);
-                        archiveDir.mkdirs();
+                        if (!archiveDir.exists() && !archiveDir.mkdirs())
+                            Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to create archive directory " + archiveDirectory, null, null, true);
+
                         String archiveFile = archiveDirectory + "/" + path + "-" + TimeCommon.getCurrentTimestamp();
 
                         File prev = new File(archiveFile);
-                        file.renameTo(prev);
+                        if (!file.renameTo(prev))
+                            Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to archive " + saveFile + " as " + archiveFile, null, null, true);
                     }
-                    else
-                        file.delete();
+                    else if (!file.delete())
+                        Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to delete previous " + saveFile, null, null, true);
                 }
                 catch (Exception e) {
-                    if (Ollivanders2.debug) {
-                        e.printStackTrace();
-                    }
+                    Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to replace previous " + saveFile, e, null, true);
                 }
             }
 
-            // create the directory and file
-            if (!dir.exists())
-                dir.mkdirs();
+            if (!dir.exists() && !dir.mkdirs()) {
+                Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to create plugin directory " + Ollivanders2.pluginDir, null, null, true);
+                return;
+            }
 
+            // the previous save file could not be moved out of the way, so this save would be lost
             if (!file.createNewFile()) {
+                Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to create " + saveFile + ", save data not written", null, null, true);
                 return;
             }
         }
         catch (Exception e) {
-            if (Ollivanders2.debug) {
-                e.printStackTrace();
-            }
-
+            Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to create " + saveFile, e, null, true);
             return;
         }
 
-        try {
-            BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(saveFile), StandardCharsets.UTF_8));
-
+        try (BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveFile), StandardCharsets.UTF_8))) {
             bWriter.write(json);
             bWriter.flush();
-            bWriter.close();
         }
         catch (Exception e) {
-            if (Ollivanders2.debug) {
-                e.printStackTrace();
-            }
+            Ollivanders2API.common.printDebugMessage("GsonDAO.writeJSON: unable to write " + saveFile, e, null, true);
         }
     }
 
     /**
-     * Reads json from the specified file.
+     * Read json from a save file.
      *
-     * @param path path to the json file
-     * @return the json read or null if the file could not be read
+     * @param path the name of the save file, relative to the plugin directory
+     * @return the json read, or null if the file is missing, empty, or could not be read
      */
-    private String readJSON(@NotNull String path) {
-        String json = null;
+    @Nullable
+    private synchronized String readJSON(@NotNull String path) {
         String saveFile = Ollivanders2.pluginDir + path;
 
         File file = new File(saveFile);
 
-        // see if the file exists and we can access it
         try {
-            if (!file.exists()) {
+            if (!file.exists() || !file.canRead())
                 return null;
-            }
-
-            if (!file.canRead()) {
-                return null;
-            }
         }
         catch (Exception e) {
-            if (Ollivanders2.debug) {
-                e.printStackTrace();
-            }
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readJSON: unable to access " + saveFile, e, null, true);
             return null;
         }
 
-        try {
-            BufferedReader bReader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(saveFile), StandardCharsets.UTF_8));
+        StringBuilder json = new StringBuilder();
 
-            json = bReader.readLine();
-
-            // read the rest of the file if we're not done
+        try (BufferedReader bReader = new BufferedReader(new InputStreamReader(new FileInputStream(saveFile), StandardCharsets.UTF_8))) {
             String curLine;
             while ((curLine = bReader.readLine()) != null) {
-                json = json + curLine;
+                json.append(curLine);
             }
-
-            bReader.close();
         }
         catch (Exception e) {
-            if (Ollivanders2.debug) {
-                e.printStackTrace();
-            }
+            Ollivanders2API.common.printDebugMessage("GsonDAO.readJSON: unable to read " + saveFile, e, null, true);
+            return null;
         }
 
-        return json;
+        if (json.isEmpty())
+            return null;
+
+        return json.toString();
     }
 }

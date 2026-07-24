@@ -114,7 +114,7 @@ public abstract class AddO2Effect extends O2Spell {
         int targets = 0;
 
         if (targetSelf) {
-            common.printDebugMessage("AddO2Effect.doCheckEffect: adding effect to caster", null, null, false);
+            Ollivanders2API.common.printDebugMessage("AddO2Effect.doCheckEffect: adding effect to caster", null, null, false);
             addEffectsToTarget(caster);
             targets = targets + 1;
         }
@@ -126,7 +126,7 @@ public abstract class AddO2Effect extends O2Spell {
             if (targets >= numberOfTargets)
                 break;
 
-            common.printDebugMessage("AddO2Effect.doCheckEffect: adding effect to " + target.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("AddO2Effect.doCheckEffect: adding effect to " + target.getName(), null, null, false);
             addEffectsToTarget(target);
             targets = targets + 1;
         }
@@ -157,7 +157,7 @@ public abstract class AddO2Effect extends O2Spell {
                 effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, boolean.class, UUID.class).newInstance(p, duration * strengthModifier, permanent, target.getUniqueId());
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to create class for " + effectType, e, null, true);
+                Ollivanders2API.common.printDebugMessage("Failed to create class for " + effectType, e, null, true);
                 continue;
             }
 

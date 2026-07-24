@@ -45,12 +45,18 @@ public class O2StationarySpellsTest {
     }
 
     /**
+     * The plugin instance loaded by the current test, null for tests that did not load one. Used by {@link #cleanUp()}
+     * to decide whether the manager API is available.
+     */
+    Ollivanders2 testPlugin = null;
+
+    /**
      * Load a fresh plugin instance with all managers and listeners registered, advancing the scheduler through startup.
      *
      * @return a fresh Ollivanders2 plugin instance
      */
     Ollivanders2 getMockPlugin() {
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
+        testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
         return testPlugin;
     }
@@ -255,16 +261,18 @@ public class O2StationarySpellsTest {
      */
     @AfterEach
     void cleanUp() {
-        if (Ollivanders2API.getStationarySpells() != null) {
+        // tests that did not load a plugin have nothing to clean up, and clearFlooNetwork also needs the manager
+        // API, which throws when the plugin is not available
+        if (testPlugin != null) {
             for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
                 spell.kill();
             }
 
             // run upkeep to remove the killed spells from the list
             mockServer.getScheduler().performTicks(20);
-        }
 
-        ALIQUAM_FLOO.clearFlooNetwork();
+            ALIQUAM_FLOO.clearFlooNetwork();
+        }
     }
 
     @AfterAll

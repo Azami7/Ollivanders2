@@ -115,13 +115,13 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         HARMONIA_NECTERE_PASSUS twinCabinet = getTwin();
 
         if (twinCabinet == null) {
-            common.printDebugMessage("Harmonia stationary: twin cabinet null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("Harmonia stationary: twin cabinet null", null, null, true);
             kill();
             return;
         }
 
         if (!cabinetCheck(location.getBlock())) {
-            common.printDebugMessage("Harmonia stationary: cabinet malformed", null, null, true);
+            Ollivanders2API.common.printDebugMessage("Harmonia stationary: cabinet malformed", null, null, true);
             kill();
             twinCabinet.kill();
             return;
@@ -177,7 +177,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      */
     private boolean cabinetCheck(@NotNull Block signBlock) {
         if (signBlock.getType() != Material.AIR && !Ollivanders2Common.isSign(signBlock)) {
-            common.printDebugMessage("Harmonia stationary: signBlock is not air or a sign. Block type is " + signBlock.getType(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Harmonia stationary: signBlock is not air or a sign. Block type is " + signBlock.getType(), null, null, false);
             return false;
         }
 
@@ -194,7 +194,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
-        Map<String, String> serializedLoc = common.serializeLocation(twinCabinetLocation, twinLabel);
+        Map<String, String> serializedLoc = Ollivanders2API.common.serializeLocation(twinCabinetLocation, twinLabel);
 
         if (serializedLoc == null)
             serializedLoc = new HashMap<>();
@@ -209,7 +209,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
-        Location loc = common.deserializeLocation(spellData, twinLabel);
+        Location loc = Ollivanders2API.common.deserializeLocation(spellData, twinLabel);
 
         if (loc != null)
             twinCabinetLocation = loc;

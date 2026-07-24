@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
@@ -101,8 +100,6 @@ public abstract class O2Book {
      * opening/closing pages, and the NBT tags used to identify the book and its contents.
      */
     private void writeSpellBookMeta() {
-        Ollivanders2Common common = new Ollivanders2Common(p);
-
         if (bookItem == null)
             return;
 
@@ -137,7 +134,7 @@ public abstract class O2Book {
         for (String content : bookContents) {
             String name = Ollivanders2API.getBooks().spellText.getName(content);
             if (name == null) {
-                common.printDebugMessage("O2Book: " + title + " contains unknown spell or potion " + content, null, null, false);
+                Ollivanders2API.common.printDebugMessage("O2Book: " + title + " contains unknown spell or potion " + content, null, null, false);
                 continue;
             }
 

@@ -129,10 +129,10 @@ public final class DISSENDIUM extends O2Spell {
             }
         }
         else {
-            common.printDebugMessage("DISSENDIUM.doCheckEffect: hit door block", null, null, false);
+            Ollivanders2API.common.printDebugMessage("DISSENDIUM.doCheckEffect: hit door block", null, null, false);
             Block target = getTargetBlock();
             if (target == null) {
-                common.printDebugMessage("DISSENDIUM.doCheckEffect: target block is null", null, null, true);
+                Ollivanders2API.common.printDebugMessage("DISSENDIUM.doCheckEffect: target block is null", null, null, true);
                 kill();
                 return;
             }
@@ -140,7 +140,7 @@ public final class DISSENDIUM extends O2Spell {
 
             // if the target is openable, open it
             if (!(targetBlockData instanceof Openable) || ((Openable)targetBlockData).isOpen()) {
-                common.printDebugMessage("DISSENDIUM.doCheckEffect: target block is not openable or is already open", null, null, false);
+                Ollivanders2API.common.printDebugMessage("DISSENDIUM.doCheckEffect: target block is not openable or is already open", null, null, false);
                 kill();
                 return;
             }
@@ -159,7 +159,7 @@ public final class DISSENDIUM extends O2Spell {
     private void openDoor() {
         Block target = getTargetBlock();
         if (target == null) {
-            common.printDebugMessage("DISSENDIUM.openDoor: target block is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("DISSENDIUM.openDoor: target block is null", null, null, true);
             kill();
             return;
         }
@@ -170,7 +170,7 @@ public final class DISSENDIUM extends O2Spell {
 
         for (O2StationarySpell statSpell : spellsAtLocation) {
             if (statSpell instanceof COLLOPORTUS) {
-                common.printDebugMessage("DISSENDIUM.openDoor: door is within a colloportus spell", null, null, false);
+                Ollivanders2API.common.printDebugMessage("DISSENDIUM.openDoor: door is within a colloportus spell", null, null, false);
                 kill();
                 return;
             }
@@ -178,7 +178,7 @@ public final class DISSENDIUM extends O2Spell {
 
         BlockData targetBlockData = target.getBlockData();
 
-        common.printDebugMessage("DISSENDIUM.openDoor: opening door", null, null, false);
+        Ollivanders2API.common.printDebugMessage("DISSENDIUM.openDoor: opening door", null, null, false);
         doorBlock = target;
         ((Openable) targetBlockData).setOpen(true);
         doorBlock.setBlockData(targetBlockData);
@@ -197,11 +197,11 @@ public final class DISSENDIUM extends O2Spell {
 
         BlockData doorData = doorBlock.getBlockData();
         if (!(doorData instanceof Openable)) {
-            common.printDebugMessage("DISSENDIUM.revert: target block is no longer a door", null, null, false);
+            Ollivanders2API.common.printDebugMessage("DISSENDIUM.revert: target block is no longer a door", null, null, false);
             return;
         }
 
-        common.printDebugMessage("DISSENDIUM.revert: closing door", null, null, false);
+        Ollivanders2API.common.printDebugMessage("DISSENDIUM.revert: closing door", null, null, false);
         ((Openable)doorData).setOpen(false);
         doorBlock.setBlockData(doorData);
 

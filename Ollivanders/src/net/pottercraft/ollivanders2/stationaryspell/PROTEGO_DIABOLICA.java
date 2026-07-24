@@ -96,7 +96,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
      * them.
      */
     void createFireRing() {
-        common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: creating fire ring", null, null, false);
+        Ollivanders2API.common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: creating fire ring", null, null, false);
 
         int baseY = location.getBlockY() - 1;
 
@@ -158,7 +158,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
                 }
             }
             else
-                common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: cannot create fire at " + fireBlock.getLocation().getX() + ", " + fireBlock.getLocation().getY() + ", " + fireBlock.getLocation().getZ(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("PROTEGO_DIABOLICA.createFireRing: cannot create fire at " + fireBlock.getLocation().getX() + ", " + fireBlock.getLocation().getY() + ", " + fireBlock.getLocation().getZ(), null, null, false);
         }
 
         createdFireRing = true;
@@ -258,7 +258,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
     boolean isLoyal(Player player) {
         O2Player o2Player = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         if (o2Player == null) {
-            common.printDebugMessage("PROTEGO_DIABOLICA.isLoyal: o2player is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("PROTEGO_DIABOLICA.isLoyal: o2player is null", null, null, true);
             return false;
         }
 
@@ -280,7 +280,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
             if (isLocationInside(entityLocation)) {
                 if (entity.getUniqueId().equals(getCasterID()) || isLoyal((Player) entity)) {
                     event.setCancelled(true);
-                    common.printDebugMessage("PROTEGO_DIABOLICA: canceled EntityCombustEvent", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("PROTEGO_DIABOLICA: canceled EntityCombustEvent", null, null, false);
                 }
             }
         }
@@ -302,7 +302,7 @@ public class PROTEGO_DIABOLICA extends O2StationarySpell {
                 if (isLocationInside(entityLocation)) {
                     if (entity.getUniqueId().equals(getCasterID()) || isLoyal((Player) entity)) {
                         event.setCancelled(true);
-                        common.printDebugMessage("PROTEGO_DIABOLICA: canceled EntityDamageEvent", null, null, false);
+                        Ollivanders2API.common.printDebugMessage("PROTEGO_DIABOLICA: canceled EntityDamageEvent", null, null, false);
                     }
                 }
             }

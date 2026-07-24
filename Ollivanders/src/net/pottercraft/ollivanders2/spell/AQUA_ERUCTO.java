@@ -111,10 +111,10 @@ public class AQUA_ERUCTO extends O2Spell {
      * @return true if the entity is on fire
      */
     boolean canTarget(Entity entity) {
-        common.printDebugMessage("AQUA_ERUCTO.canTarget(): checking " + entity.getType(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("AQUA_ERUCTO.canTarget(): checking " + entity.getType(), null, null, false);
 
         if (entity.getFireTicks() > 0) { // entity is on fire
-            common.printDebugMessage("AQUA_ERUCTO.canTarget(): entity is on fire", null, null, false);
+            Ollivanders2API.common.printDebugMessage("AQUA_ERUCTO.canTarget(): entity is on fire", null, null, false);
             return true;
         }
 

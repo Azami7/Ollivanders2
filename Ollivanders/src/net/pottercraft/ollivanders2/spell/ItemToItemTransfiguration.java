@@ -128,7 +128,7 @@ public abstract class ItemToItemTransfiguration extends Transfiguration {
                 continue;
 
             if (!canTransfigure(item)) {
-                common.printDebugMessage("ItemToItemTransfiguration.transfigure: item cannot be transfigured", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ItemToItemTransfiguration.transfigure: item cannot be transfigured", null, null, false);
                 continue;
             }
 

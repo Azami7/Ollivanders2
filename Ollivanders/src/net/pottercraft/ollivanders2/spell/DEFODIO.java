@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -111,7 +112,7 @@ public final class DEFODIO extends O2Spell {
         else if (remainingCount < 1)
             remainingCount = 1;
 
-        common.printDebugMessage("Defodio remaining set to " + remainingCount, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Defodio remaining set to " + remainingCount, null, null, false);
     }
 
     /**
@@ -150,7 +151,7 @@ public final class DEFODIO extends O2Spell {
 
         // stop the spell if we hit a block type on the blocked list or when the max depth is reached
         if (materialBlockedList.contains(curBlock.getType()) || remainingCount <= 0) {
-            common.printDebugMessage("Block type not allowed: " + curBlock.getType(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Block type not allowed: " + curBlock.getType(), null, null, false);
             kill();
             return;
         }
@@ -161,7 +162,7 @@ public final class DEFODIO extends O2Spell {
             return;
         }
         remainingCount = remainingCount - 1;
-        common.printDebugMessage("Blocks remaining: " + remainingCount, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Blocks remaining: " + remainingCount, null, null, false);
 
         // advance along the vector to the next distinct block, accumulating fractional movement so non-axis-aligned
         // casts still cross block boundaries instead of re-targeting the block we just broke

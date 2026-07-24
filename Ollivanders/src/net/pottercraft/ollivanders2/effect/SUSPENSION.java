@@ -132,7 +132,7 @@ public class SUSPENSION extends O2Effect {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("SUSPENSION: cancelling PlayerVelocityEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("SUSPENSION: cancelling PlayerVelocityEvent", null, null, false);
     }
 
     /**

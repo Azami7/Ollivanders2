@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2WorldGuard;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.ApparateEvent;
@@ -212,7 +213,7 @@ public final class APPARATE extends O2Spell {
      */
     private void doApparate() {
         if (!apparateEvent.isCancelled()) {
-            common.printDebugMessage("APPARATE.doApparate: adding teleport event", null, null, false);
+            Ollivanders2API.common.printDebugMessage("APPARATE.doApparate: adding teleport event", null, null, false);
             p.addTeleportAction(caster, destination, true);
         }
     }
@@ -320,7 +321,7 @@ public final class APPARATE extends O2Spell {
                 wg = new Ollivanders2WorldGuard(p);
 
             if (!wg.checkWGFlag(caster, destination, Flags.ENTRY)) {
-                common.printDebugMessage("Player does not have ENTRY permissions to destination", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Player does not have ENTRY permissions to destination", null, null, false);
                 return false;
             }
         }
@@ -456,7 +457,7 @@ public final class APPARATE extends O2Spell {
             return;
 
         GsonDAO gsonLayer = new GsonDAO();
-        HashMap<String, Location> loadedLocations = gsonLayer.readApparateLocation();
+        HashMap<String, Location> loadedLocations = gsonLayer.readApparateLocations();
 
         if (loadedLocations != null)
             apparateLocations = loadedLocations;

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -41,7 +42,7 @@ public class FLYING extends O2Effect {
         age(1);
 
         if (!target.getAllowFlight()) {
-            common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
             target.setAllowFlight(true);
         }
         if (doSmokeEffect)
@@ -54,7 +55,7 @@ public class FLYING extends O2Effect {
     @Override
     public void doRemove() {
         if (!target.hasPermission("Ollivanders2.admin")) {
-            common.printDebugMessage("Removing flight for " + target.getDisplayName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Removing flight for " + target.getDisplayName(), null, null, false);
             target.setAllowFlight(false);
             target.setFlying(false);
         }

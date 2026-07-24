@@ -44,11 +44,6 @@ public class O2Players {
     private final Ollivanders2 p;
 
     /**
-     * Common functions
-     */
-    private final Ollivanders2Common common;
-
-    /**
      * A count of the player records read at start. This can be used to prevent writing back out at server
      * shut down if something goes wrong on plugin load.
      */
@@ -81,7 +76,6 @@ public class O2Players {
         p = plugin;
 
         playerEffects = new O2Effects(p);
-        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -249,7 +243,7 @@ public class O2Players {
     private Map<String, Map<String, String>> serializeO2Players(@NotNull Map<UUID, O2Player> o2PlayerMap) {
         Map<String, Map<String, String>> serializedMap = new HashMap<>();
 
-        common.printDebugMessage("Serializing O2Players...", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Serializing O2Players...", null, null, false);
 
         if (recordCount != 0) {
             if (o2PlayerMap.isEmpty()) {
@@ -335,8 +329,8 @@ public class O2Players {
             //
             // Year
             //
-            Integer year = o2p.getYear().ordinal();
-            playerData.put(yearLabel, year.toString());
+            int year = o2p.getYear().ordinal();
+            playerData.put(yearLabel, Integer.toString(year));
 
             //
             // Spell Experience
@@ -545,14 +539,14 @@ public class O2Players {
      */
     public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args) {
         if (args.length == 1 && sender instanceof Player) {
-            common.printDebugMessage("Running playerSummary for sender: " + sender.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Running playerSummary for sender: " + sender.getName(), null, null, false);
             playerSummary(sender, (Player) sender);
             return true;
         }
         else if (args.length == 2 && sender.hasPermission("Ollivanders2.admin")) {
             Player target = p.getServer().getPlayer(args[1]);
             if (target != null) {
-                common.printDebugMessage("Running playerSummary for player: " + target.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("Running playerSummary for player: " + target.getName(), null, null, false);
                 playerSummary(sender, target);
                 return true;
             }
@@ -673,7 +667,7 @@ public class O2Players {
         O2Player o2p = getPlayer(targetPlayer);
         if (o2p == null) {
             sender.sendMessage(Ollivanders2.chatColor + "Unable to find a player named " + targetPlayer + ".\n");
-            common.printDebugMessage("O2Player is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Player is null", null, null, true);
             return true;
         }
 
@@ -779,7 +773,7 @@ public class O2Players {
 
         // are they a muggle?
         if (o2p.isMuggle()) {
-            common.printDebugMessage("Player " + player.getName() + " is a muggle", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Player " + player.getName() + " is a muggle", null, null, false);
             summary.append("is a Muggle.\n\n");
         }
         else {

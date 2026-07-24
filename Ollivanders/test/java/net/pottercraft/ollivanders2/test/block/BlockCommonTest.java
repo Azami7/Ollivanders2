@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.block;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.block.BlockCommon;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BlockCommonTest {
     static ServerMock mockServer;
     static Ollivanders2 testPlugin;
-    static Ollivanders2Common o2common;
     Location origin;
     World testWorld;
     final String worldName = "world";
@@ -37,8 +35,6 @@ public class BlockCommonTest {
     static void globalSetUp() {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
-
-        o2common = new Ollivanders2Common(testPlugin);
     }
 
     @BeforeEach

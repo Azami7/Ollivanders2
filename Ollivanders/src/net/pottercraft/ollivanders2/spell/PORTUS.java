@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -77,7 +78,7 @@ public final class PORTUS extends ItemEnchant {
 
         World world = portkeyDestination.getWorld();
         if (world == null) {
-            common.printLogMessage("PORTUS.createEnchantmentArgs: null world", null, null, true);
+            Ollivanders2API.common.printLogMessage("PORTUS.createEnchantmentArgs: null world", null, null, true);
             kill();
             return;
         }

@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.item.enchantment;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.MagicLevel;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -45,11 +44,6 @@ public class EnchantedItems implements Listener {
     private final Ollivanders2 p;
 
     /**
-     * Common functions.
-     */
-    private final Ollivanders2Common common;
-
-    /**
      * NBT key for the enchantment type, stored as the {@link ItemEnchantmentType} enum name (e.g. "GEMINO").
      */
     static public NamespacedKey enchantmentType;
@@ -86,7 +80,6 @@ public class EnchantedItems implements Listener {
      */
     public EnchantedItems(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         enchantmentType = new NamespacedKey(p, "o2enchantment_name");
         enchantmentMagnitude = new NamespacedKey(p, "o2enchantment_magnitude");
@@ -166,7 +159,7 @@ public class EnchantedItems implements Listener {
 
         enchantedItems.put(eid, enchantment);
 
-        common.printDebugMessage("Added enchanted item " + itemStack.getType() + " of type " + eType.getName(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Added enchanted item " + itemStack.getType() + " of type " + eType.getName(), null, null, false);
     }
 
     /**
@@ -232,22 +225,22 @@ public class EnchantedItems implements Listener {
      */
     public boolean isCursedLevelBased(@NotNull Item item, @NotNull MagicLevel level) {
         if (!isCursed(item)) {
-            common.printDebugMessage("EnchantedItems.isCursedLevelBased: item is not cursed", null, null, false);
+            Ollivanders2API.common.printDebugMessage("EnchantedItems.isCursedLevelBased: item is not cursed", null, null, false);
             return false;
         }
 
-        common.printDebugMessage("EnchantedItems.isCursedLevelBased: item is cursed", null, null, false);
+        Ollivanders2API.common.printDebugMessage("EnchantedItems.isCursedLevelBased: item is cursed", null, null, false);
 
         ItemEnchantmentType enchantmentType = getEnchantmentType(item.getItemStack());
         if (enchantmentType == null) // this should never happen because isCursed would have been false, this is to make the linter happy
             return false;
 
-        common.printDebugMessage("curse level is " + enchantmentType.getLevel() + ", detection level is " + level, null, null, false);
+        Ollivanders2API.common.printDebugMessage("curse level is " + enchantmentType.getLevel() + ", detection level is " + level, null, null, false);
         if (enchantmentType.getLevel().ordinal() <= (level.ordinal() + 1)) {
-            common.printDebugMessage("EnchantedItems.isCursedLevelBased: curse can be detected", null, null, false);
+            Ollivanders2API.common.printDebugMessage("EnchantedItems.isCursedLevelBased: curse can be detected", null, null, false);
             return true;
         }
-        common.printDebugMessage("EnchantedItems.isCursedLevelBased: curse cannot be detected", null, null, false);
+        Ollivanders2API.common.printDebugMessage("EnchantedItems.isCursedLevelBased: curse cannot be detected", null, null, false);
         return false;
     }
 
@@ -285,7 +278,7 @@ public class EnchantedItems implements Listener {
             enchantmentType = ItemEnchantmentType.valueOf(enchantmentTypeStr);
         }
         catch (Exception e) {
-            common.printDebugMessage("Invalid item enchantment " + enchantmentTypeStr, null, null, true);
+            Ollivanders2API.common.printDebugMessage("Invalid item enchantment " + enchantmentTypeStr, null, null, true);
         }
 
         return enchantmentType;
@@ -382,7 +375,7 @@ public class EnchantedItems implements Listener {
         String args = getEnchantmentArgs(itemStack);
 
         if (magnitude == null || eType == null) {
-            common.printDebugMessage("Null enchantment NBT tags", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Null enchantment NBT tags", null, null, false);
             return null;
         }
 
@@ -411,7 +404,7 @@ public class EnchantedItems implements Listener {
             enchantmentType = ItemEnchantmentType.valueOf(eType);
         }
         catch (Exception e) {
-            common.printDebugMessage("Malformed enchantment type", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Malformed enchantment type", null, null, false);
             return null;
         }
 
@@ -422,7 +415,7 @@ public class EnchantedItems implements Listener {
             enchantment = (Enchantment) enchantmentClass.getConstructor(Ollivanders2.class, int.class, String.class, String.class).newInstance(p, magnitude, args, enchantmentType.getLore());
         }
         catch (Exception e) {
-            common.printDebugMessage("Failed to create enchantment", e, null, true);
+            Ollivanders2API.common.printDebugMessage("Failed to create enchantment", e, null, true);
         }
 
         return enchantment;
@@ -449,7 +442,7 @@ public class EnchantedItems implements Listener {
     @NotNull
     public ItemStack removeEnchantment(@NotNull ItemStack enchantedItemStack) {
         if (!isEnchanted(enchantedItemStack)) {
-            common.printDebugMessage("EnchantedItems.removeEnchantment: itemStack not enchanted", null, null, false);
+            Ollivanders2API.common.printDebugMessage("EnchantedItems.removeEnchantment: itemStack not enchanted", null, null, false);
             return enchantedItemStack;
         }
 
@@ -457,7 +450,7 @@ public class EnchantedItems implements Listener {
         if (eid != null)
             enchantedItems.remove(eid);
         else {
-            common.printDebugMessage("EnchantedItems.removeEnchantment: eid is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("EnchantedItems.removeEnchantment: eid is null", null, null, true);
         }
 
         return removeEnchantmentNBT(enchantedItemStack);

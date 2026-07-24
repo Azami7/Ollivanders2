@@ -55,8 +55,6 @@ public final class O2Books implements Listener {
 
     Ollivanders2 p;
 
-    Ollivanders2Common common;
-
     /**
      * The book text for each spell and potion.
      */
@@ -69,7 +67,6 @@ public final class O2Books implements Listener {
      */
     public O2Books(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(plugin);
 
         spellText = new BookTexts(plugin);
 
@@ -86,7 +83,7 @@ public final class O2Books implements Listener {
         O2BookMap.clear();
 
         addBooks();
-        common.printLogMessage("Added " + O2BookMap.keySet().size() + " books.", null, null, false);
+        Ollivanders2API.common.printLogMessage("Added " + O2BookMap.size() + " books.", null, null, false);
 
         spellText.onEnable();
     }
@@ -133,7 +130,7 @@ public final class O2Books implements Listener {
      * @param book   the book being read
      */
     private void readBook(@NotNull Player player, @NotNull ItemStack book) {
-        common.printDebugMessage("O2Books: " + player.getDisplayName() + " reading a book and book learning is enabled.", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Books: " + player.getDisplayName() + " reading a book and book learning is enabled.", null, null, false);
 
         ItemMeta meta = book.getItemMeta();
         if (meta == null)
@@ -146,7 +143,7 @@ public final class O2Books implements Listener {
      * Populate the book map from all book types, keyed by title.
      */
     private void addBooks() {
-        common.printDebugMessage("O2Books: adding all books...", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Books: adding all books...", null, null, false);
 
         for (O2BookType bookType : O2BookType.values()) {
             O2Book book = getO2BookByType(bookType);
@@ -172,7 +169,7 @@ public final class O2Books implements Listener {
             book = (O2Book) bookClass.getConstructor(Ollivanders2.class).newInstance(p);
         }
         catch (Exception e) {
-            common.printDebugMessage("O2Books: exception trying to create new instance of " + bookType, e, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Books: exception trying to create new instance of " + bookType, e, null, true);
         }
 
         return book;
@@ -491,7 +488,7 @@ public final class O2Books implements Listener {
                 return true;
             }
             else {
-                common.printDebugMessage("O2Books:: player to give book to is " + targetName, null, null, false);
+                Ollivanders2API.common.printDebugMessage("O2Books:: player to give book to is " + targetName, null, null, false);
             }
 
             // args after "book give <player>" are book name

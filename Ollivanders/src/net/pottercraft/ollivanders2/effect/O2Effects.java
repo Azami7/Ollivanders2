@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.effect;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
@@ -72,11 +71,6 @@ public class O2Effects implements Listener {
     final Ollivanders2 p;
 
     /**
-     * Common utility functions for the plugin.
-     */
-    final Ollivanders2Common common;
-
-    /**
      * Guards access to the {@code EffectsData} maps; shared across all instances so locking is consistent.
      */
     final static Semaphore semaphore = new Semaphore(1);
@@ -104,7 +98,7 @@ public class O2Effects implements Listener {
     /**
      * Semaphore-guarded storage for active effects (online players) and saved effects (offline players).
      */
-    private class EffectsData {
+    private static class EffectsData {
         /**
          * A list of all active effects on all online players
          */
@@ -138,7 +132,7 @@ public class O2Effects implements Listener {
                     effects = new HashMap<>(activeEffects.get(pid));
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.getPlayerActiveEffects: failed to acquire mutex in getPlayerActiveEffects", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.getPlayerActiveEffects: failed to acquire mutex in getPlayerActiveEffects", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -184,7 +178,7 @@ public class O2Effects implements Listener {
                 }
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.getActiveEffect: failed to acquire mutex in getActiveEffect", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.getActiveEffect: failed to acquire mutex in getActiveEffect", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -210,7 +204,7 @@ public class O2Effects implements Listener {
                     effects = new HashMap<>(savedEffects.get(pid));
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.getPlayerSavedEffects: failed to acquire mutex in getPlayerSavedEffects", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.getPlayerSavedEffects: failed to acquire mutex in getPlayerSavedEffects", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -232,7 +226,7 @@ public class O2Effects implements Listener {
                 savedEffects.put(pid, effects);
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.updatePlayerSavedEffects: failed to acquire mutex in updatePlayerSavedEffects", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.updatePlayerSavedEffects: failed to acquire mutex in updatePlayerSavedEffects", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -252,7 +246,7 @@ public class O2Effects implements Listener {
                 activeEffects.put(pid, effects);
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.updatePlayerActiveEffects: failed to acquire mutex in updatePlayerActiveEffects", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.updatePlayerActiveEffects: failed to acquire mutex in updatePlayerActiveEffects", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -279,7 +273,7 @@ public class O2Effects implements Listener {
                 savedEffects.remove(pid);
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.resetEffects: failed to acquire mutex in resetEffects", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.resetEffects: failed to acquire mutex in resetEffects", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -307,7 +301,7 @@ public class O2Effects implements Listener {
                 }
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.resetAllEffects: failed to acquire mutex in resetAllEffects", e, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.resetAllEffects: failed to acquire mutex in resetAllEffects", e, null, true);
             }
             finally {
                 semaphore.release();
@@ -327,7 +321,6 @@ public class O2Effects implements Listener {
      */
     public O2Effects(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(plugin);
 
         p.getServer().getPluginManager().registerEvents(this, p);
     }
@@ -575,7 +568,7 @@ public class O2Effects implements Listener {
         Entity entity = event.getTarget();
 
         if (entity == null) {
-            common.printDebugMessage("O2Effects: target entity is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Effects: target entity is null", null, null, true);
             return;
         }
 
@@ -944,7 +937,7 @@ public class O2Effects implements Listener {
                 }
             }
             catch (Exception e) {
-                common.printDebugMessage("Failure reading saved effect data.", e, null, true);
+                Ollivanders2API.common.printDebugMessage("Failure reading saved effect data.", e, null, true);
             }
         }
 
@@ -975,7 +968,7 @@ public class O2Effects implements Listener {
             effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, boolean.class, UUID.class).newInstance(p, duration, isPermanent, targetID);
         }
         catch (Exception e) {
-            common.printDebugMessage("Exception trying to create new instance of " + effectType, e, null, true);
+            Ollivanders2API.common.printDebugMessage("Exception trying to create new instance of " + effectType, e, null, true);
             return null;
         }
 
@@ -1027,13 +1020,13 @@ public class O2Effects implements Listener {
         }
 
         effectsData.updatePlayerActiveEffects(pid, playerEffects);
-        common.printDebugMessage("Added effect " + effect.effectType.toString() + " to " + pid, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Added effect " + effect.effectType.toString() + " to " + pid, null, null, false);
 
         String affectedPlayerMessage = effect.getAffectedPlayerText();
         if (affectedPlayerMessage != null) {
             Player player = p.getServer().getPlayer(pid);
             if (player == null) {
-                common.printDebugMessage("O2Effects.addEffect: player is null", null, null, true);
+                Ollivanders2API.common.printDebugMessage("O2Effects.addEffect: player is null", null, null, true);
                 effect.kill();
                 return;
             }
@@ -1079,10 +1072,10 @@ public class O2Effects implements Listener {
             playerEffects.remove(effectType);
         }
         else
-            common.printDebugMessage("O2Effects.removeEffect: effect to remove is null.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Effects.removeEffect: effect to remove is null.", null, null, false);
 
         effectsData.updatePlayerActiveEffects(pid, playerEffects);
-        common.printDebugMessage("Removed effect " + effectType + " from " + pid, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Removed effect " + effectType + " from " + pid, null, null, false);
     }
 
     /**
@@ -1199,16 +1192,16 @@ public class O2Effects implements Listener {
      */
     @Nullable
     public String detectEffectWithInformous(@NotNull UUID pid) {
-        common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effects with Informous", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effects with Informous", null, null, false);
         String infoText = null;
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
         Collection<O2Effect> effects = activeEffects.values();
 
-        common.printDebugMessage("O2Effects.detectEffectWithInformous: found " + activeEffects.size() + " active effects", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Effects.detectEffectWithInformous: found " + activeEffects.size() + " active effects", null, null, false);
 
         for (O2Effect effect : effects) {
-            common.printDebugMessage("O2Effects.detectEffectWithInformous: checking effect " + effect.effectType.toString(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Effects.detectEffectWithInformous: checking effect " + effect.effectType.toString(), null, null, false);
 
             if (effect.informousText != null) {
                 infoText = effect.informousText;
@@ -1229,14 +1222,14 @@ public class O2Effects implements Listener {
      */
     @Nullable
     public String detectEffectWithLegilimens(@NotNull UUID pid) {
-        common.printDebugMessage("O2Effects.detectEffectWithLegilimens", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Effects.detectEffectWithLegilimens", null, null, false);
         String infoText = null;
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
         Collection<O2Effect> effects = activeEffects.values();
 
         for (O2Effect effect : effects) {
-            common.printDebugMessage("O2Effects.detectEffectWithLegilimens: found " + effect.effectType.toString(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Effects.detectEffectWithLegilimens: found " + effect.effectType.toString(), null, null, false);
             if (effect.legilimensText != null) {
                 infoText = effect.legilimensText;
                 break;
@@ -1355,7 +1348,7 @@ public class O2Effects implements Listener {
      * test cleanup or server-wide resets.
      */
     public void removeAllEffects() {
-        common.printDebugMessage("Removing all effects from all players", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Removing all effects from all players", null, null, false);
         effectsData.killAllEffects();
     }
 }

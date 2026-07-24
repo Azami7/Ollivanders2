@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.divination;
 
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -30,11 +30,6 @@ public class O2Prophecies {
      * Reference to the plugin
      */
     final private Ollivanders2 p;
-
-    /**
-     * Common functions
-     */
-    final private Ollivanders2Common common;
 
     /**
      * Prophecies for online targets, aged and fulfilled each tick by {@link #upkeep()} until fulfilled or killed.
@@ -67,7 +62,6 @@ public class O2Prophecies {
         p = plugin;
 
         loadProphecies();
-        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -76,7 +70,7 @@ public class O2Prophecies {
      * @param prophecy the prophecy to add
      */
     public void addProphecy(@NotNull O2Prophecy prophecy) {
-        common.printDebugMessage("Adding prophecy", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Adding prophecy", null, null, false);
         activeProphecies.add(prophecy);
     }
 
@@ -86,7 +80,7 @@ public class O2Prophecies {
      * @param prophecy the prophecy whose target is offline
      */
     void addOfflineProphecy(@NotNull O2Prophecy prophecy) {
-        common.printDebugMessage("Adding prophecy", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Adding prophecy", null, null, false);
         offlineProphecies.add(prophecy);
     }
 
@@ -169,7 +163,7 @@ public class O2Prophecies {
             }
 
             if (prophecy.isKilled()) {
-                common.printDebugMessage("Removing prophecy", null, null, false);
+                Ollivanders2API.common.printDebugMessage("Removing prophecy", null, null, false);
                 activeProphecies.remove(prophecy);
             }
         }
@@ -299,7 +293,7 @@ public class O2Prophecies {
                 }
             }
             catch (Exception e) {
-                common.printDebugMessage("Failure reading saved prophecy data.", e, null, true);
+                Ollivanders2API.common.printDebugMessage("Failure reading saved prophecy data.", e, null, true);
             }
         }
 
@@ -334,7 +328,7 @@ public class O2Prophecies {
             }
         }
 
-        common.printDebugMessage("Loaded " + count + " prophecies for player.", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Loaded " + count + " prophecies for player.", null, null, false);
     }
 
     /**

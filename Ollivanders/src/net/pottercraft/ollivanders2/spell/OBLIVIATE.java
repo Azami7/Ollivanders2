@@ -89,7 +89,7 @@ public final class OBLIVIATE extends O2Spell {
 
             O2Player o2player = Ollivanders2API.getPlayers().getPlayer(target.getUniqueId());
             if (o2player == null) {
-                common.printDebugMessage("Null O2Player in OBLIVIATE.doCheckEffect()", null, null, true);
+                Ollivanders2API.common.printDebugMessage("Null O2Player in OBLIVIATE.doCheckEffect()", null, null, true);
                 continue;
             }
 
@@ -177,7 +177,7 @@ public final class OBLIVIATE extends O2Spell {
         O2SpellType[] spells = knownSpells.keySet().toArray(new O2SpellType[0]);
         target.setSpellCount(spells[index], knownSpells.get(spells[index]) - reduction);
 
-        common.printDebugMessage(target.getPlayerName() + " loses " + reduction + " level in " + spells[index].getSpellName(), null, null, false);
+        Ollivanders2API.common.printDebugMessage(target.getPlayerName() + " loses " + reduction + " level in " + spells[index].getSpellName(), null, null, false);
         return true;
     }
 
@@ -200,7 +200,7 @@ public final class OBLIVIATE extends O2Spell {
         O2PotionType[] potions = knownPotions.keySet().toArray(new O2PotionType[0]);
         target.setPotionCount(potions[index], knownPotions.get(potions[index]) - reduction);
 
-        common.printDebugMessage(target.getPlayerName() + " loses " + reduction + " level in " + potions[index].getPotionName(), null, null, false);
+        Ollivanders2API.common.printDebugMessage(target.getPlayerName() + " loses " + reduction + " level in " + potions[index].getPotionName(), null, null, false);
         return true;
     }
 }

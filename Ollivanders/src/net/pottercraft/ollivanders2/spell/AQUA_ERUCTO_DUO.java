@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -60,7 +61,7 @@ public final class AQUA_ERUCTO_DUO extends AQUA_ERUCTO {
      */
     @Override
     boolean canTarget(Entity entity) {
-        common.printDebugMessage("AQUA_ERUCTO_DUO.canTarget(): checking " + entity.getType(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("AQUA_ERUCTO_DUO.canTarget(): checking " + entity.getType(), null, null, false);
 
         return EntityCommon.isFireMob(entity.getType());
     }
@@ -74,7 +75,7 @@ public final class AQUA_ERUCTO_DUO extends AQUA_ERUCTO {
     @Override
     void effectEntity(Entity entity) {
         if (!(entity instanceof LivingEntity)) {
-            common.printDebugMessage("AQUA_ERUCTO_DUO.effectEntity: not a living entity", null, null, true);
+            Ollivanders2API.common.printDebugMessage("AQUA_ERUCTO_DUO.effectEntity: not a living entity", null, null, true);
             return;
         }
 

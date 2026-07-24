@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.potion;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -89,7 +90,7 @@ public final class FORGETFULNESS_POTION extends O2Potion {
             }
         }
 
-        common.printDebugMessage("Forgetfulness Potion: " + player.getName() + " lost " + memLoss + " experience with " + lostSkill, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Forgetfulness Potion: " + player.getName() + " lost " + memLoss + " experience with " + lostSkill, null, null, false);
 
         player.sendMessage(Ollivanders2.chatColor + "It feels like you've forgotten something.");
     }

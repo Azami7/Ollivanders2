@@ -114,11 +114,11 @@ public class FLAGRANTE extends Enchantment {
             burning.addDamage(damage);
 
             Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
-            common.printDebugMessage("Added flagrante curse to " + player.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Added flagrante curse to " + player.getName(), null, null, false);
         }
         else {
             Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.FLAGRANTE_BURNING);
-            common.printDebugMessage("Removed flagrante curse from " + player.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Removed flagrante curse from " + player.getName(), null, null, false);
         }
     }
 }

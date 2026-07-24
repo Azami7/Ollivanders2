@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 
@@ -69,7 +70,7 @@ public class MUFFLIATO extends ShieldSpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 
@@ -66,7 +67,7 @@ public class MOLLIARE extends O2StationarySpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class MOLLIARE extends O2StationarySpell {
 
         if (isLocationInside(entity.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("MOLLIARE: canceled EntityDamageEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("MOLLIARE: canceled EntityDamageEvent", null, null, false);
         }
     }
 

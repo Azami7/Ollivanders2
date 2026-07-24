@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import java.util.Map;
 import java.util.HashMap;
 
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  */
 public final class BookTexts {
-    Ollivanders2Common common;
-
     /**
      * The content for one spell or potion. May exceed a single Minecraft book page; it is split across pages when the
      * book is assembled.
@@ -90,7 +88,6 @@ public final class BookTexts {
      */
     BookTexts(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -120,7 +117,7 @@ public final class BookTexts {
                 spell = (O2Spell) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
             }
             catch (Exception e) {
-                common.printDebugMessage("BookTexts: exception trying to add book text for " + spellType, e, null, true);
+                Ollivanders2API.common.printDebugMessage("BookTexts: exception trying to add book text for " + spellType, e, null, true);
                 continue;
             }
 
@@ -146,7 +143,7 @@ public final class BookTexts {
                 potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
             }
             catch (Exception e) {
-                common.printDebugMessage("BookTexts: exception trying to add book text for " + potionType, e, null, true);
+                Ollivanders2API.common.printDebugMessage("BookTexts: exception trying to add book text for " + potionType, e, null, true);
                 continue;
             }
 

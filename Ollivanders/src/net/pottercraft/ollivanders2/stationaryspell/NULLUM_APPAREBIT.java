@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
@@ -77,7 +78,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
 
         if (isLocationInside(destination)) {
             event.setCancelled(true);
-            common.printDebugMessage("NULLUM_APPAREBIT: canceled OllivandersApparateByNameEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("NULLUM_APPAREBIT: canceled OllivandersApparateByNameEvent", null, null, false);
         }
 
         new BukkitRunnable() {
@@ -137,7 +138,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
 
         if (isLocationInside(destination)) {
             event.setCancelled(true);
-            common.printDebugMessage("NULLUM_APPAREBIT: canceled OllivandersApparateByCoordinatesEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("NULLUM_APPAREBIT: canceled OllivandersApparateByCoordinatesEvent", null, null, false);
         }
 
         new BukkitRunnable() {
@@ -162,7 +163,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
 
         if (isLocationInside(destination)) {
             event.setCancelled(true);
-            common.printDebugMessage("NULLUM_APPAREBIT: canceled EntityTeleportEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("NULLUM_APPAREBIT: canceled EntityTeleportEvent", null, null, false);
         }
     }
 
@@ -179,7 +180,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
 
         if (isLocationInside(destination)) {
             event.setCancelled(true);
-            common.printDebugMessage("NULLUM_APPAREBIT: canceled PlayerTeleportEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("NULLUM_APPAREBIT: canceled PlayerTeleportEvent", null, null, false);
         }
 
         new BukkitRunnable() {

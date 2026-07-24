@@ -177,7 +177,7 @@ public abstract class Divination extends O2Spell {
             divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, int.class).newInstance(p, caster, target, experience);
         }
         catch (Exception e) {
-            common.printDebugMessage("Exception creating divination", e, null, true);
+            Ollivanders2API.common.printDebugMessage("Exception creating divination", e, null, true);
             return;
         }
 

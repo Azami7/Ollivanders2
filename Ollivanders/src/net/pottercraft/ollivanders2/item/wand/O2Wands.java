@@ -37,11 +37,6 @@ public class O2Wands {
     private final Ollivanders2 p;
 
     /**
-     * common functions
-     */
-    private final Ollivanders2Common common;
-
-    /**
      * Namespace keys for NBT tags
      */
     private final NamespacedKey wandWoodKey;
@@ -64,7 +59,6 @@ public class O2Wands {
      */
     public O2Wands(Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         wandCoreKey = new NamespacedKey(p, "o2wand_core");
         wandWoodKey = new NamespacedKey(p, "o2wand_wood");
@@ -77,7 +71,7 @@ public class O2Wands {
      * @return true if yes, false if no
      */
     public boolean isWand(@NotNull ItemStack itemstack) {
-        common.printDebugMessage("isWand enter", null, null, false);
+        Ollivanders2API.common.printDebugMessage("isWand enter", null, null, false);
 
         // check elder wand
         if (O2ItemType.ELDER_WAND.isItemThisType(itemstack))
@@ -89,7 +83,7 @@ public class O2Wands {
                 return true;
         }
 
-        common.printDebugMessage("not a wand", null, null, false);
+        Ollivanders2API.common.printDebugMessage("not a wand", null, null, false);
         return false;
     }
 
@@ -211,7 +205,7 @@ public class O2Wands {
         ItemStack held = player.getInventory().getItemInMainHand();
 
         if (held.getType() == Material.AIR) {
-            common.printDebugMessage("O2Wands.holdsWandInPrimary: player not holding an item", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Wands.holdsWandInPrimary: player not holding an item", null, null, false);
             return false;
         }
 
@@ -228,7 +222,7 @@ public class O2Wands {
         ItemStack held = player.getInventory().getItemInOffHand();
 
         if (held.getType() == Material.AIR) {
-            common.printDebugMessage("O2Wands.holdsWandInSecondary: player not holding an item", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Wands.holdsWandInSecondary: player not holding an item", null, null, false);
             return false;
         }
 
@@ -246,7 +240,7 @@ public class O2Wands {
      */
     public void waveWand(@NotNull Player player) {
         if (Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND) >= O2PlayerCommon.wrongWand) {
-            common.printDebugMessage("O2Wands.waveWand: not the player's destined wand", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Wands.waveWand: not the player's destined wand", null, null, false);
             p.getServer().getPluginManager().callEvent(new OllivandersPlayerNotDestinedWandEvent(player));
             return;
         }
@@ -298,7 +292,7 @@ public class O2Wands {
         List<String> lore = new ArrayList<>();
         ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
         if (wand == null) {
-            common.printDebugMessage("O2Wands.makeWand: wand O2Item type missing", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Wands.makeWand: wand O2Item type missing", null, null, true);
             return null;
         }
 
@@ -337,7 +331,7 @@ public class O2Wands {
         // determine the wand wood
         ItemMeta itemMeta = corelessWand.getItemMeta();
         if (itemMeta == null) {
-            common.printDebugMessage("O2Wands.makeWandFromCoreless: item meta is null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Wands.makeWandFromCoreless: item meta is null", null, null, false);
             return null;
         }
 

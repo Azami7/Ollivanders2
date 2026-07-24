@@ -106,7 +106,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
             if (target.getUniqueId().equals(caster.getUniqueId()))
                 continue;
 
-            common.printDebugMessage("finite incantatem targeting " + target.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("finite incantatem targeting " + target.getName(), null, null, false);
 
             // look for any O2Effects on the player
             if (Ollivanders2API.getPlayers().playerEffects.hasEffects(target.getUniqueId())) {

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import org.bukkit.Location;
@@ -126,7 +127,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
      */
     protected void hidePlayersInSpellArea() {
         for (Player player : getPlayersInsideSpellRadius()) {
-            common.printDebugMessage("StationarySpell.hidePlayersInSpellArea: hiding " + player.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("StationarySpell.hidePlayersInSpellArea: hiding " + player.getName(), null, null, false);
             toggleVisibility(player);
         }
     }
@@ -262,7 +263,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         if (isLocationInside(target.getLocation()) && !isLocationInside(entity.getLocation())) {
             if (!canTarget((LivingEntity) entity)) {
                 event.setCancelled(true);
-                common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: canceled target of " + target.getName() + " by " + entity.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: canceled target of " + target.getName() + " by " + entity.getName(), null, null, false);
             }
         }
     }
@@ -289,7 +290,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
             if (areaEntryDenyMessage != null)
                 player.sendMessage(Ollivanders2.chatColor + areaEntryDenyMessage);
 
-            common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: prevented " + player.getName() + " entering area.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: prevented " + player.getName() + " entering area.", null, null, false);
 
             return;
         }
@@ -315,19 +316,19 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         // moving in from outside
         if (isLocationInside(toLocation) && !isLocationInside(fromLocation)) {
             if (canEnter(entity)) {
-                common.printDebugMessage(entity.getName() + " entering spell area", null, null, false);
+                Ollivanders2API.common.printDebugMessage(entity.getName() + " entering spell area", null, null, false);
                 hidePlayersInSpellArea();
             }
         }
         // moving out from inside
         else if (!isLocationInside(toLocation) && isLocationInside(fromLocation) && entity instanceof Player) {
-            common.printDebugMessage(entity.getName() + " leaving spell area", null, null, false);
+            Ollivanders2API.common.printDebugMessage(entity.getName() + " leaving spell area", null, null, false);
             unhidePlayer((Player) entity);
             hidePlayersInSpellArea();
         }
         // moving around outside, within the proximity boundary
         else if (!isLocationInside(toLocation) && !isLocationInside(fromLocation) && isInProximity(toLocation)) {
-            common.printDebugMessage(entity.getName() + " at proximity boundary", null, null, false);
+            Ollivanders2API.common.printDebugMessage(entity.getName() + " at proximity boundary", null, null, false);
             doProximityCheck(entity);
         }
     }
@@ -349,7 +350,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         for (Player player : recipients) {
             if (!canHear(player)) {
                 event.getRecipients().remove(player);
-                common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: removed " + player.getName() + " from chat recipients", null, null, false);
+                Ollivanders2API.common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: removed " + player.getName() + " from chat recipients", null, null, false);
             }
         }
     }

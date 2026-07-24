@@ -62,11 +62,6 @@ public class O2Potions implements Listener {
     final private Ollivanders2 p;
 
     /**
-     * Utility functions for common operations across the plugin.
-     */
-    final private Ollivanders2Common common;
-
-    /**
      * Loaded potion types indexed by lowercase display name. Excludes types disabled by missing dependencies.
      */
     final static private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
@@ -198,7 +193,6 @@ public class O2Potions implements Listener {
     public O2Potions(@NotNull Ollivanders2 plugin) {
         p = plugin;
 
-        common = new Ollivanders2Common(p);
         potionTypeKey = new NamespacedKey(p, "o2potion_type");
 
         p.getServer().getPluginManager().registerEvents(this, p);
@@ -281,16 +275,16 @@ public class O2Potions implements Listener {
      * Consumes one glass bottle and removes all dropped items within 1 block of the cauldron.
      */
     public void brewPotion(@NotNull Player player, @NotNull Block cauldron) {
-        common.printDebugMessage("O2Potions.brewPotion: enter", null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Potions.brewPotion: enter", null, null, false);
 
         ItemStack emptyBottle = player.getInventory().getItemInOffHand();
         if (emptyBottle.getType() != Material.GLASS_BOTTLE) {
-            common.printDebugMessage("O2Potions.brewPotion: player not holding a glass bottle in off-hand", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Potions.brewPotion: player not holding a glass bottle in off-hand", null, null, false);
             return;
         }
 
         if (!Ollivanders2Common.isHotBlock(cauldron.getRelative(BlockFace.DOWN))) {
-            common.printDebugMessage("O2Potions.brewPotion: cauldron is not over a hot block", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Potions.brewPotion: cauldron is not over a hot block", null, null, false);
             return;
         }
 
@@ -389,7 +383,7 @@ public class O2Potions implements Listener {
 
                 int count = ((Item) e).getItemStack().getAmount();
 
-                common.printDebugMessage("Found " + count + " of ingredient " + ingredientType, null, null, false);
+                Ollivanders2API.common.printDebugMessage("Found " + count + " of ingredient " + ingredientType, null, null, false);
 
                 if (ingredientsInCauldron.containsKey(ingredientType))
                     count = count + ingredientsInCauldron.get(ingredientType);
@@ -434,7 +428,7 @@ public class O2Potions implements Listener {
             potionName = container.get(potionTypeKey, PersistentDataType.STRING);
 
         if (potionName != null && !potionName.isEmpty()) {
-            common.printDebugMessage("O2Potions.findPotionByItemMeta: potion name is " + potionName, null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Potions.findPotionByItemMeta: potion name is " + potionName, null, null, false);
             potionType = O2PotionType.getPotionTypeByName(potionName);
 
             // handle the case of legacy potions created before potion name was added
@@ -443,17 +437,17 @@ public class O2Potions implements Listener {
 
         }
         else {
-            common.printDebugMessage("O2Potions.findPotionByItemMeta: potion name not found in NBT", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Potions.findPotionByItemMeta: potion name not found in NBT", null, null, false);
         }
 
         // if the type was found and this type is currently loaded
         if (potionType != null) {
             if (O2PotionMap.containsValue(potionType)) {
-                common.printDebugMessage("O2Potions.findPotionByItemMeta: found potion", null, null, false);
+                Ollivanders2API.common.printDebugMessage("O2Potions.findPotionByItemMeta: found potion", null, null, false);
                 return getPotionFromType(potionType);
             }
             else {
-                common.printDebugMessage("O2Potions.findPotionByItemMeta: did not find potion", null, null, false);
+                Ollivanders2API.common.printDebugMessage("O2Potions.findPotionByItemMeta: did not find potion", null, null, false);
                 return null;
             }
         }
@@ -477,7 +471,7 @@ public class O2Potions implements Listener {
             potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
         }
         catch (Exception exception) {
-            common.printDebugMessage("Exception trying to create new instance of " + potionType, exception, null, true);
+            Ollivanders2API.common.printDebugMessage("Exception trying to create new instance of " + potionType, exception, null, true);
 
             return null;
         }
@@ -557,7 +551,7 @@ public class O2Potions implements Listener {
 
         if (item.getType() == Material.POTION) {
             Player player = event.getPlayer();
-            common.printDebugMessage("O2Potions.onPlayerDrink: " + player.getDisplayName() + " drank a potion.", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Potions.onPlayerDrink: " + player.getDisplayName() + " drank a potion.", null, null, false);
 
             ItemMeta meta = item.getItemMeta();
             if (meta == null)

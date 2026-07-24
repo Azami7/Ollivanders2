@@ -128,11 +128,6 @@ public abstract class O2Spell {
     protected final Ollivanders2 p;
 
     /**
-     * Ollivanders common functions
-     */
-    protected Ollivanders2Common common;
-
-    /**
      * The modifier for this spell based on usage. This is for spells that change behavior based on the caster's experience.
      */
     protected double usesModifier = 1;
@@ -255,12 +250,11 @@ public abstract class O2Spell {
      */
     public O2Spell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         caster = player;
         casterO2P = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
         if (casterO2P == null) {
-            common.printLogMessage("O2Spell: O2Players.getPlayer(caster) returned null", null, null, false);
+            Ollivanders2API.common.printLogMessage("O2Spell: O2Players.getPlayer(caster) returned null", null, null, false);
         }
 
         location = caster.getEyeLocation();
@@ -281,7 +275,7 @@ public abstract class O2Spell {
 
         world = location.getWorld();
         if (world == null) {
-            common.printLogMessage("O2Spell: null world", null, null, true);
+            Ollivanders2API.common.printLogMessage("O2Spell: null world", null, null, true);
         }
     }
 
@@ -294,7 +288,7 @@ public abstract class O2Spell {
      */
     void initSpell() {
         if (spellType == null) {
-            common.printDebugMessage("O2Spell.initSpell() spell type is null, this probably means initSpell was called in an abstract class.", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2Spell.initSpell() spell type is null, this probably means initSpell was called in an abstract class.", null, null, true);
             kill();
             return;
         }
@@ -384,7 +378,7 @@ public abstract class O2Spell {
 
         // if we have gone beyond the max distance, kill this spell
         if (isAtMaxDistance()) {
-            common.printDebugMessage("O2Spell.move: projectile reached max distance " + projectileAge + " without hitting a target", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spell.move: projectile reached max distance " + projectileAge + " without hitting a target", null, null, false);
             kill();
             return;
         }
@@ -398,7 +392,7 @@ public abstract class O2Spell {
 
         // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
         if (!isSpellAllowed()) {
-            common.printDebugMessage("O2Spell.move: spell not allowed here", null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spell.move: spell not allowed here", null, null, false);
             kill();
             return;
         }
@@ -410,7 +404,7 @@ public abstract class O2Spell {
         // check the block at this location, if it is not a pass-through block, stop the projectile and check the target
         Material targetBlockType = location.getBlock().getType();
         if (!projectilePassThrough.contains(targetBlockType)) {
-            common.printDebugMessage("O2Spell.move: spell hit " + targetBlockType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("O2Spell.move: spell hit " + targetBlockType, null, null, false);
             stopProjectile();
             checkTargetBlock();
         }
@@ -439,12 +433,12 @@ public abstract class O2Spell {
 
         // check blockAllowList, if it is empty then all block types are allowed
         if ((!materialAllowList.isEmpty()) && !(materialAllowList.contains(target.getType()))) {
-            common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
+            Ollivanders2API.common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
             kill();
         }
         // check deny list
         else if (materialBlockedList.contains(target.getType())) {
-            common.printDebugMessage(target.getType() + " is in the material deny list", null, null, false);
+            Ollivanders2API.common.printDebugMessage(target.getType() + " is in the material deny list", null, null, false);
             kill();
         }
     }
@@ -489,7 +483,7 @@ public abstract class O2Spell {
         // check every flag needed for this spell
         for (StateFlag flag : worldGuardFlags) {
             if (!Ollivanders2.worldGuardO2.checkWGFlag(caster, location, flag)) {
-                common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
+                Ollivanders2API.common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
                 return false;
             }
         }
@@ -648,7 +642,7 @@ public abstract class O2Spell {
                 usesModifier *= 0.5;
         }
 
-        common.printDebugMessage("O2Spell.setUsesModifier: usesModifier = " + usesModifier, null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Spell.setUsesModifier: usesModifier = " + usesModifier, null, null, false);
     }
 
     /**
@@ -869,7 +863,7 @@ public abstract class O2Spell {
         if (failureMessage != null && !(failureMessage.isEmpty()))
             caster.sendMessage(Ollivanders2.chatColor + failureMessage);
         else
-            common.printDebugMessage("failure message unset or 0 length", null, null, false);
+            Ollivanders2API.common.printDebugMessage("failure message unset or 0 length", null, null, false);
     }
 
     /**

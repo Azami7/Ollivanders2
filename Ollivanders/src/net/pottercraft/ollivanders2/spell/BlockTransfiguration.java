@@ -108,17 +108,17 @@ public abstract class BlockTransfiguration extends Transfiguration {
 
         // set the spell affect radius
         setEffectRadius();
-        common.printDebugMessage("BlockTransfiguration.transfigure: effect radius is " + effectRadius, null, null, false);
+        Ollivanders2API.common.printDebugMessage("BlockTransfiguration.transfigure: effect radius is " + effectRadius, null, null, false);
 
         List<Block> blocksInRadius = BlockCommon.getBlocksInRadius(getTargetBlock().getLocation(), effectRadius); // we use getTargetBlock since spells like Aguamenti target the block above location
 
         // get the blocks to be transfigured
         for (Block blockToChange : blocksInRadius) {
-            common.printDebugMessage("BlockTransfiguration.transfigure: checking block at " + blockToChange.getLocation().getX() + ", " + blockToChange.getLocation().getY() + ", " + blockToChange.getLocation().getZ(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfiguration.transfigure: checking block at " + blockToChange.getLocation().getX() + ", " + blockToChange.getLocation().getY() + ", " + blockToChange.getLocation().getZ(), null, null, false);
             if (!canTransfigure(blockToChange))
                 continue;
 
-            common.printDebugMessage("BlockTransfiguration.transfigure: transfiguring block", null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfiguration.transfigure: transfiguring block", null, null, false);
             Material originalMaterial = blockToChange.getType();
             // if not permanent, keep track of what the original block was
             if (!permanent) {
@@ -130,7 +130,7 @@ public abstract class BlockTransfiguration extends Transfiguration {
             else
                 blockToChange.setType(transfigureType);
 
-            common.printDebugMessage("BlockTransfiguration.transfigure: new block type is " + blockToChange.getType(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfiguration.transfigure: new block type is " + blockToChange.getType(), null, null, false);
             isTransfigured = true;
         }
 
@@ -161,12 +161,12 @@ public abstract class BlockTransfiguration extends Transfiguration {
      * @return true if the block can be transfigured, false otherwise
      */
     boolean canTransfigure(@NotNull Block block) {
-        common.printDebugMessage("BlockTransfigure.canTranfigure: Checking if this block can be transfigured.", null, null, false);
+        Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: Checking if this block can be transfigured.", null, null, false);
 
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
-            common.printDebugMessage("BlockTransfigure.canTranfigure: " + caster.getName() + " failed success check in canTransfigure()", null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: " + caster.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
 
@@ -175,31 +175,31 @@ public abstract class BlockTransfiguration extends Transfiguration {
 
         if (Ollivanders2API.getBlocks().isTemporarilyChangedBlock(block)) {
             // do not change if this block is already magically altered, this must be checked first because below conditions may also be true
-            common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already magically altered", null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already magically altered", null, null, false);
             return false;
         }
         else if (projectilePassThrough.contains(blockType) && !effectsPassThrough) {
             // do not change pass-through blocks
-            common.printDebugMessage("BlockTransfigure.canTranfigure: block is a pass-through block", null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: block is a pass-through block", null, null, false);
             return false;
         }
         else if (!materialAllowList.isEmpty() && !materialAllowList.contains(blockType)) {
             // do not change if the allowed list exists and this block is not in it
-            common.printDebugMessage("BlockTransfigure.canTranfigure: Material not on allow list: " + blockType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: Material not on allow list: " + blockType, null, null, false);
             return false;
         }
         else if (materialBlockedList.contains(blockType)) {
             // do not change if this block is in the blocked list
-            common.printDebugMessage("BlockTransfigure.canTranfigure: Material on blocked list: " + blockType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: Material on blocked list: " + blockType, null, null, false);
             return false;
         }
         else if (transfigurationMap.isEmpty() && blockType == transfigureType) {
             // do not change if this block is already the target type
-            common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already type " + transfigureType, null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already type " + transfigureType, null, null, false);
             return false;
         }
 
-        common.printDebugMessage("BlockTransfigure.canTranfigure: block can be transfigured", null, null, false);
+        Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: block can be transfigured", null, null, false);
 
         return true;
     }

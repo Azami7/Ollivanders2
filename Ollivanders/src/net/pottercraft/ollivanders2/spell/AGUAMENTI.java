@@ -104,17 +104,17 @@ public final class AGUAMENTI extends BlockTransfiguration {
      */
     @Override
     boolean canTransfigure(@NotNull Block block) {
-        common.printDebugMessage("Aguamenti.canTranfigure: Checking if this block can be transfigured.", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Aguamenti.canTranfigure: Checking if this block can be transfigured.", null, null, false);
 
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate) {
-            common.printDebugMessage("Aguamenti.canTranfigure: " + caster.getName() + " failed success check in canTransfigure()", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Aguamenti.canTranfigure: " + caster.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
         else if (Ollivanders2API.getBlocks().isTemporarilyChangedBlock(block)) {
             // do not change if this block is already magically altered, this must be checked first because below conditions may also be true
-            common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already magically altered", null, null, false);
+            Ollivanders2API.common.printDebugMessage("BlockTransfigure.canTranfigure: Block is already magically altered", null, null, false);
             return false;
         }
 

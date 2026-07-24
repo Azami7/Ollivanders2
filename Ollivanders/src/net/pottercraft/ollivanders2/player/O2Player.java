@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.common.EntityCommon;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.O2Color;
@@ -55,11 +54,6 @@ public class O2Player {
      * The MC plugin callback
      */
     private final Ollivanders2 p;
-
-    /**
-     * Common functions for Ollivanders2
-     */
-    private final Ollivanders2Common common;
 
     /**
      * A map of all the spells a player knows and the cast count.
@@ -134,11 +128,6 @@ public class O2Player {
     private Year year = Year.YEAR_1;
 
     /**
-     * common player functions
-     */
-    private final O2PlayerCommon o2PlayerCommon;
-
-    /**
      * Whether per-spell casting cooldowns are enforced, from the "spellCooldown" config. When false, a 1-second
      * cooldown still applies to protect server performance.
      */
@@ -155,8 +144,6 @@ public class O2Player {
         p = plugin;
         playerName = name;
         pid = id;
-        o2PlayerCommon = new O2PlayerCommon(plugin);
-        common = new Ollivanders2Common(plugin);
 
         // set destined wand
         initDestinedWand();
@@ -433,7 +420,7 @@ public class O2Player {
      * @param spellType the spell to increment
      */
     public void incrementSpellCount(@NotNull O2SpellType spellType) {
-        common.printDebugMessage("Incrementing spell count for " + spellType, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Incrementing spell count for " + spellType, null, null, false);
 
         if (knownSpells.containsKey(spellType)) {
             int curCount = knownSpells.get(spellType);
@@ -452,7 +439,7 @@ public class O2Player {
      * @param potionType the potion to increment
      */
     public void incrementPotionCount(@NotNull O2PotionType potionType) {
-        common.printDebugMessage("Incrementing potion count for " + potionType, null, null, false);
+        Ollivanders2API.common.printDebugMessage("Incrementing potion count for " + potionType, null, null, false);
 
         if (knownPotions.containsKey(potionType)) {
             int curCount = knownPotions.get(potionType);
@@ -502,7 +489,7 @@ public class O2Player {
             spellName = "null";
         else
             spellName = spell.getSpellName();
-        common.printDebugMessage("O2Player.setWandSpell: setting wand spell to " + spellName, null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2Player.setWandSpell: setting wand spell to " + spellName, null, null, false);
 
         wandSpell = spell;
     }
@@ -617,7 +604,7 @@ public class O2Player {
             OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(player);
 
             p.getServer().getPluginManager().callEvent(event);
-            common.printDebugMessage("Fired OllivandersPlayerFoundWandEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("Fired OllivandersPlayerFoundWandEvent", null, null, false);
 
             // once they have found their wand and can cast spells, they are no longer a muggle
             setMuggle(false);
@@ -647,7 +634,7 @@ public class O2Player {
         BookMeta bookMeta = (BookMeta) spellJournal.getItemMeta();
 
         if (bookMeta == null) {
-            common.printDebugMessage("getSpellJournal book meta is null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("getSpellJournal book meta is null", null, null, false);
             return null;
         }
 
@@ -781,7 +768,7 @@ public class O2Player {
      */
     public void setIsAnimagus() {
         if (animagusForm == null) {
-            animagusForm = o2PlayerCommon.getAnimagusForm(pid);
+            animagusForm = Ollivanders2API.playerCommon.getAnimagusForm(pid);
 
             // determine color variations for certain types
             if (animagusForm == EntityType.CAT)
@@ -800,9 +787,9 @@ public class O2Player {
                 animagusColor = EntityCommon.getRandomNaturalSheepColor(pid.hashCode()).toString();
 
             if (animagusColor != null)
-                common.printDebugMessage("Color variation " + animagusColor, null, null, false);
+                Ollivanders2API.common.printDebugMessage("Color variation " + animagusColor, null, null, false);
 
-            common.printDebugMessage(playerName + " is an animagus type " + animagusForm.toString(), null, null, false);
+            Ollivanders2API.common.printDebugMessage(playerName + " is an animagus type " + animagusForm.toString(), null, null, false);
         }
     }
 
@@ -812,7 +799,7 @@ public class O2Player {
      * @param type the player's Animagus form.
      */
     public void setAnimagusForm(@NotNull EntityType type) {
-        if (o2PlayerCommon.isAllowedAnimagusForm(type))
+        if (Ollivanders2API.playerCommon.isAllowedAnimagusForm(type))
             animagusForm = type;
         else {
             // they do not have an allowed type, reset their type

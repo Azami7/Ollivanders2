@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
@@ -68,7 +69,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
         setRadius(radius);
         setDuration(duration, false);
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
@@ -131,7 +132,7 @@ public class HORCRUX extends O2StationarySpell {
         horcruxItem = item;
         horcruxMaterial = item.getItemStack().getType();
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -187,7 +188,7 @@ public class HORCRUX extends O2StationarySpell {
 
                 horcruxMaterial = Material.getMaterial(materialName);
                 if (horcruxMaterial == null) {
-                    common.printDebugMessage("O2StationarySpell.HORCRUX: saved material " + materialName + " not found", null, null, true);
+                    Ollivanders2API.common.printDebugMessage("O2StationarySpell.HORCRUX: saved material " + materialName + " not found", null, null, true);
                     kill();
                     return;
                 }
@@ -227,7 +228,7 @@ public class HORCRUX extends O2StationarySpell {
     private void respawnHorcruxItem() {
         World world = p.getServer().getWorld(worldName);
         if (world == null) {
-            common.printDebugMessage("O2StationarySpell.HORCRUX: world " + worldName + " is null", null, null, true);
+            Ollivanders2API.common.printDebugMessage("O2StationarySpell.HORCRUX: world " + worldName + " is null", null, null, true);
             kill();
             return;
         }
@@ -235,7 +236,7 @@ public class HORCRUX extends O2StationarySpell {
         ItemStack itemStack = new ItemStack(horcruxMaterial);
         itemStack.setAmount(1);
 
-        common.printDebugMessage("O2StationarySpell.HORCRUX: creating horcrux for player " + playerUUID, null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2StationarySpell.HORCRUX: creating horcrux for player " + playerUUID, null, null, false);
         horcruxItem = world.dropItem(location, itemStack);
     }
 
@@ -274,7 +275,7 @@ public class HORCRUX extends O2StationarySpell {
         Player target = event.getPlayer();
 
         if (target.getUniqueId().equals(playerUUID)) {
-            common.printDebugMessage("HORCRUX: " + target.getName() + " enter their own horcrux area", null, null, false);
+            Ollivanders2API.common.printDebugMessage("HORCRUX: " + target.getName() + " enter their own horcrux area", null, null, false);
             return;
         }
 

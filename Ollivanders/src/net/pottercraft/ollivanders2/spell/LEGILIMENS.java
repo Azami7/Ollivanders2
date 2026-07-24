@@ -87,15 +87,15 @@ public final class LEGILIMENS extends O2Spell {
         }
 
         for (Player target : getNearbyPlayers(radius)) {
-            common.printDebugMessage("LEGILIMENS.checkEffect: checking " + target.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("LEGILIMENS.checkEffect: checking " + target.getName(), null, null, false);
             if (target.getUniqueId().equals(caster.getUniqueId())) {
                 continue;
             }
 
             // only someone who has mastered legilimens can even attempt to read a mind when they are in animagus form
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT)) {
-                common.printDebugMessage("LEGILIMENS.checkEffect: target is in animagus form", null, null, false);
-                common.printDebugMessage("LEGILIMENS.checkEffect: Uses modifier = " + usesModifier, null, null, false);
+                Ollivanders2API.common.printDebugMessage("LEGILIMENS.checkEffect: target is in animagus form", null, null, false);
+                Ollivanders2API.common.printDebugMessage("LEGILIMENS.checkEffect: Uses modifier = " + usesModifier, null, null, false);
 
                 if (usesModifier < O2Spell.spellMasteryLevel) {
                     return; // spell fails with no message, caster skill too low to read animagus
@@ -154,7 +154,7 @@ public final class LEGILIMENS extends O2Spell {
     private void readMind(Player target) {
         O2Player o2p = p.getO2Player(target);
 
-        common.printDebugMessage("LEGILIMENS.readMind: usesModifier = " + usesModifier, null, null, false);
+        Ollivanders2API.common.printDebugMessage("LEGILIMENS.readMind: usesModifier = " + usesModifier, null, null, false);
         caster.sendMessage(Ollivanders2.chatColor + "You search in to " + o2p.getPlayerName() + "'s mind ...");
 
         // this will dictate all the information the caster can detect
@@ -190,7 +190,7 @@ public final class LEGILIMENS extends O2Spell {
                     if (house != null)
                         message.append(house.getName()).append(".");
                     else
-                        common.printDebugMessage("Null house in LEGILIMENS.readMind()", null, null, false);
+                        Ollivanders2API.common.printDebugMessage("Null house in LEGILIMENS.readMind()", null, null, false);
                 }
                 else
                     message.append(" has not started school yet.");

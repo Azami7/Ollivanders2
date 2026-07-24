@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
@@ -73,7 +74,7 @@ public class PROTEGO extends ShieldSpellEffect {
         for (Projectile projectile : projectileIterator) {
             if (!projectile.isDead()) {
                 if (Ollivanders2Common.isInside(target.getLocation(), projectile.getLocation(), radius)) {
-                    common.printDebugMessage("projectile in shield area", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("projectile in shield area", null, null, false);
                     projectile.remove();
                     if (flairOnSpellImpact)
                         Ollivanders2Common.flair(target.getLocation(), radius, 10, impactFlairParticle);
@@ -102,7 +103,7 @@ public class PROTEGO extends ShieldSpellEffect {
         if (type == EntityType.ARROW || type == EntityType.SNOWBALL || type == EntityType.EGG || type == EntityType.SPLASH_POTION || type == EntityType.LINGERING_POTION) {
             // is this projectile within maxDistance of this spell center?
             if (Ollivanders2Common.isInside(target.getLocation(), projectile.getLocation(), maxDistance)) {
-                common.printDebugMessage("adding projectile " + type, null, null, false);
+                Ollivanders2API.common.printDebugMessage("adding projectile " + type, null, null, false);
                 projectiles.add(projectile);
             }
         }

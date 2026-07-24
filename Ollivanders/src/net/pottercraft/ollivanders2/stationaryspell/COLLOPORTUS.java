@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -73,7 +74,7 @@ public class COLLOPORTUS extends O2StationarySpell {
         radius = minRadius;
         duration = minDuration;
 
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class COLLOPORTUS extends O2StationarySpell {
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("COLLOPORTUS: canceled BlockBreakEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("COLLOPORTUS: canceled BlockBreakEvent", null, null, false);
         }
     }
 
@@ -117,7 +118,7 @@ public class COLLOPORTUS extends O2StationarySpell {
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("COLLOPORTUS: canceled EntityBreakDoorEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("COLLOPORTUS: canceled EntityBreakDoorEvent", null, null, false);
         }
     }
 
@@ -132,7 +133,7 @@ public class COLLOPORTUS extends O2StationarySpell {
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("COLLOPORTUS: canceled EntityChangeBlockEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("COLLOPORTUS: canceled EntityChangeBlockEvent", null, null, false);
         }
     }
 
@@ -147,7 +148,7 @@ public class COLLOPORTUS extends O2StationarySpell {
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("COLLOPORTUS: canceled EntityInteractEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("COLLOPORTUS: canceled EntityInteractEvent", null, null, false);
         }
     }
 
@@ -164,7 +165,7 @@ public class COLLOPORTUS extends O2StationarySpell {
 
         if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
-            common.printDebugMessage("COLLOPORTUS: canceled PlayerInteractEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("COLLOPORTUS: canceled PlayerInteractEvent", null, null, false);
         }
     }
 

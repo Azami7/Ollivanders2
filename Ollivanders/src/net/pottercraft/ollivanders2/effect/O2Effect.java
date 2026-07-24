@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.effect;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
@@ -96,11 +95,6 @@ public abstract class O2Effect {
     protected String affectedPlayerText;
 
     /**
-     * Common functions
-     */
-    Ollivanders2Common common;
-
-    /**
      * The affected player; resolved in the constructor, and the effect is killed immediately if they are offline.
      * Child classes use this inherited reference rather than keeping their own.
      */
@@ -122,7 +116,6 @@ public abstract class O2Effect {
      */
     public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, boolean isPermanent, @NotNull UUID pid) {
         p = plugin;
-        common = new Ollivanders2Common(p);
 
         duration = durationInTicks;
         permanent = isPermanent;

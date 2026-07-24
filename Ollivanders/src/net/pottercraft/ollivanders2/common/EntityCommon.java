@@ -47,6 +47,8 @@ import java.util.List;
  * @author Azami7
  */
 public class EntityCommon {
+    Ollivanders2 p;
+
     /**
      * Undead entities (for use with magic that targets undead)
      */
@@ -120,16 +122,6 @@ public class EntityCommon {
     private static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>();
 
     /**
-     * Reference to the plugin object
-     */
-    final private Ollivanders2 p;
-
-    /**
-     * Utility class for common operations and debug message printing
-     */
-    final private Ollivanders2Common common;
-
-    /**
      * Populate the static boat and minecart type lists. Idempotent: each list is filled only if still empty, so
      * repeated calls are harmless. Must run before {@link #getBoats()} or {@link #getMinecarts()} return any data.
      */
@@ -170,7 +162,6 @@ public class EntityCommon {
      */
     public EntityCommon(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -187,7 +178,7 @@ public class EntityCommon {
             entityType = EntityType.valueOf(entityTypeString);
         }
         catch (Exception e) {
-            common.printDebugMessage("Failed to parse EntityType " + entityTypeString, e, null, true);
+            Ollivanders2API.common.printDebugMessage("Failed to parse EntityType " + entityTypeString, e, null, true);
         }
         return entityType;
     }
@@ -680,10 +671,7 @@ public class EntityCommon {
             return true;
 
         // a neutral mob that has picked a target is currently hostile
-        if (livingEntity instanceof Mob && ((Mob) livingEntity).getTarget() != null)
-            return true;
-
-        return false;
+        return (livingEntity instanceof Mob && ((Mob) livingEntity).getTarget() != null);
     }
 
     /**

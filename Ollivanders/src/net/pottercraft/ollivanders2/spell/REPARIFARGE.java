@@ -112,7 +112,7 @@ public final class REPARIFARGE extends O2Spell {
     public void doCheckEffect() {
         if (hasHitBlock()) {
             if (getTargetBlock() == null)
-                common.printDebugMessage("Target block null in " + spellType.toString(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("Target block null in " + spellType.toString(), null, null, false);
             else if (reparifargeBlock(getTargetBlock()))
                 sendSuccessMessage();
             else

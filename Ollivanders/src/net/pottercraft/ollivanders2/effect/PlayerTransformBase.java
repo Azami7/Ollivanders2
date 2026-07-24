@@ -102,7 +102,7 @@ abstract public class PlayerTransformBase extends O2Effect {
     void spawnEntity() {
         // spawn the entity type
         if (entityType == null) {
-            common.printDebugMessage("PlayerTransformBase.checkEffect: entityType is null", null, null, false);
+            Ollivanders2API.common.printDebugMessage("PlayerTransformBase.checkEffect: entityType is null", null, null, false);
             kill();
             return;
         }

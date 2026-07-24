@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
@@ -76,7 +77,7 @@ public final class AVADA_KEDAVRA extends O2Spell {
                     continue;
 
                 entity.damage(usesModifier, caster);
-                common.printDebugMessage("Targeting " + entity.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("Targeting " + entity.getName(), null, null, false);
 
                 kill();
                 return;

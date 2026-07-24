@@ -76,7 +76,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
         // technically possible to return a null but this should never happen
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(targetID);
         if (o2p == null) {
-            common.printDebugMessage("o2player cannot be found", null, null, false);
+            Ollivanders2API.common.printDebugMessage("o2player cannot be found", null, null, false);
             kill();
             return;
         }
@@ -85,7 +85,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
         colorVariant = o2p.getAnimagusColor();
 
         if (form == null) {
-            common.printDebugMessage("Unable to get animagus form for " + o2p.getPlayerName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("Unable to get animagus form for " + o2p.getPlayerName(), null, null, false);
             kill();
         }
     }
@@ -124,7 +124,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = Cat.Type.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse Cat.Type " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse Cat.Type " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -138,7 +138,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = Rabbit.Type.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse Rabbit.Type " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse Rabbit.Type " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -151,7 +151,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = DyeColor.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -165,7 +165,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = Horse.Color.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse Horse.Color " + colorVariant, null, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse Horse.Color " + colorVariant, null, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -179,7 +179,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = Llama.Color.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse Llama.Color " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse Llama.Color " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -206,7 +206,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = Fox.Type.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse Fox.Type " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse Fox.Type " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -223,7 +223,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = DyeColor.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -242,7 +242,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
                 color = DyeColor.valueOf(colorVariant);
             }
             catch (Exception e) {
-                common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
+                Ollivanders2API.common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
                 correctedVariant = color.toString();
             }
 
@@ -287,7 +287,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
 
         if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
-            common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerInteractEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerInteractEvent", null, null, false);
         }
     }
 
@@ -301,7 +301,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
 
         if (event.isFlying()) {
             event.setCancelled(true);
-            common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerToggleFlightEvent", null, null, false);
+            Ollivanders2API.common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerToggleFlightEvent", null, null, false);
         }
     }
 
@@ -314,7 +314,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("ANIMAGUS_EFFECT: cancelling EntityPickupItemEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("ANIMAGUS_EFFECT: cancelling EntityPickupItemEvent", null, null, false);
     }
 
     /**
@@ -326,7 +326,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemHeldEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemHeldEvent", null, null, false);
 
     }
 
@@ -339,7 +339,7 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemConsumeEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemConsumeEvent", null, null, false);
     }
 
     /**
@@ -351,6 +351,6 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
             return;
 
         event.setCancelled(true);
-        common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);
+        Ollivanders2API.common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);
     }
 }

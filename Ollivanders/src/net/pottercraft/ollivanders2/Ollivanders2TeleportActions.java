@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2;
 
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -9,16 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * With MC 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of
- * teleport events like we use for things like spell projectiles and effects.
+ * A queue of pending player teleport actions, drained by the plugin scheduler each tick. Teleports are queued
+ * rather than executed immediately because teleporting a player while an event is being dispatched is unsafe.
  *
  * @author Azami7
- * @since 2.4
  */
 public class Ollivanders2TeleportActions {
-    final private Ollivanders2 p;
-    final private Ollivanders2Common common;
-
     /**
      * The list of all queued teleport actions
      */
@@ -51,19 +46,7 @@ public class Ollivanders2TeleportActions {
         /**
          * Constructor
          *
-         * @param p    the player teleporting
-         * @param from the location they are teleporting from
-         * @param to   the location they are teleporting to
-         */
-        O2TeleportAction(@NotNull Player p, @NotNull Location from, @NotNull Location to) {
-            player = p;
-            fromLocation = from;
-            toLocation = to;
-        }
-
-        /**
-         * Constructor
-         *
+         * @param p         the player teleporting
          * @param from      the location they are teleporting from
          * @param to        the location they are teleporting to
          * @param explosion should this teleport create an explosion effect when it happens
@@ -77,9 +60,9 @@ public class Ollivanders2TeleportActions {
         }
 
         /**
-         * get the player who teleported
+         * get the player to teleport
          *
-         * @return the player who teleported
+         * @return the player to teleport
          */
         @NotNull
         public Player getPlayer() {
@@ -87,7 +70,7 @@ public class Ollivanders2TeleportActions {
         }
 
         /**
-         * get the location the player teleported to
+         * get the location the player is teleporting to
          *
          * @return the destination
          */
@@ -97,7 +80,7 @@ public class Ollivanders2TeleportActions {
         }
 
         /**
-         * get the location the player teleported from
+         * get the location the player is teleporting from
          *
          * @return the source
          */
@@ -107,9 +90,9 @@ public class Ollivanders2TeleportActions {
         }
 
         /**
-         * does this teleport do an explosion sound on teleport?
+         * does this teleport create an explosion effect on teleport?
          *
-         * @return true if it does an explosion sound, false otherwise
+         * @return true if it creates an explosion effect, false otherwise
          */
         public boolean isExplosionOnTeleport() {
             return explosionOnTeleport;
@@ -118,18 +101,14 @@ public class Ollivanders2TeleportActions {
 
     /**
      * Constructor
-     *
-     * @param plugin a callback to the MC plugin
      */
-    public Ollivanders2TeleportActions(@NotNull Ollivanders2 plugin) {
-        p = plugin;
-        common = new Ollivanders2Common(p);
+    public Ollivanders2TeleportActions() {
     }
 
     /**
-     * Get all the teleport events.
+     * Get all the pending teleport actions.
      *
-     * @return a list of the pending teleport events
+     * @return a copy of the pending teleport action list; changes to it do not affect the queue
      */
     @NotNull
     public List<O2TeleportAction> getTeleportActions() {
@@ -137,45 +116,31 @@ public class Ollivanders2TeleportActions {
     }
 
     /**
-     * Add a teleport action to the list.
-     *
-     * @param player the player teleporting
-     * @param from   the location they are teleporting from
-     * @param to     the location they are teleporting to
-     */
-    public void addTeleportEvent(@NotNull Player player, @NotNull Location from, @NotNull Location to) {
-        addTeleportEvent(player, from, to, false);
-    }
-
-    /**
-     * Add a teleport action to the list.
+     * Add a teleport action to the queue and load the destination chunk so it is ready when the teleport runs.
      *
      * @param player              the player teleporting
      * @param from                the location they are teleporting from
      * @param to                  the location they are teleporting to
      * @param explosionOnTeleport should there be an explosion effect on teleport
      */
-    public void addTeleportEvent(@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport) {
-        O2TeleportAction teleportEvent = new O2TeleportAction(player, from, to, explosionOnTeleport);
+    public void addTeleportAction(@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport) {
+        O2TeleportAction teleportAction = new O2TeleportAction(player, from, to, explosionOnTeleport);
 
-        common.printDebugMessage("Created teleport action: " + player.getName() + " from " + from + " to " + to, null, null, false);
-        teleportActions.add(teleportEvent);
+        Ollivanders2API.common.printDebugMessage("Created teleport action: " + player.getName() + " from " + from + " to " + to, null, null, false);
+        teleportActions.add(teleportAction);
 
         to.getChunk().load();
     }
 
     /**
-     * Remove a teleport action from the list.
+     * Remove a teleport action from the queue; does nothing if the action is not queued.
      *
      * @param teleportAction the teleport action to remove
      */
-    public void removeTeleportEvent(@NotNull Ollivanders2TeleportActions.O2TeleportAction teleportAction) {
-        if (teleportActions.contains(teleportAction)) {
-            common.printDebugMessage("Removing teleport action for " + teleportAction.getPlayer().getName(), null, null, false);
-            teleportActions.remove(teleportAction);
-        }
-        else {
-            common.printDebugMessage("Unable to remove teleport action, not found.", null, null, false);
-        }
+    public void removeTeleportAction(@NotNull Ollivanders2TeleportActions.O2TeleportAction teleportAction) {
+        if (teleportActions.remove(teleportAction))
+            Ollivanders2API.common.printDebugMessage("Removing teleport action for " + teleportAction.getPlayer().getName(), null, null, false);
+        else
+            Ollivanders2API.common.printDebugMessage("Unable to remove teleport action, not found.", null, null, false);
     }
 }

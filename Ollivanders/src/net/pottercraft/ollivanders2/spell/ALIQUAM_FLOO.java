@@ -95,7 +95,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
                 Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
                 String flooName = sign.getSide(Side.FRONT).getLine(0).trim() + " " + sign.getSide(Side.FRONT).getLine(1).trim() + " " + sign.getSide(Side.FRONT).getLine(2).trim() + " " + sign.getSide(Side.FRONT).getLine(3).trim();
                 if (flooName.isBlank()) {
-                    common.printDebugMessage("ALIQUAM_FLOO.doCheckEffect: sign is blank", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("ALIQUAM_FLOO.doCheckEffect: sign is blank", null, null, false);
                     sendFailureMessage();
                     kill();
                     return;
@@ -103,7 +103,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
 
                 flooName = flooName.trim();
                 flooName = flooName.toLowerCase();
-                common.printDebugMessage("ALIQUAM_FLOO.doCheckEffect: Floo name on sign is " + flooName, null, null, false);
+                Ollivanders2API.common.printDebugMessage("ALIQUAM_FLOO.doCheckEffect: Floo name on sign is " + flooName, null, null, false);
 
                 // make sure there is not already an aliquam floo spell at this block
                 for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
@@ -127,9 +127,9 @@ public final class ALIQUAM_FLOO extends O2Spell {
         else {
             if (Ollivanders2.debug) {
                 if (target != null)
-                    common.printDebugMessage("target block was " + target.getType(), null, null, false);
+                    Ollivanders2API.common.printDebugMessage("target block was " + target.getType(), null, null, false);
                 else
-                    common.printDebugMessage("target block was null", null, null, false);
+                    Ollivanders2API.common.printDebugMessage("target block was null", null, null, false);
             }
         }
 

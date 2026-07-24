@@ -73,7 +73,7 @@ public class ApparateTest extends O2SpellTestSuper {
         PlayerMock caster = mockServer.addPlayer();
 
         APPARATE apparate = castSpell(caster, new String[]{});
-        assertNotEquals(0, apparate.getMaxApparateDistance(), "failed to read maxApparateDistance config value");
+        assertNotEquals(0, APPARATE.getMaxApparateDistance(), "failed to read maxApparateDistance config value");
     }
 
     /**
@@ -89,6 +89,7 @@ public class ApparateTest extends O2SpellTestSuper {
      * <li>Persistence (save and load)</li>
      * <li>Named location apparation</li>
      * <li>Distance limit validation</li>
+     * <li>The apparateLoc admin command (add, duplicate add, update, bad input, list, remove)</li>
      * </ul>
      */
     @Override
@@ -111,7 +112,7 @@ public class ApparateTest extends O2SpellTestSuper {
         assertThat(mockServer.getPluginManager(), hasFiredEventInstance(OllivandersApparateByCoordinatesEvent.class));
         Location newLocation = caster.getLocation();
         assertNotEquals(location, newLocation, "player did not change location");
-        assertTrue(location.distance(newLocation) <= apparate.getMaxLineOfSight(), "line of sight apparate exceeded max distance");
+        assertTrue(location.distance(newLocation) <= APPARATE.getMaxLineOfSight(), "line of sight apparate exceeded max distance");
 
         // apparate by coord, invalid coords, caster goes to a line-of-sight location
         caster.setLocation(location);
@@ -120,7 +121,7 @@ public class ApparateTest extends O2SpellTestSuper {
         mockServer.getScheduler().performTicks(600);
         newLocation = caster.getLocation();
         assertNotEquals(location, newLocation, "player did not change location");
-        assertTrue(location.distance(newLocation) <= apparate.getMaxLineOfSight(), "line of sight apparate exceeded max distance");
+        assertTrue(location.distance(newLocation) <= APPARATE.getMaxLineOfSight(), "line of sight apparate exceeded max distance");
 
         // apparate by coord, valid coords
         caster.setLocation(location);
@@ -223,6 +224,55 @@ public class ApparateTest extends O2SpellTestSuper {
         assertEquals(location, newLocation, "caster apparated beyond max apparate distance");
         message = caster.nextMessage();
         assertNotNull(message, "caster did not receive failure message");
+
+        // the apparateLoc command - add, duplicate add, update, update nonexistent, bad coordinates, list, remove
+        PlayerMock admin = mockServer.addPlayer();
+        admin.setOp(true); // apparate location commands require admin permission
+
+        // add a new location
+        String london = "London";
+        assertTrue(admin.performCommand("Ollivanders2 apparate add " + london + " 200 70 350"), "apparate add failed");
+        assertTrue(APPARATE.doesLocationExist(london), "apparate add did not create the location");
+
+        // adding a name that already exists is rejected
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 apparate add " + london + " 1 2 3"), "duplicate apparate add failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "duplicate apparate add did not message the sender");
+        assertTrue(message.contains("already exists"), "duplicate apparate add should say the location already exists");
+
+        // update changes the coordinates of an existing location
+        assertTrue(admin.performCommand("Ollivanders2 apparate update " + london + " 201 71 351"), "apparate update failed");
+        Location londonLocation = APPARATE.getAllApparateLocations().get(london.toLowerCase());
+        assertNotNull(londonLocation, "updated location no longer exists");
+        assertEquals(201, (int) londonLocation.getX(), "apparate update did not change the location coordinates");
+
+        // updating a name that does not exist is rejected
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 apparate update Nowhere 1 2 3"), "nonexistent apparate update failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "nonexistent apparate update did not message the sender");
+        assertTrue(message.contains("does not exist"), "nonexistent apparate update should say the location does not exist");
+
+        // unparseable coordinates are rejected and the location is not created
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 apparate add Paris one two three"), "bad coordinates apparate add failed");
+        message = admin.nextMessage();
+        assertNotNull(message, "bad coordinates should message the sender");
+        assertTrue(message.contains("Invalid coordinates"), "bad coordinates should be reported as invalid");
+        assertFalse(APPARATE.doesLocationExist("Paris"), "bad coordinates should not create the location");
+
+        // list shows the saved locations
+        TestCommon.clearMessageQueue(admin);
+        assertTrue(admin.performCommand("Ollivanders2 apparate list"), "apparate list failed");
+        mockServer.getScheduler().performTicks(5);
+        message = TestCommon.getWholeMessage(admin);
+        assertNotNull(message, "apparate list did not message the sender");
+        assertTrue(message.contains(london.toLowerCase()), "apparate list did not contain " + london.toLowerCase());
+
+        // remove deletes the location
+        assertTrue(admin.performCommand("Ollivanders2 apparate remove " + london), "apparate remove failed");
+        assertFalse(APPARATE.doesLocationExist(london), "apparate remove did not delete the location");
 
         // canApparateFrom and canApparateTo cannot be tested until we mock world guard
     }

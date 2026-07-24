@@ -81,13 +81,13 @@ public class VERDIMILLIOUS_DUO extends Sparks {
         List<Item> items = getNearbyItems(radius);
 
         for (Item item : items) {
-            common.printDebugMessage("VERDIMILLIOUS_DUO.doCheckEffect: checking item " + item.getItemStack().getType(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("VERDIMILLIOUS_DUO.doCheckEffect: checking item " + item.getItemStack().getType(), null, null, false);
             // check for cursed items based on the level of this spell
             boolean cursed = Ollivanders2API.getItems().enchantedItems.isCursedLevelBased(item, spellType.getLevel());
 
             // add to the cursed item list if it is cursed, also exclude things already glowing because we don't want to change their state
             if (cursed && !item.isGlowing()) {
-                common.printDebugMessage("VERDIMILLIOUS_DUO.doCheckEffect: found cursed item " + item.getItemStack().getType(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("VERDIMILLIOUS_DUO.doCheckEffect: found cursed item " + item.getItemStack().getType(), null, null, false);
                 item.setGlowing(true);
                 cursedItem = item;
 

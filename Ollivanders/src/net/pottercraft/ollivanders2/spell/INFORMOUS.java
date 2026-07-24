@@ -166,7 +166,7 @@ public final class INFORMOUS extends O2Spell {
         if (spell instanceof HORCRUX) {
             Player stationarySpellCaster = Bukkit.getPlayer(spell.getCasterID());
             if (stationarySpellCaster == null) {
-                common.printDebugMessage("INFORMOUS.stationarySpellInfo: null player", null, null, false);
+                Ollivanders2API.common.printDebugMessage("INFORMOUS.stationarySpellInfo: null player", null, null, false);
                 return;
             }
             caster.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of player " + stationarySpellCaster.getName() + " of radius " + spell.getRadius());

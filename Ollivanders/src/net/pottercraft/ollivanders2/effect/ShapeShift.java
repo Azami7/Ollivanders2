@@ -9,6 +9,7 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -92,7 +93,7 @@ public abstract class ShapeShift extends O2Effect {
         Player target = p.getServer().getPlayer(targetID);
 
         if (target != null && form != null) {
-            common.printDebugMessage("transforming " + target.getName(), null, null, false);
+            Ollivanders2API.common.printDebugMessage("transforming " + target.getName(), null, null, false);
 
             if (!Ollivanders2.testMode) {
                 DisguiseType disguiseType = DisguiseType.getType(form);

@@ -10,7 +10,6 @@ import java.util.function.Consumer;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
@@ -58,8 +57,6 @@ public class O2StationarySpells implements Listener {
 
     final Ollivanders2 p;
 
-    Ollivanders2Common common;
-
     /**
      * JSON key for the caster's UUID in serialized spell data.
      */
@@ -90,7 +87,6 @@ public class O2StationarySpells implements Listener {
      */
     public O2StationarySpells(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(plugin);
     }
 
     /**
@@ -382,7 +378,7 @@ public class O2StationarySpells implements Listener {
      * @param spell the stationary spell to add
      */
     public void addStationarySpell(@NotNull O2StationarySpell spell) {
-        common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
         stationarySpells.add(spell);
     }
 
@@ -393,7 +389,7 @@ public class O2StationarySpells implements Listener {
      * @param spell the stationary spell to remove
      */
     public void removeStationarySpell(@NotNull O2StationarySpell spell) {
-        common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType(), null, null, false);
+        Ollivanders2API.common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType(), null, null, false);
         spell.kill();
     }
 
@@ -521,10 +517,10 @@ public class O2StationarySpells implements Listener {
         List<Map<String, String>> serializedSpells = gsonLayer.readSavedDataListMap(GsonDAO.o2StationarySpellsJSONFile);
 
         if (serializedSpells == null) {
-            common.printLogMessage("Unable to load saved stationary spells.", null, null, false);
+            Ollivanders2API.common.printLogMessage("Unable to load saved stationary spells.", null, null, false);
         }
         else {
-            common.printLogMessage("Reading saved stationary spells", null, null, false);
+            Ollivanders2API.common.printLogMessage("Reading saved stationary spells", null, null, false);
             stationarySpells = deserializeO2StationarySpells(serializedSpells);
         }
     }
@@ -539,7 +535,7 @@ public class O2StationarySpells implements Listener {
     private List<Map<String, String>> serializeO2StationarySpells() {
         List<Map<String, String>> serializedList = new ArrayList<>();
 
-        common.printDebugMessage("Serializing O2StationarySpells...", null, null, false);
+        Ollivanders2API.common.printDebugMessage("Serializing O2StationarySpells...", null, null, false);
 
         for (O2StationarySpell spell : stationarySpells) {
             Map<String, String> spellData = new HashMap<>();
@@ -640,7 +636,7 @@ public class O2StationarySpells implements Listener {
             statSpell = (O2StationarySpell) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
         }
         catch (Exception e) {
-            common.printDebugMessage("Exception trying to create new instance of " + spellType, e, null, true);
+            Ollivanders2API.common.printDebugMessage("Exception trying to create new instance of " + spellType, e, null, true);
             return null;
         }
 

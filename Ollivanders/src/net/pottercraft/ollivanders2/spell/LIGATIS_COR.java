@@ -110,20 +110,20 @@ public final class LIGATIS_COR extends O2Spell {
 
         O2ItemType coreItemType = Ollivanders2API.getItems().getItemTypeByItem(coreItem);
         if (coreItemType == null) {
-            common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to find core O2Item", null, null, true);
+            Ollivanders2API.common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to find core O2Item", null, null, true);
             return;
         }
 
         O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByItemType(coreItemType);
         if (coreType == null) {
-            common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to get O2WandCore by type", null, null, true);
+            Ollivanders2API.common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to get O2WandCore by type", null, null, true);
             return;
         }
 
         wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(corelessWand.getItemStack(), coreType, 1);
 
         if (wand == null) {
-            common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to make wand", null, null, true);
+            Ollivanders2API.common.printDebugMessage("LIGATIS_COR.createAndDropWand: failed to make wand", null, null, true);
             return;
         }
 
@@ -156,7 +156,7 @@ public final class LIGATIS_COR extends O2Spell {
     private Item getNearbyWandCore(Location location) {
         for (Item item : EntityCommon.getItemsInRadius(location, 2)) {
             if (O2WandCoreType.isWandCore(item)) {
-                common.printDebugMessage("ligatis cor: found core item near wand", null, null, false);
+                Ollivanders2API.common.printDebugMessage("ligatis cor: found core item near wand", null, null, false);
                 return item;
             }
         }
