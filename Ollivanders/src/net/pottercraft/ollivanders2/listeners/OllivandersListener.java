@@ -323,14 +323,7 @@ public class OllivandersListener implements Listener {
         if (o2p == null)
             return;
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!event.isCancelled()) {
-                    o2p.onDeath();
-                }
-            }
-        }.runTaskLater(p, threadDelay);
+        o2p.onDeath();
     }
 
     /**
@@ -392,14 +385,7 @@ public class OllivandersListener implements Listener {
                 return;
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (!event.isCancelled()) {
-                        event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
-                    }
-                }
-            }.runTaskLater(p, threadDelay);
+            event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
         }
     }
 

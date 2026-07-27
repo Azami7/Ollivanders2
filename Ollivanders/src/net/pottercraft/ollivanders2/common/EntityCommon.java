@@ -8,6 +8,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -32,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Utility class providing static lists and methods for working with Minecraft entities.
@@ -54,11 +57,11 @@ public class EntityCommon {
      */
     private static final List<EntityType> undeadMobs = new ArrayList<>() {{
         add(EntityType.BOGGED);
-        //add(EntityType.CAMEL_HUSK); MC 26
+        add(EntityType.CAMEL_HUSK);
         add(EntityType.DROWNED);
         add(EntityType.GIANT);
         add(EntityType.HUSK);
-        //add(EntityType.PARCHED); MC 26
+        add(EntityType.PARCHED);
         add(EntityType.PHANTOM);
         add(EntityType.SKELETON);
         add(EntityType.SKELETON_HORSE);
@@ -68,7 +71,7 @@ public class EntityCommon {
         add(EntityType.ZOGLIN);
         add(EntityType.ZOMBIE);
         add(EntityType.ZOMBIE_HORSE);
-        //add(EntityType.ZOMBIE_NAUTILUS); MC 26
+        add(EntityType.ZOMBIE_NAUTILUS);
         add(EntityType.ZOMBIE_VILLAGER);
         add(EntityType.ZOMBIFIED_PIGLIN);
     }};
@@ -78,7 +81,7 @@ public class EntityCommon {
      */
     private static final List<EntityType> skeletonMobs = new ArrayList<>() {{
         add(EntityType.BOGGED);
-        //add(EntityType.PARCHED); MC 26
+        add(EntityType.PARCHED);
         add(EntityType.SKELETON);
         add(EntityType.SKELETON_HORSE);
         add(EntityType.STRAY);
@@ -401,9 +404,15 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
-        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % Cat.Type.values().length;
+        // Cat.Type is registry-backed rather than an enum, so the variants come from the registry - this also picks
+        // up any variants added by a datapack
+        List<Cat.Type> catTypes = Registry.CAT_VARIANT.stream().toList();
+        if (catTypes.isEmpty()) // should not happen on a live server
+            return Cat.Type.WHITE;
 
-        return Cat.Type.values()[rand];
+        int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % catTypes.size();
+
+        return catTypes.get(rand);
     }
 
     /**
@@ -414,6 +423,41 @@ public class EntityCommon {
     @NotNull
     static public Cat.Type getRandomCatType() {
         return getRandomCatType((int) TimeCommon.getDefaultWorldTime());
+    }
+
+    /**
+     * Get the stored name for a Cat type, such as "ALL_BLACK". This is the name persisted as a player's animagus
+     * color and the name {@link #getCatTypeByName(String)} parses, so both sides must use this method.
+     *
+     * <p>{@link Cat.Type} is registry-backed rather than an enum, so {@code toString()} is whatever the server
+     * implementation returns and is not a stable name.</p>
+     *
+     * @param catType the cat type to name
+     * @return the uppercased registry key, e.g. "ALL_BLACK"
+     */
+    @NotNull
+    // Spigot deprecates Keyed.getKey() in favor of RegistryAware.getKeyOrThrow(), but Paper's Cat.Type does not
+    // implement RegistryAware - getKey() is the only key accessor both provide, and the tests run against Paper
+    @SuppressWarnings("deprecation")
+    static public String getCatTypeName(@NotNull Cat.Type catType) {
+        return catType.getKey().getKey().toUpperCase(Locale.ROOT);
+    }
+
+    /**
+     * Look up a Cat type by the name {@link #getCatTypeName(Cat.Type)} produces.
+     *
+     * @param name the cat type name, e.g. "ALL_BLACK"
+     * @return the matching cat type, or null if the name does not match a registered variant
+     */
+    @Nullable
+    static public Cat.Type getCatTypeByName(@NotNull String name) {
+        try {
+            return Registry.CAT_VARIANT.get(NamespacedKey.minecraft(name.toLowerCase(Locale.ROOT)));
+        }
+        catch (Exception e) { // NamespacedKey rejects characters that cannot appear in a key
+            Ollivanders2API.common.printDebugMessage("EntityCommon.getCatTypeByName: cannot parse " + name, e, null, false);
+            return null;
+        }
     }
 
     /**
@@ -675,6 +719,21 @@ public class EntityCommon {
     }
 
     /**
+     * Determine whether an entity is submerged, meaning the block at its eye level is water. Entities standing in
+     * shallow water with their head above the surface are not submerged.
+     *
+     * <p>Spigot has no equivalent of Paper's {@code Entity.isUnderWater()}, so this recreates it.</p>
+     *
+     * @param entity the entity to check
+     * @return true if the entity's eye level is in water, false otherwise
+     */
+    public static boolean isUnderWater(@NotNull Entity entity) {
+        Location eyeLocation = entity instanceof LivingEntity livingEntity ? livingEntity.getEyeLocation() : entity.getLocation();
+
+        return eyeLocation.getBlock().getType() == Material.WATER;
+    }
+
+    /**
      * Get the distance to the water surface if an entity is underwater.
      *
      * @param entity the entity to measure
@@ -682,7 +741,7 @@ public class EntityCommon {
      * @see <a href="https://minecraft.wiki/w/Altitude">Minecraft Wiki - Altitude</a>
      */
     public static int distanceToSurface(Entity entity) {
-        if (!entity.isUnderWater())
+        if (!isUnderWater(entity))
             return 0;
 
         Block above = entity.getLocation().getBlock().getRelative(BlockFace.UP);

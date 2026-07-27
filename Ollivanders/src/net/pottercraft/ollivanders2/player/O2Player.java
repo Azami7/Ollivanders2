@@ -392,12 +392,13 @@ public class O2Player {
     /**
      * Set the cooldown expiry time for a spell to now plus the spell's cooldown, overwriting any previous value. When
      * spell cooldowns are disabled in config, a 1-second cooldown is used instead. Also records this as the player's
-     * last-cast spell.
+     * last-cast spell. Admins are exempt from spell cooldowns.
      *
      * @param spellType the spell that was cast
      */
     public void setSpellRecentCastTime(@NotNull O2SpellType spellType) {
-        if (spellCooldownEnabled)
+        Player player = p.getServer().getPlayer(pid);
+        if (spellCooldownEnabled && (player != null && !player.isOp()))
             recentSpells.put(spellType, System.currentTimeMillis() + spellType.getCooldown());
         else
             recentSpells.put(spellType, System.currentTimeMillis() + 1000); // 1 second cooldown to protect server performance
@@ -772,7 +773,7 @@ public class O2Player {
 
             // determine color variations for certain types
             if (animagusForm == EntityType.CAT)
-                animagusColor = EntityCommon.getRandomCatType(pid.hashCode()).toString();
+                animagusColor = EntityCommon.getCatTypeName(EntityCommon.getRandomCatType(pid.hashCode()));
             else if (animagusForm == EntityType.RABBIT)
                 animagusColor = EntityCommon.getRandomRabbitType(pid.hashCode()).toString();
             else if (animagusForm == EntityType.WOLF || animagusForm == EntityType.SHULKER)
@@ -848,10 +849,7 @@ public class O2Player {
      * @return true if they have an Animagus form, false otherwise
      */
     public boolean isAnimagus() {
-        if (animagusForm != null)
-            return true;
-
-        return false;
+        return (animagusForm != null);
     }
 
     /**
@@ -917,11 +915,11 @@ public class O2Player {
         animagusForm = EntityType.CAT;
 
         if (animagusColor.contains("BLACK"))
-            animagusColor = Cat.Type.ALL_BLACK.toString();
+            animagusColor = EntityCommon.getCatTypeName(Cat.Type.ALL_BLACK);
         else if (animagusColor.contains("RED"))
-            animagusColor = Cat.Type.RED.toString();
+            animagusColor = EntityCommon.getCatTypeName(Cat.Type.RED);
         else // siamese
-            animagusColor = Cat.Type.SIAMESE.toString();
+            animagusColor = EntityCommon.getCatTypeName(Cat.Type.SIAMESE);
     }
 
     /**

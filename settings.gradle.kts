@@ -11,4 +11,4 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "Ollivanders2-2.21.7"
+rootProject.name = "Ollivanders2-2.21.11"

@@ -2,12 +2,15 @@ package net.pottercraft.ollivanders2.test;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
@@ -66,6 +69,22 @@ public class Ollivanders2Test {
     }
 
     /**
+     * Count the items a kit gave a player: their inventory plus anything dropped at their feet.
+     * {@link net.pottercraft.ollivanders2.player.O2PlayerCommon#givePlayerKit} drops the leftovers when a kit is
+     * larger than the inventory can hold, so the inventory alone under-reports a kit that does not fit.
+     *
+     * @param player the player to check
+     * @return the total number of items given to the player
+     */
+    private static int countGivenItems(@NotNull PlayerMock player) {
+        int count = countInventoryItems(player);
+        for (Item item : EntityCommon.getItemsInRadius(player.getEyeLocation(), 5))
+            count = count + item.getItemStack().getAmount();
+
+        return count;
+    }
+
+    /**
      * A player without admin permission gets the player usage summary and no admin action happens - the
      * wands subcommand must not give them any items.
      */
@@ -105,10 +124,14 @@ public class Ollivanders2Test {
         PlayerMock target = mockServer.addPlayer();
         target.setOp(false);
 
+        // the wand kit is larger than a player inventory, so the overflow gets dropped in world - put the admin in
+        // their own world so a parallel test's dropped items cannot be counted as part of this kit
+        admin.setLocation(new Location(mockServer.addSimpleWorld("wandsCommandTest"), 0, 4, 0));
+
         // -- wands with no args gives the sender every wand --
         assertTrue(admin.performCommand("Ollivanders2 wands"), "The wands subcommand should succeed");
         int allWandsCount = Ollivanders2API.getItems().getWands().getAllWands().size();
-        assertEquals(allWandsCount, countInventoryItems(admin), "The sender should be given one of every wand");
+        assertEquals(allWandsCount, countGivenItems(admin), "The sender should be given one of every wand");
 
         // -- wands with a player name gives that player a random wand --
         assertTrue(admin.performCommand("Ollivanders2 wands " + target.getName()),
