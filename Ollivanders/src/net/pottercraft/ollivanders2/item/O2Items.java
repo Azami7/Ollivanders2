@@ -272,7 +272,7 @@ public class O2Items {
     /**
      * Get the names of all items.
      *
-     * @return an array of the item names
+     * @return a list of the item names
      */
     @NotNull
     public ArrayList<String> getAllItemNames() {
@@ -329,8 +329,10 @@ public class O2Items {
      * @return a copy of the item-type-to-recipe-key map
      */
     public HashMap<O2ItemType, NamespacedKey> getRecipeKeys() {
-        HashMap<O2ItemType, NamespacedKey> keys = new HashMap<>();
-        keys.putAll(recipeKeys);
+        HashMap<O2ItemType, NamespacedKey> keys = new HashMap<>() {
+            {
+                putAll(recipeKeys);
+            }};
 
         return keys;
     }

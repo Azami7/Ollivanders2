@@ -5,7 +5,9 @@ import net.pottercraft.ollivanders2.book.O2BookType;
 import net.pottercraft.ollivanders2.effect.BABBLING;
 import net.pottercraft.ollivanders2.effect.LYCANTHROPY;
 import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
+import net.pottercraft.ollivanders2.spell.CELATUM;
 import net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -134,23 +136,32 @@ public class FiniteIncantatemTest extends O2SpellTestSuper {
 
         ItemStack writtenBookStack = Ollivanders2API.getBooks().getBookByType(O2BookType.HARMONIOUS_CONNECTIONS);
         assertNotNull(writtenBookStack);
-        Item book = testWorld.dropItem(targetLocation, writtenBookStack);
-        castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel, O2SpellType.CELATUM);
+        testWorld.dropItem(targetLocation, writtenBookStack);
+        CELATUM celatum = (CELATUM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel, O2SpellType.CELATUM);
         mockServer.getScheduler().performTicks(20);
-        assertTrue(Ollivanders2API.getItems().enchantedItems.isEnchanted(book));
+
+        // Celatum removes the book it targeted and drops an enchanted replacement, so the enchanted book has to be
+        // fetched from the world rather than reusing the dropped entity
+        Item enchantedBook = EntityCommon.getItemAtLocation(celatum.getLocation());
+        assertNotNull(enchantedBook, "Celatum did not drop an enchanted book");
+        assertTrue(Ollivanders2API.getItems().enchantedItems.isEnchanted(enchantedBook));
 
         FINITE_INCANTATEM finiteIncantatem = (FINITE_INCANTATEM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
         assertTrue(finiteIncantatem.isKilled(), "spell not killed when it hit item target");
-        assertFalse(Ollivanders2API.getItems().enchantedItems.isEnchanted(book), "Celatum enchantment not removed");
-        book.remove();
+
+        // Finite Incantatem likewise drops a disenchanted replacement rather than stripping the enchantment in place
+        Item disenchantedBook = EntityCommon.getItemAtLocation(finiteIncantatem.getLocation());
+        assertNotNull(disenchantedBook, "Finite Incantatem did not drop a disenchanted book");
+        assertFalse(Ollivanders2API.getItems().enchantedItems.isEnchanted(disenchantedBook), "Celatum enchantment not removed");
+        disenchantedBook.remove();
 
         ItemStack broomStack = Ollivanders2API.getItems().getItemByType(O2ItemType.BROOMSTICK, 1);
         assertNotNull(broomStack);
         Item broom = testWorld.dropItem(targetLocation, broomStack);
         assertTrue(Ollivanders2API.getItems().enchantedItems.isEnchanted(broom));
 
-        finiteIncantatem = (FINITE_INCANTATEM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
         assertTrue(Ollivanders2API.getItems().enchantedItems.isEnchanted(broom), "Volatus enchantment removed");
         broom.remove();
@@ -198,7 +209,7 @@ public class FiniteIncantatemTest extends O2SpellTestSuper {
         target.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 100, 1));
         target.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 1));
 
-        finiteIncantatem = (FINITE_INCANTATEM) castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
         mockServer.getScheduler().performTicks(20);
         assertFalse(target.hasPotionEffect(PotionEffectType.HUNGER), "Hunger not removed from target player");
         assertFalse(target.hasPotionEffect(PotionEffectType.LUCK), "Luck not removed from target player");

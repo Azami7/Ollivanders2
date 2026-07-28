@@ -5,6 +5,10 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.AWAKE;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.effect.SLEEPING;
+import io.papermc.paper.block.bed.BedEnterAction;
+import io.papermc.paper.block.bed.BedEnterProblem;
+import io.papermc.paper.block.bed.BedRuleResult;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,6 +31,39 @@ public class AwakeTest extends EffectTestSuper {
     @Override
     AWAKE createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new AWAKE(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
+    }
+
+    /**
+     * A bed-entry action that permits sleeping, for constructing test {@link PlayerBedEnterEvent}s.
+     * <p>
+     * {@link PlayerBedEnterEvent#isCancelled()} reports true whenever {@link BedEnterAction#canSleep()} is not
+     * {@link BedRuleResult#ALLOWED}, so this must allow sleeping for a cancellation assertion to prove that AWAKE
+     * did the cancelling.
+     *
+     * @return a bed-entry action with no obstacles to sleeping
+     */
+    private BedEnterAction allowSleeping() {
+        return new BedEnterAction() {
+            @Override
+            public BedRuleResult canSleep() {
+                return BedRuleResult.ALLOWED;
+            }
+
+            @Override
+            public BedRuleResult canSetSpawn() {
+                return BedRuleResult.ALLOWED;
+            }
+
+            @Override
+            public BedEnterProblem problem() {
+                return null;
+            }
+
+            @Override
+            public Component errorMessage() {
+                return null;
+            }
+        };
     }
 
     /**
@@ -82,7 +119,7 @@ public class AwakeTest extends EffectTestSuper {
         addEffect(target2, 100, false);
 
         // Try to trigger a bed enter event
-        PlayerBedEnterEvent event = new PlayerBedEnterEvent(target2, bed, PlayerBedEnterEvent.BedEnterResult.OK);
+        PlayerBedEnterEvent event = new PlayerBedEnterEvent(target2, bed, PlayerBedEnterEvent.BedEnterResult.OK, allowSleeping());
         mockServer.getPluginManager().callEvent(event);
 
         // Verify the event was cancelled
@@ -108,10 +145,10 @@ public class AwakeTest extends EffectTestSuper {
 
         target.setLocation(new Location(testWorld, 200, 4, 300));
 
-        AWAKE awake = (AWAKE)addEffect(target, 100, false);
+        addEffect(target, 100, false);
 
         // call a player bed enter event
-        PlayerBedEnterEvent event = new PlayerBedEnterEvent(target, bed, PlayerBedEnterEvent.BedEnterResult.OK);
+        PlayerBedEnterEvent event = new PlayerBedEnterEvent(target, bed, PlayerBedEnterEvent.BedEnterResult.OK, allowSleeping());
         mockServer.getPluginManager().callEvent(event);
 
         mockServer.getScheduler().performTicks(5);

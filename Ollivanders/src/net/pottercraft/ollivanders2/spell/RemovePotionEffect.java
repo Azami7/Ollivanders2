@@ -115,7 +115,7 @@ public abstract class RemovePotionEffect extends O2Spell {
     void removePotionEffects(@NotNull LivingEntity target) {
         for (PotionEffectType potionEffectType : potionEffectTypes) {
             if (checkSuccess()) {
-                Ollivanders2API.common.printDebugMessage("Removing " + potionEffectType.getName() + " from " + target.getName(), null, null, false);
+                Ollivanders2API.common.printDebugMessage("Removing " + potionEffectType.toString() + " from " + target.getName(), null, null, false);
                 target.removePotionEffect(potionEffectType);
             }
         }

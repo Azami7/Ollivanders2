@@ -6,6 +6,7 @@ import java.util.List;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -143,6 +144,8 @@ public final class APARECIUM extends O2Spell {
         ItemStack newBook = new ItemStack(Material.WRITTEN_BOOK);
         newBook.setItemMeta(bookMeta);
 
-        return newBook;
+        // bookMeta was copied from the concealed book, so it still carries the Celatum enchantment tags - strip them
+        // so the revealed book is not enchanted
+        return EnchantedItems.removeEnchantmentNBT(newBook);
     }
 }

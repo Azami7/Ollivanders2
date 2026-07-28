@@ -224,7 +224,7 @@ public abstract class Knockback extends O2Spell {
             distance = maxDistance;
 
         // if this is a vertical push spell and the target is underwater, we don't want to send them flying out of the water at underwater drag velocity
-        if (vertical && !pull && !Ollivanders2.testMode && target.isUnderWater()) { // isUnderWater not currently implemented in MockBukkit
+        if (vertical && !pull && EntityCommon.isUnderWater(target)) {
             int distanceToSurface = EntityCommon.distanceToSurface(target);
             if (distance > (distanceToSurface + 1))
                 distance = distanceToSurface + 1;
@@ -246,7 +246,7 @@ public abstract class Knockback extends O2Spell {
     double calculateDragFactor(Entity target) {
         double drag;
 
-        if (!Ollivanders2.testMode && target.isUnderWater()) { // isUnderWater not currently implemented in MockBukkit
+        if (EntityCommon.isUnderWater(target)) {
             drag = Ollivanders2Common.underWaterDragFactor;
         }
         else {

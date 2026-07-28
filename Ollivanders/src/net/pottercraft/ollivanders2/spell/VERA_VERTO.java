@@ -10,7 +10,6 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -59,11 +58,10 @@ public final class VERA_VERTO extends FriendlyMobDisguise {
         durationModifier = 1.0;
 
         targetType = EntityType.FALLING_BLOCK;
-        ItemStack flowerPot = new ItemStack(Material.FLOWER_POT, 1);
         disguiseType = DisguiseType.getType(targetType);
         disguise = new MiscDisguise(disguiseType);
         FallingBlockWatcher watcher = (FallingBlockWatcher) disguise.getWatcher();
-        watcher.setBlock(flowerPot);
+        watcher.setBlockData(Material.FLOWER_POT.createBlockData());
 
         initSpell();
 

@@ -20,6 +20,7 @@ import me.libraryaddict.disguise.disguisetypes.watchers.ShulkerWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.TurtleWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.TraderLlamaWatcher;
 
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -118,14 +119,12 @@ public class ANIMAGUS_EFFECT extends ShapeShift {
 
         if (watcher instanceof CatWatcher) {
             CatWatcher catWatcher = (CatWatcher) watcher;
-            Cat.Type color = Cat.Type.WHITE;
+            Cat.Type color = EntityCommon.getCatTypeByName(colorVariant);
 
-            try {
-                color = Cat.Type.valueOf(colorVariant);
-            }
-            catch (Exception e) {
-                Ollivanders2API.common.printDebugMessage("Failed to parse Cat.Type " + colorVariant, e, null, false);
-                correctedVariant = color.toString();
+            if (color == null) {
+                Ollivanders2API.common.printDebugMessage("Failed to parse Cat.Type " + colorVariant, null, null, false);
+                color = Cat.Type.WHITE;
+                correctedVariant = EntityCommon.getCatTypeName(color);
             }
 
             catWatcher.setType(color);

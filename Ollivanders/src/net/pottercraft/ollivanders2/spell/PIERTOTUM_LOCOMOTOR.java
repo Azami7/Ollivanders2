@@ -77,10 +77,12 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
         // materials this transfiguration works on
         materialAllowList.add(Material.IRON_BLOCK);
         materialAllowList.add(Material.SNOW_BLOCK);
+        //materialAllowList.add(Material.COPPER_BLOCK); MC 26
 
         // map of entity type to change each material to
         transfigurationMap.put(Material.IRON_BLOCK, EntityType.IRON_GOLEM);
         transfigurationMap.put(Material.SNOW_BLOCK, EntityType.SNOW_GOLEM);
+        //transfigurationMap.put(Material.COPPER_BLOCK, EntityType.COPPER_GOLEM); MC 26
 
         initSpell();
     }

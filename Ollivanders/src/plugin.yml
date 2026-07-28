@@ -1,6 +1,6 @@
 name: Ollivanders2
 main: net.pottercraft.ollivanders2.Ollivanders2
-version: 2.21.7
+version: 2.21.11
 authors: [ Azami7, autumnwoz ]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [ WorldGuard, LibsDisguises ]
@@ -12,8 +12,8 @@ commands:
     usage: /Ollivanders2 <arg>
     aliases: [Olli, olli]
     permissions: Ollivanders2.admin
-    permission-message: You do not have Ollivanders admin permissions.
+    permission-message: You do not have Ollivanders2 admin permissions.
 permissions:
   Ollivanders2.admin:
-    description: Allows all Ollivanders commands
+    description: Allows all Ollivanders2 commands
     default: op

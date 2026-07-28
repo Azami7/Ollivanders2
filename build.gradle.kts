@@ -37,18 +37,22 @@ configurations.all {
 dependencies {
     implementation("org.jetbrains:annotations:26.0.1")
     implementation("com.google.code.gson:gson:2.11.0")
-    implementation("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
+    // Build against Spigot, not Paper: Paper deprecates API that Spigot still supports, and those warnings are
+    // noise for a Spigot-targeting plugin. Compiling here also fails the build if Paper-only API creeps into src.
+    // compileOnly keeps this off the test classpath, where paper-api is used instead - both declare the
+    // org.spigotmc:spigot-api capability and Gradle will not resolve a classpath containing both.
+    compileOnly("org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT")
 
     // local plugin jars
-    implementation(files("/Users/kristin/minecraft/plugins/worldguard-bukkit-7.0.9-dist.jar"))
-    implementation(files("/Users/kristin/minecraft/plugins/worldedit-bukkit-7.3.9.jar"))
+    implementation(files("/Users/kristin/minecraft/plugins/worldguard-bukkit-7.0.14-dist.jar"))
+    implementation(files("/Users/kristin/minecraft/plugins/worldedit-bukkit-7.3.15.jar"))
     implementation(files("/Users/kristin/minecraft/plugins/ProtocolLib-5.4.0.jar"))
-    implementation(files("/Users/kristin/minecraft/plugins/LibsDisguises-11.0.7-Premium.jar"))
+    implementation(files("/Users/kristin/minecraft/plugins/LibsDisguises-11.0.14-Premium.jar"))
 
-    testImplementation(files("/Users/kristin/minecraft/plugins/worldguard-bukkit-7.0.9-dist.jar"))
-    testImplementation(files("/Users/kristin/minecraft/plugins/worldedit-bukkit-7.3.9.jar"))
+    testImplementation(files("/Users/kristin/minecraft/plugins/worldguard-bukkit-7.0.14-dist.jar"))
+    testImplementation(files("/Users/kristin/minecraft/plugins/worldedit-bukkit-7.3.15.jar"))
     testImplementation(files("/Users/kristin/minecraft/plugins/ProtocolLib-5.4.0.jar"))
-    testImplementation(files("/Users/kristin/minecraft/plugins/LibsDisguises-11.0.7-Premium.jar"))
+    testImplementation(files("/Users/kristin/minecraft/plugins/LibsDisguises-11.0.14-Premium.jar"))
 
     // JUnit 5
     testImplementation(platform("org.junit:junit-bom:5.11.3"))
@@ -57,8 +61,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // mockbukkit
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.71.0")
-    testImplementation("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.101.0")
+    testImplementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     // mockito
     testImplementation("org.mockito:mockito-core:5.7.0")
@@ -68,7 +72,8 @@ dependencies {
     testImplementation(sourceSets.main.get().output)
 }
 tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-Xlint:-deprecation")
+    options.compilerArgs.add("-Xlint:deprecation")
+    options.compilerArgs.add("-Xlint:removal")
     options.compilerArgs.add("-Xlint:-unchecked")
 }
 
